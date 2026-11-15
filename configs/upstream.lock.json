@@ -1,0 +1,15 @@
+{
+  "checked_on": "2026-11-15",
+  "timenet": {
+    "repository": "https://github.com/OpenTSLM/TimeNet",
+    "commit": "9bd1613019ee61fbc52e02106a1a45990ead7a54",
+    "declared_packages": {"timenet": "0.12.0", "timenet-connectors": "0.12.0"},
+    "requires_python": ">=3.11",
+    "verification": "Clean existing checkout inspected; SHA matched remote HEAD. SDK not installed in AirAware."
+  },
+  "opentslm": {
+    "repository": "https://github.com/OpenTSLM/OpenTSLM",
+    "commit": "2968f4b891baab4307f7e9d0043e87677b593a30",
+    "verification": "Remote HEAD recorded only; model adapter and training interfaces not inspected."
+  }
+}

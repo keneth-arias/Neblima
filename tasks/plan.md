@@ -64,3 +64,11 @@ Source URLs, download sizes, licenses and coverage are candidates until verified
 
 ## Next work
 Begin with the upstream investigation and source inventory, then SENAMHI/OEFA verification. Do not start optional enrichment before the measured comparison and first usable forecasting slice.
+
+## Foundation setup checkpoint (2026-11-15)
+Keneth Arias is the main data and platform lead. The accepted initial service choice is local storage
+plus GitHub Actions (ADR-001). The foundation branch prepares #1–#3 with pinned upstream research,
+locked Python tooling, source catalog validation, CLI, CI and lead onboarding. Source URLs remain
+unverified; #4/#5 are the next investigative tasks, followed by downloader work #6/#7.
+See `docs/lead-handbook.md` for the runbook and `docs/services.md` for access state. The branch/PR
+and live issues carry implementation/review status; preparation does not imply real data collection.
