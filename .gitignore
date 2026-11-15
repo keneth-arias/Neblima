@@ -10,3 +10,26 @@ data/raw/*
 !data/raw/.gitkeep
 data/processed/*
 !data/processed/.gitkeep
+!.env.example
+# Datos locales y resultados derivados
+data/**
+!data/**/
+!data/**/.gitkeep
+reports/generated/
+*.parquet
+*.duckdb
+*.duckdb.wal
+*.zarr/
+*.pt
+*.pth
+*.ckpt
+# Salidas de herramientas y paquetes
+.pytest_cache/
+.hypothesis/
+.ruff_cache/
+.ty_cache/
+dist/
+build/
+*.egg-info/
+.coverage
+coverage.xml

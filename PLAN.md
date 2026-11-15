@@ -1,3 +1,8 @@
-# AirAware Perú plan
+# Plan de AirAware Perú
 
-See [the ordered implementation plan](tasks/plan.md) and [the original project brief](docs/initial-plan.md). Live status, blockers, and remaining work are tracked in the linked GitHub issues.
+Consulta el [plan vigente](tasks/plan.md). Las tareas y sus bloqueos se actualizan en GitHub.
+El [plan inicial completo](docs/initial-plan.md) también está en español; Git conserva su versión original.
+
+Prioridad actual: base del proyecto (#1–#3), con Keneth como responsable de datos y plataforma.
+Usamos almacenamiento local y GitHub Actions. Luego: verificar SENAMHI/OEFA (#4/#5) e implementar
+las descargas reanudables (#6/#7). Revisa la [guía de inicio](docs/team-onboarding.md).

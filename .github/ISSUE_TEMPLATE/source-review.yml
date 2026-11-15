@@ -1,0 +1,25 @@
+name: Verificación de una fuente
+description: Registrar acceso, metodología, procedencia y evidencia de licencia
+title: 'Verificar fuente: '
+body:
+- type: input
+  id: source
+  attributes:
+    label: source_id del catálogo y URL oficial
+  validations:
+    required: true
+- type: textarea
+  id: evidence
+  attributes:
+    label: Evidencia y fecha de verificación
+    description: Incluir cobertura, frecuencia, unidades, tipo de medición, acceso
+      y URL de licencia. No pegar credenciales.
+  validations:
+    required: true
+- type: textarea
+  id: decision
+  attributes:
+    label: Decisión o bloqueo
+    description: Separar hechos verificados, dudas, restricciones y siguiente acción.
+  validations:
+    required: true

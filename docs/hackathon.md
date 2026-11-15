@@ -1,19 +1,23 @@
-# TimeNet hackathon
+# Entrega al hackathon de TimeNet
 
-Official references checked November 15, 2026:
+Referencias oficiales revisadas el 15/11/2026:
+
 - https://challenge.timenet.ai/
 - https://docs.timenet.ai/get-started.html
 - https://github.com/OpenTSLM/TimeNet
 
-Round 1 closes November 22, 2026 at 11:59 p.m. PST (November 23 at 07:59 UTC). Verify the official page for updates.
+La primera ronda cierra el 22/11/2026 a las 11:59 p. m. PST: equivale al **23/11/2026 a las
+2:59 a. m. en el Perú** (07:59 UTC). Verifica cualquier cambio en la página oficial antes de entregar.
 
-- [ ] Every participant registers; teams have 2–4 people.
-- [ ] Confirm data sources and redistribution rights.
-- [ ] Prepare and validate the dataset in TimeNet format; submit a dataset contribution PR.
-- [ ] Train or fine-tune a temporal model and evaluate on held-out data.
-- [ ] Prepare a project pitch, demo, website, or other showcase.
-- [ ] Publish project posts on X and LinkedIn, with screenshots of available metrics.
-- [ ] Share the project on the hackathon Discord.
-- [ ] Submit the required links using the official form by the deadline.
+- [ ] Cada integrante se registra; el equipo debe tener entre 2 y 4 personas.
+- [ ] Se verifican fuentes y derechos de redistribución.
+- [ ] Se prepara y valida el conjunto en TimeNet y se presenta el PR del conjunto de datos.
+- [ ] Se entrena o ajusta un modelo temporal y se evalúa con datos separados.
+- [ ] Se prepara una presentación, demostración, página u otro material del proyecto.
+- [ ] Se publica en X y LinkedIn con capturas de las métricas disponibles.
+- [ ] Se comparte el proyecto en Discord del hackathon.
+- [ ] Se envían los enlaces mediante el formulario oficial antes del cierre.
 
-The current quickstart requires Python 3.11+. The client is `timenet`; the build CLI ships separately in `timenet-connectors`. Pin dependencies when implementation begins.
+La publicación, el PR externo y el envío deben respetar las autorizaciones del plan.
+La guía técnica requiere Python 3.11+. El cliente es `timenet`; el comando de construcción viene
+en `timenet-connectors`. Fija las versiones al implementar la integración.
