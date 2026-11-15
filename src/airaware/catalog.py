@@ -1,6 +1,6 @@
-"""Validate source discovery records without network access.
+"""Validación de registros de fuentes sin acceso a la red.
 
-Pydantic model patterns: https://docs.pydantic.dev/latest/concepts/models/
+Referencia de modelos Pydantic: https://docs.pydantic.dev/latest/concepts/models/
 """
 
 from datetime import datetime
@@ -12,7 +12,7 @@ from pydantic import BaseModel, ConfigDict, Field, HttpUrl, ValidationError, mod
 
 
 class Source(BaseModel):
-    """A candidate source; null fields explicitly mean unverified information."""
+    """Fuente candidata: los campos nulos indican información sin verificar."""
 
     model_config = ConfigDict(extra="forbid")
 
@@ -66,33 +66,35 @@ class Source(BaseModel):
 
     @model_validator(mode="after")
     def validate_evidence(self) -> Self:
-        """Prevent credentialed URLs and unsupported source-readiness claims."""
+        """Rechazar URL con credenciales y avances sin evidencia registrada."""
         for url in [self.catalog_url, *self.resource_urls, self.license_url]:
             if url and (url.username is not None or url.password is not None):
-                raise ValueError("URLs must not contain credentials")
+                raise ValueError("Las URL no deben contener credenciales")
         if self.last_verified_at is not None and self.last_verified_at.utcoffset() is None:
-            raise ValueError("Verification timestamps must include a timezone")
+            raise ValueError("Las fechas de verificación deben incluir zona horaria")
         progressed = self.status in {"verified", "downloaded", "profiled", "integrated"}
         if progressed and (
             self.last_verified_at is None or not self.notes or not self.notes.strip()
         ):
-            raise ValueError("Progress requires a verification timestamp and evidence notes")
+            raise ValueError("El avance requiere fecha de verificación y notas con evidencia")
         if self.status in {"blocked", "excluded", "duplicate"} and (
             not self.notes or not self.notes.strip()
         ):
-            raise ValueError("Inactive sources require an explanation")
+            raise ValueError("Las fuentes inactivas requieren una explicación")
         if self.status == "integrated" and (
             self.redistribution != "allowed"
             or not self.license
             or not self.license_url
             or self.data_category in {"unknown", "mixed"}
         ):
-            raise ValueError("Integration requires documented rights and measurement semantics")
+            raise ValueError(
+                "La integración requiere derechos y significado de las mediciones documentados"
+            )
         return self
 
 
 class Catalog(BaseModel):
-    """Versioned source inventory with stable unique identifiers."""
+    """Inventario versionado con identificadores estables y únicos."""
 
     model_config = ConfigDict(extra="forbid")
     schema_version: Literal[1]
@@ -100,25 +102,26 @@ class Catalog(BaseModel):
 
     @model_validator(mode="after")
     def unique_ids(self) -> Self:
-        """Reject ambiguous source identifiers."""
+        """Rechazar identificadores de fuente ambiguos."""
         ids = [source.source_id for source in self.sources]
         if len(ids) != len(set(ids)):
-            raise ValueError("Source identifiers must be unique")
+            raise ValueError("Los identificadores de fuente deben ser únicos")
         return self
 
 
 class CatalogError(ValueError):
-    """A safe user-facing catalog error with no raw configuration values."""
+    """Error seguro del catálogo que no muestra valores de configuración."""
 
 
 def load_catalog(path: Path) -> Catalog:
-    """Load trusted-size local YAML safely and report errors without echoing its values."""
+    """Leer YAML local de tamaño acotado e informar errores sin mostrar sus valores."""
     try:
         if path.stat().st_size > 2_000_000:
-            raise CatalogError("Catalog exceeds the 2 MB configuration limit")
+            raise CatalogError("El catálogo supera el límite de configuración de 2 MB")
         content = yaml.safe_load(path.read_text(encoding="utf-8"))
         return Catalog.model_validate(content)
     except (OSError, UnicodeError, yaml.YAMLError, ValidationError, RecursionError) as error:
         raise CatalogError(
-            "Cannot read or validate catalog; check YAML, required fields, unique IDs and evidence"
+            "No se pudo leer o validar el catálogo; revisa YAML, campos obligatorios, "
+            "ID únicos y evidencia"
         ) from error

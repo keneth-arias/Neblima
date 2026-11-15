@@ -1,24 +1,31 @@
-# ADR-001: Local storage and GitHub Actions for the foundation
+# ADR-001: Almacenamiento local y GitHub Actions al inicio
 
-## Status and date
-Accepted, 2026-11-15. The user selected local storage and GitHub Actions for the initial setup.
+## Estado y fecha
 
-## Context
-The first issues need source discovery, licensing evidence and reproducible developer tools.
-Coverage, download sizes and future compute requirements are not yet measured.
+Aceptada el 15/11/2026. Keneth eligió almacenamiento local y GitHub Actions para la preparación inicial.
 
-## Decision
-Use uv with Python 3.13.13 locally, maintain compatibility with TimeNet's Python 3.11 floor,
-and lock Pydantic, PyYAML and Typer plus test/lint/type/audit tools. Use local layered artifact storage
-and a public GitHub repo with CI. Keneth Arias owns data contracts and platform decisions.
-Do not install heavy analytical, geospatial or training dependencies until a task uses them.
+## Contexto
 
-## Alternatives
-Cloud object storage and orchestration would add credentials, cost and administration before there
-is a verified data slice. An unversioned notebook-only setup would make provenance and reproducibility
-harder to enforce. Both remain possible later if measured requirements justify them.
+Las primeras tareas requieren investigar fuentes, registrar licencias y preparar herramientas
+reproducibles. Aún no se han medido cobertura, volumen real de descargas ni necesidades de cómputo.
 
-## Consequences
-Current setup requires no paid account or provider API key. Environmental data access still requires
-per-source verification; public links imply no license grant. Local storage is not a backup system.
-The lead must choose a backup/artifact-sharing strategy before the first irreplaceable acquisition.
+## Decisión
+
+Usar uv y Python 3.13.13 en local, con compatibilidad mínima de Python 3.11 como TimeNet.
+Fijar Pydantic, PyYAML, Typer y herramientas de pruebas, formato, tipos y auditoría.
+Mantener datos en carpetas locales por etapa y el código en un repositorio público con CI.
+Keneth dirige los contratos de datos y las decisiones de plataforma. No instalar dependencias
+analíticas, geoespaciales o de entrenamiento hasta que una tarea las necesite.
+
+## Alternativas
+
+El almacenamiento remoto y la orquestación agregarían cuentas, costos y administración sin contar
+con una muestra verificada. Trabajar solo con cuadernos sin versiones dificultaría la trazabilidad.
+Se podrán reconsiderar estas opciones con mediciones concretas.
+
+## Consecuencias
+
+La preparación actual no necesita cuentas de pago ni claves de proveedores.
+Cada fuente debe verificarse: un enlace público no concede permiso de redistribución.
+El almacenamiento local no es una copia de respaldo. Antes de una recolección irremplazable,
+el responsable debe definir y probar un procedimiento de respaldo e intercambio de archivos.

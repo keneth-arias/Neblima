@@ -11,7 +11,7 @@ data/raw/*
 data/processed/*
 !data/processed/.gitkeep
 !.env.example
-# Local data and derived artifacts
+# Datos locales y resultados derivados
 data/**
 !data/**/
 !data/**/.gitkeep
@@ -23,7 +23,7 @@ reports/generated/
 *.pt
 *.pth
 *.ckpt
-# Tooling and distribution output
+# Salidas de herramientas y paquetes
 .pytest_cache/
 .hypothesis/
 .ruff_cache/

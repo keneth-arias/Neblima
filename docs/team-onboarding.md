@@ -1,22 +1,24 @@
-# Team local setup
+# Guía de inicio del equipo
 
-All three developers use the same tracked tools/configuration and separate checkouts. On the shared
-machine, use your own Linux account and checkout; do not change branches in another person's folder.
+Cada integrante usa las mismas herramientas y configuración versionadas, pero una copia local
+independiente. En la máquina compartida entra con tu usuario de Linux; no trabajes en la carpeta
+ni cambies la rama de otra persona.
 
-| Developer | Linux user | GitHub | Checkout |
+| Integrante | Usuario de Linux | GitHub | Carpeta del proyecto |
 | --- | --- | --- | --- |
 | Keneth | kymai | keneth-arias | /home/shared/github/keneth-arias/airaware |
 | Cristopher | cristopher | qriqs | /home/cristopher/github/airaware |
 | Jordan | jordan | J0r-PS | /home/jordan/github/airaware |
 
-Cristopher and Jordan each have Python 3.13.13, their own .venv and uv cache, an ignored private .env,
-and private local data storage in their checkout. Git, gh, Make and uv are installed system-wide.
-Repository-local Git author identities use their GitHub noreply email addresses; pull is fast-forward
-only and the first push automatically sets upstream. No GitHub credential was copied between users.
+Cristopher y Jordan tienen Python 3.13.13, su propia `.venv`, caché de uv, archivo `.env` privado y
+carpeta de datos. Git, gh, Make y uv están disponibles para todos los usuarios. Cada copia tiene la
+identidad de Git de su responsable, con correo noreply de GitHub. `git pull` solo acepta avance
+directo, sin crear una fusión automática, y el primer `push` configura la rama remota.
+No se comparten credenciales entre usuarios.
 
-## First session
+## Tu primera sesión
 
-Log in as your own Linux user and run:
+Entra con tu usuario y ejecuta:
 
 ```bash
 cd ~/github/airaware
@@ -24,9 +26,9 @@ make doctor
 make check
 ```
 
-For another computer, clone the public repository and follow CONTRIBUTING.md. As of setup, the
-foundation is in PR #36 on `chore/platform-foundation`, and each prepared checkout uses that branch.
-After it merges, switch to main and pull before starting new work:
+En otra computadora, clona el repositorio público y sigue CONTRIBUTING.md.
+La base está en el PR #36, rama `chore/platform-foundation`; las copias preparadas usan esa rama.
+Después de integrar el PR, cambia a main antes de empezar otra tarea:
 
 ```bash
 git fetch origin
@@ -34,39 +36,42 @@ git switch main
 git pull --ff-only
 ```
 
-Before merge, create issue branches from `origin/chore/platform-foundation` and target that branch
-for early review. After #36 merges, base new branches on `origin/main`. Keneth coordinates retargeting
-any early PRs so the foundation diff is not reviewed twice.
+Antes de esa integración, crea tus ramas desde `origin/chore/platform-foundation` y solicita revisión
+contra esa rama. Después, usa `origin/main`. Keneth coordina los cambios de rama base de los PR ya
+abiertos para no revisar dos veces los mismos cambios.
 
-Cristopher's suggested first branch is `docs/issue-5-oefa-review`; Jordan's is
-`docs/issue-29-showcase-outline`. Create branches only when beginning the task:
+Cristopher puede iniciar con `docs/issue-5-oefa-review`; Jordan, con
+`docs/issue-29-showcase-outline`. Crea tu rama cuando empieces la tarea:
 
 ```bash
 git switch -c docs/issue-5-oefa-review
 ```
 
-Jordan uses his own issue-29 branch name instead. Keep the first PR focused on the first deliverable
-in the issue handoff; it need not finish the entire issue. Leave acceptance criteria unchecked until
-there is evidence. One active issue per person is the initial work-in-progress limit.
+Jordan debe usar el nombre de su rama de la tarea #29. El primer PR debe incluir solo la primera
+entrega indicada en la tarea, no todo el trabajo de golpe. Marca un criterio de aceptación solo
+cuando tengas evidencia. Mantén **una tarea activa por persona**.
 
-## GitHub access still needs personal sign-in
+## Acceso personal a GitHub
 
-Repository invitations to qriqs and J0r-PS are pending as of setup. Both must accept their invitation
-through their own GitHub account before pushing or receiving native issue assignments. Until then,
-owner labels and handoff sections reserve their issue queues. Both have been granted personal Project admin
-access; repository access is collaborator/write because the repo belongs to a personal account.
-Local gh is installed but neither teammate's local account is authenticated yet. Read-only public
-cloning, local editing, tests and builds work already. Each developer must establish their own GitHub
-login before pushing or creating PRs; never reuse Keneth's token or another developer's login.
+Las invitaciones de qriqs y J0r-PS al repositorio siguen pendientes según la última verificación.
+Deben aceptarlas con sus propias cuentas antes de subir cambios o recibir asignaciones nativas.
+Mientras tanto, las etiquetas `owner:qriqs` y `owner:J0r-PS` reservan sus tareas, como indicó Keneth.
+Ambos tienen permiso de administrador del tablero. En el repositorio personal, su permiso es de
+colaborador con escritura. Son permisos distintos.
 
-## Shared configuration and private artifacts
+`gh` está instalado, pero aún no se ha autenticado en los usuarios locales de Cristopher y Jordan.
+Ya pueden clonar el repositorio público, editar, probar y generar paquetes. Cada uno debe configurar
+su propio acceso antes de subir cambios o crear PR. No reutilicen la sesión ni el token de Keneth.
 
-Changes to pyproject.toml, uv.lock, configs, Makefile, AGENTS.md and CI travel through Git and PRs.
-After pulling changes, use `make setup` to synchronize your own environment. The CLI does not load
-.env automatically; export environment variables explicitly when needed. Default data is local to
-your checkout. Do not move credentials, .venv, caches or raw data between developers as a setup step.
-Publish source evidence and small permitted fixtures through PRs so others can reproduce your work.
+## Configuración común y archivos privados
 
-Both prepared accounts passed doctor, 29 offline tests, formatting, lint, type/catalog checks, package
-build and dependency audit on 2026-11-15. Provider access, actual datasets and their rights remain
-unverified. See [work allocation](team-work-allocation.md) for the issue queues and handoff rules.
+Los cambios de pyproject.toml, uv.lock, configs, Makefile, AGENTS.md y CI se comparten mediante Git y PR.
+Después de actualizar tu copia, ejecuta `make setup`. El programa no carga `.env` automáticamente;
+exporta las variables que necesites. Los datos se guardan por defecto en tu propia copia.
+No copies credenciales, entornos, cachés ni datos originales de otro integrante para preparar tu equipo.
+Comparte evidencia y muestras pequeñas permitidas mediante PR para que el trabajo sea reproducible.
+
+El 15/11/2026 ambos usuarios aprobaron doctor, 29 pruebas sin servicios externos, formato, análisis
+estático, tipos, catálogo, generación de paquetes y auditoría de dependencias. La traducción agrega
+pruebas de idioma; los resultados actuales se registran en el PR. El acceso a proveedores y los
+derechos de sus datos siguen sin verificar. Consulta la [distribución de tareas](team-work-allocation.md).

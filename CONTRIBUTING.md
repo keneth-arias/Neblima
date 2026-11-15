@@ -1,12 +1,15 @@
-# Contributing
+# Cómo contribuir
 
-Teammates using the shared machine should start with [their local onboarding](docs/team-onboarding.md)
-and [work allocation](docs/team-work-allocation.md). Use your own checkout and GitHub credentials.
+En la máquina compartida, revisa primero la [guía del equipo](docs/team-onboarding.md) y la
+[distribución de tareas](docs/team-work-allocation.md). Usa tu propia copia y tus credenciales.
+Después consulta la [guía del responsable](docs/lead-handbook.md), el [plan](tasks/plan.md) y tu tarea.
 
-Start with [the lead handbook](docs/lead-handbook.md), [the plan](tasks/plan.md), and your GitHub issue.
-Development is supported on Linux/macOS; Windows contributors should use WSL for Make targets.
-Install Git, Make, uv >=0.11.20 and optionally the GitHub CLI through their official installation guides.
-Python is managed by uv; `.python-version` pins the default interpreter.
+Trabajamos en español del Perú. Escribe documentación, tareas y PR en español claro; explica las
+siglas. Conserva comandos, rutas y nombres de API. Usa inglés solo cuando una contribución externa
+lo requiera. La [decisión de idioma](docs/decisions/002-espanol-peru.md) detalla el criterio.
+
+El desarrollo se verifica en Linux; macOS está contemplado en las herramientas. En Windows usa WSL
+para ejecutar Make. Instala Git, Make, uv >=0.11.20 y, de ser necesario, GitHub CLI. uv administra Python.
 
 ```bash
 uv python install
@@ -18,16 +21,18 @@ make build
 make audit
 ```
 
-Setup and build may download tooling. `make check` uses no live environmental data; after setup it
-can run with `UV_OFFLINE=true`. The advisory audit deliberately queries an external service.
-CI repeats quality checks on Python 3.11 and 3.13.13 and runs the dependency audit separately.
+La instalación y la generación del paquete pueden descargar herramientas. `make check` no usa datos
+ambientales remotos y funciona con `UV_OFFLINE=true` después de la instalación.
+`make audit` sí consulta un servicio de alertas de seguridad. CI repite los controles en Python
+3.11 y 3.13.13 y ejecuta la auditoría por separado.
 
-Create a focused branch, reference the issue in the PR, include verification evidence, and request
-review from the data and platform lead. CODEOWNERS requests a review; it does not itself enforce one.
-A contributor cannot approve their own PR. Use the PR template and leave sources at `discovered`
-until evidence justifies a status change. Read `AGENTS.md` for data handling rules.
+El [glosario](docs/glossary.md) explica PR, CI, ventanas y fuga de información con ejemplos.
 
-The CLI currently implements `catalog validate`, `workspace init` and `doctor`. Proposed download,
-profile, normalization, training and TimeF commands in the initial brief are not implemented.
-Do not publish dataset artifacts or open an upstream dataset PR without the authorization recorded
-in the plan. The code license is still a lead decision; no dataset license is implied by a public repo.
+Crea una rama por entrega, vincula la tarea en el PR y solicita revisión de Keneth.
+CODEOWNERS solicita revisión, pero no exige una aprobación por sí solo; no puedes aprobar tu propio PR.
+Mantén las fuentes en `discovered` hasta reunir evidencia. Revisa `AGENTS.md` para las reglas de datos.
+
+La herramienta actual implementa `catalog validate`, `workspace init` y `doctor`. Los comandos de
+descarga, análisis, normalización y TimeF del documento inicial siguen siendo propuestas.
+No publiques datos ni abras un PR externo sin la autorización prevista en el plan.
+La licencia del código sigue pendiente y un repositorio público no define la licencia de sus fuentes.

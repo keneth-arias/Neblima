@@ -23,7 +23,7 @@ def test_invalid_catalog_exits_nonzero_without_echoing_input(tmp_path):
     result = runner.invoke(app, ["catalog", "validate", "--path", str(path)])
     assert result.exit_code == 1
     assert "private-value" not in result.output
-    assert "Cannot read or validate" in result.output
+    assert "No se pudo leer o validar" in result.output
 
 
 def test_workspace_init_is_idempotent_and_preserves_raw_files(tmp_path):
@@ -50,10 +50,10 @@ def test_workspace_honors_environment_data_directory(tmp_path, monkeypatch):
 
 def test_workspace_reports_creation_failure(tmp_path):
     file = tmp_path / "existing-file"
-    file.write_text("keep me")
+    file.write_text("conservar")
     result = runner.invoke(app, ["workspace", "init", "--data-dir", str(file)])
     assert result.exit_code == 1
-    assert file.read_text() == "keep me"
+    assert file.read_text() == "conservar"
 
 
 def test_doctor_reports_failure_without_creating_directories(tmp_path):
@@ -80,3 +80,15 @@ def test_doctor_rejects_a_nonwritable_layer(tmp_path, monkeypatch):
     result = runner.invoke(app, ["doctor", "--catalog", str(CATALOG), "--data-dir", str(tmp_path)])
     assert result.exit_code == 1
     assert json.loads(result.stdout)["checks"]["storage"] is False
+
+
+def test_cli_help_uses_peruvian_spanish():
+    result = runner.invoke(app, ["--help"])
+    assert result.exit_code == 0
+    assert "Herramientas locales" in result.stdout
+
+
+def test_workspace_success_message_is_in_spanish(tmp_path):
+    result = runner.invoke(app, ["workspace", "init", "--data-dir", str(tmp_path)])
+    assert result.exit_code == 0
+    assert "Carpetas de trabajo listas" in result.stdout

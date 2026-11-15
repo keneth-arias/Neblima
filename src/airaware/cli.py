@@ -1,6 +1,6 @@
-"""Offline foundation commands; acquisition commands are implemented in later issues.
+"""Comandos locales iniciales; la descarga se implementará en tareas posteriores.
 
-Typer command/testing patterns: https://typer.tiangolo.com/tutorial/testing/
+Referencia de comandos y pruebas de Typer: https://typer.tiangolo.com/tutorial/testing/
 """
 
 import json
@@ -16,9 +16,15 @@ import typer
 
 from airaware.catalog import CatalogError, load_catalog
 
-app = typer.Typer(no_args_is_help=True, help="AirAware local data and platform tools.")
-catalog_app = typer.Typer(no_args_is_help=True, help="Inspect the offline source inventory.")
-workspace_app = typer.Typer(no_args_is_help=True, help="Prepare local artifact directories.")
+app = typer.Typer(
+    no_args_is_help=True, help="Herramientas locales de datos y plataforma de AirAware."
+)
+catalog_app = typer.Typer(
+    no_args_is_help=True, help="Revisar el inventario de fuentes sin usar la red."
+)
+workspace_app = typer.Typer(
+    no_args_is_help=True, help="Preparar las carpetas locales de datos y resultados."
+)
 app.add_typer(catalog_app, name="catalog")
 app.add_typer(workspace_app, name="workspace")
 LAYERS = ("raw", "staging", "normalized", "curated", "benchmarks", "timef")
@@ -27,7 +33,7 @@ DataDirectory = Annotated[Path, typer.Option(envvar="AIRAWARE_DATA_DIR")]
 
 @catalog_app.command("validate")
 def catalog_validate(path: Path = Path("configs/sources.yaml")) -> None:
-    """Validate source metadata and summarize verification status, without making requests."""
+    """Validar metadatos y resumir estados de verificación sin hacer consultas de red."""
     try:
         catalog = load_catalog(path)
     except CatalogError as error:
@@ -47,14 +53,16 @@ def catalog_validate(path: Path = Path("configs/sources.yaml")) -> None:
 
 @workspace_app.command("init")
 def workspace_init(data_dir: DataDirectory = Path("data")) -> None:
-    """Create missing layer directories, preserving all existing files."""
+    """Crear las carpetas de cada etapa sin modificar los archivos existentes."""
     try:
         for layer in LAYERS:
             (data_dir.expanduser() / layer).mkdir(parents=True, exist_ok=True)
     except OSError:
-        typer.echo("Cannot create workspace directories; check path and permissions", err=True)
+        typer.echo(
+            "No se pudieron crear las carpetas de trabajo; revisa la ruta y los permisos", err=True
+        )
         raise typer.Exit(1) from None
-    typer.echo("Workspace layers ready")
+    typer.echo("Carpetas de trabajo listas")
 
 
 @app.command()
@@ -62,7 +70,7 @@ def doctor(
     catalog: Path = Path("configs/sources.yaml"),
     data_dir: DataDirectory = Path("data"),
 ) -> None:
-    """Check local readiness without network calls, writes, or credential disclosure."""
+    """Revisar el entorno local sin usar la red, escribir archivos ni mostrar credenciales."""
     try:
         load_catalog(catalog)
         catalog_ok = True

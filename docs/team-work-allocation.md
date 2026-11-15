@@ -1,49 +1,48 @@
-# Team ownership and work queues
+# Responsables y orden de trabajo
 
-Allocation on 2026-11-15: 18 of 35 open implementation issues are reserved for teammates using owner labels and issue handoffs.
-Native GitHub assignees are pending invitation acceptance; Keneth explicitly chose to keep these
-planned ownership queues until teammates can accept. This is an
-ownership queue, not 18 tasks to run at once. Live ownership labels, assignments and acceptance criteria are in GitHub;
-existing dependencies are unchanged. Keep one active issue per person, and split large issues into
-small PRs rather than marking partially complete issues done.
+El 15/11/2026 se reservaron 18 de las 35 tareas abiertas para el equipo mediante etiquetas y notas
+de entrega. Las asignaciones nativas esperan que acepten las invitaciones; Keneth indicó mantener
+estas reservas mientras tanto. Es una lista de trabajo futuro, no 18 tareas simultáneas.
+GitHub conserva responsables, criterios y dependencias. Una tarea activa por persona es el límite inicial.
 
-| Owner | Role | Issue queue |
+| Responsable | Función | Tareas reservadas |
 | --- | --- | --- |
-| Keneth / keneth-arias | Main data and platform lead; shared interfaces, scientific decisions, CI, leakage and releases | #1, #2, #3, #4, #6, #7, #11, #12, #14, #19, #20, #21, #22, #23, #27, #28, #32 |
-| Cristopher / qriqs | Full-time contributor; source research and bounded, tested implementation | #5, #8, #9, #10, #13, #15, #16, #17, #18, #25, #26, #30, #31, #33, #34, #35 |
-| Jordan / J0r-PS | Part-time contributor; guided documentation and showcase preparation | #24, #29 |
+| Keneth / keneth-arias | Liderazgo de datos y plataforma; contratos comunes, decisiones científicas, CI, prevención de fuga de información y publicaciones | #1, #2, #3, #4, #6, #7, #11, #12, #14, #19, #20, #21, #22, #23, #27, #28, #32 |
+| Cristopher / qriqs | Dedicación completa; investigación de fuentes e implementación acotada con pruebas | #5, #8, #9, #10, #13, #15, #16, #17, #18, #25, #26, #30, #31, #33, #34, #35 |
+| Jordan / J0r-PS | Dedicación parcial; documentación guiada y preparación de la presentación | #24, #29 |
 
-## Start without blocking the engineering path
+## Qué puede empezar cada uno
 
-- Cristopher starts with #5: investigate OEFA links/dictionaries and record evidence/unknowns in
-  docs/sources/oefa.md. No bulk download or coordinate guesses. Final catalog edits wait for #3;
-  Keneth reviews licensing and CRS interpretation. Weather/OpenAQ research (#16/#31) is an alternative
-  if OEFA is inaccessible; acquisition/integration still waits for the listed dependencies.
-- Jordan starts with #29: draft the showcase outline and submission-link checklist with explicit
-  placeholders. No metrics or public posting are needed to make this first PR. The final showcase
-  still waits for #24/#28. #24 can begin later with a dataset-card template; Keneth supplies verified
-  scientific/license facts and connector code, and retains publication decisions.
-- Keneth clears #1–#3/foundation review and #4, then owns the downloader contract (#6/#7), canonical
-  contracts, scientific source precedence and split/leakage enforcement. Teammates implement against
-  these contracts instead of independently redesigning them.
+- Cristopher: #5, revisar enlaces y diccionarios de OEFA y registrar evidencia y dudas en
+  docs/sources/oefa.md. No descargar datos masivos ni suponer coordenadas. El cambio final del
+  catálogo espera #3. Keneth revisa licencias y sistema de referencia de coordenadas (CRS).
+  Si OEFA no responde, puede investigar meteorología/OpenAQ (#16/#31); la descarga sigue sujeta
+  a las dependencias originales.
+- Jordan: #29, preparar un esquema de presentación y una lista de enlaces de entrega, indicando
+  claramente lo pendiente. No necesita métricas ni publicar en redes para hacer el primer PR.
+  La versión final espera #24/#28. Luego puede preparar la plantilla de ficha del conjunto de datos
+  de #24. Keneth aporta y aprueba los datos científicos, licencias y código del conector.
+- Keneth: revisar la base #1–#3 y SENAMHI #4; definir las interfaces de descarga #6/#7, los esquemas,
+  la precedencia de fuentes y la separación temporal. El resto implementa sobre esos acuerdos.
 
-Research and documentation can start before their final completion dependencies are satisfied.
-Implementation that consumes an unfinished interface must wait or use an agreed fixture contract.
-For example, Cristopher can draft profiling tests with explicitly synthetic fixtures, but cannot
-report real coverage before acquiring actual artifacts. No assignment is permission to bypass a
-source, budget, scientific-validity, leakage or publication gate.
+La investigación y los borradores pueden comenzar antes de cumplir las dependencias de cierre.
+El código que use una interfaz pendiente debe esperar o usar un contrato de prueba acordado.
+Por ejemplo, se pueden preparar pruebas de calidad con datos sintéticos identificados como tales,
+pero no reportar cobertura real antes de adquirir archivos reales. Ninguna reserva permite saltarse
+controles de derechos, presupuesto, validez científica, fuga de información o publicación.
 
-## Handoff rules
+## Cómo entregar sin bloquear a los demás
 
-Each reassigned issue contains a first small deliverable and a dependency/review gate. Work in
-separate source-specific documents and modules; avoid simultaneous wholesale edits to
-configs/sources.yaml, shared schemas or CLI contracts. Submit the evidence/document first if the
-shared file is under review, then Keneth coordinates its catalog integration.
+Cada tarea reservada indica una primera entrega pequeña y las condiciones de revisión.
+Trabaja en documentos o módulos propios de la fuente. Coordina cambios de configs/sources.yaml,
+esquemas y comandos compartidos. Si el archivo común está en revisión, entrega primero el documento
+con evidencia; Keneth coordina su integración al catálogo.
 
-When blocked, record the concrete missing input and next action on the issue, then choose independent
-research/documentation. Do not bypass another owner's module to get unstuck. Optional weather,
-national, atmospheric and QA queues do not delay the first pollution-only benchmark.
+Ante un bloqueo, registra el insumo faltante y el siguiente paso; luego toma investigación o
+redacción independiente. No modifiques el módulo de otra persona para evitar una dependencia.
+Meteorología opcional, ampliación nacional, satélites y preguntas temporales no retrasan el primer
+conjunto de evaluación basado solo en contaminación.
 
-Keneth reviews shared schema, units, CRS, licensing, missingness and leakage changes. Jordan's first
-PRs are documentation-only, with no fabricated results, code-generation responsibility, or external
-posting. Queue ownership does not impose a deadline or increase the agreed availability.
+Keneth revisa unidades, CRS, licencias, datos faltantes, esquemas y fuga de información.
+Los primeros PR de Jordan son de documentación, sin inventar resultados ni exigirle desarrollar el
+conector o publicar externamente. Reservar tareas no cambia su disponibilidad ni impone un plazo.

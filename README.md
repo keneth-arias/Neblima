@@ -1,13 +1,15 @@
 # AirAware Perú
 
-Reproducible air-quality time-series dataset engineering for Lima, Callao and Peru, participating in
-the [TimeNet hackathon](https://challenge.timenet.ai/). The first use case is measured PM2.5 forecasting.
-Keneth Arias (`@keneth-arias`) is the main data and platform lead.
+Proyecto de ingeniería de datos de calidad del aire para Lima, Callao y el Perú. Participamos en el
+[hackathon de TimeNet](https://challenge.timenet.ai/). El primer caso de uso es pronosticar PM2.5
+usando mediciones reales. Keneth Arias (`@keneth-arias`) lidera datos y plataforma.
 
-## Start locally
+El idioma de trabajo del equipo es el **español del Perú**. La documentación, las tareas y los PR se
+redactan en español claro. Los comandos, identificadores y nombres técnicos conservan su forma original.
 
-Install Git, Make and [uv](https://docs.astral.sh/uv/getting-started/installation/), then run from this
-repository root:
+## Empieza en tu equipo
+
+Instala Git, Make y [uv](https://docs.astral.sh/uv/getting-started/installation/). Desde la carpeta raíz:
 
 ```bash
 uv python install
@@ -17,9 +19,10 @@ make doctor
 make check
 ```
 
-The default Python is 3.13.13. Dependencies are locked in `uv.lock`. Setup needs network access for
-tooling; catalog validation and tests work offline after setup. No paid service or provider API key
-is needed for current commands. [Contributor setup](CONTRIBUTING.md) includes build and audit checks.
+Usamos Python 3.13.13 y dependencias fijadas en `uv.lock`. La instalación descarga herramientas;
+las pruebas y la validación del catálogo funcionan sin internet después de la instalación.
+Para estos comandos no necesitas servicios de pago ni claves de proveedores.
+Consulta [cómo contribuir](CONTRIBUTING.md) para generar el paquete y revisar dependencias.
 
 ```bash
 uv run --locked airaware catalog validate
@@ -27,33 +30,37 @@ uv run --locked airaware workspace init
 uv run --locked airaware doctor
 ```
 
-`AIRAWARE_DATA_DIR` selects another local artifact root. Environment files are not auto-loaded.
-See the [lead handbook](docs/lead-handbook.md) and [service/access checklist](docs/services.md).
+`AIRAWARE_DATA_DIR` permite elegir otra carpeta de datos. El archivo `.env` no se carga automáticamente.
+Revisa la [guía del responsable](docs/lead-handbook.md), los [servicios](docs/services.md),
+la [guía de inicio del equipo](docs/team-onboarding.md) y la [distribución de tareas](docs/team-work-allocation.md).
 
-Team members: see [local onboarding](docs/team-onboarding.md) and
-[issue ownership and first tasks](docs/team-work-allocation.md).
+Si recién empiezas, consulta el [glosario práctico](docs/glossary.md).
 
-## Current capabilities
-The foundation validates 37 candidate source resources, initializes local storage layers, and checks
-the local environment. Every source remains unverified. Acquisition, profiling, normalization,
-TimeF export and training are future tasks; no environmental observations have been collected.
+## Qué funciona hoy
 
-## Layout and next work
+La base del proyecto valida 37 recursos candidatos, prepara las carpetas locales y revisa el entorno.
+Todas las fuentes siguen pendientes de verificación. Todavía no se han recolectado observaciones
+ambientales. La descarga, el análisis de calidad, la normalización, la exportación TimeF y el
+entrenamiento están en las tareas siguientes.
 
-- `configs/sources.yaml`: active source inventory; [schema and status rules](docs/sources.md).
-- `src/airaware/`: catalog validation and CLI; `tests/`: offline behavior checks.
-- `data/`: raw, staging, normalized, curated, benchmarks and timef artifacts, excluded from Git.
-- `metadata/*.csv`: original internal column templates, not TimeNet exports.
-- `docs/`: methodology, decisions, lead onboarding and verified upstream research.
-- `.github/`: CI, CODEOWNERS, source-review issue form and PR template.
+## Organización y próximos pasos
 
-Start with source verification in [#4](https://github.com/keneth-arias/airaware/issues/4) and
-[#5](https://github.com/keneth-arias/airaware/issues/5), then implement acquisition before downloading.
-The [implementation plan](tasks/plan.md), [GitHub Project](https://github.com/users/keneth-arias/projects/1)
-and [issues](https://github.com/keneth-arias/airaware/issues) track delivery.
-The [initial brief](docs/initial-plan.md) retains the complete scope; its proposed commands are not
-implemented APIs. [Architecture](ARCHITECTURE.md) describes current and planned boundaries.
+- `configs/sources.yaml`: inventario vigente; [campos y estados](docs/sources.md).
+- `src/airaware/` y `tests/`: herramientas locales y pruebas sin servicios externos.
+- `data/`: datos originales, intermedios, normalizados, depurados, conjuntos de evaluación y TimeF.
+  Los archivos de datos no se suben a Git.
+- `metadata/*.csv`: plantillas iniciales de columnas; no son exportaciones TimeNet.
+- `docs/`: metodología, decisiones y guías del equipo.
+- `.github/`: integración continua (CI), responsables y plantillas de tareas y PR.
 
-Never commit credentials or bulk data. Source licenses must be verified before redistribution;
-a public repository does not grant rights to candidate datasets. The project's code license remains
-a lead decision, and no dataset license is asserted by this foundation.
+Empiecen por verificar SENAMHI en [#4](https://github.com/keneth-arias/airaware/issues/4) y OEFA en
+[#5](https://github.com/keneth-arias/airaware/issues/5). Implementen la descarga antes de recolectar datos.
+El [plan vigente](tasks/plan.md), el [tablero](https://github.com/users/keneth-arias/projects/1) y las
+[tareas](https://github.com/keneth-arias/airaware/issues) muestran el trabajo pendiente.
+La [arquitectura](ARCHITECTURE.md) diferencia lo implementado de lo propuesto.
+El [plan inicial completo](docs/initial-plan.md) también está adaptado al español. Sus comandos
+propuestos aún no están implementados. El texto original se conserva en el historial de Git.
+
+No subas credenciales ni datos masivos. Verifica las licencias antes de redistribuir datos.
+Que el repositorio sea público no concede derechos sobre las fuentes. La licencia del código del
+proyecto todavía debe definirse y no se atribuye una licencia a los datos candidatos.

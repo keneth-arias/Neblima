@@ -29,7 +29,7 @@ def test_discovery_preserves_unknowns_without_claiming_verification():
 
 
 def test_duplicate_source_ids_are_rejected():
-    with pytest.raises(ValidationError, match="unique"):
+    with pytest.raises(ValidationError, match="únicos"):
         Catalog.model_validate({"schema_version": 1, "sources": [candidate(), candidate()]})
 
 
@@ -43,7 +43,9 @@ def test_integration_requires_rights_and_verified_measurement_semantics():
     with pytest.raises(ValidationError):
         Source.model_validate(
             candidate(
-                status="integrated", last_verified_at="2026-11-15T00:00:00Z", notes="Checked file"
+                status="integrated",
+                last_verified_at="2026-11-15T00:00:00Z",
+                notes="Archivo revisado",
             )
         )
 
@@ -115,7 +117,7 @@ def test_verified_source_with_timestamped_evidence_is_accepted():
         candidate(
             status="verified",
             last_verified_at="2026-11-15T12:00:00-05:00",
-            notes="Reviewed official catalog and recorded its measurement methodology.",
+            notes="Catálogo oficial revisado y metodología de medición registrada.",
         )
     )
     assert source.status == "verified"
@@ -127,7 +129,7 @@ def test_integration_accepts_documented_rights_and_measurement_category():
         candidate(
             status="integrated",
             last_verified_at="2026-11-15T17:00:00Z",
-            notes="Fixture only: sample artifact and terms inspected.",
+            notes="Solo muestra de prueba: archivo y términos revisados.",
             license="CC-BY-4.0",
             license_url="https://example.org/license",
             redistribution="allowed",
@@ -138,12 +140,12 @@ def test_integration_accepts_documented_rights_and_measurement_category():
 
 
 def test_naive_verification_timestamp_is_rejected():
-    with pytest.raises(ValidationError, match="timezone"):
+    with pytest.raises(ValidationError, match="zona horaria"):
         Source.model_validate(
-            candidate(status="verified", last_verified_at="2026-11-15T17:00:00", notes="Checked")
+            candidate(status="verified", last_verified_at="2026-11-15T17:00:00", notes="Revisado")
         )
 
 
 def test_missing_catalog_is_a_safe_error(tmp_path):
-    with pytest.raises(CatalogError, match="Cannot read or validate"):
+    with pytest.raises(CatalogError, match="No se pudo leer o validar"):
         load_catalog(tmp_path / "absent.yaml")

@@ -1,56 +1,63 @@
-# Verified TimeNet integration notes
+# Notas verificadas de integración con TimeNet
 
-Checked 2026-11-15 against clean upstream commit
+Revisión del 15/11/2026 sobre la copia sin cambios del commit
 [`9bd1613019ee61fbc52e02106a1a45990ead7a54`](https://github.com/OpenTSLM/TimeNet/tree/9bd1613019ee61fbc52e02106a1a45990ead7a54).
-The local checkout SHA matched remote HEAD. Both packages declare 0.12.0 and Python >=3.11;
-upstream contributor guidance tests Python 3.11–3.13. This is source inspection, not an AirAware
-TimeF runtime validation. AirAware intentionally does not install the SDK/build tool yet.
+El SHA local coincidió con HEAD remoto. Ambos paquetes declaran versión 0.12.0 y Python >=3.11;
+las instrucciones de contribución prueban Python 3.11–3.13.
+Se inspeccionó código: esto no constituye una validación de TimeF en ejecución.
+El SDK y la herramienta de construcción aún no están instalados en AirAware.
 
-## Inspected contract
-Paths below are relative to the pinned upstream tree.
+## Contratos inspeccionados
 
-| Component | Verified contract | Upstream path |
+Las rutas son relativas al repositorio externo en la revisión indicada.
+
+| Componente | Contrato verificado | Ruta externa |
 | --- | --- | --- |
-| BaseConnector | `download(cache_dir: Path) -> list[TRaw]`, or async download; `convert(raw_refs) -> TimeFDataset` has no network I/O | `packages/timenet/src/timenet/connectors/base.py` |
-| Composition | Override `compose(raw_refs, context)` for declared parents; parents are accessed through `context.parents`; use `dataset.import_from` | same file; `docs/connectors.md` |
-| Dataset | `TimeFDataset(metadata=...)`; attach records/tasks through `add_record(record=...)` / `add_task(task=...)` | `packages/timenet/src/timenet/dataset/dataset.py` |
-| Record/Source | Keyword-only dataclasses; Record holds root Sources and a TimeOrigin; Source holds named child sources and Signals | `dataset/record.py`, `dataset/source.py` under the same package |
-| Signal | Keyword-only `spec`, `time_axis`, `name`, `data`; lazy `from_loader` is supported | `dataset/time_series.py` |
-| Tasks | Built-in ForecastingTask, ClassificationTask and AnswerTask inherit keyword-only inputs/targets/prompt/split fields; classification also uses label definitions | `packages/timenet/src/timenet/types/tasks.py` |
-| Storage | `dataset.write(path=..., values_backend=...)` uses official writer; `TimeFReader.open(version_dir)` reads it | `docs/timef-writer.md`, `docs/timef-reader.md` |
+| BaseConnector | `download(cache_dir: Path) -> list[TRaw]`, o variante asíncrona; `convert(raw_refs) -> TimeFDataset` no usa la red | `packages/timenet/src/timenet/connectors/base.py` |
+| Composición | Redefinir `compose(raw_refs, context)` con padres declarados; acceso por `context.parents` e importación mediante `dataset.import_from` | El mismo archivo y `docs/connectors.md` |
+| Conjunto de datos | `TimeFDataset(metadata=...)`; agregar con `add_record(record=...)` y `add_task(task=...)` | `packages/timenet/src/timenet/dataset/dataset.py` |
+| Record y Source | Clases de datos con argumentos nombrados; Record contiene fuentes raíz y TimeOrigin; Source contiene fuentes hijas y señales | `dataset/record.py`, `dataset/source.py` dentro del paquete |
+| Signal | Argumentos nombrados `spec`, `time_axis`, `name`, `data`; admite lectura diferida con `from_loader` | `dataset/time_series.py` |
+| Tareas | ForecastingTask, ClassificationTask y AnswerTask heredan inputs, targets, prompt y split; clasificación usa etiquetas | `packages/timenet/src/timenet/types/tasks.py` |
+| Almacenamiento | `dataset.write(path=..., values_backend=...)` usa el escritor oficial; `TimeFReader.open(version_dir)` permite leerlo | `docs/timef-writer.md`, `docs/timef-reader.md` |
 
-Writer output includes manifest.json and control.duckdb plus Parquet/Zarr signal storage.
-The reader is a context manager. `TimeFReader.verify()` checks release file hashes. Do not create
-an AirAware lookalike format. Internal observation templates are not TimeF artifacts.
+El escritor genera manifest.json, control.duckdb y valores de señales en Parquet o Zarr.
+El lector se usa como administrador de contexto. `TimeFReader.verify()` verifica las sumas de los
+archivos. No crear un formato propio que imite TimeF. Las plantillas internas de observaciones no son TimeF.
 
-## Missingness, splits and licensing
-- Arrow nulls are preserved by `to_arrow`; `to_numpy` and the PyTorch adapter reject actual nulls.
-  Handle masks and any justified causal input imputation explicitly before tensor conversion.
-  See pinned `docs/data-model/time-series.md`.
-- Splits live on Tasks, not Records. A Record can serve multiple splits; our window builder must
-  enforce input/target separation itself. Do not copy TSQA's generic stratified splitter for a
-  chronological air-quality benchmark. See `docs/data-model/tasks.md` and `docs/connectors.md`.
-- `compose` and parent declarations support lineage and pinned parent releases. Confirm final
-  namespace availability and exact card requirements when building the first connector.
-- TimeNet code is MIT, but data retains source licenses. The hosted registry requires the dataset
-  and ancestors to declare open access. `NONE` is not permission to redistribute.
-  See pinned `docs/catalog/licensing.md`; AirAware has not chosen its own code license yet.
+## Datos faltantes, particiones y licencias
 
-## Reusable examples and checks
-Inspected AGENTS.md, CONTRIBUTING.md and package pyprojects; hello-world's connector/card and TSQA's
-card and split guidance. Hello-world is an offline synthetic example; TSQA demonstrates task and card
-metadata. A search of connector cards for weather/climate/air-quality/meteorology found no direct
-reusable environmental connector at this revision; this is not a full external ecosystem search.
+- `to_arrow` conserva valores nulos. `to_numpy` y el adaptador PyTorch rechazan nulos reales.
+  Deben tratarse las máscaras y cualquier imputación causal justificada antes de convertir a tensores.
+  Referencia: `docs/data-model/time-series.md` de la revisión fijada.
+- Las particiones pertenecen a Task, no a Record. Un registro puede servir a varias particiones;
+  nuestro constructor debe evitar que entradas y objetivos se compartan entre entrenamiento y prueba.
+  No copiar la partición estratificada de TSQA para un problema cronológico de contaminación.
+  Referencias: `docs/data-model/tasks.md` y `docs/connectors.md`.
+- `compose` y los padres declarados permiten trazabilidad con versiones fijadas. Confirmar los nombres
+  disponibles y el esquema de ficha al implementar el conector.
+- El código de TimeNet usa MIT; los datos conservan sus propias licencias. El registro alojado exige
+  acceso abierto del conjunto y sus antecesores. `NONE` no autoriza redistribución.
+  Referencia: `docs/catalog/licensing.md`. La licencia de AirAware sigue pendiente.
 
-For future upstream changes, follow its per-connector requirements and contributor commands:
-`make check`, `make lint-fix`, `make test`, `make test-connectors`, and license checks. Do not
-run these against AirAware, whose own commands are documented in CONTRIBUTING.md.
+## Ejemplos y controles
 
-Remaining integration work: source-specific connector, fixture round trip, namespace checks,
-nullable-to-tensor tests and standard SDK loading in issues #21–#23. No dataset has been collected.
+Se revisaron AGENTS.md, CONTRIBUTING.md, los pyproject de ambos paquetes, el conector y la ficha de
+hello-world y la ficha y orientación de particiones de TSQA. Hello-world es sintético y no usa red.
+TSQA muestra metadatos de tareas y fichas. La búsqueda de weather/climate/air-quality/meteorology en
+las fichas no encontró un conector ambiental directamente reutilizable en esa revisión.
+Esto no equivale a una búsqueda exhaustiva fuera del repositorio.
 
-## Hackathon verification
-The [official challenge](https://challenge.timenet.ai/) checked on 2026-11-15 requires onboarding a
-TimeNet dataset, training/fine-tuning a temporal model, a showcase, and the submission links listed
-in `docs/hackathon.md`. The research notes are not a submission. Verify deadlines and requirements
-again before submitting. Each participant must register individually.
+Para contribuir a TimeNet, seguir sus dependencias por conector y comandos: `make check`,
+`make lint-fix`, `make test`, `make test-connectors` y controles de licencia.
+No confundirlos con los de AirAware, documentados en CONTRIBUTING.md.
+
+Quedan #21–#23: conector de fuente, escritura y lectura de una muestra, nombres disponibles,
+tratamiento de nulos antes de tensores y carga con el SDK estándar. Aún no hay datos recolectados.
+
+## Requisitos del hackathon
+
+La [página oficial](https://challenge.timenet.ai/), revisada el 15/11/2026, exige incorporar un conjunto
+a TimeNet, entrenar o ajustar un modelo temporal, preparar una presentación y entregar los enlaces
+de `docs/hackathon.md`. Cada persona debe registrarse. Revisar las reglas y el plazo antes de enviar;
+estas notas no constituyen una entrega.

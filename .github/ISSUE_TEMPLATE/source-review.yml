@@ -1,24 +1,25 @@
-name: Source verification
-description: Record access, scientific semantics, provenance and license evidence
-title: "Verify source: "
+name: Verificación de una fuente
+description: Registrar acceso, metodología, procedencia y evidencia de licencia
+title: 'Verificar fuente: '
 body:
-  - type: input
-    id: source
-    attributes:
-      label: Catalog source_id and official URL
-    validations:
-      required: true
-  - type: textarea
-    id: evidence
-    attributes:
-      label: Evidence and verification timestamp
-      description: Include coverage, cadence, units, measurement type, access status and license URL. Never paste credentials.
-    validations:
-      required: true
-  - type: textarea
-    id: decision
-    attributes:
-      label: Decision or blocker
-      description: State verified facts, unknowns, restrictions and next action separately.
-    validations:
-      required: true
+- type: input
+  id: source
+  attributes:
+    label: source_id del catálogo y URL oficial
+  validations:
+    required: true
+- type: textarea
+  id: evidence
+  attributes:
+    label: Evidencia y fecha de verificación
+    description: Incluir cobertura, frecuencia, unidades, tipo de medición, acceso
+      y URL de licencia. No pegar credenciales.
+  validations:
+    required: true
+- type: textarea
+  id: decision
+  attributes:
+    label: Decisión o bloqueo
+    description: Separar hechos verificados, dudas, restricciones y siguiente acción.
+  validations:
+    required: true

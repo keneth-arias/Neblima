@@ -1,34 +1,43 @@
-# AirAware contributor instructions
+# Instrucciones para contribuir a AirAware
 
-Read `CONSTRAINTS.md` before writing code. Do not weaken it to make a change pass.
-Read `tasks/plan.md` and the issue being implemented; preserve incomplete work.
+Lee `CONSTRAINTS.md` antes de escribir código. No debilites los controles para aprobar un cambio.
+Revisa `tasks/plan.md` y la tarea correspondiente. Conserva el trabajo pendiente de otras personas.
 
-## Ownership and scope
-Keneth Arias (`@keneth-arias`) is the main data and platform lead. See
-`docs/lead-handbook.md` for decisions, handoffs and the first working session.
-Read `docs/team-work-allocation.md` for owners and handoff boundaries. Each developer uses their own
-checkout/environment; never switch branches in another developer's folder.
-Use English for code/docs; preserve original Spanish source artifacts.
+## Equipo e idioma
 
-## Commands
-Run from the repository root using uv: `make setup`, `make init`, `make check`,
-`make build`, `make audit`, `make doctor`. Python development uses `.python-version`;
-CI checks Python 3.11 and 3.13.13. Tests and catalog validation must work offline after sync.
+Keneth Arias (`@keneth-arias`) es el responsable principal de datos y plataforma.
+Consulta `docs/lead-handbook.md` y `docs/team-work-allocation.md` para conocer responsables y entregas.
+Cada persona usa su propia copia y entorno; no cambies la rama dentro de la carpeta de otra persona.
+El idioma principal es español latinoamericano, con vocabulario usual en el Perú: archivo, carpeta,
+equipo, datos faltantes, tarea y responsable. Explica las siglas al usarlas por primera vez.
+Documentación, tareas, títulos/descripciones de PR y mensajes visibles se escriben en español.
+Mantén identificadores, rutas, comandos, campos de esquemas y nombres de API en su forma técnica
+original. Los tipos de Conventional Commits se conservan; el resumen puede ir en español.
+Preserva los archivos originales de las fuentes. Sigue el idioma exigido por TimeNet en contribuciones
+externas. La política de idioma actual reemplaza la indicación en inglés del plan original, conservado en Git.
 
-## Boundaries
-- `configs/sources.yaml` and `airaware.catalog` own discovery metadata and its schema.
-- `metadata/*.csv` are legacy column templates, not an authoritative source inventory.
-- Keep network acquisition separate from deterministic conversion.
-- Use immutable raw files and trace every derived observation to source artifacts.
-- Never invent units, timestamps, coordinates, missing measurements or license grants.
-- Do not use random row splits for temporal benchmarks or future observations as features.
-- Do not commit bulk data, credentials, notebook outputs, caches or checkpoints.
-- Verify pinned TimeNet code before using its interfaces; see `configs/upstream.lock.json`.
-- Add dependencies only for implemented behavior. Document architectural decisions in `docs/decisions/`.
-- Bulk publication, external dataset PRs, paid services and expensive/unbounded downloads retain
-  the authorization gates recorded in the plan. Initial setup is local storage plus GitHub Actions.
+## Comandos
 
-## Delivery
-Use focused branches, tests before new logic, conventional commits and reviewable PRs.
-Run `make check`, `make build` and `make audit` before handoff. Report exact results and
-blockers. Never skip tests, suppress findings or claim unavailable data was inspected.
+Ejecuta desde la raíz: `make setup`, `make init`, `make check`, `make build`, `make audit`, `make doctor`.
+Usa uv y la versión de `.python-version`. CI verifica Python 3.11 y 3.13.13.
+Las pruebas y la validación del catálogo deben funcionar sin internet después de instalar dependencias.
+
+## Límites
+
+- `configs/sources.yaml` y `airaware.catalog` definen el inventario y su esquema.
+- `metadata/*.csv` son plantillas antiguas, no el inventario vigente.
+- Separa la descarga por red de la conversión local determinista.
+- Conserva los datos originales sin cambios y registra la procedencia de cada observación derivada.
+- No inventes unidades, fechas, coordenadas, mediciones faltantes ni permisos de uso.
+- No dividas filas al azar para evaluar series temporales ni uses información futura como entrada.
+- No subas datos masivos, claves, salidas de cuadernos, cachés ni pesos de modelos.
+- Verifica las API de TimeNet contra la revisión fijada en `configs/upstream.lock.json`.
+- Agrega dependencias solo cuando se utilicen. Registra decisiones en `docs/decisions/`.
+- Conserva las autorizaciones del plan para publicar datos, abrir PR externos, contratar servicios
+  o hacer descargas costosas o sin límites. Por ahora usamos almacenamiento local y GitHub Actions.
+
+## Entregas
+
+Trabaja en ramas y PR pequeños; escribe pruebas antes de cambiar la lógica.
+Antes de entregar ejecuta `make check`, `make build` y `make audit`. Registra comandos, resultados y
+bloqueos. No omitas pruebas, ocultes errores ni afirmes haber revisado datos que no están disponibles.

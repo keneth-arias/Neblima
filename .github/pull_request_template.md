@@ -1,12 +1,13 @@
-## Problem and resulting behavior
+## Problema y resultado del cambio
 
-## Related issue
+## Tarea relacionada
 
-## Verification
-- [ ] `make check` and `make build` pass; exact results are recorded below.
-- [ ] New behavior has focused tests; no tests or checks were weakened.
-- [ ] Source changes include provenance, verification dates and license evidence.
-- [ ] No raw data, credentials, generated caches or model weights are committed.
-- [ ] Documentation describes implemented behavior and remaining limitations.
+## Verificación
 
-Commands and results:
+- [ ] Pasan `make check` y `make build`; abajo se registran los resultados exactos.
+- [ ] Los cambios de comportamiento tienen pruebas; no se debilitaron controles ni pruebas.
+- [ ] Las fuentes incluyen procedencia, fecha de verificación y evidencia de licencia.
+- [ ] No se suben datos originales, credenciales, cachés ni pesos de modelos.
+- [ ] La documentación explica lo implementado y sus limitaciones.
+
+Comandos ejecutados y resultados:

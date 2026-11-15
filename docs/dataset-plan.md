@@ -1,23 +1,38 @@
-# Dataset plan
+# Plan del conjunto de datos
 
-## Scope
-Start with Lima, Peru. Prioritize PM2.5 and PM10 if available. Confirm stations, date range, sampling interval, and prediction horizon after reviewing coverage.
+## Alcance
 
-## Source discovery
-Investigate SENAMHI, Peru's national open data portal, and OpenAQ. These are candidate sources, not verified integrations. Record official endpoints, access requirements, coverage, and redistribution rights in the source inventory before importing anything.
+Empezar con Lima y Callao y ampliar al Perú cuando la cobertura lo permita.
+Priorizar PM2.5 y PM10 medidos. Confirmar estaciones, fechas, intervalo y horizonte después del análisis.
 
-## Collection and normalization
-- Preserve original files and record query parameters, retrieval time in UTC, and SHA-256 checksums.
-- Retain source timestamps and timezone; normalize timestamps to UTC and use America/Lima for local calendar features.
-- Record station coordinates, pollutant, unit, averaging period, measurement method, and source quality flags.
-- Keep missing values missing. Document negative values, detection limits, and unit conversions; retain originals.
-- Treat the observation CSV as an internal column template, not a validated TimeNet format.
+## Investigación de fuentes
 
-## Quality and evaluation
-Report coverage, missingness, duplicate station/pollutant/timestamp/averaging-period keys, gaps, and quality flags. Resolve conflicting duplicates with provenance. Use chronological train/validation/test splits and fit preprocessing only on training data. Compare forecasts with persistence and seasonal baselines; report MAE and RMSE by station, pollutant, and horizon.
+Revisar SENAMHI, OEFA, el Portal Nacional de Datos Abiertos y OpenAQ como candidatos.
+Registrar enlaces reales, requisitos de acceso, cobertura y derechos antes de importar datos.
 
-## TimeNet delivery
-Check the current official data model and connector documentation before implementing. Map sources, signals, time axes, metadata, and task annotations; validate a local TimeNet build and contribute the dataset through a PR. The CSV template alone is not a TimeNet dataset.
+## Recolección y normalización
 
-## First dataset acceptance
-Confirmed source rights, reproducible collection instructions, provenance, a quality report, chronological split definitions, and a validated TimeNet build.
+- Conservar originales y registrar parámetros, fecha UTC y suma de verificación SHA-256.
+- Preservar fechas y zona horaria originales; normalizar a UTC y usar America/Lima para calendario.
+- Registrar coordenadas, contaminante, unidad, periodo de promedio, método y marcas de calidad.
+- Conservar datos faltantes como tales. Documentar negativos, límites de detección y conversiones.
+- El CSV de observaciones es una plantilla interna, no un archivo TimeNet validado.
+
+## Calidad y evaluación
+
+Medir cobertura, datos faltantes, huecos, duplicados y conflictos por estación, contaminante,
+fecha y periodo. Resolver conflictos con procedencia documentada.
+Separar entrenamiento, validación y prueba cronológicamente. Ajustar el procesamiento solo con
+entrenamiento. Comparar con persistencia y referencias estacionales; informar MAE y RMSE por
+estación, contaminante y horizonte.
+
+## Entrega TimeNet
+
+Revisar el modelo de datos y los conectores vigentes antes de implementar. Mapear fuentes, señales,
+ejes temporales, metadatos y tareas. Validar una construcción local y preparar el PR externo,
+cuya apertura requiere la autorización del plan. La plantilla CSV por sí sola no es un conjunto TimeNet.
+
+## Condiciones del primer conjunto
+
+Derechos confirmados, recolección reproducible, procedencia trazable, informe de calidad,
+particiones cronológicas definidas y una construcción TimeF validada.

@@ -1,24 +1,25 @@
-# Foundation quality contract
+# Acuerdo de calidad inicial
 
-Established 2026-11-15 from the project brief and local-first setup scope.
-Owner: @keneth-arias. This is the initial floor; further coverage/performance budgets
-remain a lead decision after real pipeline measurements.
+Definido el 15/11/2026 a partir del plan y el alcance local. Responsable: @keneth-arias.
+Los objetivos adicionales de cobertura y rendimiento se definirán después de medir el sistema real.
 
-| Check | Gate | Command |
+| Control | Condición para aprobar | Comando |
 | --- | --- | --- |
-| Lockfile | Current project metadata resolves without lock changes | `uv lock --check` |
-| Formatting and lint | No configured findings | `uv run --locked ruff format --check src tests` and `uv run --locked ruff check src tests` |
-| Types | No type errors against Python 3.11 floor | `uv run --locked ty check src tests` |
-| Source catalog | Valid schema, unique IDs, evidence for progress | `uv run --locked airaware catalog validate` |
-| Behavior | All offline tests pass | `uv run --locked pytest` |
-| Packaging | Source distribution and wheel build | `make build` |
-| Dependency advisories | No known vulnerabilities in installed locked environment | `make audit` (network required) |
+| Dependencias fijadas | El archivo de versiones está actualizado | `uv lock --check` |
+| Formato y análisis estático | Cero errores de las reglas configuradas | `uv run --locked ruff format --check src tests` y `uv run --locked ruff check src tests` |
+| Tipos | Cero errores con la compatibilidad mínima de Python 3.11 | `uv run --locked ty check src tests` |
+| Catálogo | Esquema válido, ID únicos y evidencia de avance | `uv run --locked airaware catalog validate` |
+| Comportamiento | Todas las pruebas sin servicios externos aprueban | `uv run --locked pytest` |
+| Paquetes | Se generan distribución fuente y wheel | `make build` |
+| Seguridad de dependencias | Sin vulnerabilidades conocidas en el entorno instalado | `make audit` (requiere internet) |
 
-`make check` runs the first five rows locally and in CI. Dependency audit includes dev tools;
-the editable local package is skipped by the advisory service because it is unpublished.
-No numerical coverage target is asserted yet. Main branch protection requires both Python quality jobs and the advisory audit, with an owner
-override retained; see the service checklist for the active state.
+`make check` ejecuta las cinco primeras filas en local y en CI. La auditoría incluye herramientas
+de desarrollo; omite el paquete local editable porque no está publicado.
+No hay todavía un porcentaje mínimo de cobertura. La protección de main exige los dos controles
+por versión de Python y la auditoría; Keneth conserva la excepción de administrador.
+Consulta el estado en la [lista de servicios](docs/services.md).
 
-Review-enforced floor: no secrets, suppression comments, unfinished stubs, skipped/deleted tests
-without a documented reason, or weakened checks. These review rules are not represented as a
-complete automatic scanner. Do not edit this contract to bypass a failing change.
+La revisión también exige: no subir secretos, añadir supresiones para ocultar errores, dejar código
+sin implementar, omitir/eliminar pruebas sin motivo documentado ni debilitar controles.
+Estas reglas de revisión no equivalen a un escáner automático completo. No cambies este acuerdo
+para hacer pasar un cambio que falla. La traducción no reduce ninguna exigencia técnica.

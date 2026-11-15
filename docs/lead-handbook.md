@@ -1,14 +1,15 @@
-# Data and platform lead handbook
+# Guía del responsable de datos y plataforma
 
-Keneth Arias (`@keneth-arias`) is the main data and platform lead. CODEOWNERS routes repository
-review requests to you. This role owns source selection, canonical contracts, scientific data
-quality, provenance, split integrity, developer tooling, CI and release readiness.
-Cristopher (`@qriqs`) contributes full-time on source work and tested implementation. Jordan
-(`@J0r-PS`) contributes part-time on guided documentation and showcase work. See
-[work allocation](team-work-allocation.md) and [local onboarding](team-onboarding.md).
+Keneth Arias (`@keneth-arias`) lidera datos y plataforma. CODEOWNERS dirige las solicitudes de revisión
+hacia él. Es responsable de seleccionar fuentes, aprobar contratos de datos, calidad científica,
+procedencia, particiones de evaluación, herramientas, CI y preparación de publicaciones.
+Cristopher (`@qriqs`) aporta a tiempo completo en fuentes e implementación con pruebas.
+Jordan (`@J0r-PS`) aporta a tiempo parcial en documentación guiada y presentación.
+Revisa [responsables y tareas](team-work-allocation.md) y la [guía de inicio](team-onboarding.md).
 
-## Your first working session
-Run from the repository root:
+## Primera sesión
+
+Desde la raíz del repositorio:
 
 ```bash
 make setup
@@ -17,25 +18,26 @@ make doctor
 make check
 ```
 
-`doctor` checks Python, Git, uv, timezone support, catalog validity and storage readiness without
-network requests or writes. It reports optional credential presence as booleans, never values.
-A healthy result means the local foundation is ready; it does not verify provider access,
-GitHub authentication, backup health, available data, or dataset rights.
+`doctor` revisa Python, Git, uv, zona horaria, catálogo y carpetas escribibles sin acceder a la red
+ni crear archivos. Solo informa si hay una clave opcional; nunca muestra su valor.
+Un resultado correcto indica que la base local está lista. No verifica acceso a proveedores,
+autenticación de GitHub, respaldo, disponibilidad real de datos ni derechos de uso.
+Las claves JSON son técnicas: `ready` indica disponibilidad y `checks` contiene los controles.
 
-Review `configs/sources.yaml`. Keneth owns `senamhi-lima` verification in #4;
-Cristopher owns `oefa-national` research in #5.
-Resolve actual download resources and dictionaries, verify license evidence, then record a dated
-source review using the GitHub issue form. Leave unknown coverage and units as null. Keep blocked
-sources with a reason. `verified`, `downloaded` and later statuses require timestamped evidence;
-`integrated` additionally requires documented redistribution permission and a known data category.
+Keneth verifica `senamhi-lima` en #4; Cristopher investiga `oefa-national` en #5.
+Resuelvan recursos reales y diccionarios, revisen licencias y registren fechas y evidencia.
+La cobertura o las unidades desconocidas permanecen nulas. Mantengan las fuentes bloqueadas con
+su explicación. Los estados avanzados requieren evidencia con fecha y zona horaria;
+`integrated` exige además permiso documentado de redistribución y categoría de medición conocida.
 
-After verification, implement the tested downloader in #6–#7 before acquisition #8–#9. First inspect
-real artifacts, then produce measured profiles and comparison (#10–#11). Select the benchmark from
-that evidence; four stations, 24 months and 72/24-hour windows remain provisional targets.
+Después se implementa el descargador #6/#7 antes de adquirir datos #8/#9.
+Se inspeccionan los archivos, se miden calidad y cobertura #10/#11 y recién se define el conjunto
+inicial de evaluación. Cuatro estaciones, 24 meses y ventanas de 72/24 horas son metas provisionales.
 
-## Services and secrets
-Use the [service checklist](services.md). No API key is needed for current commands. The `.env` file
-is ignored and is not auto-loaded. If needed, set variables in your shell, for example:
+## Servicios y credenciales
+
+Consulta [servicios y accesos](services.md). No se necesita una clave para los comandos actuales.
+`.env` está excluido de Git y no se carga automáticamente. Puedes definir otra carpeta:
 
 ```bash
 export AIRAWARE_DATA_DIR="$HOME/airaware-data"
@@ -43,23 +45,23 @@ make init
 make doctor
 ```
 
-Do not put provider keys into catalog URLs, issue comments, notebook outputs or Git. OpenAQ is a
-later task; acquire your own key through its official account flow when that integration starts.
-Local artifacts are not committed or automatically backed up. Choose and test a backup procedure
-before relying on them. Keep original raw bytes immutable and derived artifacts rebuildable.
+No incluyas claves en URL del catálogo, tareas, cuadernos ni Git. OpenAQ se integra más adelante;
+cada persona usa su propia cuenta. Los datos locales no se respaldan automáticamente.
+Define y prueba el respaldo antes de depender de una recolección irremplazable.
+Conserva los archivos originales sin cambios y haz reproducibles los derivados.
 
-## Decisions and handoffs
+## Decisiones y revisiones
 
-- You decide source inclusion after license and measurement review; record major decisions in ADRs.
-- Contributors include issue scope, exact verification results and known unknowns in each PR.
-- Review changes to schemas, source precedence, quality filters and split dates before downstream use.
-- Freeze test boundaries before model iteration; prohibit preprocessing fitted to held-out data.
-- Before a release, inspect source licenses, provenance, quality reports, leakage tests, SDK round
-  trips and baseline metrics. Publish only after the authorization required by the plan.
-- Maintain the GitHub Project and issue blockers as the live status; the plan is an ordered index.
+- Aprueba fuentes tras revisar licencia y metodología; registra decisiones importantes en ADR.
+- Cada PR debe explicar alcance, comandos ejecutados, resultados y dudas pendientes.
+- Revisa esquemas, precedencia de fuentes, filtros de calidad y fechas de partición antes de usarlos.
+- Fija los límites del conjunto de prueba antes de experimentar; no ajustes el procesamiento con él.
+- Antes de publicar, revisa licencias, trazabilidad, calidad, pruebas de fuga, lectura con SDK y modelos
+  de referencia. Publica solo con la autorización prevista en el plan.
+- Usa GitHub como estado vigente y el plan como índice ordenado de tareas.
 
-## Initial delivery evidence
-The foundation adds a locked local environment, a validated discovery catalog, three offline CLI
-commands, tests and CI configuration. It does not implement downloading, profiling, normalization,
-TimeF export or model training. The integration note records source inspection separately from
-runtime verification so you can assess readiness without assuming unfinished work is complete.
+## Alcance actual
+
+La preparación incluye entorno fijado, catálogo, tres comandos sin red, pruebas y CI.
+No implementa descarga, análisis de datos, normalización, TimeF ni entrenamiento.
+Las notas de integración distinguen inspección del código externo de validación en ejecución.

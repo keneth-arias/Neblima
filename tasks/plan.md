@@ -1,81 +1,92 @@
-# AirAware Perú implementation plan
+# Plan de implementación de AirAware Perú
 
-Source: [initial plan](../docs/initial-plan.md). Tasks are tracked in GitHub Issues and the [AirAware Perú Project](https://github.com/users/keneth-arias/projects/1). This document is the ordered index; issue status is authoritative. This is planning work: no collection, validation or model results are claimed.
+Fuente: [plan inicial completo](../docs/initial-plan.md), adaptado al español del Perú.
+El estado vigente está en las [tareas de GitHub](https://github.com/keneth-arias/airaware/issues) y el
+[tablero](https://github.com/users/keneth-arias/projects/1). Este documento es un índice ordenado;
+no afirma que ya se recolectaron datos ni que existen resultados de modelos.
 
-## Delivery decisions
-- Keep repository name `airaware`; start with measured Lima/Callao PM2.5 and expand nationally after evidence gates.
-- Verify upstream APIs and pin revisions before implementation. Keep the independent pipeline separate from the minimal upstream connector.
-- Prioritize M0–M3, native TimeF delivery in M5, and baseline/temporal-model work in M8. M4 weather is conditional on verified availability; pollution-only remains the first vertical slice.
-- License and measurement-semantics checks are exclusion gates. Coverage targets (four stations and 24 months), hourly cadence, and 72/24-hour windows remain provisional until profiling.
-- No bulk dataset publication or external PR creation is authorized by this task-planning request. Expensive/unbounded acquisition and full-scale training retain explicit budget/authorization gates.
-- Start with minimal Python/uv tooling; add Polars, DuckDB, HTTPX, Pydantic, geospatial and raster dependencies only when needed. No distributed infrastructure without measured need.
+## Decisiones de ejecución
 
-## Dependency flow
-M0 upstream/source verification → M1 reproducible acquisition → M2 measured comparison → M3 canonical normalization → M5 pollution-only benchmark/splits → native TimeF validation → M8 baselines/adapter/temporal experiment → submission preparation.
-M3 + verified weather → M4 aligned weather configuration. M6 national expansion and M7 enrichment follow the core path.
+- Mantener el nombre airaware. Empezar por PM2.5 medido en Lima/Callao y ampliar con evidencia.
+- Verificar las API y fijar revisiones antes de implementar; separar AirAware del conector externo mínimo.
+- Priorizar M0–M3, la primera entrega TimeF de M5 y las referencias/modelo temporal de M8.
+  M4 depende de meteorología verificada. El primer flujo completo puede usar solo contaminación.
+- Licencias incompatibles y significado de medición desconocido son motivos de exclusión.
+  Cuatro estaciones, 24 meses, frecuencia horaria y ventanas 72/24 son metas provisionales.
+- Esta preparación no autoriza publicar datos masivos, abrir PR externos ni ejecutar descargas o
+  entrenamientos costosos o sin límites. Se mantienen las autorizaciones expresas del plan.
+- Empezar con Python/uv y dependencias mínimas. Incorporar Polars, DuckDB, HTTPX, herramientas
+  geoespaciales o de ráster cuando se utilicen. No usar infraestructura distribuida sin necesidad medida.
 
-## Ordered issue index
-- [M0 / P0 — Verify pinned TimeNet interfaces and hackathon requirements](https://github.com/keneth-arias/airaware/issues/1)
-- [M0 / P0 — Bootstrap reproducible Python tooling and offline CI](https://github.com/keneth-arias/airaware/issues/2)
-- [M0 / P0 — Build validated environmental source inventory](https://github.com/keneth-arias/airaware/issues/3)
-- [M0 / P0 — Verify SENAMHI resources and redistribution rights](https://github.com/keneth-arias/airaware/issues/4)
-- [M0 / P0 — Verify OEFA resources and coordinate semantics](https://github.com/keneth-arias/airaware/issues/5)
-- [M1 / P0 — Implement atomic streaming downloads with provenance](https://github.com/keneth-arias/airaware/issues/6)
-- [M1 / P0 — Add resumable bounded acquisition and CLI controls](https://github.com/keneth-arias/airaware/issues/7)
-- [M1 / P0 — Acquire a reproducible SENAMHI Lima data slice](https://github.com/keneth-arias/airaware/issues/8)
-- [M1 / P0 — Acquire bounded OEFA observations and documentation](https://github.com/keneth-arias/airaware/issues/9)
-- [M2 / P0 — Profile raw station coverage and signal quality](https://github.com/keneth-arias/airaware/issues/10)
-- [M2 / P0 — Compare sources and select the first Lima benchmark](https://github.com/keneth-arias/airaware/issues/11)
-- [M3 / P0 — Define canonical observations and station metadata contracts](https://github.com/keneth-arias/airaware/issues/12)
-- [M3 / P0 — Normalize SENAMHI into validated partitioned Parquet](https://github.com/keneth-arias/airaware/issues/13)
-- [M3 / P0 — Resolve station identities and cross-source duplicates](https://github.com/keneth-arias/airaware/issues/14)
-- [M3 / P0 — Construct pollution-only station timelines and masks](https://github.com/keneth-arias/airaware/issues/15)
-- [M4 / P1 — Verify weather sources and acquire a station-specific slice](https://github.com/keneth-arias/airaware/issues/16)
-- [M4 / P1 — Align meteorology with pollution without future leakage](https://github.com/keneth-arias/airaware/issues/17)
-- [M5 / P0 — Build fully observed PM2.5 forecasting windows](https://github.com/keneth-arias/airaware/issues/18)
-- [M5 / P0 — Freeze chronological splits and enforce leakage checks](https://github.com/keneth-arias/airaware/issues/19)
-- [M5 / P1 — Validate pollution-event labeling methodology](https://github.com/keneth-arias/airaware/issues/20)
-- [M5 / P0 — Implement native SENAMHI TimeNet base connector](https://github.com/keneth-arias/airaware/issues/21)
-- [M5 / P0 — Export the leakage-safe Lima TimeF benchmark](https://github.com/keneth-arias/airaware/issues/22)
-- [M5 / P0 — Run offline end-to-end dataset release checks](https://github.com/keneth-arias/airaware/issues/23)
-- [M5 / P0 — Publish dataset methodology and prepare upstream contribution](https://github.com/keneth-arias/airaware/issues/24)
-- [M8 / P0 — Evaluate persistence and seasonal forecast baselines](https://github.com/keneth-arias/airaware/issues/25)
-- [M8 / P1 — Evaluate a tabular baseline and event metrics](https://github.com/keneth-arias/airaware/issues/26)
-- [M8 / P0 — Implement OpenTSLM adapter and bounded model smoke test](https://github.com/keneth-arias/airaware/issues/27)
-- [M8 / P0 — Train and evaluate the hackathon temporal-model experiment](https://github.com/keneth-arias/airaware/issues/28)
-- [M8 / P0 — Prepare hackathon showcase and submission package](https://github.com/keneth-arias/airaware/issues/29)
-- [M6 / P2 — Normalize OEFA and validate national measurement compatibility](https://github.com/keneth-arias/airaware/issues/30)
-- [M6 / P2 — Discover Peru OpenAQ observations and aggregator overlap](https://github.com/keneth-arias/airaware/issues/31)
-- [M6 / P2 — Add held-out-station evaluation and safe national pretraining splits](https://github.com/keneth-arias/airaware/issues/32)
-- [M7 / P2 — Pilot atmospheric and satellite enrichment](https://github.com/keneth-arias/airaware/issues/33)
-- [M7 / P2 — Evaluate optional wildfire mobility and contextual features](https://github.com/keneth-arias/airaware/issues/34)
-- [M7 / P2 — Generate deterministic temporal QA as a follow-up](https://github.com/keneth-arias/airaware/issues/35)
+## Orden y dependencias
 
-## Checkpoints
-- After upstream/tooling/catalog: offline checks pass; source inventory retains verification dates and blockers.
-- After source probes/downloader: content validation and acquisition failure tests pass before real downloads.
-- After acquisition/profile/selection: inspect real artifacts, rights, comparison metrics and readiness; record the selected benchmark in an ADR.
-- After schema/normalization/deduplication: audit provenance, cadence, units, station identities and missing masks.
-- After windows/splits/TimeF: inspect leakage tests and standard SDK round trip; freeze release inputs and evaluation manifests.
-- Before training and showcase: dataset gates pass, bounded compute config is recorded, metrics compare identical targets, and limitations are documented.
+M0: investigar API y fuentes → M1: adquisición reproducible → M2: comparación medida → M3:
+normalización común → M5: ventanas y particiones sin fugas, exportación y lectura TimeF → M8:
+referencias, adaptador, experimento temporal y entrega.
+M3 y fuentes meteorológicas verificadas habilitan M4. M6 nacional y M7 complementario vienen después.
 
-## Risks and unresolved decisions
-Source URLs, download sizes, licenses and coverage are candidates until verified. Failure must leave a documented blocker rather than fabricated progress. Decide final stations/date ranges, regulatory event methodology, code license, dataset licenses, upstream namespaces, artifact hosting and model/compute budget from evidence. The supplied source plan retains its complete discovery list and proposed architecture; proposed commands and paths are not implemented APIs.
+## Índice de tareas
+- [#1: Verificar las API de TimeNet y los requisitos del hackathon](https://github.com/keneth-arias/airaware/issues/1)
+- [#2: Preparar las herramientas de Python y la integración continua sin servicios externos](https://github.com/keneth-arias/airaware/issues/2)
+- [#3: Construir y validar el inventario de fuentes ambientales](https://github.com/keneth-arias/airaware/issues/3)
+- [#4: Verificar los recursos de SENAMHI y los derechos de redistribución](https://github.com/keneth-arias/airaware/issues/4)
+- [#5: Verificar los recursos de OEFA y sus coordenadas](https://github.com/keneth-arias/airaware/issues/5)
+- [#6: Implementar descargas atómicas con trazabilidad](https://github.com/keneth-arias/airaware/issues/6)
+- [#7: Agregar reanudación y límites a la descarga](https://github.com/keneth-arias/airaware/issues/7)
+- [#8: Recolectar una muestra reproducible de SENAMHI Lima](https://github.com/keneth-arias/airaware/issues/8)
+- [#9: Recolectar datos acotados de OEFA y su documentación](https://github.com/keneth-arias/airaware/issues/9)
+- [#10: Analizar la cobertura de estaciones y la calidad de las señales](https://github.com/keneth-arias/airaware/issues/10)
+- [#11: Comparar fuentes y seleccionar el primer conjunto de evaluación de Lima](https://github.com/keneth-arias/airaware/issues/11)
+- [#12: Definir el esquema común de observaciones y estaciones](https://github.com/keneth-arias/airaware/issues/12)
+- [#13: Normalizar SENAMHI a Parquet validado y particionado](https://github.com/keneth-arias/airaware/issues/13)
+- [#14: Resolver identidades de estaciones y duplicados entre fuentes](https://github.com/keneth-arias/airaware/issues/14)
+- [#15: Construir líneas temporales de contaminación y máscaras de datos faltantes](https://github.com/keneth-arias/airaware/issues/15)
+- [#16: Verificar fuentes meteorológicas y recolectar una muestra por estación](https://github.com/keneth-arias/airaware/issues/16)
+- [#17: Alinear meteorología y contaminación sin información futura](https://github.com/keneth-arias/airaware/issues/17)
+- [#18: Construir ventanas de pronóstico de PM2.5 con objetivos completos](https://github.com/keneth-arias/airaware/issues/18)
+- [#19: Fijar particiones cronológicas y comprobar fugas de información](https://github.com/keneth-arias/airaware/issues/19)
+- [#20: Validar la metodología para etiquetar episodios de contaminación](https://github.com/keneth-arias/airaware/issues/20)
+- [#21: Implementar el conector base de SENAMHI para TimeNet](https://github.com/keneth-arias/airaware/issues/21)
+- [#22: Exportar el conjunto de evaluación de Lima a TimeF sin fugas](https://github.com/keneth-arias/airaware/issues/22)
+- [#23: Verificar la entrega del conjunto de datos de extremo a extremo sin servicios externos](https://github.com/keneth-arias/airaware/issues/23)
+- [#24: Documentar la metodología y preparar la contribución a TimeNet](https://github.com/keneth-arias/airaware/issues/24)
+- [#25: Evaluar modelos de referencia de persistencia y estacionalidad](https://github.com/keneth-arias/airaware/issues/25)
+- [#26: Evaluar un modelo tabular y métricas de episodios](https://github.com/keneth-arias/airaware/issues/26)
+- [#27: Implementar el adaptador de OpenTSLM y una prueba acotada de modelo](https://github.com/keneth-arias/airaware/issues/27)
+- [#28: Entrenar y evaluar el experimento temporal del hackathon](https://github.com/keneth-arias/airaware/issues/28)
+- [#29: Preparar la presentación y la entrega del hackathon](https://github.com/keneth-arias/airaware/issues/29)
+- [#30: Normalizar OEFA y validar la compatibilidad de mediciones nacionales](https://github.com/keneth-arias/airaware/issues/30)
+- [#31: Investigar OpenAQ Perú y duplicaciones de agregadores](https://github.com/keneth-arias/airaware/issues/31)
+- [#32: Evaluar estaciones separadas y particiones seguras para preentrenamiento nacional](https://github.com/keneth-arias/airaware/issues/32)
+- [#33: Probar información atmosférica y satelital complementaria](https://github.com/keneth-arias/airaware/issues/33)
+- [#34: Evaluar incendios, movilidad y otras variables de contexto opcionales](https://github.com/keneth-arias/airaware/issues/34)
+- [#35: Generar preguntas temporales con respuestas verificables como ampliación](https://github.com/keneth-arias/airaware/issues/35)
 
-## Next work
-Begin with the upstream investigation and source inventory, then SENAMHI/OEFA verification. Do not start optional enrichment before the measured comparison and first usable forecasting slice.
+## Puntos de control
 
-## Foundation setup checkpoint (2026-11-15)
-Keneth Arias is the main data and platform lead. The accepted initial service choice is local storage
-plus GitHub Actions (ADR-001). The foundation branch prepares #1–#3 with pinned upstream research,
-locked Python tooling, source catalog validation, CLI, CI and lead onboarding. Source URLs remain
-unverified; #4/#5 are the next investigative tasks, followed by downloader work #6/#7.
-See `docs/lead-handbook.md` for the runbook and `docs/services.md` for access state. The branch/PR
-and live issues carry implementation/review status; preparation does not imply real data collection.
+- Tras API/herramientas/catálogo: controles sin servicios externos aprobados; fechas y bloqueos registrados.
+- Tras consultas iniciales y descargador: probar formatos y fallas antes de descargar datos reales.
+- Tras adquisición/análisis/selección: inspeccionar archivos, derechos, métricas y ventanas; registrar
+  la elección en una decisión de arquitectura (ADR).
+- Tras esquemas/normalización/duplicados: revisar procedencia, frecuencia, unidades, estaciones y máscaras.
+- Tras ventanas/particiones/TimeF: probar fugas y lectura estándar; fijar insumos y manifiestos de evaluación.
+- Antes de entrenar/presentar: aprobar datos, acotar cómputo, comparar objetivos idénticos y explicar límites.
 
-## Team allocation checkpoint (2026-11-15)
-18 of 35 open implementation issues are reserved for qriqs (16) and J0r-PS (2) using owner labels
-and issue handoffs; native assignees await invitation acceptance. Keneth retains 17
-lead-owned issues. Separate local checkouts/environments are prepared. See
-[team work allocation](../docs/team-work-allocation.md) for one-issue-at-a-time queues, first
-deliverables and unchanged dependency gates. GitHub ownership labels and assignments are authoritative.
+## Riesgos y decisiones pendientes
+
+Enlaces, tamaños, derechos y cobertura son candidatos hasta verificarse. Una falla debe quedar como
+bloqueo, no como progreso inventado. Definir estaciones, fechas, método regulatorio, licencia del
+código y de los datos, nombres externos, alojamiento de archivos y presupuesto de cómputo con evidencia.
+Los comandos del plan inicial son propuestas, no API implementadas.
+
+## Preparación y distribución del equipo
+
+Keneth lidera datos y plataforma. La decisión inicial es almacenamiento local y GitHub Actions (ADR-001).
+El PR #36 prepara #1–#3 con revisiones fijadas, herramientas, catálogo, comandos, CI y guías.
+Las fuentes siguen sin verificar. Lo siguiente es #4/#5 y el descargador #6/#7.
+
+Se reservaron 18 de las 35 tareas: 16 para qriqs y dos para J0r-PS, mediante etiquetas y notas de
+entrega mientras sus invitaciones están pendientes. Keneth conserva 17 tareas. Mantener una tarea
+activa por persona y las dependencias originales. Consulta la [distribución](../docs/team-work-allocation.md),
+la [guía de inicio](../docs/team-onboarding.md) y los [servicios](../docs/services.md).
+El idioma vigente es español del Perú (ADR-002), incluidos tareas, documentación y PR.
