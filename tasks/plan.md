@@ -94,8 +94,8 @@ El idioma vigente es español del Perú (ADR-002), incluidos tareas, documentaci
 
 ## Trabajo activo: tarea #1
 
-El [plan detallado de #1](issue-1-plan.md) separa evidencia preliminar y cuatro pasos pendientes:
+El [plan y resultado de #1](issue-1-plan.md) documenta cuatro pasos ejecutados:
 confirmar revisión, completar matriz de API, revisar ejemplos y vincular requisitos del hackathon.
-Responsable: Keneth. No se cierra #1 ni se afirma una validación TimeF por redactar el plan.
+Responsable: Keneth. La investigación está lista para revisión; el cierre de #1 espera integrar su PR y no equivale a validar TimeF en ejecución.
 Cristopher ya tiene asignadas sus 16 tareas de forma nativa; Jordan conserva sus dos reservas
 mientras acepta la invitación. Estos avances no modifican las dependencias.

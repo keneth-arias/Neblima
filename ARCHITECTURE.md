@@ -32,3 +32,26 @@ Empezamos con archivos locales y añadiremos herramientas analíticas cuando sea
 No se configura ahora un servicio de base de datos, orquestación, almacenamiento remoto ni modelos.
 Consulta [ADR-001](docs/decisions/001-local-first-foundation.md), la [política de idioma](docs/decisions/002-espanol-peru.md)
 y las [notas de TimeNet](docs/timenet-integration.md).
+
+## Contratos confirmados al ejecutar la tarea #1
+
+La [revisión de código](docs/timenet-integration.md) vincula cada contrato a un commit y una prueba
+fuente inspeccionada. Se mantiene la revisión 9bd1613 de TimeNet: no hay actualización de dependencias.
+
+- El conector externo separará download/download_async de convert/compose. La secuencia independiente
+  de AirAware no dependerá del registro de TimeNet para adquirir o normalizar sus fuentes.
+- Las series usarán origen y ejes temporales físicos verificados; OrdinalAxis de TSQA no se trasladará
+  directamente a mediciones con fecha/hora. El esquema y la granularidad final se fijan en #12.
+- Las tareas contendrán la partición; #19 debe comprobar que sus entradas/objetivos no se superpongan
+  indebidamente. El SDK no determina por nosotros los límites cronológicos ni la disponibilidad de variables.
+- La clasificación exige LabelSet. Los objetivos escalares pueden usar ScalarPredictionTask y unidad;
+  el pronóstico temporal y las respuestas usan sus tipos propios. No inventar parámetros de ventana.
+- Se preservarán los valores nulos y máscaras. La conversión a NumPy/PyTorch requiere preparación
+  explícita; no se reparan observaciones silenciosamente para satisfacer al formato.
+- Las bases por fuente seguirán separadas cuando difieran derechos o significado. La composición
+  fijará padres y mantendrá trazabilidad y archivos requeridos; su lectura/escritura se probará en #21–#23.
+- Los ayudantes de descarga de TimeNet son referencia para #6, no un reemplazo ya aprobado de los
+  manifiestos, controles de contenido, caché verificable y límites que necesita AirAware.
+
+No apareció una contradicción bloqueante en los contratos examinados. La licencia del código propio
+sigue como decisión de Keneth; la inspección de MIT de TimeNet no concede derechos sobre datos externos.

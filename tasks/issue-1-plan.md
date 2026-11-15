@@ -1,8 +1,8 @@
 # Plan de la tarea #1: verificar TimeNet y los requisitos del hackathon
 
 Tarea: [#1](https://github.com/keneth-arias/airaware/issues/1).
-Responsable: Keneth (`@keneth-arias`). Estado: planificación iniciada; los criterios de aceptación
-siguen pendientes de cierre con evidencia. El PR #36 está integrado en main desde el 15/11/2026,
+Responsable: Keneth (`@keneth-arias`). Estado: los cuatro pasos de investigación están ejecutados y documentados; el cierre de la tarea
+queda sujeto a revisión e integración del PR. No se afirma validación TimeF en ejecución. El PR #36 está integrado en main desde el 15/11/2026,
 commit `4585d7542bbc8836ee85cf76cce1d84312827056`; cerró la tarea #2 de herramientas.
 Las tareas se mantienen en GitHub; este documento detalla su orden, sin duplicar un tablero de estado.
 
@@ -122,3 +122,17 @@ Keneth ejecuta esta investigación. Cristopher puede avanzar en evidencia OEFA (
 borrador de presentación (#29) sin esperar el cierre de #1. Compartir cambios de API antes de que
 alguien los implemente; no bloquear investigación por revisiones de documentación.
 No añadir servicios de pago, entornos de entrenamiento ni descargas masivas para completar esta tarea.
+
+## Resultado de la ejecución (15/11/2026)
+
+| Paso | Resultado verificable | Entrega |
+| --- | --- | --- |
+| 1. Revisión y reglas | Copia limpia y HEAD remoto coinciden con el commit fijado; paquetes 0.12.0 y Python >=3.11 confirmados | configs/upstream.lock.json y notas de integración |
+| 2. Matriz de API | 14 filas de contratos, invariantes y consecuencias con definiciones y pruebas fuente | docs/timenet-integration.md |
+| 3. Ejemplos y reutilización | Hello-world y TSQA revisados; búsqueda acotada en 12 fichas y 12 conectores sin coincidencias ambientales | docs/timenet-integration.md |
+| 4. Requisitos y decisiones | Matriz de evidencias/estado/responsables, plazo convertido y consecuencias de arquitectura | docs/hackathon.md y ARCHITECTURE.md |
+
+Las pruebas externas se inspeccionaron, no se ejecutaron. No se instaló el SDK ni se descargaron
+datos. Se mantiene la revisión y la arquitectura ya aceptadas. La elección de licencia del código
+propio se consultó a Keneth y permanece pendiente hasta su respuesta; no bloquea esta investigación.
+Las decisiones de esquema científico, cobertura real y cómputo siguen en #12, #4/#5 y #27/#28.
