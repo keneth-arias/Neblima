@@ -10,7 +10,7 @@ Checked 2026-11-15. Access states can change; recheck before relying on them.
 | Python | Local default installed: 3.13.13, pinned in .python-version | `uv python install`, then `make setup` |
 | GitHub repository | Public, keneth-arias/airaware | Keep only code, docs and permitted small fixtures in Git |
 | GitHub Project | Linked backlog with 35 implementation issues | Own priorities and unblock source decisions |
-| GitHub Actions | Repository permits Actions; workflow added in foundation branch | Check actual workflow results; configure required statuses after first run |
+| GitHub Actions | First foundation run passed Python 3.11, Python 3.13.13 and dependency audit | Keep all three checks green |
 | Local storage | Layer directories initialized under data/ | Use AIRAWARE_DATA_DIR for another disk; check free space before real downloads |
 | Data backup | Not configured | Choose and verify backup/artifact sharing before irreplaceable collection |
 | SENAMHI/OEFA | Candidate links inventoried; access/rights not verified | Work through #4/#5; record real resources, terms and blockers |
@@ -19,8 +19,10 @@ Checked 2026-11-15. Access states can change; recheck before relying on them.
 | OpenTSLM | Remote revision recorded; model interfaces not yet inspected | Defer training setup until #27 after dataset gates pass |
 | Hackathon | Submission checklist documented | Each participant registers; account/submission completion is not verified here |
 
-GitHub CODEOWNERS requests reviews; required review/status enforcement is a separate repository
-setting. Repository collaborator roles and personal Project roles are distinct. J0r-PS has Project
+Main branch protection requires up-to-date passing `quality (3.11)`, `quality (3.13.13)` and
+`audit` checks. Force pushes and branch deletion are blocked. Admin enforcement is off so the owner
+retains an emergency override. Mandatory review approval is not configured. GitHub CODEOWNERS
+requests reviews; it does not itself enforce approval. Repository collaborator roles and personal Project roles are distinct. J0r-PS has Project
 admin access; personal-repo collaborators have write access. Do not assume pending invitations were
 accepted. No account creation or paid subscription is needed to run the current foundation.
 

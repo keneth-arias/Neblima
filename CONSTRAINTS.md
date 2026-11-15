@@ -16,8 +16,8 @@ remain a lead decision after real pipeline measurements.
 
 `make check` runs the first five rows locally and in CI. Dependency audit includes dev tools;
 the editable local package is skipped by the advisory service because it is unpublished.
-No numerical coverage target is asserted yet. Branch protection is separate from having a CI file;
-see the service checklist for the active state.
+No numerical coverage target is asserted yet. Main branch protection requires both Python quality jobs and the advisory audit, with an owner
+override retained; see the service checklist for the active state.
 
 Review-enforced floor: no secrets, suppression comments, unfinished stubs, skipped/deleted tests
 without a documented reason, or weakened checks. These review rules are not represented as a
