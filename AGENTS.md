@@ -6,6 +6,8 @@ Read `tasks/plan.md` and the issue being implemented; preserve incomplete work.
 ## Ownership and scope
 Keneth Arias (`@keneth-arias`) is the main data and platform lead. See
 `docs/lead-handbook.md` for decisions, handoffs and the first working session.
+Read `docs/team-work-allocation.md` for owners and handoff boundaries. Each developer uses their own
+checkout/environment; never switch branches in another developer's folder.
 Use English for code/docs; preserve original Spanish source artifacts.
 
 ## Commands

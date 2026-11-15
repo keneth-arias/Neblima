@@ -72,3 +72,10 @@ locked Python tooling, source catalog validation, CLI, CI and lead onboarding. S
 unverified; #4/#5 are the next investigative tasks, followed by downloader work #6/#7.
 See `docs/lead-handbook.md` for the runbook and `docs/services.md` for access state. The branch/PR
 and live issues carry implementation/review status; preparation does not imply real data collection.
+
+## Team allocation checkpoint (2026-11-15)
+18 of 35 open implementation issues are reserved for qriqs (16) and J0r-PS (2) using owner labels
+and issue handoffs; native assignees await invitation acceptance. Keneth retains 17
+lead-owned issues. Separate local checkouts/environments are prepared. See
+[team work allocation](../docs/team-work-allocation.md) for one-issue-at-a-time queues, first
+deliverables and unchanged dependency gates. GitHub ownership labels and assignments are authoritative.

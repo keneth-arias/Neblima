@@ -1,5 +1,8 @@
 # Contributing
 
+Teammates using the shared machine should start with [their local onboarding](docs/team-onboarding.md)
+and [work allocation](docs/team-work-allocation.md). Use your own checkout and GitHub credentials.
+
 Start with [the lead handbook](docs/lead-handbook.md), [the plan](tasks/plan.md), and your GitHub issue.
 Development is supported on Linux/macOS; Windows contributors should use WSL for Make targets.
 Install Git, Make, uv >=0.11.20 and optionally the GitHub CLI through their official installation guides.

@@ -2,8 +2,10 @@
 
 Keneth Arias (`@keneth-arias`) is the main data and platform lead. CODEOWNERS routes repository
 review requests to you. This role owns source selection, canonical contracts, scientific data
-quality, provenance, split integrity, developer tooling, CI and release readiness. Teammate roles
-remain unassigned until the team agrees on them.
+quality, provenance, split integrity, developer tooling, CI and release readiness.
+Cristopher (`@qriqs`) contributes full-time on source work and tested implementation. Jordan
+(`@J0r-PS`) contributes part-time on guided documentation and showcase work. See
+[work allocation](team-work-allocation.md) and [local onboarding](team-onboarding.md).
 
 ## Your first working session
 Run from the repository root:
@@ -20,7 +22,8 @@ network requests or writes. It reports optional credential presence as booleans,
 A healthy result means the local foundation is ready; it does not verify provider access,
 GitHub authentication, backup health, available data, or dataset rights.
 
-Review `configs/sources.yaml`. Pick `senamhi-lima` for issue #4 and `oefa-national` for issue #5.
+Review `configs/sources.yaml`. Keneth owns `senamhi-lima` verification in #4;
+Cristopher owns `oefa-national` research in #5.
 Resolve actual download resources and dictionaries, verify license evidence, then record a dated
 source review using the GitHub issue form. Leave unknown coverage and units as null. Keep blocked
 sources with a reason. `verified`, `downloaded` and later statuses require timestamped evidence;

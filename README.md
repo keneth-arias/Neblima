@@ -30,6 +30,9 @@ uv run --locked airaware doctor
 `AIRAWARE_DATA_DIR` selects another local artifact root. Environment files are not auto-loaded.
 See the [lead handbook](docs/lead-handbook.md) and [service/access checklist](docs/services.md).
 
+Team members: see [local onboarding](docs/team-onboarding.md) and
+[issue ownership and first tasks](docs/team-work-allocation.md).
+
 ## Current capabilities
 The foundation validates 37 candidate source resources, initializes local storage layers, and checks
 the local environment. Every source remains unverified. Acquisition, profiling, normalization,
