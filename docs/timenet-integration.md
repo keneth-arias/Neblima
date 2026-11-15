@@ -3,7 +3,8 @@
 Revisión documental ejecutada el 15/11/2026 para la tarea #1. Commit inspeccionado:
 [`9bd1613019ee61fbc52e02106a1a45990ead7a54`](https://github.com/OpenTSLM/TimeNet/tree/9bd1613019ee61fbc52e02106a1a45990ead7a54).
 La copia externa está limpia; `git rev-parse HEAD` y `git ls-remote origin HEAD` coincidieron.
-No se modificó la copia externa, no se instaló el SDK en AirAware ni se ejecutaron las pruebas de TimeNet.
+La copia externa no se modificó. La suite de TimeNet no se ejecutó. La verificación sintética
+posterior usa un entorno independiente y se registra al final de este documento.
 Las pruebas enlazadas se **leyeron**, no se presentan como ejecuciones.
 
 ## Versiones y reglas confirmadas
@@ -104,5 +105,16 @@ repositorio no concede una excepción ni licencia dual. Ver [ADR-003](decisions/
 
 Ejecutado: consultas Git de revisión/estado, extracción de definiciones y firmas por AST, búsqueda
 acotada de fichas/conectores e inspección manual de código, pruebas, licencias y reglas.
-No ejecutado: tests de TimeNet, convert de ejemplos, descargas de proveedores, SDK ni escritura/lectura
-TimeF de AirAware. Las 31 pruebas propias de AirAware son controles separados de esas verificaciones.
+No ejecutado: suite de tests de TimeNet, descargas de proveedores ni escritura/lectura de un conjunto
+ambiental de AirAware. El ejemplo sintético sí se construyó y leyó en la verificación posterior.
+Las 31 pruebas propias de AirAware son controles separados de esas verificaciones.
+
+## Actualización: verificación sintética en ejecución
+
+Después de integrar #40 se instaló la revisión fijada en el entorno independiente
+[tools/timenet-smoke](../tools/timenet-smoke/README.md). Se ejecutó el constructor oficial de
+timenet/hello-world@1.0.0, TimeFReader.verify(), lectura y carga con SDK desde un registro local.
+Se compararon valores y commits instalados. Resultado: tres registros, cinco señales, cinco tareas
+y 4 478 280 bytes, bajo CC-BY-4.0. Informe local: data/timef/hello-world-validation.json.
+Esta ejecución posterior amplía la inspección anterior: la suite de tests de TimeNet sigue sin
+ejecutarse y el conector/datos reales de SENAMHI siguen pendientes en #21–#23.

@@ -43,6 +43,9 @@ Todas las fuentes siguen pendientes de verificación. Todavía no se han recolec
 ambientales. La descarga, el análisis de calidad, la normalización, la exportación TimeF y el
 entrenamiento están en las tareas siguientes.
 
+La [prueba sintética de TimeNet](tools/timenet-smoke/README.md) ya se ejecutó en un entorno aislado.
+El conjunto hello-world está en data/timef; no contiene observaciones ambientales reales.
+
 ## Organización y próximos pasos
 
 - `configs/sources.yaml`: inventario vigente; [campos y estados](docs/sources.md).

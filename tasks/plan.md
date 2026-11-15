@@ -100,3 +100,10 @@ confirmar revisión, completar matriz de API, revisar ejemplos y vincular requis
 Responsable: Keneth. La investigación está lista para revisión; el cierre de #1 espera integrar su PR y no equivale a validar TimeF en ejecución.
 Cristopher ya tiene asignadas sus 16 tareas de forma nativa; Jordan conserva sus dos reservas
 mientras acepta la invitación. Estos avances no modifican las dependencias.
+
+## Siguiente paso: inventario con SENAMHI
+
+#40 está integrado y #1 cerrada. La prueba sintética hello-world ya se ejecutó, con datos en data/timef
+y entorno aislado en tools/timenet-smoke. Continúa [el plan de #3](issue-3-plan.md), empezando por
+SENAMHI en coordinación con #4; OEFA #5 sigue con Cristopher. El primer acceso web al catálogo
+SENAMHI devolvió 403; no hay observaciones reales descargadas ni licencia de esa fuente verificada.

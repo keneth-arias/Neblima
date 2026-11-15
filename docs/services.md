@@ -15,7 +15,7 @@ Estado revisado el 15/11/2026; vuelve a verificar accesos antes de depender de e
 | Respaldo | No configurado | Definirlo y probarlo antes de una recolección irremplazable |
 | SENAMHI/OEFA | Enlaces candidatos; acceso y derechos pendientes | Revisar #4/#5 y registrar recursos, términos y bloqueos |
 | OpenAQ | Opcional para #31; sin clave configurada | Seguir la [guía oficial](https://docs.openaq.org/using-the-api/api-key) cuando se necesite |
-| TimeNet | Código inspeccionado y revisión fijada; SDK no instalado | Preparar un entorno aislado para #21 |
+| TimeNet | SDK/conectores fijados en tools/timenet-smoke; hello-world construido y verificado localmente | Repetir la verificación documentada; SENAMHI sigue pendiente |
 | OpenTSLM | Revisión remota anotada; interfaz de entrenamiento pendiente | Esperar #27 y la validación de datos |
 | Hackathon | Lista de entrega documentada | Cada integrante se registra; aquí no se confirma su inscripción |
 
