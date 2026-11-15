@@ -35,4 +35,7 @@ Mantén las fuentes en `discovered` hasta reunir evidencia. Revisa `AGENTS.md` p
 La herramienta actual implementa `catalog validate`, `workspace init` y `doctor`. Los comandos de
 descarga, análisis, normalización y TimeF del documento inicial siguen siendo propuestas.
 No publiques datos ni abras un PR externo sin la autorización prevista en el plan.
-La licencia del código sigue pendiente y un repositorio público no define la licencia de sus fuentes.
+El código propio usa AGPL-3.0-only; las contribuciones a AirAware se reciben bajo esa misma licencia
+y cada autor conserva sus derechos. Un repositorio público no define la licencia de sus fuentes.
+Antes de contribuir código a TimeNet bajo MIT, revisa [ADR-003](docs/decisions/003-licencia-agpl-v3.md):
+no se concede una excepción ni licencia dual al código AGPL de AirAware.

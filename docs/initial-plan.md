@@ -490,7 +490,8 @@ consultas diferidas, selección de particiones y escritura incremental de Parque
 
 Adaptar a la estructura existente de airaware. Conservar AGENTS.md, README.md, PLAN.md,
 ARCHITECTURE.md, CONTRIBUTING.md, pyproject.toml, uv.lock, Makefile, .env.example y .gitignore.
-Definir LICENSE cuando el responsable elija la licencia.
+LICENSE contiene AGPL-3.0-only para el código propio, elegida por Keneth. Revisar ADR-003 antes
+de preparar contribuciones externas bajo MIT.
 
 ```text
 configs/

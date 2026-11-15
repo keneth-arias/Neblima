@@ -41,3 +41,9 @@ Las pruebas y la validación del catálogo deben funcionar sin internet después
 Trabaja en ramas y PR pequeños; escribe pruebas antes de cambiar la lógica.
 Antes de entregar ejecuta `make check`, `make build` y `make audit`. Registra comandos, resultados y
 bloqueos. No omitas pruebas, ocultes errores ni afirmes haber revisado datos que no están disponibles.
+
+## Licencia del código
+
+El código propio usa AGPL-3.0-only (LICENSE y NOTICE). Lee ADR-003 antes de copiar código hacia
+TimeNet u otro proyecto MIT: no hay excepción ni licencia dual implícita. Las fuentes de datos
+y las dependencias mantienen licencias independientes.

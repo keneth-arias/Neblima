@@ -3,6 +3,8 @@ name = "airaware"
 version = "0.1.0"
 description = "Ingeniería reproducible de datos de calidad del aire para Lima y el Perú"
 readme = "README.md"
+license = "AGPL-3.0-only"
+license-files = ["LICENSE", "NOTICE"]
 requires-python = ">=3.11,<3.14"
 dependencies = ["pydantic>=2.12,<3", "pyyaml>=6,<7", "typer>=0.12,<1"]
 
