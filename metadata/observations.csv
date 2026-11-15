@@ -1,0 +1,1 @@
+source_id,station_id,timestamp_utc,pollutant,value,unit,averaging_period,latitude,longitude,quality_flag
