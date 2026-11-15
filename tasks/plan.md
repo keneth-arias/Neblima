@@ -82,7 +82,8 @@ Los comandos del plan inicial son propuestas, no API implementadas.
 ## Preparación y distribución del equipo
 
 Keneth lidera datos y plataforma. La decisión inicial es almacenamiento local y GitHub Actions (ADR-001).
-El PR #36 prepara #1–#3 con revisiones fijadas, herramientas, catálogo, comandos, CI y guías.
+El PR #36 ya está integrado en main y cerró #2. Preparó la evidencia inicial de #1/#3,
+las herramientas, el catálogo, los comandos, CI y las guías.
 Las fuentes siguen sin verificar. Lo siguiente es #4/#5 y el descargador #6/#7.
 
 Se reservaron 18 de las 35 tareas: 16 para qriqs y dos para J0r-PS, mediante etiquetas y notas de
@@ -90,3 +91,11 @@ entrega mientras sus invitaciones están pendientes. Keneth conserva 17 tareas. 
 activa por persona y las dependencias originales. Consulta la [distribución](../docs/team-work-allocation.md),
 la [guía de inicio](../docs/team-onboarding.md) y los [servicios](../docs/services.md).
 El idioma vigente es español del Perú (ADR-002), incluidos tareas, documentación y PR.
+
+## Trabajo activo: tarea #1
+
+El [plan detallado de #1](issue-1-plan.md) separa evidencia preliminar y cuatro pasos pendientes:
+confirmar revisión, completar matriz de API, revisar ejemplos y vincular requisitos del hackathon.
+Responsable: Keneth. No se cierra #1 ni se afirma una validación TimeF por redactar el plan.
+Cristopher ya tiene asignadas sus 16 tareas de forma nativa; Jordan conserva sus dos reservas
+mientras acepta la invitación. Estos avances no modifican las dependencias.

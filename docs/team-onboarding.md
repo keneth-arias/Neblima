@@ -27,8 +27,9 @@ make check
 ```
 
 En otra computadora, clona el repositorio público y sigue CONTRIBUTING.md.
-La base está en el PR #36, rama `chore/platform-foundation`; las copias preparadas usan esa rama.
-Después de integrar el PR, cambia a main antes de empezar otra tarea:
+El PR #36 ya está integrado. Las copias preparadas originalmente usaban
+`chore/platform-foundation`; cada integrante debe actualizar su propia copia a main cuando esté
+sin cambios pendientes, antes de empezar otra tarea:
 
 ```bash
 git fetch origin
@@ -36,9 +37,9 @@ git switch main
 git pull --ff-only
 ```
 
-Antes de esa integración, crea tus ramas desde `origin/chore/platform-foundation` y solicita revisión
-contra esa rama. Después, usa `origin/main`. Keneth coordina los cambios de rama base de los PR ya
-abiertos para no revisar dos veces los mismos cambios.
+Crea las nuevas ramas desde `origin/main` y solicita revisión contra main. Si ya abriste un PR
+contra `chore/platform-foundation`, coordina su cambio de base con Keneth para evitar revisar
+dos veces los mismos cambios. No descartes trabajo pendiente para actualizar tu copia.
 
 Cristopher puede iniciar con `docs/issue-5-oefa-review`; Jordan, con
 `docs/issue-29-showcase-outline`. Crea tu rama cuando empieces la tarea:
@@ -53,9 +54,9 @@ cuando tengas evidencia. Mantén **una tarea activa por persona**.
 
 ## Acceso personal a GitHub
 
-Las invitaciones de qriqs y J0r-PS al repositorio siguen pendientes según la última verificación.
-Deben aceptarlas con sus propias cuentas antes de subir cambios o recibir asignaciones nativas.
-Mientras tanto, las etiquetas `owner:qriqs` y `owner:J0r-PS` reservan sus tareas, como indicó Keneth.
+qriqs ya puede recibir asignaciones y tiene sus 16 tareas asignadas. La invitación de J0r-PS
+sigue pendiente según la última verificación; la etiqueta `owner:J0r-PS` conserva sus dos reservas.
+El acceso autenticado desde cada usuario local se configura por separado.
 Ambos tienen permiso de administrador del tablero. En el repositorio personal, su permiso es de
 colaborador con escritura. Son permisos distintos.
 
