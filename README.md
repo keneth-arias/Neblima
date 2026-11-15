@@ -62,5 +62,6 @@ El [plan inicial completo](docs/initial-plan.md) también está adaptado al espa
 propuestos aún no están implementados. El texto original se conserva en el historial de Git.
 
 No subas credenciales ni datos masivos. Verifica las licencias antes de redistribuir datos.
-Que el repositorio sea público no concede derechos sobre las fuentes. La licencia del código del
-proyecto todavía debe definirse y no se atribuye una licencia a los datos candidatos.
+Que el repositorio sea público no concede derechos sobre las fuentes. El código propio se distribuye bajo
+[AGPL-3.0-only](LICENSE); consulta [la decisión y los límites para TimeNet](docs/decisions/003-licencia-agpl-v3.md).
+No se atribuye una licencia a los datos candidatos.

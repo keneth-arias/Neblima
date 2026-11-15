@@ -96,8 +96,9 @@ Se mantiene la revisión fijada y la separación adquisición/conversión ya apr
 servicios, bibliotecas pesadas, un formato TimeF propio ni particiones aleatorias.
 La granularidad definitiva de registros, el esquema de observaciones y el presupuesto de entrenamiento
 se decidirán con datos reales en #12/#27/#28. No hacen falta para cerrar esta investigación.
-La elección de licencia del código propio sigue pendiente de respuesta de Keneth; no cambia los
-permisos de ninguna fuente y no bloquea la inspección documental.
+Keneth eligió AGPL-3.0-only para el código propio. No cambia los permisos de ninguna fuente.
+Una contribución a TimeNet bajo MIT debe tener autoría y permiso adecuados por separado; este
+repositorio no concede una excepción ni licencia dual. Ver [ADR-003](decisions/003-licencia-agpl-v3.md).
 
 ## Qué se verificó y qué falta ejecutar
 

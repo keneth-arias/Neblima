@@ -75,8 +75,9 @@ M3 y fuentes meteorológicas verificadas habilitan M4. M6 nacional y M7 compleme
 ## Riesgos y decisiones pendientes
 
 Enlaces, tamaños, derechos y cobertura son candidatos hasta verificarse. Una falla debe quedar como
-bloqueo, no como progreso inventado. Definir estaciones, fechas, método regulatorio, licencia del
-código y de los datos, nombres externos, alojamiento de archivos y presupuesto de cómputo con evidencia.
+bloqueo, no como progreso inventado. Definir estaciones, fechas, método regulatorio, licencias de los datos, nombres externos,
+alojamiento de archivos y presupuesto de cómputo con evidencia. El código propio usa AGPL-3.0-only
+por decisión de Keneth; ADR-003 define la separación respecto de contribuciones externas MIT.
 Los comandos del plan inicial son propuestas, no API implementadas.
 
 ## Preparación y distribución del equipo

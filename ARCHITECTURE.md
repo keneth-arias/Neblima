@@ -53,5 +53,7 @@ fuente inspeccionada. Se mantiene la revisión 9bd1613 de TimeNet: no hay actual
 - Los ayudantes de descarga de TimeNet son referencia para #6, no un reemplazo ya aprobado de los
   manifiestos, controles de contenido, caché verificable y límites que necesita AirAware.
 
-No apareció una contradicción bloqueante en los contratos examinados. La licencia del código propio
-sigue como decisión de Keneth; la inspección de MIT de TimeNet no concede derechos sobre datos externos.
+No apareció una contradicción bloqueante en los contratos examinados. El código propio usa AGPL-3.0-only
+por decisión de Keneth; la inspección de MIT de TimeNet no concede derechos sobre datos externos.
+La contribución MIT externa necesita revisar autoría y permisos por separado según
+[ADR-003](docs/decisions/003-licencia-agpl-v3.md).

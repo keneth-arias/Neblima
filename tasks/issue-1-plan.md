@@ -133,6 +133,6 @@ No añadir servicios de pago, entornos de entrenamiento ni descargas masivas par
 | 4. Requisitos y decisiones | Matriz de evidencias/estado/responsables, plazo convertido y consecuencias de arquitectura | docs/hackathon.md y ARCHITECTURE.md |
 
 Las pruebas externas se inspeccionaron, no se ejecutaron. No se instaló el SDK ni se descargaron
-datos. Se mantiene la revisión y la arquitectura ya aceptadas. La elección de licencia del código
-propio se consultó a Keneth y permanece pendiente hasta su respuesta; no bloquea esta investigación.
+datos. Se mantiene la revisión y la arquitectura ya aceptadas. Keneth eligió AGPL-3.0-only para el código propio. Se documentó la separación de permisos respecto
+a las contribuciones MIT de TimeNet en ADR-003; no queda pendiente esa elección.
 Las decisiones de esquema científico, cobertura real y cómputo siguen en #12, #4/#5 y #27/#28.
