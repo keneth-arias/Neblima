@@ -1,0 +1,37 @@
+[project]
+name = "airaware"
+version = "0.1.0"
+description = "Reproducible air-quality dataset engineering for Lima and Peru"
+readme = "README.md"
+requires-python = ">=3.11,<3.14"
+dependencies = ["pydantic>=2.12,<3", "pyyaml>=6,<7", "typer>=0.12,<1"]
+
+[project.scripts]
+airaware = "airaware.cli:app"
+
+[build-system]
+requires = ["uv_build>=0.11,<0.12"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = ["pytest>=9,<10", "hypothesis>=6,<7", "ruff>=0.17,<0.18", "ty>=0.0.92,<0.1", "types-pyyaml>=6,<7", "pip-audit>=2,<3"]
+
+[tool.uv]
+required-version = ">=0.11.20"
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+
+[tool.ruff.format]
+exclude = ["*.md"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.pytest.ini_options]
+addopts = ["--import-mode=importlib", "--strict-markers", "-ra"]
+testpaths = ["tests"]
+
+[tool.ty.environment]
+python-version = "3.11"
