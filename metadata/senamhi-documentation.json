@@ -283,7 +283,14 @@
   "consultation": {
     "path": "docs/sources/senamhi-consultation.md",
     "reviewed": true,
-    "sent": false
+    "sent": true,
+    "sender": "keneth.arias@outlook.com",
+    "recipient": "info.sgd@senamhi.gob.pe",
+    "subject": "Consulta académica sobre datos de calidad del aire para el proyecto Air Aware — Hackathon TimeNet",
+    "mailbox_recorded_at_utc": "2026-11-16T01:02:04Z",
+    "verification": "Operación send_email completada y mensaje localizado mediante búsqueda de asunto/destinatario en Outlook. La marca corresponde al correo encontrado; no es confirmación de entrega del destinatario.",
+    "recipient_receipt_confirmed": false,
+    "follow_up_issue": 43
   },
   "limitations": [
     "No se homologaron estaciones ni se evaluó cobertura útil.",

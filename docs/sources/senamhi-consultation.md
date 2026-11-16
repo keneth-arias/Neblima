@@ -1,63 +1,56 @@
-# Consulta técnica preparada para SENAMHI
+# Consulta enviada a SENAMHI
 
-Estado: revisada, pendiente de revisión final de Keneth y de autorización de envío. No enviada.
-Destinatario propuesto: info.sgd@senamhi.gob.pe, contacto consignado en el DOCX del conjunto.
-Su publicación en el documento no confirma la disponibilidad actual del buzón.
-Remitente propuesto: Keneth Arias, responsable de datos y plataforma de AirAware Perú.
+Envío autorizado expresamente por Keneth y realizado mediante Outlook desde keneth.arias@outlook.com
+hacia info.sgd@senamhi.gob.pe. Outlook confirmó la operación y se encontró el mensaje por asunto y
+destinatario, con marca de correo 2026-11-16T01:02:04Z. No confirma recepción ni respuesta de SENAMHI.
+Seguimiento: [#43](https://github.com/keneth-arias/airaware/issues/43).
+No reenviar ni programar recordatorios sin una nueva instrucción de Keneth.
 
-**Asunto:** Aclaraciones sobre unidades, tiempo y reutilización del conjunto de calidad del aire de Lima
+**Asunto:** Consulta académica sobre datos de calidad del aire para el proyecto Air Aware — Hackathon TimeNet
+
+## Texto enviado
 
 Estimado equipo de la Subdirección de Gestión de Datos del SENAMHI:
 
-Somos el equipo de AirAware Perú. Participamos en el hackathon TimeNet y estamos preparando un conjunto
-reproducible para investigación de series temporales de calidad del aire de Lima y el Perú.
+Reciban un cordial saludo. Mi nombre es Keneth Arias, soy docente peruano de Tecnologías de la Información y la Comunicación (TIC). Junto con dos estudiantes peruanos estamos desarrollando Air Aware (AirAware Perú), un proyecto con el que participamos en el hackathon TimeNet.
 
-Consultamos el conjunto «Monitoreo de los contaminantes del aire en Lima Metropolitana» publicado en
-https://www.datosabiertos.gob.pe/dataset/monitoreo-de-los-contaminantes-del-aire-en-lima-metropolitana-servicio-nacional-de,
-su diccionario y metadatos. El CSV utilizado tiene 68 501 558 bytes y SHA-256
-896ae8a106fb128460e81b3f58096f6b9c4d582ef28fffa46e5394c5875c40d4.
-No hemos publicado esa exportación ni una versión derivada. Agradeceríamos aclarar:
+Nuestro propósito es aprender y aportar, desde un trabajo académico y colaborativo, al estudio de la calidad del aire en Lima y el Perú mediante el análisis de series temporales. Para ello, estamos preparando un conjunto de datos reproducible que permita investigar y evaluar modelos de pronóstico, procurando respetar tanto el significado de las mediciones como las condiciones de uso de la información.
 
-1. **Unidades.** ¿Qué unidad utiliza cada columna PM10, PM2_5 y NO2 en esta exportación? El diccionario
-   no la especifica. MT-DRD-005 v01, tabla 1, usa NO2 en ppb, mientras el boletín de febrero de 2018
-   muestra concentraciones en µg/m³. ¿El CSV contiene NO2 convertido? De ser así, ¿qué condiciones
-   de temperatura/presión y procedimiento se aplicaron y hubo cambios por estación o periodo?
-2. **Tiempo.** ¿FECHA/HORA corresponden a UTC, hora peruana u otra referencia? ¿Cada registro representa
-   inicio o fin del promedio horario y qué criterio mínimo de disponibilidad se exige para ese promedio?
-   Como ejemplo, el máximo NO2 de Campo de Marte del 16/02/2018 aparece con 36.6 a las 08:00 en el
-   boletín (página 9), y con el mismo valor a HORA=130000 en el CSV (ID=27417). Cuatro casos adicionales
-   presentan la misma diferencia de cinco horas. ¿Esta convención aplica a todo el periodo 2015–2024?
-3. **Calidad y ausencias.** ¿Qué versión del proceso de validación se aplicó a la exportación? ¿Los valores
-   vacíos son la única codificación de ausencia o existen otros códigos? ¿Es posible obtener los
-   banderines y registros de mantenimiento/cambios instrumentales por estación y periodo?
-4. **Ubicación y códigos.** ¿Cuál es el sistema geodésico de LATITUD/LONGITUD y están expresadas en grados
-   decimales? El diccionario describe grados/minutos/segundos. ¿Existe un historial de reubicaciones?
-   UBIGEO está declarado alfanumérico de seis posiciones, pero observamos 150113.0: ¿cuál es su
-   representación canónica y cómo deben tratarse los códigos faltantes?
-5. **Condiciones de reutilización.** Catálogo y metadatos declaran Open Data Commons Attribution License.
-   ¿Confirman que ODC-BY v1.0 aplica a esta exportación y qué avisos/atribución debemos conservar para
-   redistribuir una base derivada normalizada y particionada en TimeF, acompañada de procedencia y
-   descripción de cambios? ¿Existe alguna condición adicional aplicable a sus contenidos o componentes?
+Agradecemos que el SENAMHI ponga a disposición estos datos. Hemos revisado el conjunto «Monitoreo de los contaminantes del aire en Lima Metropolitana», junto con su diccionario y metadatos:
+https://www.datosabiertos.gob.pe/dataset/monitoreo-de-los-contaminantes-del-aire-en-lima-metropolitana-servicio-nacional-de
 
-Si hay documentación pública que ya resuelva estas preguntas, agradeceremos las referencias y su versión.
-Nuestro objetivo es representar fielmente los datos y sus condiciones, diferenciando la licencia de la
-base de datos de la del código del proyecto.
+También consultamos el manual MT-DRD-005 y boletines oficiales. Sin embargo, todavía tenemos algunas dudas que preferimos aclarar antes de transformar o compartir los datos. Si estuviera a su alcance, agradeceríamos mucho su orientación sobre los siguientes puntos:
 
-Saludos cordiales,
+1. Unidades de las mediciones. ¿Qué unidades utilizan PM10, PM2_5 y NO2 en el CSV publicado? El diccionario no las precisa. Observamos que el manual MT-DRD-005 expresa NO2 en ppb, mientras que el boletín de febrero de 2018 lo presenta en µg/m³. ¿El CSV contiene valores convertidos? De ser así, ¿qué procedimiento y condiciones de temperatura y presión se aplicaron, y hubo cambios por estación o periodo?
+
+2. Fecha y hora. ¿Los campos FECHA y HORA están expresados en UTC o en hora peruana? ¿La hora indica el inicio o el final del promedio horario y cuál es el mínimo de datos requerido para calcularlo? Como referencia, el máximo de NO2 de Campo de Marte del 16/02/2018 figura con un valor de 36.6 a las 08:00 en el boletín, y con el mismo valor a las 13:00 en el CSV (ID 27417). Encontramos la misma diferencia de cinco horas en otros cuatro casos. Quisiéramos confirmar su interpretación y si se mantiene durante todo el periodo.
+
+3. Validación y datos faltantes. ¿Qué procedimiento de validación se aplicó a esta exportación? ¿Las celdas vacías son la única forma de representar datos faltantes o existen otros códigos? ¿Hay banderines de calidad o registros de mantenimiento y cambios de instrumentos que podamos consultar?
+
+4. Ubicación de estaciones y códigos. ¿Podrían confirmarnos el sistema geodésico y si LATITUD y LONGITUD están expresadas en grados decimales? ¿Existe un historial de reubicación de estaciones? Asimismo, ¿cuál es la representación correcta de UBIGEO, considerando que el diccionario indica seis posiciones alfanuméricas y en el archivo aparecen valores como 150113.0?
+
+5. Reutilización y disponibilidad. El catálogo y los metadatos indican Open Data Commons Attribution License. ¿Podrían confirmarnos la versión aplicable y la atribución o los avisos que debemos conservar si compartimos una versión derivada para investigación, normalizada y organizada en el formato TimeF de TimeNet? También agradeceríamos saber si existen condiciones adicionales o series más recientes y archivos complementarios disponibles para este propósito.
+
+Para identificar el archivo consultado: el CSV tiene 68 501 558 bytes y su SHA-256 es:
+896ae8a106fb128460e81b3f58096f6b9c4d582ef28fffa46e5394c5875c40d4
+
+Por el momento, no hemos publicado el archivo ni una versión derivada. Si estas consultas ya están resueltas en alguna guía o documento, nos sería de mucha ayuda conocer la referencia. Si corresponde dirigirlas a otra área, agradeceremos que nos indiquen el canal adecuado.
+
+Entendemos que su equipo tiene diversas responsabilidades; cualquier orientación que puedan brindarnos será muy valiosa para nosotros. Muchas gracias por su tiempo y por el trabajo que realizan.
+
+Atentamente,
+
 Keneth Arias
-AirAware Perú — https://github.com/keneth-arias/airaware
+Docente de Tecnologías de la Información y la Comunicación
+Equipo Air Aware — dos estudiantes peruanos y un docente peruano
+keneth.arias@outlook.com
+https://github.com/keneth-arias/airaware
 
-## Revisión del borrador
+## Revisión y alcance
 
-Revisión técnica y editorial realizada el 16/11/2026:
-
-- Preguntas contrastadas con XLSX/DOCX y documentos oficiales; se retiraron datos ya resueltos,
-  como significado de FECHA_CORTE, para no solicitar aclaraciones innecesarias.
-- Se identifica la versión por tamaño y SHA-256; no se adjuntan datos masivos ni se incluyen claves.
-- El contraste de cinco horas se presenta como observación, sin afirmar UTC ni una unidad del CSV.
-- Se pide aclarar condiciones declaradas, sin afirmar que la licencia prohíba reutilizar datos.
-- El contacto proviene del DOCX; no se afirma haber confirmado el buzón ni recibido una respuesta.
-- No se promete una publicación ni se confunden licencias del software y de la base.
-
-La revisión anterior la realizó el mismo agente que investigó las fuentes; no es una revisión externa
-ni una respuesta de SENAMHI. El envío requiere autorización expresa de Keneth.
+El texto enviado adapta la consulta investigada a un tono cordial en español del Perú e identifica
+al equipo como dos estudiantes peruanos y un docente peruano de TIC, según indicó Keneth.
+Las cinco preguntas se contrastaron con fuentes oficiales y con el CSV identificado por SHA-256.
+El desfase horario se describe como observación; no se declara confirmada la semántica del histórico.
+No se adjuntaron datos masivos ni se publicaron credenciales, identificadores privados o enlaces del buzón.
+La revisión técnica y editorial la realizó el mismo agente; no es revisión externa ni respuesta de SENAMHI.

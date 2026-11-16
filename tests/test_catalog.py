@@ -230,5 +230,8 @@ def test_senamhi_documentation_preserves_field_and_document_provenance():
     assert review["temporal_interpretation"]["csv_timezone_confirmed"] is None
     assert review["temporal_interpretation"]["corroboration_only"] is True
     assert len(review["no2_crosscheck"]) == 5
-    assert review["consultation"]["sent"] is False
+    assert review["consultation"]["sent"] is True
+    assert review["consultation"]["follow_up_issue"] == 43
+    assert review["consultation"]["recipient_receipt_confirmed"] is False
+    assert review["consultation"]["sender"] == "keneth.arias@outlook.com"
     assert review["consultation"]["reviewed"] is True

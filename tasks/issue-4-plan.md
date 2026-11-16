@@ -2,7 +2,7 @@
 
 Responsable: Keneth (@keneth-arias). Dependencia: #3 cerrada mediante #41.
 Seguimiento y lista de trabajo: [issue #4](https://github.com/keneth-arias/airaware/issues/4).
-Estado: investigación ejecutada el 16/11/2026; entrega pendiente de revisión e integración.
+Estado: investigación completada el 16/11/2026; cierre mediante PR #42 y seguimiento externo en #43.
 Keneth aprobó el plan y pidió búsqueda profunda antes de preparar cualquier consulta.
 
 ## Objetivo y alcance
@@ -98,8 +98,8 @@ Las pruebas seguirán sin red y sin necesitar los originales locales.
 ## Decisión aprobada
 
 Keneth aprobó el plan y pidió búsqueda profunda ante vacíos antes de preparar una consulta revisada.
-La investigación se ejecutó bajo esa autorización. Persisten campos desconocidos; el borrador quedó
-preparado, revisado y sin enviar. La aprobación no incluye publicar datos ni contratar servicios.
+La investigación se ejecutó bajo esa autorización. Persisten campos desconocidos; la consulta quedó
+preparada, revisada y enviada con autorización posterior expresa. La aprobación no incluye publicar datos ni contratar servicios.
 
 ## Resultado de ejecución (16/11/2026)
 
@@ -108,10 +108,10 @@ preparado, revisado y sin enviar. La aprobación no incluye publicar datos ni co
 - [x] Matriz de los 15 campos y búsqueda adicional en manuales, fichas y boletines oficiales.
 - [x] Cinco máximos NO2 contrastados con boletín febrero 2018: valores coincidentes, horas +5.
   Inferencia acotada documentada, sin imponer unidad o zona horaria al histórico.
-- [x] Consulta técnica revisada y no enviada para los vacíos persistentes.
+- [x] Consulta técnica revisada y enviada con autorización de Keneth para los vacíos persistentes.
 
 Evidencia: docs/sources/senamhi.md, docs/sources/senamhi-research-log.md y
 metadata/senamhi-documentation.json. La aprobación posterior de Keneth reemplazó la decisión
 pendiente descrita en el plan original. No se pausó la búsqueda al primer desconocido.
-La entrega sigue sin autorizar integración ni publicación. El envío de la consulta requiere
-una instrucción expresa; no está incluido en la autorización de preparar y revisar un borrador.
+La entrega sigue sin autorizar integración ni publicación. Keneth autorizó posteriormente el envío, completado mediante Outlook. Las aclaraciones externas
+continúan en #43; cerrar #4 no cambia unidades, tiempos ni la decisión pendiente de publicación.

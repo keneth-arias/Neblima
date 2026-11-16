@@ -116,4 +116,4 @@ la [evidencia](../docs/sources/inventory-review.md) distingue metadatos, estruct
 el contraste de derechos, la matriz de significado de campos y la entrega de evidencia.
 La lista de trabajo se mantiene en GitHub #4. Keneth aprobó la ejecución y pidió búsqueda profunda
 ante vacíos. La investigación quedó ejecutada con documentos originales, contraste adicional y consulta
-revisada sin enviar; el informe de #4 distingue resultados de preguntas pendientes.
+revisada y enviada con autorización de Keneth; el informe de #4 distingue resultados de preguntas pendientes.

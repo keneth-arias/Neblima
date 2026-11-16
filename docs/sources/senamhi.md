@@ -9,7 +9,7 @@ CSV, diccionario XLSX y metadatos DOCX están resueltos y preservados localmente
 acreditan una serie declarada horaria y una publicación de actualización mensual, formatos de
 fecha/hora y licencia de base de datos. Persisten preguntas sobre la exportación histórica: unidades
 de contaminantes, zona horaria, intervalo, calidad y alcance de avisos/derechos para publicación.
-La [consulta revisada](senamhi-consultation.md) está preparada y no enviada.
+La [consulta revisada](senamhi-consultation.md) fue enviada con autorización de Keneth; seguimiento en [#43](https://github.com/keneth-arias/airaware/issues/43).
 
 El catálogo conserva unidades de contaminantes sin asignar y redistribution: unknown. Se puede
 continuar preparando adquisición reproducible y análisis estructural; convertir, alinear con
@@ -120,7 +120,8 @@ La futura contribución TimeNet debe separar licencia del código, base y compon
 
 Los tres recursos exigidos están resueltos; frecuencia, significado y licencia tienen evidencia
 fechada. Las preguntas no resueltas se conservaron y se preparó una consulta revisada.
-La entrega de investigación #4 está lista para revisión; no equivale a integración autorizada.
+La investigación #4 queda completa con su entrega y el envío autorizado de la consulta.
+El seguimiento de respuestas pasa a #43; el cierre no equivale a integración autorizada.
 Tras respuesta de SENAMHI, registrar evidencia nueva y actualizar únicamente las afirmaciones
 confirmadas. #8 reutiliza el CSV; #10 mide cobertura/calidad; #13 necesita semántica suficiente.
 

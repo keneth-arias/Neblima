@@ -59,4 +59,4 @@ La corroboración de cinco máximos aporta evidencia concreta para preguntar por
 pero no fija la semántica de toda la serie. Siguen sin confirmación para el CSV: unidad por señal,
 reloj/intervalo, condiciones de conversión, trazas de validación, códigos completos de ausencia,
 sistema geodésico y alcance de avisos para la entrega derivada.
-Se preparó una consulta limitada a estas preguntas, revisada y no enviada.
+Se preparó, revisó y envió una consulta limitada a estas preguntas, con autorización expresa de Keneth. Seguimiento en #43.
