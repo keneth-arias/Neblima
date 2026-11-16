@@ -166,11 +166,15 @@ nuevas a los proveedores. PR #50 de etiquetas sigue siendo una entrega separada,
 Keneth aprobó ambos planes. #8 se ejecutó sin descargas y se integró en PR #52. Los prerrequisitos
 OEFA de dialecto y canal explícito se integraron en #53/#54. reports/acquisition/oefa.md y
 metadata/oefa-acquisition-check.json registran documentación verificada y CSV bloqueado por HTTP 418.
-No se cambió de canal ni se inició otra transferencia después del rechazo. #9 conserva el pendiente
-CSV y #10 puede comenzar por SENAMHI, separando la ausencia de señales OEFA de los documentos.
+Estado histórico del primer intento. Posteriormente Keneth pidió la descarga completa con Lightpanda:
+PR #56 integró la evidencia del CSV completo y cerró #9; el 418 ya no bloquea el perfilamiento.
 
 ## #10: perfilamiento de originales locales completos
 
 Plan adaptado en [issue-10-plan.md](issue-10-plan.md). #8/#9 cerradas y archivos completos disponibles.
 Implementación autorizada por Keneth: perfiles por fuente/estación/serie y señales con Parquet local,
 pruebas sintéticas y ejecución real posterior, sin normalizar incertidumbres ni escoger el benchmark.
+
+La implementación y ejecución real de #10 están en revisión: [metodología](../docs/profiling.md),
+[configuración](../configs/profiling.json) y [resultados](../reports/profiling.md). Las salidas Parquet
+permanecen locales. La selección de #11 conserva las incertidumbres de reloj/unidades.

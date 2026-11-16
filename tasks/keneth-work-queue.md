@@ -10,8 +10,8 @@ en el repositorio; respuestas y resúmenes para Keneth en inglés.
 | --- | --- | --- |
 | #7 | Caché/reanudación y selección por lotes, límites, estimación y modo sin red; HTTP simulado | #6/#7 cerradas; PR #46–#49 integrados |
 | #8 | Reutilizar CSV/documentación SENAMHI con plan repetible e informe local | #8 ejecutada e integrada en PR #52; originales intactos, cero red |
-| #9 | Documentación OEFA y CSV acotado; resolver dialecto/canal antes de transferir | CSV completo adquirido con Lightpanda y verificado; informe reports/acquisition/oefa.md; integración pendiente |
-| #10 | Perfilamiento de cobertura/calidad con datos reales y límites por fuente | Espera #8; incorporar OEFA al completar #9 |
+| #9 | Documentación OEFA y CSV acotado; resolver dialecto/canal antes de transferir | #9 cerrada; PR #56 integrado, CSV completo Lightpanda verificado |
+| #10 | Perfilamiento de cobertura/calidad con datos reales y límites por fuente | #8/#9 cerradas; implementación y ejecución real de ambas fuentes en revisión (#57 y continuación) |
 | #11 | Plan de comparación, conteo real de ventanas y puntuación con trazas de filtros | Espera #9/#10; no inventar cobertura ni seleccionar fuente con semántica desconocida |
 | #12 | Contrato de observaciones/estaciones, nulabilidad, procedencia y disponibilidad | Espera selección #11; se puede preparar propuesta sin fijar unidades desconocidas |
 | #14 | Reglas de identidad, reubicación y duplicados; regresiones de procedencia | Espera normalización #13, a cargo de Cristopher |
