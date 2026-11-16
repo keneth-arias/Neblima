@@ -224,3 +224,13 @@ con sumas verificadas y dos recorridos offline. El CSV respondió HTTP 418 en la
 se detuvo sin otro intento/canal, no se descargó el archivo completo ni se confirmó el tamaño actual.
 La evidencia histórica de rango de #5 no se reemplaza ni se presenta como medición de esta ejecución.
 #9 conserva el bloqueo; el catálogo diferencia acceso documental y acceso al archivo CSV.
+
+
+## Descarga completa posterior con Lightpanda
+
+Por instrucción explícita de Keneth, Lightpanda download obtuvo el CSV completo: 1 317 949 839 bytes.
+metadata/oefa-lightpanda-download.json registra SHA-256, 36 columnas, 2 883 877 filas de datos,
+validación estructural y reutilización local del original/manifiesto sin cambios. El código HTTP del
+archivo queda nulo porque la herramienta no lo expuso. El CSV no se normalizó ni se publicó en Git.
+Este resultado resuelve la adquisición de #9; el 418 del canal http_file permanece como historial,
+no como bloqueo actual del archivo disponible localmente. #10 mantiene el perfilamiento científico.

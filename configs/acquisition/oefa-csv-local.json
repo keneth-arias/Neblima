@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "jobs": [
+    {
+      "spec": {
+        "source_id": "oefa-csv",
+        "resource_url": "https://www.datosabiertos.gob.pe/sites/default/files/1a_Vigilancia%20y%20Seguimiento%20ambiental%20en%20la%20calidad%20del%20aire.csv",
+        "final_url": null,
+        "api_documentation_url": null,
+        "source_page_url": "https://www.datosabiertos.gob.pe/dataset/vigilancia-y-seguimiento-ambiental-en-la-calidad-del-aire-organismo-de-evaluaci%C3%B3n-y",
+        "method": "lightpanda",
+        "format": "csv",
+        "max_bytes": 1317949839,
+        "expected_sha256": "1f09a8064ee0aed0b3a9a0a90b96f63ce226b45a969dace49f73e45134f26d92",
+        "acquired_at": null,
+        "json_required_keys": [],
+        "csv_delimiter": ";"
+      },
+      "local_file": "data/raw/oefa/oefa_eas_20261116.csv",
+      "expected_size_bytes": 1317949839
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 # Plan de #9: adquisición acotada de OEFA y documentación
 
-Estado: plan aprobado por Keneth; prerrequisitos implementados y documentos adquiridos; CSV bloqueado.
+Estado: ejecución completada con Lightpanda tras instrucción explícita de Keneth; entrega para integración.
 Responsable: @keneth-arias. Dependencias #5 y #7 cerradas; PR #45 integrado.
 Lista de tareas: issue #9 en GitHub. Completar #8 primero para mantener una tarea activa.
 
@@ -112,3 +112,12 @@ metadata/oefa-acquisition-check.json; informe reports/acquisition/oefa.md.
 #9 sigue abierta para resolver el acceso oficial al CSV; no hay afirmación de adquisición completa.
 No se envió correo ni se autorizó un nuevo intento tras el bloqueo. #10 recibe los documentos y el
 bloqueo explícito, además del SENAMHI completado en #8. Las incertidumbres científicas se mantienen.
+
+
+## Cierre de adquisición tras Lightpanda
+
+El intento posterior con Lightpanda obtuvo el CSV completo y pasó validación/reutilización sin red.
+Evidencia metadata/oefa-lightpanda-download.json y plan configs/acquisition/oefa-csv-local.json.
+Los pendientes anteriores de acceso se conservan como historial del canal HTTP, no como estado
+actual. No se repitió una identidad falsa ni se atribuye la descarga a method=api/http_file.
+El cierre de #9 no cierra perfilamiento, semántica ni derechos de publicación.
