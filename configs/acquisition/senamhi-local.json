@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "jobs": [
+    {
+      "spec": {
+        "source_id": "senamhi-lima-csv",
+        "resource_url": "https://www.datosabiertos.gob.pe/sites/default/files/Monitoreo%20de%20los%20contaminantes%20del%20aire%20en%20Lima%20Metropolitana%20-%20%5BServicio%20Nacional%20de%20Meteorolog%C3%ADa%20e%20Hidrolog%C3%ADa%20del%20Per%C3%BA%20-%20SENAMHI%5D_1.csv",
+        "api_documentation_url": null,
+        "method": "lightpanda",
+        "format": "csv",
+        "max_bytes": 70000000,
+        "expected_sha256": "896ae8a106fb128460e81b3f58096f6b9c4d582ef28fffa46e5394c5875c40d4",
+        "acquired_at": "2026-11-15T23:54:18.824364Z",
+        "json_required_keys": []
+      },
+      "local_file": "data/raw/senamhi/senamhi_lima_monitoreo_1.csv",
+      "region": "Lima",
+      "expected_size_bytes": 68501558
+    },
+    {
+      "spec": {
+        "source_id": "senamhi-data-dictionary",
+        "resource_url": "https://www.datosabiertos.gob.pe/sites/default/files/Diccionario_Datos_Monitoreo%20de%20los%20contaminantes%20del%20aire%20en%20Lima%20Metropolitana%20-%20%5BServicio%20Nacional%20de%20Meteorolog%C3%ADa%20e%20Hidrolog%C3%ADa%20del%20Per%C3%BA%20-%20SENAMHI%5D.xlsx",
+        "final_url": null,
+        "api_documentation_url": null,
+        "method": "lightpanda",
+        "format": "xlsx",
+        "max_bytes": 1048576,
+        "expected_sha256": "d795fb9c0c8695ed0e99bbad98a94c5f698ffc2a2401f37303883d716654caae",
+        "acquired_at": null,
+        "json_required_keys": []
+      },
+      "local_file": "data/raw/senamhi/senamhi_dictionary.xlsx",
+      "region": "Lima",
+      "expected_size_bytes": 10471
+    },
+    {
+      "spec": {
+        "source_id": "senamhi-metadata",
+        "resource_url": "https://www.datosabiertos.gob.pe/sites/default/files/Metadatos_Monitoreo%20de%20los%20contaminantes%20del%20aire%20en%20Lima%20Metropolitana%20-%20%5BServicio%20Nacional%20de%20Meteorolog%C3%ADa%20e%20Hidrolog%C3%ADa%20del%20Per%C3%BA%20-%20SENAMHI%5D.docx",
+        "final_url": null,
+        "api_documentation_url": null,
+        "method": "lightpanda",
+        "format": "docx",
+        "max_bytes": 1048576,
+        "expected_sha256": "b2a1ab0b081e9d5ebb79efe0be91014b00013caf567f12fffff11f689728b945",
+        "acquired_at": null,
+        "json_required_keys": []
+      },
+      "local_file": "data/raw/senamhi/senamhi_metadata.docx",
+      "region": "Lima",
+      "expected_size_bytes": 41626
+    }
+  ]
+}

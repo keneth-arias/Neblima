@@ -1,6 +1,6 @@
 # Plan de #8: adquisición reproducible de SENAMHI Lima
 
-Estado: propuesta para comentarios de Keneth; no iniciar ejecución hasta recibir su respuesta.
+Estado: plan aprobado por Keneth y ejecución local completada; entrega para revisión/integración.
 Responsable: @keneth-arias. Dependencias #4 y #7 cerradas. Lista de tareas: issue #8 en GitHub.
 
 ## Qué cambia respecto del plan inicial
@@ -46,11 +46,11 @@ Los resultados locales de ejecución quedan bajo data/, fuera de Git. El plan us
 la raíz de cada copia; la guía explica la configuración para las copias de Cristopher y Jordan.
 No se copian datos a sus carpetas ni se presupone que ya los tienen.
 
-- [ ] CSV/XLSX/DOCX con tamaño, suma, canal real y manifiesto comprobados; faltantes registrados.
-- [ ] Dos ejecuciones locales, network_bytes=0, sin cambios a originales/manifiestos existentes.
-- [ ] Registro documental de PDF conservado con sus formatos reales, sin nueva descarga.
-- [ ] Catálogo válido e informe suficiente para que #10 encuentre los insumos y sus límites.
-- [ ] make check, make build y make audit aprobados antes de entregar; pruebas enfocadas solo si
+- [x] CSV/XLSX/DOCX con tamaño, suma, canal real y manifiesto comprobados; faltantes registrados.
+- [x] Dos ejecuciones locales, network_bytes=0, sin cambios a originales/manifiestos existentes.
+- [x] Registro documental de PDF conservado con sus formatos reales, sin nueva descarga.
+- [x] Catálogo válido e informe suficiente para que #10 encuentre los insumos y sus límites.
+- [x] make check, make build y make audit aprobados antes de entregar; pruebas enfocadas solo si
   se modifica lógica. No crear un descargador paralelo ni pruebas que solo repitan constantes.
 
 ## Presupuesto, bloqueos y cierre
@@ -62,3 +62,5 @@ No se normalizan fechas/unidades, convierten coordenadas, imputan mediciones ni 
 estos límites documentados; eso no habilita automáticamente normalización o selección en #11.
 Si algún original falta en la ejecución, consultar primero si se recupera de evidencia local o se
 aprueba una descarga concreta con Lightpanda. No reabrir la consulta institucional sin instrucción.
+
+Evidencia: metadata/senamhi-acquisition-check.json y reports/acquisition/senamhi.md. No hubo nuevas transferencias.
