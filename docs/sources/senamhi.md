@@ -156,3 +156,10 @@ No se añadieron dependencias al paquete. XLSX/DOCX se inspeccionaron con zipfil
 PDF con pypdf y PyMuPDF en entornos efímeros de uv; las páginas indicadas se revisaron visualmente.
 make check valida catálogo y coherencia documental sin originales ni navegador. make build y make audit
 siguen siendo obligatorios antes de la entrega.
+
+## Reutilización reproducible de #8
+
+El plan configs/acquisition/senamhi-local.json y el informe reports/acquisition/senamhi.md registran
+la adquisición local aprobada. metadata/senamhi-acquisition-check.json comprueba seis originales y
+la reutilización de CSV/XLSX/DOCX en dos recorridos offline; cero bytes de red y archivos/manifiestos
+previos intactos. No se cambian las conclusiones científicas ni los pendientes de #43.
