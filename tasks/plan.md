@@ -178,3 +178,9 @@ pruebas sintéticas y ejecución real posterior, sin normalizar incertidumbres n
 La implementación y ejecución real de #10 están en revisión: [metodología](../docs/profiling.md),
 [configuración](../configs/profiling.json) y [resultados](../reports/profiling.md). Las salidas Parquet
 permanecen locales. La selección de #11 conserva las incertidumbres de reloj/unidades.
+
+## Plan #11 adaptado después del perfilamiento
+
+#10 cerrada con PR #57/#58 integrados. La propuesta de [issue-11-plan.md](issue-11-plan.md)
+separa conteos estructurales de elegibilidad científica, geografía Lima/Callao y escenarios nacionales.
+Investigación OEFA y borrador de consulta preparados; pendientes de feedback, sin envío ni implementación.
