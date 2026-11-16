@@ -215,3 +215,12 @@ Ejecutado el 2026-11-16 desde la raíz del repositorio:
 - `make build`: aprobado; se generaron la distribución fuente y el wheel de `airaware-0.1.0`.
 - `make audit`: aprobado; `pip-audit` no encontró vulnerabilidades conocidas. Se omitió el paquete
   local editable conforme a la configuración del proyecto.
+
+## Ejecución controlada posterior de #9
+
+El plan aprobado se ejecutó con los prerrequisitos de dialecto y canal público explícito.
+metadata/oefa-acquisition-check.json y reports/acquisition/oefa.md registran documentos preservados
+con sumas verificadas y dos recorridos offline. El CSV respondió HTTP 418 en la sonda controlada:
+se detuvo sin otro intento/canal, no se descargó el archivo completo ni se confirmó el tamaño actual.
+La evidencia histórica de rango de #5 no se reemplaza ni se presenta como medición de esta ejecución.
+#9 conserva el bloqueo; el catálogo diferencia acceso documental y acceso al archivo CSV.

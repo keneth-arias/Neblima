@@ -9,8 +9,8 @@ en el repositorio; respuestas y resúmenes para Keneth en inglés.
 | Tarea | Primera entrega y verificación | Dependencias y estado |
 | --- | --- | --- |
 | #7 | Caché/reanudación y selección por lotes, límites, estimación y modo sin red; HTTP simulado | #6/#7 cerradas; PR #46–#49 integrados |
-| #8 | Reutilizar CSV/documentación SENAMHI con plan repetible e informe local | #4/#7 cerradas; plan pendiente de feedback |
-| #9 | Documentación OEFA y CSV acotado; resolver dialecto/canal antes de transferir | #5/#7 cerradas; alcance y presupuesto pendientes de feedback |
+| #8 | Reutilizar CSV/documentación SENAMHI con plan repetible e informe local | #8 ejecutada e integrada en PR #52; originales intactos, cero red |
+| #9 | Documentación OEFA y CSV acotado; resolver dialecto/canal antes de transferir | Plan aprobado; documentos verificados, CSV bloqueado HTTP 418. Ver reports/acquisition/oefa.md |
 | #10 | Perfilamiento de cobertura/calidad con datos reales y límites por fuente | Espera #8; incorporar OEFA al completar #9 |
 | #11 | Plan de comparación, conteo real de ventanas y puntuación con trazas de filtros | Espera #9/#10; no inventar cobertura ni seleccionar fuente con semántica desconocida |
 | #12 | Contrato de observaciones/estaciones, nulabilidad, procedencia y disponibilidad | Espera selección #11; se puede preparar propuesta sin fijar unidades desconocidas |

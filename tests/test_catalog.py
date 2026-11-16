@@ -176,7 +176,19 @@ def test_inventory_has_dated_access_evidence_for_every_candidate():
             assert source.status == "discovered"
             assert row["reason"]
         if row["outcome"] == "accessible":
-            assert source.status in {"verified", "downloaded"}
+            if source.source_id == "oefa-csv":
+                # La revisión del catálogo histórico no sustituye al acceso actual al archivo.
+                latest = json.loads((root / "metadata/oefa-acquisition-check.json").read_text())
+                assert source.status == latest["csv"]["status"] == "blocked"
+                assert latest["csv"]["http_status"] == 418
+                assert latest["csv"]["resource_url"] in {str(u) for u in source.resource_urls}
+                assert latest["catalog_discovery"]["http_status"] == 200
+                assert source.last_verified_at == datetime.fromisoformat(latest["finished_at_utc"])
+                assert "metadata/oefa-acquisition-check.json" in source.notes
+                assert "artifact" not in latest["csv"]
+                assert source.size_bytes is None
+            else:
+                assert source.status in {"verified", "downloaded"}
         if row["outcome"] == "blocked":
             assert source.status == "blocked"
             assert row["reason"]

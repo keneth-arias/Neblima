@@ -160,3 +160,11 @@ Verificación de esta propuesta documental: make check aprobado (146 pruebas sob
 make build aprobado y make audit sin vulnerabilidades conocidas. No se cambió código ni se ejecutó
 acquire/import-file/batch para #8/#9 durante la planificación. No se hicieron consultas o descargas
 nuevas a los proveedores. PR #50 de etiquetas sigue siendo una entrega separada, no incluida aquí.
+
+## Ejecución aprobada de #8/#9
+
+Keneth aprobó ambos planes. #8 se ejecutó sin descargas y se integró en PR #52. Los prerrequisitos
+OEFA de dialecto y canal explícito se integraron en #53/#54. reports/acquisition/oefa.md y
+metadata/oefa-acquisition-check.json registran documentación verificada y CSV bloqueado por HTTP 418.
+No se cambió de canal ni se inició otra transferencia después del rechazo. #9 conserva el pendiente
+CSV y #10 puede comenzar por SENAMHI, separando la ausencia de señales OEFA de los documentos.
