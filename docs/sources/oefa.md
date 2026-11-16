@@ -86,6 +86,14 @@ El volumen actual del objeto es 1 317 949 839 bytes (aproximadamente 1,318 GB de
 coherente con el tamaño de 1,23 GB mostrado por el catálogo. La descarga completa queda pendiente de
 la tarea de adquisición y de sus controles; esta investigación transfirió únicamente 64 KiB del CSV.
 
+La comprobación acotada del CSV descrita aquí se realizó con `curl`. No se registró una
+comprobación inicial con Lightpanda. Se usó `curl` para solicitar un rango de bytes acotado y
+conservar los encabezados HTTP; esta alternativa al flujo inicial acordado queda registrada de
+forma explícita. Durante la revisión de Keneth del 16/11/2026, el catálogo respondió HTTP 200 y
+se descargaron el diccionario XLSX y los metadatos DOCX con Lightpanda; sus SHA-256 coinciden con
+los registrados abajo. Esa revisión no volvió a descargar la muestra del CSV ni comprobó su
+respuesta de rango.
+
 Comando principal de comprobación, con las URL abreviadas solo en esta explicación:
 
 ```bash
@@ -140,8 +148,9 @@ formatos y el hemisferio debe quedar explícita antes de construir un CRS.
 
 ## Diferencias y datos faltantes observados
 
-- El CSV contiene `FECHA_CORTE`, pero el diccionario descargado no documenta ese campo. En las filas
-  revisadas aparece como `20240429`.
+- El diccionario documenta `FECHA_CORTE` en la fila 40 como «Día en que se generó el dataset.»,
+  con formato `aaaammdd`. En las filas revisadas aparece como `20240429`. Es una fecha de generación
+  del conjunto; no debe usarse como fecha de medición.
 - El diccionario indica `aaaammdd` para `FECHA_INICIO` y `FECHA_FIN`; la muestra usa `AAAA-MM-DD`.
 - El diccionario indica `HH:MM` para las horas; la muestra presenta valores como
   `1899-12-31 18:00:00`. Falta confirmar la interpretación y la zona horaria antes de normalizar.
@@ -152,9 +161,9 @@ formatos y el hemisferio debe quedar explícita antes de construir un CRS.
 - Los informes confirman productos horarios, de 24 horas y promedios móviles de 3 horas en evaluaciones
   concretas. No definen el vocabulario completo de `PERIODO` en el CSV ni si su fecha y hora marcan el
   inicio, el fin u otro instante de la ventana.
-- No se encontró una fuente oficial específica que defina `FECHA_CORTE` para este conjunto. Su posible uso
-  como fecha administrativa de corte en otros conjuntos no basta para marcar esa interpretación como
-  confirmada. Tampoco se adoptó UTC−5 por ser la zona horaria nacional: la fuente debe documentarla.
+- La definición oficial de `FECHA_CORTE` está disponible en el diccionario; no se requiere consultar
+  a OEFA por la ausencia de esa definición. Sigue pendiente confirmar la zona horaria de las
+  mediciones y la interpretación de las horas. No se adoptó UTC−5 solo por ser la zona horaria nacional.
 - Los metadatos DOCX indican última actualización 2024-04-29; el catálogo indica modificación
   2026-06-15 y el CSV informa `Last-Modified` 2024-07-17. No se equiparan estas fechas porque pueden
   describir eventos distintos.
@@ -189,8 +198,8 @@ también etiqueta el recurso XLSX como `format: csv`, otra diferencia que debe c
 
 1. Perfilar todas las combinaciones de `ZONA` y `DATUM`, valores vacíos y coordenadas inválidas cuando
    se autorice una descarga completa o se disponga de consultas acotadas por estación.
-2. Consultar a OEFA sobre `FECHA_CORTE`, los formatos de fecha/hora y la zona horaria si la evidencia
-   disponible no resuelve esas diferencias.
+2. Consultar a OEFA sobre las diferencias de formato de fecha/hora y la zona horaria de las
+   mediciones si la evidencia disponible no las resuelve.
 3. Definir con Keneth el sistema de referencia de coordenadas (CRS), la atribución y el tratamiento de
    datos faltantes antes de integrar o redistribuir datos.
 4. Establecer una relación determinista entre `NOMBRE_EVALUACION`, los códigos de estación y los informes
