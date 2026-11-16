@@ -1,6 +1,7 @@
 import csv
 import hashlib
 import json
+from pathlib import Path
 
 import duckdb
 import pytest
@@ -266,3 +267,131 @@ def test_hash_is_rechecked_even_if_modified_file_metadata_is_restored(tmp_path):
     with pytest.raises(ValueError, match="SHA-256"):
         profile(spec, tmp_path / "out", progress=mutate)
     assert not list((tmp_path / "out").glob("*/manifest.json"))
+
+
+def test_cli_profiles_locally_and_uses_parquet_without_dns(tmp_path, monkeypatch):
+    from typer.testing import CliRunner
+
+    from airaware.cli import app
+
+    spec = fixture(tmp_path, [("10000", "1"), ("30000", "2")])
+    config = tmp_path / "config.json"
+    config.write_text(json.dumps({"schema_version": 1, "datasets": [spec.model_dump(mode="json")]}))
+    monkeypatch.setattr("socket.getaddrinfo", lambda *a, **k: pytest.fail("No DNS"))
+    result = CliRunner().invoke(
+        app, ["profile", "run", "--config", str(config), "--output-root", str(tmp_path / "reports")]
+    )
+    assert result.exit_code == 0, result.output
+    payload = json.loads(result.stdout)
+    assert not payload["errors"] and len(payload["completed"]) == 1
+    report = Path(payload["completed"][0]["report"])
+    assert read(report, "datasets")[0]["rows"] == 2
+
+
+def test_cli_refuses_unknown_source_without_creating_outputs(tmp_path):
+    from typer.testing import CliRunner
+
+    from airaware.cli import app
+
+    spec = fixture(tmp_path, [("10000", "1")])
+    config = tmp_path / "config.json"
+    config.write_text(json.dumps({"schema_version": 1, "datasets": [spec.model_dump(mode="json")]}))
+    result = CliRunner().invoke(
+        app,
+        [
+            "profile",
+            "run",
+            "--config",
+            str(config),
+            "--source",
+            "typo",
+            "--output-root",
+            str(tmp_path / "out"),
+        ],
+    )
+    assert result.exit_code == 1 and "plan local" in result.output
+    assert not (tmp_path / "out").exists()
+
+
+def test_manifest_read_is_bounded_before_parsing(tmp_path):
+    spec = fixture(tmp_path, [("10000", "1")])
+    folder = tmp_path / "oversized"
+    folder.mkdir()
+    file = folder / "manifest.json"
+    file.write_bytes(b" " * 70000)
+    spec = spec.model_copy(update={"manifest": file})
+    with pytest.raises(ValueError, match="64 KiB"):
+        profile(spec, tmp_path / "out")
+
+
+def test_cli_can_relocate_local_inputs_with_data_directory(tmp_path, monkeypatch):
+    import shutil
+
+    from typer.testing import CliRunner
+
+    from airaware.cli import app
+
+    spec = fixture(tmp_path, [("10000", "1")])
+    config = tmp_path / "config.json"
+    config.write_text(json.dumps({"datasets": [spec.model_dump(mode="json")]}))
+    moved = tmp_path / "moved"
+    shutil.copytree(tmp_path / "data", moved)
+    shutil.rmtree(tmp_path / "data")
+    monkeypatch.setenv("AIRAWARE_DATA_DIR", str(moved))
+    result = CliRunner().invoke(
+        app, ["profile", "run", "--config", str(config), "--output-root", str(tmp_path / "out")]
+    )
+    assert result.exit_code == 0, result.output
+
+
+def test_oefa_date_coverage_does_not_require_inventing_missing_clock(tmp_path):
+    spec = oefa_fixture(tmp_path)
+    manifest = json.loads(spec.manifest.read_text())
+    original = spec.raw_root / manifest["artifact_path"]
+    rows = list(csv.DictReader(original.open(newline=""), delimiter=";"))
+    rows[0].update(FECHA_INICIO="2018-01-01", HORA_INICIO="NA")
+    rows[1].update(FECHA_INICIO="2026-12-31", HORA_INICIO="1899-12-31")
+    source = tmp_path / "modified.csv"
+    with source.open("w", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=list(spec.columns), delimiter=";")
+        w.writeheader()
+        w.writerows(rows)
+    acq = AcquisitionSpec(
+        source_id="fixture-oefa",
+        resource_url="https://example.org/modified",
+        method="local",
+        format="csv",
+        csv_delimiter=";",
+        max_bytes=100000,
+    )
+    result = ingest_file(acq, source, tmp_path / "second")
+    spec = spec.model_copy(
+        update={
+            "raw_root": tmp_path / "second/raw",
+            "manifest": result.manifest,
+            "sha256": hashlib.sha256(source.read_bytes()).hexdigest(),
+        }
+    )
+    run = profile(spec, tmp_path / "out")
+    row = read(run, "datasets")[0]
+    assert {r["token"] for r in read(run, "tokens") if r["dimension"] == "start_clock"} == {
+        "NA",
+        "1899-12-31",
+    }
+    assert str(row["first_date"]) == "2018-01-01" and str(row["last_date"]) == "2026-12-31"
+    assert row["clock_missing_rows"] == 1 and row["clock_unsupported_rows"] == 1
+    assert row["unparsed_start_rows"] == 2
+
+
+def test_hourly_grid_excludes_ambiguous_end_intervals_even_if_one_conflicts():
+    from airaware.profiling.engine import _signal
+
+    with duckdb.connect() as c:
+        c.execute("""CREATE TABLE base AS SELECT 'series' series_id,'station' station_key,
+            'demo' station_label,'[]' series_context,TIMESTAMP '2024-01-01 01:00:00' ts,
+            TIMESTAMP '2024-01-01 02:00:00' + delta*INTERVAL '1 hour' end_ts,
+            true hourly,'parsed' start_status,raw PM10 FROM
+            (VALUES (0,'10'),(0,'20'),(1,'10')) AS v(delta,raw)""")
+        _signal(c, "PM10", 0)
+        result = c.execute("SELECT conflict_slots,observed_hour_slots FROM signal_0").fetchone()
+        assert result == (1, None)

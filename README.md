@@ -42,7 +42,8 @@ La base del proyecto valida 37 recursos candidatos, prepara las carpetas locales
 Los 37 enlaces tienen una revisión documental con Lightpanda y bloqueos registrados. El CSV SENAMHI
 ya se descargó localmente y pasó una comprobación estructural; sus unidades, calidad y derechos
 siguen en revisión. Consulta [el inventario y la evidencia](docs/sources/inventory-review.md).
-El análisis de calidad, la normalización, la exportación TimeF y el entrenamiento siguen pendientes.
+El [perfilamiento local](docs/profiling.md) mide cobertura y calidad sin modificar originales.
+La normalización, la exportación TimeF y el entrenamiento siguen pendientes.
 
 La [prueba sintética de TimeNet](tools/timenet-smoke/README.md) ya se ejecutó en un entorno aislado.
 El conjunto hello-world está en data/timef; no contiene observaciones ambientales reales.
@@ -57,8 +58,8 @@ El conjunto hello-world está en data/timef; no contiene observaciones ambiental
 - `docs/`: metodología, decisiones y guías del equipo.
 - `.github/`: integración continua (CI), responsables y plantillas de tareas y PR.
 
-Empiecen por verificar SENAMHI en [#4](https://github.com/keneth-arias/airaware/issues/4) y OEFA en
-[#5](https://github.com/keneth-arias/airaware/issues/5). Sigan el [protocolo Lightpanda](docs/web-access.md) y la [guía de adquisición](docs/acquisition.md).
+SENAMHI y OEFA ya tienen originales locales verificados (#8/#9). Consulten los
+[resultados de perfilamiento](reports/profiling.md) para preparar la selección de #11. Sigan el [protocolo Lightpanda](docs/web-access.md) y la [guía de adquisición](docs/acquisition.md).
 La CLI acquire de #6 ya registra originales y consulta API públicas explícitas con integridad;
 caché, reanudación y lotes acotados se describen en la guía de adquisición (#7).
 El [plan vigente](tasks/plan.md), el [tablero](https://github.com/users/keneth-arias/projects/1) y las
