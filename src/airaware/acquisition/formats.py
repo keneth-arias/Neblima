@@ -32,7 +32,7 @@ def validate_format(path: Path, spec: AcquisitionSpec) -> None:
     try:
         if spec.format == "csv":
             with path.open(encoding="utf-8-sig", newline="") as stream:
-                rows = csv.reader(stream, strict=True)
+                rows = csv.reader(stream, delimiter=spec.csv_delimiter, strict=True)
                 header = next(rows)
                 if len(header) < 2 or len(set(header)) != len(header) or not all(header):
                     raise ValueError("Encabezado CSV inválido")

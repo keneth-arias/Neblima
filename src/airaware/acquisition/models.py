@@ -28,9 +28,12 @@ class AcquisitionSpec(BaseModel):
     expected_sha256: str | None = Field(default=None, pattern=r"^[a-f0-9]{64}$")
     acquired_at: datetime | None = None
     json_required_keys: tuple[str, ...] = ()
+    csv_delimiter: Literal[",", ";"] = ","
 
     @model_validator(mode="after")
     def check_contract(self) -> Self:
+        if self.format != "csv" and self.csv_delimiter != ",":
+            raise ValueError("El delimitador solo describe recursos CSV")
         if self.method == "api" and self.api_documentation_url is None:
             raise ValueError("La API requiere una referencia de documentación")
         for url in [self.resource_url, self.final_url, self.api_documentation_url]:

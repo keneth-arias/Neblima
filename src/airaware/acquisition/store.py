@@ -90,12 +90,18 @@ def _measure(chunks: Iterable[bytes], max_bytes: int, output: Path | None) -> tu
 
 
 def _identity(spec: AcquisitionSpec) -> tuple[object, ...]:
-    return (
+    identity = (
         spec.source_id,
         str(spec.resource_url),
         spec.method,
         spec.format,
         spec.json_required_keys,
+    )
+    # Conservar claves históricas y contratos de coma sin reescribir manifiestos.
+    return (
+        identity
+        if spec.csv_delimiter == ","
+        else (*identity, ("csv_delimiter", spec.csv_delimiter))
     )
 
 
