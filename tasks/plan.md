@@ -143,3 +143,9 @@ La [cola de trabajo](keneth-work-queue.md) ordena las 13 tareas abiertas asignad
 Comienza [#7](issue-7-plan.md), con límite por archivo de 1000 GiB indicado por Keneth, presupuestos
 explícitos por lote y pruebas sin descargas masivas. Los siguientes pasos científicos requieren las
 entregas de Cristopher y las aclaraciones de #43; no se declaran completados por anticipación.
+
+## #20: metodología y etiquetas (16/11/2026)
+
+Plan detallado en [issue-20-plan.md](issue-20-plan.md): verificar normas oficiales, separar ventana
+futura completa de día calendario, implementar módulo puro con pruebas y mantener explícita la
+integración pendiente con #18. No normalizar ni etiquetar todavía datos SENAMHI de semántica incierta.
