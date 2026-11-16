@@ -6,7 +6,7 @@ resultado, motivo y próxima acción en [source-access.json](../../metadata/sour
 El catálogo conserva categoría, cobertura y licencia declaradas con calificadores explícitos;
 lo que no se pudo verificar queda nulo o unknown. No se descargaron los conjuntos restantes.
 
-## Resultado y alcance
+## Resultado y alcance (captura histórica de #3)
 
 30 páginas con contenido accesible, cuatro accesos parciales y tres bloqueos de navegación.
 Estados del catálogo: 29 verified (revisión documental), un downloaded (CSV SENAMHI), cuatro discovered
@@ -58,3 +58,10 @@ Las unidades, zona horaria y derechos se revisan en #4; calidad/cobertura útil 
 zona horaria sin acceder a internet. `make build` genera el paquete; `make audit` revisa dependencias.
 Las pruebas no requieren archivos originales ni Lightpanda instalado. La evidencia es una captura
 fechada, no una promesa de que los proveedores mantengan los mismos enlaces.
+
+## Actualización posterior: #4
+
+La revisión SENAMHI del 16/11/2026 descargó diccionario y metadatos; el catálogo vigente tiene
+27 verified y tres downloaded, además de cuatro discovered y tres blocked. El registro de acceso
+de #3 conserva su fecha original. La evidencia posterior está en metadata/senamhi-documentation.json;
+la licencia de la base ya está documentada, pero unidades/tiempo y publicación conservan preguntas.

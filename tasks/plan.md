@@ -114,6 +114,6 @@ la [evidencia](../docs/sources/inventory-review.md) distingue metadatos, estruct
 
 #3 quedó integrada en #41. El [plan de #4](issue-4-plan.md) ordena la preservación de documentos,
 el contraste de derechos, la matriz de significado de campos y la entrega de evidencia.
-La lista de trabajo se mantiene en GitHub #4. Keneth conserva la responsabilidad; la ejecución
-espera su decisión sobre cómo proceder si los documentos oficiales resultan insuficientes.
-No se inició la investigación ni se modificaron los estados del catálogo durante esta planificación.
+La lista de trabajo se mantiene en GitHub #4. Keneth aprobó la ejecución y pidió búsqueda profunda
+ante vacíos. La investigación quedó ejecutada con documentos originales, contraste adicional y consulta
+revisada sin enviar; el informe de #4 distingue resultados de preguntas pendientes.

@@ -169,7 +169,8 @@ def test_inventory_has_dated_access_evidence_for_every_candidate():
         assert row["method"].startswith("Lightpanda")
         assert row["outcome"] in {"accessible", "partial", "blocked"}
         assert row["next_action"]
-        assert source.last_verified_at == datetime.fromisoformat(row["checked_at"])
+        assert source.last_verified_at is not None
+        assert source.last_verified_at >= datetime.fromisoformat(row["checked_at"])
         assert source.notes
         if row["outcome"] == "partial":
             assert source.status == "discovered"
@@ -179,7 +180,12 @@ def test_inventory_has_dated_access_evidence_for_every_candidate():
         if row["outcome"] == "blocked":
             assert source.status == "blocked"
             assert row["reason"]
-        assert source.size_bytes is None or source.source_id == "senamhi-lima-csv"
+        if source.size_bytes is not None:
+            assert source.source_id in {
+                "senamhi-lima-csv",
+                "senamhi-data-dictionary",
+                "senamhi-metadata",
+            }
         assert source.redistribution == "unknown"
 
 
@@ -194,4 +200,35 @@ def test_senamhi_download_has_public_provenance_without_bundling_raw_data():
     assert len(evidence["sha256"]) == 64
     assert evidence["csv_validation"]["data_rows"] == 577794
     assert evidence["normalization"] == "none"
-    assert source.license is None
+    assert source.license == "ODC-BY-1.0"
+    assert source.redistribution == "unknown"
+    assert source.units == {}
+
+
+def test_senamhi_documentation_preserves_field_and_document_provenance():
+    root = Path(__file__).resolve().parents[1]
+    review = json.loads((root / "metadata/senamhi-documentation.json").read_text())
+    original = json.loads((root / "metadata/senamhi-lima-download.json").read_text())
+    assert [field["name"] for field in review["fields"]] == original["csv_validation"]["columns"]
+    assert len({field["name"] for field in review["fields"]}) == 15
+    for field in review["fields"]:
+        assert field["reference"].startswith("DiccionarioDatos!")
+        assert field["definition"]
+    catalog = load_catalog(root / "configs/sources.yaml")
+    sources = {s.source_id: s for s in catalog.sources}
+    for document in review["documents"]:
+        assert document["size_bytes"] > 0
+        assert len(document["sha256"]) == 64
+        assert datetime.fromisoformat(document["verified_at_utc"]).tzinfo is not None
+        if document["source_id"] in sources:
+            source = sources[document["source_id"]]
+            assert source.size_bytes == document["size_bytes"]
+            assert source.status == "downloaded"
+            assert document["source_url"] in [str(url) for url in source.resource_urls]
+    assert review["license"]["identifier"] == "ODC-BY-1.0"
+    assert review["license"]["redistribution_decision"] == "pending_clarification"
+    assert review["temporal_interpretation"]["csv_timezone_confirmed"] is None
+    assert review["temporal_interpretation"]["corroboration_only"] is True
+    assert len(review["no2_crosscheck"]) == 5
+    assert review["consultation"]["sent"] is False
+    assert review["consultation"]["reviewed"] is True

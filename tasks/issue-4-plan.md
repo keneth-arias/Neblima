@@ -2,7 +2,8 @@
 
 Responsable: Keneth (@keneth-arias). Dependencia: #3 cerrada mediante #41.
 Seguimiento y lista de trabajo: [issue #4](https://github.com/keneth-arias/airaware/issues/4).
-Estado: planificación; pendiente de decisión de Keneth antes de ejecutar la investigación.
+Estado: investigación ejecutada el 16/11/2026; entrega pendiente de revisión e integración.
+Keneth aprobó el plan y pidió búsqueda profunda antes de preparar cualquier consulta.
 
 ## Objetivo y alcance
 
@@ -57,8 +58,8 @@ redistribution: allowed solo por acceso público o por una etiqueta de licencia.
 ### Punto de control: derechos y evidencia insuficiente
 
 Presentar a Keneth obligaciones encontradas y cualquier conflicto. Si no hay evidencia suficiente,
-propuesta pendiente de su decisión: mantener derechos/unidades desconocidos, registrar el bloqueo
-y preparar un borrador de consulta a SENAMHI. No enviar mensajes ni publicar datos sin autorización
+decisión aprobada por Keneth: buscar evidencia adicional en profundidad y, si persiste el vacío,
+mantener derechos/unidades desconocidos, registrar el bloqueo y preparar una consulta revisada. No enviar mensajes ni publicar datos sin autorización
 expresa. Una fuente secundaria puede orientar la búsqueda, sin sustituir evidencia oficial faltante.
 No se requiere cerrar todos los desconocidos para entregar un informe honesto; un bloqueo no equivale
 a una fuente aprobada para integración. El cierre de #4 dependerá de que sus criterios documenten
@@ -94,10 +95,23 @@ Las pruebas seguirán sin red y sin necesitar los originales locales.
 **Archivos:** docs/sources/senamhi.md, configs/sources.yaml, tests/test_catalog.py si corresponde.
 **Dependencia:** pasos 2 y 3 con resultados o bloqueos documentados. **Tamaño:** pequeño.
 
-## Decisión antes de ejecutar
+## Decisión aprobada
 
-Keneth debe confirmar si, ante documentación oficial insuficiente, se mantienen los campos desconocidos
-y se prepara una consulta para su revisión (recomendado), o se detiene toda la tarea hasta obtener
-respuesta oficial. En ambos casos, no se asumirá permiso ni se enviará la consulta automáticamente.
-La aprobación autoriza la investigación acotada de los pasos anteriores, no publicar datos ni contratar
-servicios. No se han descargado documentos ni iniciado la verificación sustantiva en esta planificación.
+Keneth aprobó el plan y pidió búsqueda profunda ante vacíos antes de preparar una consulta revisada.
+La investigación se ejecutó bajo esa autorización. Persisten campos desconocidos; el borrador quedó
+preparado, revisado y sin enviar. La aprobación no incluye publicar datos ni contratar servicios.
+
+## Resultado de ejecución (16/11/2026)
+
+- [x] Documentos preservados con Lightpanda y manifiesto; CSV original reutilizado y suma confirmada.
+- [x] Licencia contrastada con el texto oficial; alcance y decisión operativa registrados.
+- [x] Matriz de los 15 campos y búsqueda adicional en manuales, fichas y boletines oficiales.
+- [x] Cinco máximos NO2 contrastados con boletín febrero 2018: valores coincidentes, horas +5.
+  Inferencia acotada documentada, sin imponer unidad o zona horaria al histórico.
+- [x] Consulta técnica revisada y no enviada para los vacíos persistentes.
+
+Evidencia: docs/sources/senamhi.md, docs/sources/senamhi-research-log.md y
+metadata/senamhi-documentation.json. La aprobación posterior de Keneth reemplazó la decisión
+pendiente descrita en el plan original. No se pausó la búsqueda al primer desconocido.
+La entrega sigue sin autorizar integración ni publicación. El envío de la consulta requiere
+una instrucción expresa; no está incluido en la autorización de preparar y revisar un borrador.

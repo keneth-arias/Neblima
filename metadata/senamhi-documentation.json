@@ -1,0 +1,319 @@
+{
+  "schema_version": 1,
+  "reviewed_at_utc": "2026-11-16T00:27:26.408947+00:00",
+  "documents": [
+    {
+      "source_id": "senamhi-data-dictionary",
+      "local_path": "data/raw/senamhi/senamhi_dictionary.xlsx",
+      "source_url": "https://www.datosabiertos.gob.pe/sites/default/files/Diccionario_Datos_Monitoreo%20de%20los%20contaminantes%20del%20aire%20en%20Lima%20Metropolitana%20-%20%5BServicio%20Nacional%20de%20Meteorolog%C3%ADa%20e%20Hidrolog%C3%ADa%20del%20Per%C3%BA%20-%20SENAMHI%5D.xlsx",
+      "format": "XLSX",
+      "size_bytes": 10471,
+      "sha256": "d795fb9c0c8695ed0e99bbad98a94c5f698ffc2a2401f37303883d716654caae",
+      "verified_at_utc": "2026-11-16T00:27:26.408947+00:00",
+      "download_method": "Lightpanda download",
+      "http_status": null,
+      "http_status_note": "download no expone el código exacto; conserva únicamente respuestas 200–203.",
+      "reference": "DiccionarioDatos!A4:F19"
+    },
+    {
+      "source_id": "senamhi-metadata",
+      "local_path": "data/raw/senamhi/senamhi_metadata.docx",
+      "source_url": "https://www.datosabiertos.gob.pe/sites/default/files/Metadatos_Monitoreo%20de%20los%20contaminantes%20del%20aire%20en%20Lima%20Metropolitana%20-%20%5BServicio%20Nacional%20de%20Meteorolog%C3%ADa%20e%20Hidrolog%C3%ADa%20del%20Per%C3%BA%20-%20SENAMHI%5D.docx",
+      "format": "DOCX",
+      "size_bytes": 41626,
+      "sha256": "b2a1ab0b081e9d5ebb79efe0be91014b00013caf567f12fffff11f689728b945",
+      "verified_at_utc": "2026-11-16T00:27:26.408947+00:00",
+      "download_method": "Lightpanda download",
+      "http_status": null,
+      "http_status_note": "download no expone el código exacto; conserva únicamente respuestas 200–203.",
+      "reference": "Tabla de metadatos, versión 1.0"
+    },
+    {
+      "source_id": "senamhi-quality-control-reference",
+      "local_path": "data/raw/senamhi/senamhi_quality_control.pdf",
+      "source_url": "https://www.senamhi.gob.pe/load/file/00711SENA-91.pdf",
+      "format": "PDF",
+      "size_bytes": 831789,
+      "sha256": "c7d9bd7f525dc068005e13ef3263d13dc468d4385f440cbee7ea98cd0702f030",
+      "verified_at_utc": "2026-11-16T00:27:26.408947+00:00",
+      "download_method": "Lightpanda download",
+      "http_status": null,
+      "http_status_note": "download no expone el código exacto; conserva únicamente respuestas 200–203.",
+      "reference": "MT-DRD-005 v01, páginas 6–7"
+    },
+    {
+      "source_id": "senamhi-network-evaluation-reference",
+      "local_path": "data/raw/senamhi/senamhi_network_evaluation.pdf",
+      "source_url": "https://www.senamhi.gob.pe/load/file/01403SENA-5.pdf",
+      "format": "PDF",
+      "size_bytes": 2291577,
+      "sha256": "544174da90534b4924ca869d1a5bcb2d66d196babe20774e33300b3436db8a8d",
+      "verified_at_utc": "2026-11-16T00:27:26.408947+00:00",
+      "download_method": "Lightpanda download",
+      "http_status": null,
+      "http_status_note": "download no expone el código exacto; conserva únicamente respuestas 200–203.",
+      "reference": "Evaluación de la calidad del aire en Lima Metropolitana 2013; edición Lima 2015"
+    },
+    {
+      "source_id": "senamhi-bulletin-reference",
+      "local_path": "data/raw/senamhi/senamhi_bulletin_201802.pdf",
+      "source_url": "https://cdn.www.gob.pe/uploads/document/file/7841338/6613132-boletin-de-vigilancia-de-calidad-del-aire-en-lima-metropolitana-y-callao-febrero-2018.pdf?v=1743111078",
+      "format": "PDF",
+      "size_bytes": 3282212,
+      "sha256": "6d1c82e51d4f4baa2c6689d60c7761a4b9ba5799957bf49ba5d15c6870b489c1",
+      "verified_at_utc": "2026-11-16T00:27:26.408947+00:00",
+      "download_method": "Lightpanda download",
+      "http_status": null,
+      "http_status_note": "download no expone el código exacto; conserva únicamente respuestas 200–203.",
+      "reference": "Febrero 2018, página 9; inspección visual páginas 2, 3, 9, 10"
+    }
+  ],
+  "fields": [
+    {
+      "name": "ID",
+      "definition": "Identificador de registro",
+      "declared_type": "numeric",
+      "confirmed_unit": null,
+      "declared_format": null,
+      "reference": "DiccionarioDatos!A5:F5"
+    },
+    {
+      "name": "ESTACION",
+      "definition": "Nombre de estación automática",
+      "declared_type": "text",
+      "confirmed_unit": null,
+      "declared_format": null,
+      "reference": "DiccionarioDatos!A6:F6"
+    },
+    {
+      "name": "FECHA",
+      "definition": "Fecha de medición",
+      "declared_type": "numeric",
+      "confirmed_unit": null,
+      "declared_format": "aaaammdd",
+      "reference": "DiccionarioDatos!A7:F7"
+    },
+    {
+      "name": "HORA",
+      "definition": "Hora de medición",
+      "declared_type": "alphanumeric",
+      "confirmed_unit": null,
+      "declared_format": "hhmmss",
+      "reference": "DiccionarioDatos!A8:F8"
+    },
+    {
+      "name": "LONGITUD",
+      "definition": "Posición respecto de Greenwich",
+      "declared_type": "numeric",
+      "confirmed_unit": null,
+      "declared_format": null,
+      "reference": "DiccionarioDatos!A9:F9"
+    },
+    {
+      "name": "LATITUD",
+      "definition": "Posición respecto del ecuador",
+      "declared_type": "numeric",
+      "confirmed_unit": null,
+      "declared_format": null,
+      "reference": "DiccionarioDatos!A10:F10"
+    },
+    {
+      "name": "ALTITUD",
+      "definition": "Elevación sobre nivel medio del mar",
+      "declared_type": "numeric",
+      "confirmed_unit": "m",
+      "declared_format": null,
+      "reference": "DiccionarioDatos!A11:F11"
+    },
+    {
+      "name": "PM10",
+      "definition": "Material particulado menor a 10 micras",
+      "declared_type": "numeric",
+      "confirmed_unit": null,
+      "declared_format": null,
+      "reference": "DiccionarioDatos!A12:F12"
+    },
+    {
+      "name": "PM2_5",
+      "definition": "Material particulado menor a 2.5 micras",
+      "declared_type": "numeric",
+      "confirmed_unit": null,
+      "declared_format": null,
+      "reference": "DiccionarioDatos!A13:F13"
+    },
+    {
+      "name": "NO2",
+      "definition": "Dióxido de nitrógeno",
+      "declared_type": "numeric",
+      "confirmed_unit": null,
+      "declared_format": null,
+      "reference": "DiccionarioDatos!A14:F14"
+    },
+    {
+      "name": "DEPARTAMENTO",
+      "definition": "Departamento de la estación",
+      "declared_type": "text",
+      "confirmed_unit": null,
+      "declared_format": null,
+      "reference": "DiccionarioDatos!A15:F15"
+    },
+    {
+      "name": "PROVINCIA",
+      "definition": "Provincia de la estación",
+      "declared_type": "text",
+      "confirmed_unit": null,
+      "declared_format": null,
+      "reference": "DiccionarioDatos!A16:F16"
+    },
+    {
+      "name": "DISTRITO",
+      "definition": "Distrito de la estación",
+      "declared_type": "text",
+      "confirmed_unit": null,
+      "declared_format": null,
+      "reference": "DiccionarioDatos!A17:F17"
+    },
+    {
+      "name": "UBIGEO",
+      "definition": "Código geográfico de la estación",
+      "declared_type": "alphanumeric",
+      "confirmed_unit": null,
+      "declared_format": null,
+      "reference": "DiccionarioDatos!A18:F18"
+    },
+    {
+      "name": "FECHA_CORTE",
+      "definition": "Día de generación del conjunto",
+      "declared_type": "numeric",
+      "confirmed_unit": null,
+      "declared_format": "aaaammdd",
+      "reference": "DiccionarioDatos!A19:F19"
+    }
+  ],
+  "license": {
+    "identifier": "ODC-BY-1.0",
+    "declaration_sources": [
+      "SENAMHI catálogo",
+      "SENAMHI metadatos DOCX: Licencia"
+    ],
+    "catalog_link": "http://opendefinition.org/licenses/odc-by/",
+    "legal_text_url": "https://opendatacommons.org/licenses/by/1-0/",
+    "sections_reviewed": [
+      "2.2",
+      "2.4",
+      "3.1",
+      "4.2",
+      "4.3",
+      "4.4",
+      "7.1"
+    ],
+    "redistribution_decision": "pending_clarification",
+    "reason": "Licencia documental confirmada; aclarar alcance sobre exportación, contenidos y avisos concretos antes de publicar."
+  },
+  "temporal_interpretation": {
+    "declared_frequency": "hourly",
+    "declared_update_frequency": "monthly",
+    "csv_timezone_confirmed": null,
+    "corroboration_only": true,
+    "hypothesis": "UTC en CSV frente a hora del boletín: +5 horas en cinco casos de febrero 2018; sin extender al histórico completo.",
+    "aggregation_interval_confirmed": null
+  },
+  "no2_crosscheck": [
+    {
+      "station": "CAMPO_DE_MARTE",
+      "csv_record_id": "27417",
+      "date": "20180216",
+      "csv_hour": "130000",
+      "csv_value": "36.6",
+      "bulletin_hour": "080000",
+      "bulletin_value": 36.6,
+      "bulletin_unit": "µg/m³",
+      "hour_difference": 5,
+      "reference": "Boletín febrero 2018, página 9"
+    },
+    {
+      "station": "CARABAYLLO",
+      "csv_record_id": "110153",
+      "date": "20180224",
+      "csv_hour": "150000",
+      "csv_value": "103.6",
+      "bulletin_hour": "100000",
+      "bulletin_value": 103.6,
+      "bulletin_unit": "µg/m³",
+      "hour_difference": 5,
+      "reference": "Boletín febrero 2018, página 9"
+    },
+    {
+      "station": "SAN_BORJA",
+      "csv_record_id": "275122",
+      "date": "20180219",
+      "csv_hour": "200000",
+      "csv_value": "58.8",
+      "bulletin_hour": "150000",
+      "bulletin_value": 58.8,
+      "bulletin_unit": "µg/m³",
+      "hour_difference": 5,
+      "reference": "Boletín febrero 2018, página 9"
+    },
+    {
+      "station": "SAN_JUAN_DE_LURIGANCHO",
+      "csv_record_id": "357778",
+      "date": "20180224",
+      "csv_hour": "140000",
+      "csv_value": "95.4",
+      "bulletin_hour": "090000",
+      "bulletin_value": 95.4,
+      "bulletin_unit": "µg/m³",
+      "hour_difference": 5,
+      "reference": "Boletín febrero 2018, página 9"
+    },
+    {
+      "station": "SAN_MARTIN_DE_PORRES",
+      "csv_record_id": "439816",
+      "date": "20180203",
+      "csv_hour": "140000",
+      "csv_value": "14.3",
+      "bulletin_hour": "090000",
+      "bulletin_value": 14.3,
+      "bulletin_unit": "µg/m³",
+      "hour_difference": 5,
+      "reference": "Boletín febrero 2018, página 9"
+    }
+  ],
+  "consultation": {
+    "path": "docs/sources/senamhi-consultation.md",
+    "reviewed": true,
+    "sent": false
+  },
+  "limitations": [
+    "No se homologaron estaciones ni se evaluó cobertura útil.",
+    "Unidades de contaminantes y zona horaria no confirmadas para toda la exportación.",
+    "No se aplican banderines ni conversiones por analogía con manuales generales."
+  ],
+  "web_checks": [
+    {
+      "requested_url": "http://opendefinition.org/licenses/odc-by/",
+      "checked_at": "2026-11-16T00:26:39.240Z",
+      "url": "http://opendefinition.org/licenses/odc-by/",
+      "httpStatus": 200,
+      "title": "Open Data Commons Attribution License - Open Definition - Defining Open in Open Data, Open Content and Open Knowledge",
+      "error": false
+    },
+    {
+      "requested_url": "http://opendatacommons.org/licenses/by/1.0/",
+      "checked_at": "2026-11-16T00:26:39.701Z",
+      "url": "https://opendatacommons.org/licenses/by/1-0/",
+      "httpStatus": 200,
+      "title": "Open Data Commons Attribution License (ODC-By) v1.0 — Open Data Commons: legal tools for open data",
+      "error": false
+    },
+    {
+      "requested_url": "https://www.senamhi.gob.pe/?e=112208&p=calidad_del_aire-estadistica",
+      "checked_at": "2026-11-16T00:26:42.576Z",
+      "url": "https://www.senamhi.gob.pe/?e=112208&p=calidad_del_aire-estadistica",
+      "httpStatus": 200,
+      "title": "SENAMHI - Calidad del Aire Estadistica",
+      "error": false
+    }
+  ]
+}
