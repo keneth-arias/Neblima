@@ -2,6 +2,7 @@
 
 import csv
 import json
+import zlib
 from pathlib import Path
 from xml.etree import ElementTree
 from zipfile import BadZipFile, ZipFile
@@ -99,6 +100,7 @@ def validate_format(path: Path, spec: AcquisitionSpec) -> None:
         csv.Error,
         StopIteration,
         BadZipFile,
+        zlib.error,
         ElementTree.ParseError,
         RuntimeError,
         RecursionError,

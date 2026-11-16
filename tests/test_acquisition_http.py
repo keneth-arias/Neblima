@@ -213,3 +213,23 @@ def test_server_cookies_are_not_replayed_on_retry(tmp_path):
 
     acquire(tmp_path, handler, sleep=lambda seconds: None)
     assert len(calls) == 2
+
+
+def test_multicast_destination_is_rejected(tmp_path):
+    with pytest.raises(AcquisitionError):
+        fetch_api(
+            request_spec(),
+            tmp_path / "data",
+            allowed_hosts={"api.example.org"},
+            resolve=lambda host: ["224.0.0.1"],
+            transport=httpx.MockTransport(lambda r: response()),
+        )
+
+
+def test_api_records_the_known_final_url_without_redirects(tmp_path):
+    import json
+
+    result = acquire(tmp_path, lambda r: response())
+    manifest = json.loads(result.manifest.read_text())
+    assert manifest["spec"]["final_url"] == "https://api.example.org/data"
+    assert manifest["original_name"] is None

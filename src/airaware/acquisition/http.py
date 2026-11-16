@@ -37,7 +37,10 @@ def _check_destination(
         raise AcquisitionError("La API requiere HTTPS y un host autorizado explícitamente")
     try:
         addresses = resolve(host)
-        if not addresses or any(not ipaddress.ip_address(ip).is_global for ip in addresses):
+        if not addresses or any(
+            not ipaddress.ip_address(ip).is_global or ipaddress.ip_address(ip).is_multicast
+            for ip in addresses
+        ):
             raise AcquisitionError("El destino no resuelve exclusivamente a direcciones públicas")
     except (OSError, ValueError) as error:
         raise AcquisitionError("No se pudo validar el destino público de la API") from error
@@ -128,7 +131,9 @@ def fetch_api(
                     if response.status_code in {429, 500, 502, 503, 504}:
                         delay = _retry_delay(response.headers.get("retry-after"), attempt, clock)
                     elif response.status_code == 200:
-                        current = spec.model_copy(update={"acquired_at": clock()})
+                        current = spec.model_copy(
+                            update={"acquired_at": clock(), "final_url": spec.resource_url}
+                        )
                         return ingest_chunks(
                             current,
                             _response_chunks(response, spec, check_time),

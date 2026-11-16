@@ -269,3 +269,58 @@ def test_reference_detects_external_change_on_reuse(tmp_path):
 
     with pytest.raises(AcquisitionError):
         verify_bundle(spec(), tmp_path / "data/raw", result.manifest.parent)
+
+
+def test_catalog_resource_id_can_reference_existing_source_family_folder(tmp_path):
+    original = tmp_path / "data/raw/senamhi/legacy.csv"
+    original.parent.mkdir(parents=True)
+    original.write_bytes(CSV)
+    request = spec(source_id="senamhi-lima-csv")
+    result = ingest_file(request, original, tmp_path / "data")
+    assert result.reused
+    assert result.artifact == original
+    second = ingest_file(request, original, tmp_path / "data")
+    assert second.reused
+    assert len(list((tmp_path / "data/raw").rglob("*.csv"))) == 1
+
+
+def test_corrupt_deflate_container_has_a_safe_error(tmp_path):
+    from zipfile import ZIP_DEFLATED
+
+    original = tmp_path / "broken.docx"
+    with ZipFile(original, "w", compression=ZIP_DEFLATED) as archive:
+        archive.writestr("[Content_Types].xml", "<Types/>")
+        archive.writestr("_rels/.rels", "<Relationships/>")
+        archive.writestr(
+            "word/document.xml",
+            '<document xmlns="http://schemas.openxmlformats.org/wordprocessingml/2006/main"/>',
+        )
+    content = bytearray(original.read_bytes())
+    content[30 + len("[Content_Types].xml")] = 7  # Tipo de bloque DEFLATE reservado.
+    original.write_bytes(content)
+    with pytest.raises(AcquisitionError):
+        ingest_file(spec(format="docx", max_bytes=4096), original, tmp_path / "data")
+
+
+def test_a_manifest_that_cannot_be_read_back_is_not_published(tmp_path):
+    key = "x" * 66000
+    original = tmp_path / "large-contract.json"
+    original.write_text(json.dumps({key: 1}))
+    with pytest.raises(AcquisitionError):
+        ingest_file(
+            spec(format="json", json_required_keys=(key,), max_bytes=100000),
+            original,
+            tmp_path / "data",
+        )
+    assert not list((tmp_path / "data").rglob("manifest.json"))
+
+
+def test_original_name_and_optional_resolved_url_are_preserved(tmp_path):
+    original = tmp_path / "fuente.csv"
+    original.write_bytes(CSV)
+    result = ingest_file(
+        spec(final_url="https://cdn.example.org/source.csv"), original, tmp_path / "data"
+    )
+    manifest = json.loads(result.manifest.read_text())
+    assert manifest["original_name"] == "fuente.csv"
+    assert manifest["spec"]["final_url"] == "https://cdn.example.org/source.csv"

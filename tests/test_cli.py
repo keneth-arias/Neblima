@@ -1,6 +1,7 @@
 import json
 from pathlib import Path
 
+import pytest
 from typer.testing import CliRunner
 
 from airaware.cli import app
@@ -94,3 +95,115 @@ def test_workspace_success_message_is_in_spanish(tmp_path):
     result = runner.invoke(app, ["workspace", "init", "--data-dir", str(tmp_path)])
     assert result.exit_code == 0
     assert "Carpetas de trabajo listas" in result.stdout
+
+
+def acquisition_config(tmp_path, **changes):
+    path = tmp_path / "acquire.json"
+    path.write_text(
+        json.dumps(
+            {
+                "source_id": "demo",
+                "resource_url": "https://example.org/data.csv",
+                "method": "lightpanda",
+                "format": "csv",
+                "max_bytes": 1024,
+                **changes,
+            }
+        )
+    )
+    return path
+
+
+def test_import_command_respects_data_directory_and_reuses_bytes(tmp_path, monkeypatch):
+    data = tmp_path / "data"
+    monkeypatch.setenv("AIRAWARE_DATA_DIR", str(data))
+    original = tmp_path / "input.csv"
+    original.write_bytes(b"a,b\n1,2\n")
+    config = acquisition_config(tmp_path)
+    args = ["acquire", "import-file", "--spec", str(config), "--file", str(original)]
+    first = runner.invoke(app, args)
+    assert first.exit_code == 0, first.stdout
+    output = json.loads(first.stdout)
+    assert Path(output["artifact"]).is_relative_to(data)
+    assert Path(output["artifact"]).read_bytes() == original.read_bytes()
+    assert output["reused"] is False
+    second = runner.invoke(app, args)
+    assert second.exit_code == 0
+    assert json.loads(second.stdout)["reused"] is True
+
+
+@pytest.mark.parametrize(
+    "changes",
+    [
+        {"resource_url": "https://user:private-value@example.org/data"},
+        {"resource_url": "https://example.org/?token=private-value"},
+        {"max_bytes": 0},
+    ],
+)
+def test_acquisition_cli_errors_do_not_echo_config_values(tmp_path, changes):
+    original = tmp_path / "input.csv"
+    original.write_bytes(b"a,b\n1,2\n")
+    config = acquisition_config(tmp_path, **changes)
+    result = runner.invoke(
+        app,
+        [
+            "acquire",
+            "import-file",
+            "--spec",
+            str(config),
+            "--file",
+            str(original),
+            "--data-dir",
+            str(tmp_path / "data"),
+        ],
+    )
+    assert result.exit_code == 1
+    assert "private-value" not in result.output
+    assert "No se pudo validar" in result.output
+
+
+def test_acquisition_cli_api_uses_explicit_allowlist_and_transport(tmp_path, monkeypatch):
+    import httpx
+
+    from airaware.acquisition.http import fetch_api
+
+    config = acquisition_config(
+        tmp_path, method="api", api_documentation_url="https://example.org/docs"
+    )
+    calls = []
+
+    def mocked_fetch(spec, data_dir, *, allowed_hosts):
+        calls.append(allowed_hosts)
+        return fetch_api(
+            spec,
+            data_dir,
+            allowed_hosts=allowed_hosts,
+            resolve=lambda host: ["93.184.216.34"],
+            transport=httpx.MockTransport(
+                lambda r: httpx.Response(200, stream=httpx.ByteStream(b"a,b\n1,2\n"))
+            ),
+        )
+
+    monkeypatch.setattr("airaware.acquisition.cli.fetch_api", mocked_fetch)
+    result = runner.invoke(
+        app,
+        [
+            "acquire",
+            "api",
+            "--spec",
+            str(config),
+            "--allow-host",
+            "example.org",
+            "--data-dir",
+            str(tmp_path / "data"),
+        ],
+    )
+    assert result.exit_code == 0, result.output
+    assert calls == [{"example.org"}]
+    assert Path(json.loads(result.stdout)["artifact"]).read_bytes() == b"a,b\n1,2\n"
+
+
+def test_acquisition_help_is_in_spanish():
+    result = runner.invoke(app, ["acquire", "--help"])
+    assert result.exit_code == 0
+    assert "Adquirir originales" in result.stdout

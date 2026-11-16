@@ -109,8 +109,10 @@ def verify_bundle(spec: AcquisitionSpec, raw: Path, directory: Path) -> Acquisit
         if _identity(manifest.spec) != _identity(spec):
             raise AcquisitionError("El destino contiene otra procedencia o contrato")
         artifact = _safe_path(raw, manifest.artifact_path)
-        if not artifact.is_relative_to(raw / spec.source_id):
-            raise AcquisitionError("El manifiesto apunta a otra fuente")
+        if manifest.storage == "bundle" and artifact != directory / f"original.{spec.format}":
+            raise AcquisitionError("El manifiesto no apunta al original del paquete")
+        if any(part.startswith(".") for part in artifact.relative_to(raw).parts):
+            raise AcquisitionError("No se admiten referencias a archivos temporales u ocultos")
         digest, size = _measure(_chunks(artifact), spec.max_bytes, None)
         if (
             digest != manifest.sha256
@@ -133,6 +135,7 @@ def ingest_chunks(
     existing: Path | None = None,
     http_status: int | None = None,
     attempts: int = 0,
+    original_name: str | None = None,
 ) -> AcquisitionResult:
     """Consumir bytes acotados y publicar un paquete completo o una referencia verificada."""
     root = data_dir.expanduser().resolve()
@@ -165,12 +168,16 @@ def ingest_chunks(
                 size_bytes=size,
                 verified_at=datetime.now(UTC),
                 artifact_path=relative,
+                original_name=original_name,
                 storage="reference" if existing else "bundle",
                 http_status=http_status,
                 attempts=attempts,
             )
+            serialized = manifest.model_dump_json(indent=2) + "\n"
+            if len(serialized.encode("utf-8")) > 64 * 1024:
+                raise AcquisitionError("El manifiesto supera el límite permitido")
             with (pending / "manifest.json").open("x", encoding="utf-8") as stream:
-                stream.write(manifest.model_dump_json(indent=2) + "\n")
+                stream.write(serialized)
                 stream.flush()
                 os.fsync(stream.fileno())
             _sync_directory(pending)
@@ -192,8 +199,13 @@ def ingest_file(spec: AcquisitionSpec, original: Path, data_dir: Path) -> Acquis
         raise AcquisitionError("La adquisición API requiere el transporte explícito")
     root = data_dir.expanduser().resolve()
     path = original.expanduser().absolute()
-    raw_source = root / "raw" / spec.source_id
-    existing = path if path.is_relative_to(raw_source) else None
+    raw_root = root / "raw"
+    existing = path if path.is_relative_to(raw_root) else None
     if existing:
         _safe_path(root, str(path.relative_to(root)))
-    return ingest_chunks(spec, _chunks(path), data_dir, existing=existing)
+        if any(part.startswith(".") for part in path.relative_to(raw_root).parts):
+            raise AcquisitionError("No se admiten referencias a temporales u originales ocultos")
+    safe_name = "".join(
+        char if char.isprintable() and char not in "/\\" else "_" for char in path.name
+    )[:255]
+    return ingest_chunks(spec, _chunks(path), data_dir, existing=existing, original_name=safe_name)

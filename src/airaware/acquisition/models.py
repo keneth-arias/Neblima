@@ -20,6 +20,7 @@ class AcquisitionSpec(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True)
     source_id: str = Field(pattern=r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
     resource_url: HttpUrl
+    final_url: HttpUrl | None = None
     api_documentation_url: HttpUrl | None = None
     method: Literal["lightpanda", "api", "local"]
     format: Literal["csv", "json", "xlsx", "docx"]
@@ -32,7 +33,7 @@ class AcquisitionSpec(BaseModel):
     def check_contract(self) -> Self:
         if self.method == "api" and self.api_documentation_url is None:
             raise ValueError("La API requiere una referencia de documentación")
-        for url in [self.resource_url, self.api_documentation_url]:
+        for url in [self.resource_url, self.final_url, self.api_documentation_url]:
             if url is not None:
                 self._check_public_url(url)
         if self.acquired_at is not None and self.acquired_at.utcoffset() is None:
@@ -65,6 +66,7 @@ class Manifest(BaseModel):
     size_bytes: int = Field(strict=True, gt=0)
     verified_at: datetime
     artifact_path: str
+    original_name: str | None = Field(default=None, max_length=255)
     storage: Literal["bundle", "reference"]
     http_status: int | None = None
     attempts: int = Field(default=0, ge=0, le=3)
