@@ -8,7 +8,10 @@ en el repositorio; respuestas y resúmenes para Keneth en inglés.
 
 | Tarea | Primera entrega y verificación | Dependencias y estado |
 | --- | --- | --- |
-| #7 | Caché/reanudación y selección por lotes, límites, estimación y modo sin red; HTTP simulado | #6 cerrada; trabajo activo |
+| #7 | Caché/reanudación y selección por lotes, límites, estimación y modo sin red; HTTP simulado | #6/#7 cerradas; PR #46–#49 integrados |
+| #8 | Reutilizar CSV/documentación SENAMHI con plan repetible e informe local | #4/#7 cerradas; plan pendiente de feedback |
+| #9 | Documentación OEFA y CSV acotado; resolver dialecto/canal antes de transferir | #5/#7 cerradas; alcance y presupuesto pendientes de feedback |
+| #10 | Perfilamiento de cobertura/calidad con datos reales y límites por fuente | Espera #8; incorporar OEFA al completar #9 |
 | #11 | Plan de comparación, conteo real de ventanas y puntuación con trazas de filtros | Espera #9/#10; no inventar cobertura ni seleccionar fuente con semántica desconocida |
 | #12 | Contrato de observaciones/estaciones, nulabilidad, procedencia y disponibilidad | Espera selección #11; se puede preparar propuesta sin fijar unidades desconocidas |
 | #14 | Reglas de identidad, reubicación y duplicados; regresiones de procedencia | Espera normalización #13, a cargo de Cristopher |
@@ -22,8 +25,9 @@ en el repositorio; respuestas y resúmenes para Keneth en inglés.
 | #32 | Evaluación espacial con estaciones excluidas y preentrenamiento sin objetivos reservados | Espera #19/#30; ampliación nacional posterior |
 | #43 | Registrar respuesta SENAMHI y actualizar solo afirmaciones sustentadas | Espera externa; consulta enviada, sin respuesta localizada en la búsqueda inicial de este trabajo |
 
-#8/#9/#10/#13/#18/#25/#30 siguen a cargo de Cristopher; #24/#29 conservan la reserva de Jordan.
-Cristopher tiene el PR #45 de investigación OEFA. Coordinar contratos comunes sin cambiar su rama.
+#8/#9/#10 fueron transferidas a Keneth por su solicitud. #13/#18/#25/#30 siguen con Cristopher;
+#24/#29 conservan la reserva de Jordan. PR #45 de investigación OEFA aprobado e integrado; #5 cerrada.
+Coordinar contratos comunes sin cambiar ramas de otras personas.
 No cerrar una tarea posterior por preparar un contrato sintético sin cumplir su criterio con datos reales.
 Una tarea de implementación activa por persona; al llegar a una dependencia, avanzar en investigación
 independiente y mantener evidencia del bloqueo.
