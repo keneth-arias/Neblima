@@ -47,3 +47,27 @@ Documentar cómo se aplican las condiciones; no interpretar rango/304 como aprob
 - No publicar un parcial ni concatenar versiones diferentes; verificar todos los caminos de reinicio.
 - No ejecutar lotes reales grandes para probar controles. Consultar decisiones de ámbito, semántica,
   almacenamiento o costes si no quedan resueltas con la autorización existente.
+
+
+## Resultado local: 16/11/2026
+
+Implementados los cuatro incrementos. La decisión de 1000 GiB es el techo por archivo, separado del
+presupuesto total de lote. Motor API con caché verificada, reanudación fuerte y publicación de #6;
+CLI con filtros, estimación sin red, offline y hasta cuatro tareas. No-store no conserva parciales
+reutilizables; los originales adquiridos se mantienen como archivos del proyecto.
+
+make check: 146 pruebas aprobadas en Python 3.13.13, formato, tipos y catálogo sin errores.
+Las pruebas de regresión incluyen parcial corrupto, no-store tras caída, presupuesto agotado antes
+de nueva solicitud, 304/206 inválidos y preservación de versiones. SENAMHI offline: 68 501 558 bytes,
+reused=true, errors=[], network_bytes=0. El presupuesto no cuenta TLS/cabeceras y puede excederse por
+el chunk ya recibido; esta limitación se declara en docs/acquisition.md.
+
+La documentación incluye los comandos para las tres copias locales. No se cambian ramas ni entornos
+de Cristopher/Jordan. Los PR se separan por fundamento, refactor HTTP, motor y CLI/lotes; #7 se cierra
+al integrar toda la cadena. #11 sigue esperando #9/#10; la investigación normativa #20 puede avanzar
+sin escoger unidades/reloj ni completar etiquetas antes de #18.
+
+Verificación adicional: 146 pruebas aprobadas en Python 3.11 después de sincronizar el entorno
+con uv sync --locked; make build generó sdist/wheel y make audit no encontró vulnerabilidades
+conocidas. La primera ejecución de Python 3.11 detectó un entorno antiguo sin HTTPX; se actualizaron
+sus dependencias fijadas y se repitió la suite completa, sin cambiar código ni controles.

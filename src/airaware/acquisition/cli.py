@@ -1,15 +1,18 @@
 """Entradas explícitas para originales descargados y API documentadas."""
 
 import json
+from datetime import date
 from pathlib import Path
 from typing import Annotated
 
 import typer
 from pydantic import ValidationError
 
-from airaware.acquisition.http import fetch_api
+from airaware.acquisition.batch import BatchPlan, estimate_jobs, execute_jobs, select_jobs
+from airaware.acquisition.budget import ByteBudget
 from airaware.acquisition.models import AcquisitionError, AcquisitionResult, AcquisitionSpec
 from airaware.acquisition.store import ingest_file
+from airaware.acquisition.transfer import fetch_cached_api as fetch_api
 
 acquisition_app = typer.Typer(
     no_args_is_help=True, help="Adquirir originales con integridad y procedencia verificables."
@@ -19,9 +22,11 @@ SpecFile = Annotated[Path, typer.Option("--spec", help="Solicitud JSON local con
 
 
 def _read_spec(path: Path) -> AcquisitionSpec:
-    if path.stat().st_size > 64 * 1024:
+    with path.open("rb") as stream:
+        content = stream.read(64 * 1024 + 1)
+    if len(content) > 64 * 1024:
         raise AcquisitionError("La solicitud supera el límite de configuración")
-    return AcquisitionSpec.model_validate_json(path.read_bytes())
+    return AcquisitionSpec.model_validate_json(content)
 
 
 def _show_result(result: AcquisitionResult) -> None:
@@ -63,9 +68,116 @@ def acquire_api(
     spec_file: SpecFile,
     allow_host: Annotated[list[str], typer.Option(help="Host exacto de API pública autorizado.")],
     data_dir: DataDirectory = Path("data"),
+    offline: Annotated[bool, typer.Option(help="Verificar caché local sin red ni DNS.")] = False,
+    refresh: Annotated[
+        bool, typer.Option(help="Consultar sin condición de caché y reiniciar parcial.")
+    ] = False,
+    budget_bytes: Annotated[
+        int | None, typer.Option(help="Presupuesto total de payload e intentos.")
+    ] = None,
+    deadline_seconds: Annotated[
+        float, typer.Option(help="Presupuesto temporal; máximo 86400 s.")
+    ] = 60,
 ) -> None:
     """Consultar una API documentada con límites; no sustituye a Lightpanda para páginas web."""
     try:
-        _show_result(fetch_api(_read_spec(spec_file), data_dir, allowed_hosts=set(allow_host)))
+        _show_result(
+            fetch_api(
+                _read_spec(spec_file),
+                data_dir,
+                allowed_hosts=set(allow_host),
+                offline=offline,
+                refresh=refresh,
+                network_budget=ByteBudget(budget_bytes) if budget_bytes is not None else None,
+                deadline_seconds=deadline_seconds,
+            )
+        )
+    except (AcquisitionError, ValidationError, OSError, ValueError):
+        _fail()
+
+
+@acquisition_app.command("batch")
+def acquire_batch(
+    plan: Annotated[Path, typer.Option(help="Plan JSON de recursos; máximo 2 MiB.")],
+    data_dir: DataDirectory = Path("data"),
+    source: Annotated[
+        list[str] | None, typer.Option(help="ID de fuente exacto; repetible.")
+    ] = None,
+    region: Annotated[
+        list[str] | None, typer.Option(help="Región declarada exacta; repetible.")
+    ] = None,
+    start: Annotated[str | None, typer.Option(help="Inicio inclusivo YYYY-MM-DD.")] = None,
+    end: Annotated[str | None, typer.Option(help="Fin inclusivo YYYY-MM-DD.")] = None,
+    dry_run: Annotated[
+        bool, typer.Option(help="Estimar sin GET/HEAD/DNS ni crear adquisiciones.")
+    ] = False,
+    offline: Annotated[
+        bool, typer.Option(help="Solo originales locales verificados; sin red.")
+    ] = False,
+    allow_host: Annotated[
+        list[str] | None, typer.Option(help="Host de API autorizado; repetible.")
+    ] = None,
+    budget_bytes: Annotated[int, typer.Option(help="Presupuesto total de payload de red.")] = 0,
+    workers: Annotated[int, typer.Option(help="Tareas simultáneas, de 1 a 4.")] = 1,
+    authorize_unknown: Annotated[
+        bool, typer.Option(help="Autorizar tamaños desconocidos dentro de límites explícitos.")
+    ] = False,
+    deadline_seconds: Annotated[float, typer.Option(help="Presupuesto temporal por recurso.")] = 60,
+) -> None:
+    """Seleccionar recursos por metadatos; no recorta filas ni inventa cobertura."""
+    try:
+        with plan.open("rb") as stream:
+            content = stream.read(2 * 1024 * 1024 + 1)
+        if len(content) > 2 * 1024 * 1024:
+            raise AcquisitionError("El plan supera 2 MiB")
+        request = BatchPlan.model_validate_json(content)
+        selected = select_jobs(
+            request.jobs,
+            sources=set(source) if source else None,
+            regions=set(region) if region else None,
+            start=date.fromisoformat(start) if start else None,
+            end=date.fromisoformat(end) if end else None,
+        )
+        if dry_run:
+            typer.echo(
+                json.dumps(
+                    {
+                        **estimate_jobs(selected),
+                        "input_count": len(request.jobs),
+                        "selected_count": len(selected),
+                    },
+                    indent=2,
+                )
+            )
+            return
+        outcome = execute_jobs(
+            selected,
+            data_dir,
+            budget_bytes=budget_bytes,
+            workers=workers,
+            offline=offline,
+            allowed_hosts=set(allow_host or []),
+            authorize_unknown=authorize_unknown,
+            deadline_seconds=deadline_seconds,
+        )
+        typer.echo(
+            json.dumps(
+                {
+                    "completed": [
+                        {
+                            "artifact": str(r.artifact),
+                            "manifest": str(r.manifest),
+                            "reused": r.reused,
+                        }
+                        for r in outcome["completed"]
+                    ],
+                    "errors": outcome["errors"],
+                    "network_bytes": outcome["network_bytes"],
+                },
+                indent=2,
+            )
+        )
+        if outcome["errors"]:
+            raise typer.Exit(1)
     except (AcquisitionError, ValidationError, OSError, ValueError):
         _fail()

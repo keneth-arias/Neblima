@@ -30,7 +30,7 @@ La cobertura o las unidades desconocidas permanecen nulas. Mantengan las fuentes
 su explicación. Los estados avanzados requieren evidencia con fecha y zona horaria;
 `integrated` exige además permiso documentado de redistribución y categoría de medición conocida.
 
-El núcleo de adquisición #6 está implementado; #7 agrega reanudación y capacidades adicionales antes
+El núcleo de adquisición #6 y los controles de caché/reanudación/lotes #7 están implementados antes
 de ampliar adquisiciones #8/#9. Consulta docs/acquisition.md y conserva los bloqueos científicos de #43.
 Se inspeccionan los archivos, se miden calidad y cobertura #10/#11 y recién se define el conjunto
 inicial de evaluación. Cuatro estaciones, 24 meses y ventanas de 72/24 horas son metas provisionales.

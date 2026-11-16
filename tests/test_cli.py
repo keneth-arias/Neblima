@@ -165,19 +165,20 @@ def test_acquisition_cli_errors_do_not_echo_config_values(tmp_path, changes):
 def test_acquisition_cli_api_uses_explicit_allowlist_and_transport(tmp_path, monkeypatch):
     import httpx
 
-    from airaware.acquisition.http import fetch_api
+    from airaware.acquisition.transfer import fetch_cached_api as fetch_api
 
     config = acquisition_config(
         tmp_path, method="api", api_documentation_url="https://example.org/docs"
     )
     calls = []
 
-    def mocked_fetch(spec, data_dir, *, allowed_hosts):
+    def mocked_fetch(spec, data_dir, *, allowed_hosts, **options):
         calls.append(allowed_hosts)
         return fetch_api(
             spec,
             data_dir,
             allowed_hosts=allowed_hosts,
+            **options,
             resolve=lambda host: ["93.184.216.34"],
             transport=httpx.MockTransport(
                 lambda r: httpx.Response(200, stream=httpx.ByteStream(b"a,b\n1,2\n"))
@@ -207,3 +208,107 @@ def test_acquisition_help_is_in_spanish():
     result = runner.invoke(app, ["acquire", "--help"])
     assert result.exit_code == 0
     assert "Adquirir originales" in result.stdout
+
+
+def test_batch_dry_run_filters_metadata_without_network_or_creating_data(tmp_path, monkeypatch):
+    config = acquisition_config(
+        tmp_path, method="api", api_documentation_url="https://example.org/docs"
+    )
+    plan = tmp_path / "batch.json"
+    plan.write_text(
+        json.dumps(
+            {
+                "schema_version": 1,
+                "jobs": [
+                    {
+                        "spec": json.loads(config.read_text()),
+                        "region": "Lima",
+                        "start": "2026-01-01",
+                        "end": "2026-01-31",
+                        "expected_size_bytes": 123,
+                    }
+                ],
+            }
+        )
+    )
+    monkeypatch.setattr(
+        "socket.getaddrinfo", lambda *a, **k: pytest.fail("dry-run must not use DNS")
+    )
+    result = runner.invoke(
+        app,
+        [
+            "acquire",
+            "batch",
+            "--plan",
+            str(plan),
+            "--dry-run",
+            "--source",
+            "demo",
+            "--region",
+            "Lima",
+            "--start",
+            "2026-01-15",
+            "--data-dir",
+            str(tmp_path / "data"),
+        ],
+    )
+    assert result.exit_code == 0, result.output
+    report = json.loads(result.stdout)
+    assert report["known_size_bytes"] == 123 and report["unknown_count"] == 0
+    assert not (tmp_path / "data").exists()
+
+
+def test_batch_offline_registers_local_original_and_reports_zero_network_bytes(tmp_path):
+    original = tmp_path / "original.csv"
+    original.write_bytes(b"a,b\n1,2\n")
+    config = acquisition_config(tmp_path)
+    plan = tmp_path / "batch.json"
+    plan.write_text(
+        json.dumps(
+            {
+                "schema_version": 1,
+                "jobs": [{"spec": json.loads(config.read_text()), "local_file": str(original)}],
+            }
+        )
+    )
+    result = runner.invoke(
+        app,
+        [
+            "acquire",
+            "batch",
+            "--plan",
+            str(plan),
+            "--offline",
+            "--data-dir",
+            str(tmp_path / "data"),
+        ],
+    )
+    assert result.exit_code == 0, result.output
+    report = json.loads(result.stdout)
+    assert report["network_bytes"] == 0 and len(report["completed"]) == 1
+    assert Path(report["completed"][0]["artifact"]).read_bytes() == original.read_bytes()
+
+
+def test_api_offline_missing_cache_fails_without_dns(tmp_path, monkeypatch):
+    config = acquisition_config(
+        tmp_path, method="api", api_documentation_url="https://example.org/docs"
+    )
+    monkeypatch.setattr(
+        "socket.getaddrinfo", lambda *a, **k: pytest.fail("offline must not resolve")
+    )
+    result = runner.invoke(
+        app,
+        [
+            "acquire",
+            "api",
+            "--spec",
+            str(config),
+            "--allow-host",
+            "example.org",
+            "--offline",
+            "--data-dir",
+            str(tmp_path / "data"),
+        ],
+    )
+    assert result.exit_code == 1
+    assert "No se pudo validar" in result.output

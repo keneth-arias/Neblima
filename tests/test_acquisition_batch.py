@@ -81,3 +81,78 @@ def test_local_file_estimate_uses_stat_without_relabelling_catalogue_size(tmp_pa
     result = estimate_jobs([job(spec=value, local_file=original, expected_size_bytes=999)])
     assert result["known_size_bytes"] == len(original.read_bytes())
     assert result["resources"][0]["size_origin"] == "local_stat"
+
+
+def test_execute_rejects_unestimated_network_jobs_without_explicit_authorization(tmp_path):
+    from airaware.acquisition.batch import execute_jobs
+
+    with pytest.raises(AcquisitionError):
+        execute_jobs(
+            [job(expected_size_bytes=None)],
+            tmp_path / "data",
+            budget_bytes=1024,
+            allowed_hosts={"api.example.org"},
+            fetcher=lambda *a, **k: pytest.fail("not authorized"),
+        )
+
+
+def test_batch_concurrency_budget_and_deduplication(tmp_path):
+    import threading
+
+    from airaware.acquisition.batch import execute_jobs
+    from airaware.acquisition.models import AcquisitionResult
+
+    barrier = threading.Barrier(2)
+    seen = []
+
+    def fetcher(spec, data_dir, **kwargs):
+        seen.append((spec.source_id, id(kwargs["network_budget"])))
+        barrier.wait(timeout=5)
+        kwargs["network_budget"].consume(3)
+        return AcquisitionResult(tmp_path / "artifact", tmp_path / "manifest", False)
+
+    second = job().spec.model_dump()
+    second["source_id"] = "second"
+    first = job()
+    result = execute_jobs(
+        [first, first, job(spec=second)],
+        tmp_path / "data",
+        budget_bytes=1000,
+        workers=2,
+        allowed_hosts={"api.example.org"},
+        fetcher=fetcher,
+    )
+    assert len(result["completed"]) == 2 and not result["errors"]
+    assert len(seen) == 2 and len({b for _, b in seen}) == 1
+    assert result["network_bytes"] == 6
+
+
+def test_batch_budget_preflight_happens_before_any_transfer(tmp_path):
+    from airaware.acquisition.batch import execute_jobs
+
+    with pytest.raises(AcquisitionError):
+        execute_jobs(
+            [job()],
+            tmp_path / "data",
+            budget_bytes=50,
+            allowed_hosts={"api.example.org"},
+            fetcher=lambda *a, **k: pytest.fail("budget insufficient"),
+        )
+
+
+def test_local_offline_batch_needs_no_network_budget(tmp_path):
+    from airaware.acquisition.batch import execute_jobs
+
+    original = tmp_path / "input.csv"
+    original.write_bytes(b"a,b\n1,2\n")
+    value = job().spec.model_dump()
+    value["method"] = "local"
+    result = execute_jobs(
+        [job(spec=value, local_file=original)],
+        tmp_path / "data",
+        budget_bytes=0,
+        offline=True,
+        allowed_hosts=set(),
+    )
+    assert not result["errors"] and result["network_bytes"] == 0
+    assert result["completed"][0].artifact.read_bytes() == original.read_bytes()
