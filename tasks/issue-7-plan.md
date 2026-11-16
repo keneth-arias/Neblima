@@ -71,3 +71,10 @@ Verificación adicional: 146 pruebas aprobadas en Python 3.11 después de sincro
 con uv sync --locked; make build generó sdist/wheel y make audit no encontró vulnerabilidades
 conocidas. La primera ejecución de Python 3.11 detectó un entorno antiguo sin HTTPX; se actualizaron
 sus dependencias fijadas y se repitió la suite completa, sin cambiar código ni controles.
+
+Revisión de entrega: corrección (rangos, caché, reinicios y ausencia de red), legibilidad por módulos,
+separación transporte/publicación, límites frente a respuestas no confiables y lectura por chunks.
+Sin dependencias nuevas ni supresiones. Se revisaron las limitaciones DNS, tiempo cooperativo,
+conteo de payload, archivo deliberado de no-store y bloqueos Linux; están declaradas en la guía.
+Pruebas de cada corte desde git archive: fundamento 119, refactor 119 y motor 139 aprobadas.
+Wheel instalado en entorno independiente: acquire batch --dry-run reconoce el SENAMHI local.
