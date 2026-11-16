@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "jobs": [
+    {
+      "spec": {
+        "source_id": "oefa-data-dictionary",
+        "resource_url": "https://www.datosabiertos.gob.pe/sites/default/files/1c_Formato_DiccionarioDatos_Vigilancia%20y%20Seguimiento%20ambiental%20en%20la%20calidad%20del%20aire.xlsx",
+        "final_url": null,
+        "api_documentation_url": null,
+        "source_page_url": "https://www.datosabiertos.gob.pe/dataset/vigilancia-y-seguimiento-ambiental-en-la-calidad-del-aire-organismo-de-evaluaci%C3%B3n-y",
+        "method": "lightpanda",
+        "format": "xlsx",
+        "max_bytes": 1048576,
+        "expected_sha256": "4f2fe50d1166ca23e0447ea5dbe9051a4e4731600b2f5bec007ae5d75017c5bb",
+        "acquired_at": null,
+        "json_required_keys": [],
+        "csv_delimiter": ","
+      },
+      "local_file": "data/raw/oefa-data-dictionary/4f2fe50d1166ca23e0447ea5dbe9051a4e4731600b2f5bec007ae5d75017c5bb/original.xlsx",
+      "expected_size_bytes": 54517
+    },
+    {
+      "spec": {
+        "source_id": "oefa-metadata",
+        "resource_url": "https://www.datosabiertos.gob.pe/sites/default/files/1b_Formato_Metadatos_Vigilancia%20y%20Seguimiento%20ambiental%20en%20la%20calidad%20del%20aire.docx",
+        "final_url": null,
+        "api_documentation_url": null,
+        "source_page_url": "https://www.datosabiertos.gob.pe/dataset/vigilancia-y-seguimiento-ambiental-en-la-calidad-del-aire-organismo-de-evaluaci%C3%B3n-y",
+        "method": "lightpanda",
+        "format": "docx",
+        "max_bytes": 1048576,
+        "expected_sha256": "886fca1668115cd10ef1f966aa5784d062cb780125ac1699908bf245bcae70d1",
+        "acquired_at": null,
+        "json_required_keys": [],
+        "csv_delimiter": ","
+      },
+      "local_file": "data/raw/oefa-metadata/886fca1668115cd10ef1f966aa5784d062cb780125ac1699908bf245bcae70d1/original.docx",
+      "expected_size_bytes": 16025
+    }
+  ]
+}

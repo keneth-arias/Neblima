@@ -1,6 +1,6 @@
 # Plan de #9: adquisición acotada de OEFA y documentación
 
-Estado: propuesta para comentarios de Keneth; sin implementación ni descargas nuevas autorizadas.
+Estado: plan aprobado por Keneth; prerrequisitos implementados y documentos adquiridos; CSV bloqueado.
 Responsable: @keneth-arias. Dependencias #5 y #7 cerradas; PR #45 integrado.
 Lista de tareas: issue #9 en GitHub. Completar #8 primero para mantener una tarea activa.
 
@@ -98,3 +98,17 @@ configs/sources.yaml y docs/sources/oefa.md; originales/manifiestos operativos b
 ODC-By documentada en #5 no equivale a aprobar atribución final o redistribución en TimeNet.
 El significado de fechas, unidades, zonas/datum y marcadores sigue en docs/sources/oefa.md.
 #9 entrega insumos verificables o un bloqueo honesto; no sustituye el perfilamiento de #10.
+
+
+## Ejecución y resultado
+
+Soporte separado en PR #53 (dialecto) y #54 (canal público); 179 pruebas sin red aprobadas en
+Python 3.11/3.13, build y auditoría aprobados. Catálogo resuelto con Lightpanda antes del transporte.
+Diccionario/metadatos preservados y reutilizados en dos ejecuciones offline, sin cambios de bytes o
+manifiestos. Sonda al CSV respondió 418; se detuvo antes de consumir el cuerpo, sin cambio de canal.
+No se confirmó tamaño actual ni se transfirió el conjunto completo. Evidencia en
+metadata/oefa-acquisition-check.json; informe reports/acquisition/oefa.md.
+
+#9 sigue abierta para resolver el acceso oficial al CSV; no hay afirmación de adquisición completa.
+No se envió correo ni se autorizó un nuevo intento tras el bloqueo. #10 recibe los documentos y el
+bloqueo explícito, además del SENAMHI completado en #8. Las incertidumbres científicas se mantienen.

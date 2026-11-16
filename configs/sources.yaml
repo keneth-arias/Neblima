@@ -124,41 +124,46 @@ sources:
   catalog_url: https://www.datosabiertos.gob.pe/dataset/vigilancia-y-seguimiento-ambiental-en-la-calidad-del-aire-organismo-de-evaluaci%C3%B3n-y
   priority: 0
   status: verified
-  notes: 'Lightpanda: accessible; HTTP 200. Evidencia: metadata/source-access.json (oefa-national). #5/#9:
-    Cristopher revisará coordenadas, términos y recursos oficiales.'
+  notes: 'Adquisición #9: metadata/oefa-acquisition-check.json y reports/acquisition/oefa.md. Catálogo
+    HTTP 200 con Lightpanda; documentos verificados/reutilizados. Consulta acotada al CSV por canal http_file
+    respondió HTTP 418; sin archivo completo. El acceso documental previo no acredita descarga actual.'
   description: Recurso documental o candidato revisado; alcance y evidencia en docs/sources/inventory-review.md.
   publisher: OEFA
   data_category: ground_measured
   geographic_coverage: Perú; 34 estaciones declaradas, no contadas en archivo
   historical_coverage: null
-  license: 'Open Data Commons Attribution License (declarada por catálogo; revisión pendiente en #5)'
+  license: ODC-BY-1.0 (declarada para la base de EAS; publicación pendiente)
   redistribution: unknown
-  last_verified_at: '2026-11-16T00:01:01.540Z'
-  limitations: Inventario documental; no acredita calidad, continuidad, unidades ni derechos de redistribución.
+  last_verified_at: '2026-11-16T21:07:32.626772+00:00'
+  limitations: CSV completo bloqueado por HTTP 418 en canal controlado; sin perfilamiento real ni cobertura
+    comprobada. Reloj, CRS, códigos especiales y publicación pendientes; ver docs/sources/oefa.md.
   update_frequency: Anual, declarada por catálogo
   resource_urls:
   - https://www.datosabiertos.gob.pe/sites/default/files/1a_Vigilancia%20y%20Seguimiento%20ambiental%20en%20la%20calidad%20del%20aire.csv
   - https://www.datosabiertos.gob.pe/sites/default/files/1c_Formato_DiccionarioDatos_Vigilancia%20y%20Seguimiento%20ambiental%20en%20la%20calidad%20del%20aire.xlsx
   - https://www.datosabiertos.gob.pe/sites/default/files/1b_Formato_Metadatos_Vigilancia%20y%20Seguimiento%20ambiental%20en%20la%20calidad%20del%20aire.docx
-  license_url: http://opendefinition.org/licenses/odc-by/
+  license_url: https://opendatacommons.org/licenses/by/1-0/
 - source_id: oefa-csv
   name: Datos CSV de OEFA
   catalog_url: https://www.datosabiertos.gob.pe/dataset/vigilancia-y-seguimiento-ambiental-en-la-calidad-del-aire-organismo-de-evaluaci%C3%B3n-y-0
   priority: 0
-  status: verified
-  notes: 'Lightpanda: accessible; HTTP 200. Evidencia: metadata/source-access.json (oefa-csv). #5/#9:
-    Cristopher revisará coordenadas, términos y recursos oficiales.'
+  status: blocked
+  notes: 'Adquisición #9: metadata/oefa-acquisition-check.json y reports/acquisition/oefa.md. Catálogo
+    HTTP 200 con Lightpanda; documentos verificados/reutilizados. Consulta acotada al CSV por canal http_file
+    respondió HTTP 418; sin archivo completo. El acceso documental previo no acredita descarga actual.'
   description: Recurso documental o candidato revisado; alcance y evidencia en docs/sources/inventory-review.md.
   publisher: OEFA
   data_category: ground_measured
   geographic_coverage: 'Perú; estaciones por verificar en #5'
   historical_coverage: null
-  license: null
+  license: ODC-BY-1.0 (declarada para la base de EAS; publicación pendiente)
   redistribution: unknown
-  last_verified_at: '2026-11-16T00:01:11.670Z'
-  limitations: Inventario documental; no acredita calidad, continuidad, unidades ni derechos de redistribución.
+  last_verified_at: '2026-11-16T21:07:32.626772+00:00'
+  limitations: CSV completo bloqueado por HTTP 418 en canal controlado; sin perfilamiento real ni cobertura
+    comprobada. Reloj, CRS, códigos especiales y publicación pendientes; ver docs/sources/oefa.md.
   resource_urls:
   - https://www.datosabiertos.gob.pe/sites/default/files/1a_Vigilancia%20y%20Seguimiento%20ambiental%20en%20la%20calidad%20del%20aire.csv
+  license_url: https://opendatacommons.org/licenses/by/1-0/
 - source_id: oefa-monitoring-portal
   name: Portal de monitoreo de OEFA
   catalog_url: https://sistemas.oefa.gob.pe/pifa/mfe/

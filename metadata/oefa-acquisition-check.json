@@ -1,0 +1,64 @@
+{
+  "started_at_utc": "2026-11-16T21:07:31.685059+00:00",
+  "catalog_url": "https://www.datosabiertos.gob.pe/dataset/vigilancia-y-seguimiento-ambiental-en-la-calidad-del-aire-organismo-de-evaluaci%C3%B3n-y",
+  "catalog_discovery": {
+    "method": "lightpanda",
+    "http_status": 200,
+    "note": "URLs CSV/XLSX/DOCX resueltas otra vez en catálogo oficial antes de transferir; tráfico de página no expuesto por herramienta."
+  },
+  "budget_bytes": 2147483648,
+  "minimum_free_bytes": 5368709120,
+  "documents": [
+    {
+      "source_id": "oefa-data-dictionary",
+      "resource_url": "https://www.datosabiertos.gob.pe/sites/default/files/1c_Formato_DiccionarioDatos_Vigilancia%20y%20Seguimiento%20ambiental%20en%20la%20calidad%20del%20aire.xlsx",
+      "format": "xlsx",
+      "size_bytes": 54517,
+      "sha256": "4f2fe50d1166ca23e0447ea5dbe9051a4e4731600b2f5bec007ae5d75017c5bb",
+      "artifact": "data/raw/oefa-data-dictionary/4f2fe50d1166ca23e0447ea5dbe9051a4e4731600b2f5bec007ae5d75017c5bb/original.xlsx",
+      "manifest": "data/raw/oefa-data-dictionary/4f2fe50d1166ca23e0447ea5dbe9051a4e4731600b2f5bec007ae5d75017c5bb/manifest.json",
+      "download_method": "Lightpanda (revisión previa de PR #45); sin nueva descarga",
+      "acquired_at_utc": null,
+      "offline_reused": true,
+      "manifest_unchanged": true
+    },
+    {
+      "source_id": "oefa-metadata",
+      "resource_url": "https://www.datosabiertos.gob.pe/sites/default/files/1b_Formato_Metadatos_Vigilancia%20y%20Seguimiento%20ambiental%20en%20la%20calidad%20del%20aire.docx",
+      "format": "docx",
+      "size_bytes": 16025,
+      "sha256": "886fca1668115cd10ef1f966aa5784d062cb780125ac1699908bf245bcae70d1",
+      "artifact": "data/raw/oefa-metadata/886fca1668115cd10ef1f966aa5784d062cb780125ac1699908bf245bcae70d1/original.docx",
+      "manifest": "data/raw/oefa-metadata/886fca1668115cd10ef1f966aa5784d062cb780125ac1699908bf245bcae70d1/manifest.json",
+      "download_method": "Lightpanda (revisión previa de PR #45); sin nueva descarga",
+      "acquired_at_utc": null,
+      "offline_reused": true,
+      "manifest_unchanged": true
+    }
+  ],
+  "csv": {
+    "status": "blocked",
+    "resource_url": "https://www.datosabiertos.gob.pe/sites/default/files/1a_Vigilancia%20y%20Seguimiento%20ambiental%20en%20la%20calidad%20del%20aire.csv",
+    "http_status": 418,
+    "reason": "Recurso público respondió HTTP 418; transferencia detenida",
+    "cause_type": null,
+    "note": "Se detuvo sin otro canal, sin falsear User-Agent ni reiterar presupuesto. No existe CSV completo verificado en esta entrega."
+  },
+  "resource_payload_bytes": 0,
+  "elapsed_seconds": 0.887,
+  "finished_at_utc": "2026-11-16T21:07:32.626772+00:00",
+  "document_offline_runs": [
+    {
+      "reused_documents": 2,
+      "network_bytes": 0,
+      "manifests_unchanged": true,
+      "originals_unchanged": true
+    },
+    {
+      "reused_documents": 2,
+      "network_bytes": 0,
+      "manifests_unchanged": true,
+      "originals_unchanged": true
+    }
+  ]
+}
