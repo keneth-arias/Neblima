@@ -143,3 +143,20 @@ La [cola de trabajo](keneth-work-queue.md) ordena las 13 tareas abiertas asignad
 Comienza [#7](issue-7-plan.md), con límite por archivo de 1000 GiB indicado por Keneth, presupuestos
 explícitos por lote y pruebas sin descargas masivas. Los siguientes pasos científicos requieren las
 entregas de Cristopher y las aclaraciones de #43; no se declaran completados por anticipación.
+
+
+## Planes #8 y #9 para feedback de Keneth
+
+Planes revisados, sin comenzar implementación ni nuevas adquisiciones:
+[reutilización SENAMHI #8](issue-8-plan.md) y [OEFA #9](issue-9-plan.md).
+Orden: #8 y #9 → #10 → #11. Responsable vigente: Keneth para las cuatro tareas.
+#8 propone cero descarga y evidencia de reutilización local. #9 propone CSV completo con 2 GiB
+por ejecución, pero requiere aprobar alcance/presupuesto y primero resolver dialecto CSV y canal
+público estático en el motor. La lista de ejecución y los bloqueos se mantienen en issues #8/#9.
+Esperar respuesta de Keneth antes de cambiar código o transferir datos. El techo de 1000 GiB por
+archivo no autoriza por sí solo una transferencia de ese tamaño ni elimina presupuestos por lote.
+
+Verificación de esta propuesta documental: make check aprobado (146 pruebas sobre main con PR #45),
+make build aprobado y make audit sin vulnerabilidades conocidas. No se cambió código ni se ejecutó
+acquire/import-file/batch para #8/#9 durante la planificación. No se hicieron consultas o descargas
+nuevas a los proveedores. PR #50 de etiquetas sigue siendo una entrega separada, no incluida aquí.
