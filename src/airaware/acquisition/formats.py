@@ -35,11 +35,11 @@ def validate_format(path: Path, spec: AcquisitionSpec) -> None:
                 header = next(rows)
                 if len(header) < 2 or len(set(header)) != len(header) or not all(header):
                     raise ValueError("Encabezado CSV inválido")
-                if any("<" in field or ">" in field for field in header):
+                if any("<" in field or ">" in field or "\x00" in field for field in header):
                     raise ValueError("HTML no es CSV")
                 count = 0
                 for row in rows:
-                    if len(row) != len(header):
+                    if len(row) != len(header) or any("\x00" in field for field in row):
                         raise ValueError("Fila CSV inconsistente")
                     count += 1
                 if count == 0:
@@ -83,7 +83,11 @@ def validate_format(path: Path, spec: AcquisitionSpec) -> None:
                     raise ValueError("Suma ZIP inválida")
                 for name in required:
                     content = archive.read(name)
-                    if b"<!DOCTYPE" in content.upper() or b"<!ENTITY" in content.upper():
+                    if (
+                        b"\x00" in content
+                        or b"<!DOCTYPE" in content.upper()
+                        or b"<!ENTITY" in content.upper()
+                    ):
                         raise ValueError("Declaraciones XML no admitidas")
                     root = ElementTree.fromstring(content)
                     if name == member and root.tag != expected:

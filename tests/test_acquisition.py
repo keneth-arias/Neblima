@@ -165,3 +165,107 @@ def test_symlinked_destination_is_rejected(tmp_path):
     with pytest.raises(AcquisitionError):
         ingest_file(spec(), original, data)
     assert not list(external.iterdir())
+
+
+def test_office_doctype_cannot_bypass_checks_with_utf16(tmp_path):
+    original = tmp_path / "document.zip"
+    with ZipFile(original, "w") as archive:
+        archive.writestr("[Content_Types].xml", "<Types/>")
+        archive.writestr("_rels/.rels", "<Relationships/>")
+        xml = (
+            '<?xml version="1.0" encoding="UTF-16"?>'
+            '<!DOCTYPE workbook [<!ENTITY value "expanded">]>'
+            '<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">'
+            "&value;</workbook>"
+        )
+        archive.writestr("xl/workbook.xml", xml.encode("utf-16"))
+    with pytest.raises(AcquisitionError):
+        ingest_file(spec(format="xlsx", max_bytes=4096), original, tmp_path / "data")
+
+
+def test_csv_nul_bytes_are_rejected(tmp_path):
+    original = tmp_path / "input.csv"
+    original.write_bytes(b"a,b\n1,\x00\n")
+    with pytest.raises(AcquisitionError):
+        ingest_file(spec(), original, tmp_path / "data")
+
+
+def test_interrupted_copy_removes_pending_files(tmp_path):
+    from airaware.acquisition.store import ingest_chunks
+
+    def interrupted():
+        yield b"fecha,valor\n"
+        raise OSError("private-path")
+
+    with pytest.raises(AcquisitionError) as error:
+        ingest_chunks(spec(), interrupted(), tmp_path / "data")
+    assert "private-path" not in str(error.value)
+    assert not list((tmp_path / "data").rglob("manifest.json"))
+    assert not list((tmp_path / "data").rglob(".pending-*"))
+
+
+def test_failed_publish_preserves_original_and_leaves_no_visible_bundle(tmp_path, monkeypatch):
+    original = tmp_path / "input.csv"
+    original.write_bytes(CSV)
+
+    def fail_publish(*args):
+        raise OSError("disco lleno")
+
+    monkeypatch.setattr("airaware.acquisition.store.os.rename", fail_publish)
+    with pytest.raises(AcquisitionError):
+        ingest_file(spec(), original, tmp_path / "data")
+    assert original.read_bytes() == CSV
+    assert not list((tmp_path / "data").rglob("manifest.json"))
+    assert not list((tmp_path / "data").rglob(".pending-*"))
+
+
+def test_malformed_manifest_does_not_destroy_existing_bytes(tmp_path):
+    original = tmp_path / "input.csv"
+    original.write_bytes(CSV)
+    result = ingest_file(spec(), original, tmp_path / "data")
+    result.manifest.write_text('{"artifact_path": "../escape"}')
+    with pytest.raises(AcquisitionError):
+        ingest_file(spec(), original, tmp_path / "data")
+    assert result.artifact.read_bytes() == CSV
+    assert result.manifest.read_text() == '{"artifact_path": "../escape"}'
+
+
+def test_competing_writer_fails_without_overwriting(tmp_path):
+    from concurrent.futures import ThreadPoolExecutor
+    from threading import Event
+
+    from airaware.acquisition.store import ingest_chunks
+
+    reading, release = Event(), Event()
+    original = tmp_path / "input.csv"
+    original.write_bytes(CSV)
+
+    def slow_bytes():
+        reading.set()
+        assert release.wait(5)
+        yield CSV
+
+    with ThreadPoolExecutor(max_workers=1) as executor:
+        first = executor.submit(ingest_chunks, spec(), slow_bytes(), tmp_path / "data")
+        try:
+            assert reading.wait(5)
+            with pytest.raises(AcquisitionError):
+                ingest_file(spec(), original, tmp_path / "data")
+        finally:
+            release.set()
+        result = first.result(timeout=5)
+    assert result.artifact.read_bytes() == CSV
+    assert len(list((tmp_path / "data").rglob("manifest.json"))) == 1
+
+
+def test_reference_detects_external_change_on_reuse(tmp_path):
+    original = tmp_path / "data/raw/demo/legacy.csv"
+    original.parent.mkdir(parents=True)
+    original.write_bytes(CSV)
+    result = ingest_file(spec(), original, tmp_path / "data")
+    original.write_bytes(b"fecha,valor\n20260101,99\n")
+    # Comprobar el paquete anterior detecta cambios sin confiar solo en el nombre SHA.
+    from airaware.acquisition.store import verify_bundle
+
+    with pytest.raises(AcquisitionError):
+        verify_bundle(spec(), tmp_path / "data/raw", result.manifest.parent)

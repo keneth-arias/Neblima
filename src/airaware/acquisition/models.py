@@ -20,6 +20,7 @@ class AcquisitionSpec(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True)
     source_id: str = Field(pattern=r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
     resource_url: HttpUrl
+    api_documentation_url: HttpUrl | None = None
     method: Literal["lightpanda", "api", "local"]
     format: Literal["csv", "json", "xlsx", "docx"]
     max_bytes: int = Field(strict=True, gt=0, le=1_073_741_824)
@@ -29,7 +30,19 @@ class AcquisitionSpec(BaseModel):
 
     @model_validator(mode="after")
     def check_contract(self) -> Self:
-        url = self.resource_url
+        if self.method == "api" and self.api_documentation_url is None:
+            raise ValueError("La API requiere una referencia de documentación")
+        for url in [self.resource_url, self.api_documentation_url]:
+            if url is not None:
+                self._check_public_url(url)
+        if self.acquired_at is not None and self.acquired_at.utcoffset() is None:
+            raise ValueError("La fecha debe incluir zona horaria")
+        if self.format == "json" and not self.json_required_keys:
+            raise ValueError("JSON requiere claves obligatorias explícitas")
+        return self
+
+    @staticmethod
+    def _check_public_url(url: HttpUrl) -> None:
         if (
             url.username
             or url.password
@@ -40,11 +53,6 @@ class AcquisitionSpec(BaseModel):
             )
         ):
             raise ValueError("No se admiten URL con credenciales ni fragmentos")
-        if self.acquired_at is not None and self.acquired_at.utcoffset() is None:
-            raise ValueError("La fecha debe incluir zona horaria")
-        if self.format == "json" and not self.json_required_keys:
-            raise ValueError("JSON requiere claves obligatorias explícitas")
-        return self
 
 
 class Manifest(BaseModel):
