@@ -59,11 +59,7 @@ def _retry_delay(value: str | None, attempt: int, clock: Callable[[], datetime])
         ) from error
 
 
-def _response_chunks(
-    response: httpx.Response,
-    spec: AcquisitionSpec,
-    check_time: Callable[[], None],
-) -> Iterator[bytes]:
+def _response_length(response: httpx.Response, spec: AcquisitionSpec) -> int | None:
     content_type = response.headers.get("content-type", "").split(";")[0].lower().strip()
     if content_type in {"text/html", "application/xhtml+xml"}:
         raise AcquisitionError("La API respondió HTML en lugar de datos")
@@ -76,6 +72,15 @@ def _response_chunks(
             raise ValueError("Longitud fuera del límite")
     except ValueError as error:
         raise AcquisitionError("Content-Length no cumple el límite de adquisición") from error
+    return expected_size
+
+
+def _response_chunks(
+    response: httpx.Response,
+    spec: AcquisitionSpec,
+    check_time: Callable[[], None],
+) -> Iterator[bytes]:
+    expected_size = _response_length(response, spec)
     size = 0
     for chunk in response.iter_raw():
         check_time()
