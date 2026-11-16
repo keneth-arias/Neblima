@@ -124,9 +124,9 @@ sources:
   catalog_url: https://www.datosabiertos.gob.pe/dataset/vigilancia-y-seguimiento-ambiental-en-la-calidad-del-aire-organismo-de-evaluaci%C3%B3n-y
   priority: 0
   status: verified
-  notes: 'Adquisición #9: metadata/oefa-acquisition-check.json y reports/acquisition/oefa.md. Catálogo
-    HTTP 200 con Lightpanda; documentos verificados/reutilizados. Consulta acotada al CSV por canal http_file
-    respondió HTTP 418; sin archivo completo. El acceso documental previo no acredita descarga actual.'
+  notes: CSV completo adquirido con Lightpanda por solicitud explícita de Keneth; metadata/oefa-lightpanda-download.json
+    y reports/acquisition/oefa.md. Estructura y SHA-256 verificados, reutilización local sin cambios.
+    El 418 histórico solo corresponde al canal http_file.
   description: Recurso documental o candidato revisado; alcance y evidencia en docs/sources/inventory-review.md.
   publisher: OEFA
   data_category: ground_measured
@@ -134,9 +134,9 @@ sources:
   historical_coverage: null
   license: ODC-BY-1.0 (declarada para la base de EAS; publicación pendiente)
   redistribution: unknown
-  last_verified_at: '2026-11-16T21:07:32.626772+00:00'
-  limitations: CSV completo bloqueado por HTTP 418 en canal controlado; sin perfilamiento real ni cobertura
-    comprobada. Reloj, CRS, códigos especiales y publicación pendientes; ver docs/sources/oefa.md.
+  last_verified_at: '2026-11-16T21:46:37.993366+00:00'
+  limitations: Adquirido y validado estructuralmente, sin normalizar ni perfilar cobertura/calidad científica.
+    Reloj, CRS, marcadores y publicación pendientes; ver docs/sources/oefa.md.
   update_frequency: Anual, declarada por catálogo
   resource_urls:
   - https://www.datosabiertos.gob.pe/sites/default/files/1a_Vigilancia%20y%20Seguimiento%20ambiental%20en%20la%20calidad%20del%20aire.csv
@@ -147,10 +147,10 @@ sources:
   name: Datos CSV de OEFA
   catalog_url: https://www.datosabiertos.gob.pe/dataset/vigilancia-y-seguimiento-ambiental-en-la-calidad-del-aire-organismo-de-evaluaci%C3%B3n-y-0
   priority: 0
-  status: blocked
-  notes: 'Adquisición #9: metadata/oefa-acquisition-check.json y reports/acquisition/oefa.md. Catálogo
-    HTTP 200 con Lightpanda; documentos verificados/reutilizados. Consulta acotada al CSV por canal http_file
-    respondió HTTP 418; sin archivo completo. El acceso documental previo no acredita descarga actual.'
+  status: downloaded
+  notes: CSV completo adquirido con Lightpanda por solicitud explícita de Keneth; metadata/oefa-lightpanda-download.json
+    y reports/acquisition/oefa.md. Estructura y SHA-256 verificados, reutilización local sin cambios.
+    El 418 histórico solo corresponde al canal http_file.
   description: Recurso documental o candidato revisado; alcance y evidencia en docs/sources/inventory-review.md.
   publisher: OEFA
   data_category: ground_measured
@@ -158,12 +158,13 @@ sources:
   historical_coverage: null
   license: ODC-BY-1.0 (declarada para la base de EAS; publicación pendiente)
   redistribution: unknown
-  last_verified_at: '2026-11-16T21:07:32.626772+00:00'
-  limitations: CSV completo bloqueado por HTTP 418 en canal controlado; sin perfilamiento real ni cobertura
-    comprobada. Reloj, CRS, códigos especiales y publicación pendientes; ver docs/sources/oefa.md.
+  last_verified_at: '2026-11-16T21:46:37.993366+00:00'
+  limitations: Adquirido y validado estructuralmente, sin normalizar ni perfilar cobertura/calidad científica.
+    Reloj, CRS, marcadores y publicación pendientes; ver docs/sources/oefa.md.
   resource_urls:
   - https://www.datosabiertos.gob.pe/sites/default/files/1a_Vigilancia%20y%20Seguimiento%20ambiental%20en%20la%20calidad%20del%20aire.csv
   license_url: https://opendatacommons.org/licenses/by/1-0/
+  size_bytes: 1317949839
 - source_id: oefa-monitoring-portal
   name: Portal de monitoreo de OEFA
   catalog_url: https://sistemas.oefa.gob.pe/pifa/mfe/
