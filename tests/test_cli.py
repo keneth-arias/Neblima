@@ -15,7 +15,7 @@ def test_catalog_summary_is_offline_and_reports_evidenced_statuses():
     summary = json.loads(result.stdout)
     assert summary["total"] >= 30
     assert sum(summary["statuses"].values()) == summary["total"]
-    assert summary["statuses"]["downloaded"] == 1
+    assert summary["statuses"]["downloaded"] == 3
     assert summary["statuses"]["blocked"] > 0
 
 
