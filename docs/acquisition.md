@@ -218,3 +218,54 @@ para eliminación al siguiente acceso, después de verificar que pertenece a est
 Protocolo consultado con Lightpanda el 16/11/2026:
 [RFC 9110: condiciones y rangos](https://www.rfc-editor.org/rfc/rfc9110.html) y
 [RFC 9111: no-store](https://www.rfc-editor.org/rfc/rfc9111.html#section-5.2.2.5).
+
+## Lotes, selección y estimación (#7)
+
+Un plan JSON contiene schema_version: 1 y jobs. Cada tarea incluye spec (el contrato anterior),
+local_file para recursos Lightpanda/local, y opcionalmente region, start, end, expected_size_bytes.
+Las fechas describen la cobertura declarada del recurso completo. Si se declaran, se requieren ambos
+extremos y un intervalo ordenado. Las rutas relativas se resuelven desde la carpeta de ejecución.
+No se interpretan fechas ni se filtran filas de medición. Máximo: 1000 tareas por plan y 2 MiB de JSON.
+
+Ejemplo que reutiliza la solicitud SENAMHI creada antes en esta guía:
+
+```bash
+uv run --locked python - <<'PY'
+import json
+from pathlib import Path
+spec = json.loads(Path('data/staging/senamhi-acquisition-request.json').read_text())
+plan = {'schema_version': 1, 'jobs': [{
+    'spec': spec,
+    'local_file': 'data/raw/senamhi/senamhi_lima_monitoreo_1.csv',
+    'region': 'Lima',
+    'expected_size_bytes': 68501558,
+}]}
+Path('data/staging/senamhi-batch.json').write_text(json.dumps(plan, indent=2) + '\n')
+PY
+uv run --locked airaware acquire batch --plan data/staging/senamhi-batch.json --source senamhi-lima-csv --region Lima --dry-run
+uv run --locked airaware acquire batch --plan data/staging/senamhi-batch.json --offline --budget-bytes 0
+```
+
+--source y --region se pueden repetir y comparan valores exactos. --start/--end seleccionan por
+solapamiento inclusivo; un recurso sin cobertura declarada no participa cuando se filtran fechas.
+--data-dir o AIRAWARE_DATA_DIR eligen la carpeta de salida. Se eliminan solicitudes duplicadas tras
+seleccionar; el contrato distingue fuente, URL, método, formato, claves JSON y SHA esperado.
+Si dos entradas del mismo recurso tienen políticas diferentes, se conserva la primera seleccionada:
+revisar el plan para no declarar metadatos/límites contradictorios.
+
+--dry-run usa solo tamaños declarados o stat de archivos locales: no GET, HEAD, DNS ni creación de
+carpetas de adquisición. known_size_bytes y unknown_count se informan por separado; authorized_max_bytes
+es la suma de techos, no una predicción. La estimación inicial OEFA de aproximadamente 1,23 GB sigue
+sin verificarse; el nuevo máximo no acredita su tamaño. --offline verifica originales locales/API
+sin red y admite presupuesto cero. No descarga recursos Lightpanda faltantes.
+
+Para un lote API revisado se exige --budget-bytes positivo y --allow-host por cada host autorizado.
+Si faltan tamaños, se requiere además --authorize-unknown; esa opción conserva todos los límites.
+Los tamaños declarados no son garantía y el contador de payload sigue activo. La concurrencia
+--workers permite 1 a 4 tareas, por defecto 1. Tareas de una misma fuente se serializan para respetar
+el bloqueo de publicación; recursos de otras fuentes pueden avanzar sin bloquearse. Un fallo queda
+en errors, el comando termina con código distinto de cero y conserva los resultados ya verificados.
+
+Demostración del 16/11/2026: plan local SENAMHI, un recurso seleccionado en Lima, 68 501 558 bytes
+medidos; ejecución offline con reused=true, errors=[] y network_bytes=0. SHA-256 y ruta del original
+coinciden con la evidencia de #3; no se crearon copias masivas ni se alteraron sus bytes.
