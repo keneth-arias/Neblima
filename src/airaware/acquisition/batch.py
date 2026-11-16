@@ -11,7 +11,7 @@ from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 from airaware.acquisition.budget import ByteBudget
 from airaware.acquisition.models import AcquisitionError, AcquisitionResult, AcquisitionSpec
-from airaware.acquisition.store import ingest_file
+from airaware.acquisition.store import _identity, ingest_file
 from airaware.acquisition.transfer import fetch_cached_api
 
 
@@ -74,14 +74,7 @@ def select_jobs(
                 continue
             if (start and job.end < start) or (end and job.start > end):
                 continue
-        key = (
-            job.spec.source_id,
-            str(job.spec.resource_url),
-            job.spec.format,
-            job.spec.json_required_keys,
-            job.spec.method,
-            job.spec.expected_sha256,
-        )
+        key = (*_identity(job.spec), job.spec.expected_sha256)
         if key not in seen:
             selected.append(job)
             seen.add(key)

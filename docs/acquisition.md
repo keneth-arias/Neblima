@@ -269,3 +269,11 @@ en errors, el comando termina con código distinto de cero y conserva los result
 Demostración del 16/11/2026: plan local SENAMHI, un recurso seleccionado en Lima, 68 501 558 bytes
 medidos; ejecución offline con reused=true, errors=[] y network_bytes=0. SHA-256 y ruta del original
 coinciden con la evidencia de #3; no se crearon copias masivas ni se alteraron sus bytes.
+
+## Delimitador CSV explícito para OEFA
+
+csv_delimiter admite coma (predeterminado) o punto y coma. Declarar `"csv_delimiter": ";"`
+para el recurso OEFA, sin convertir ni autodetectar los bytes. Las mismas reglas de encabezado,
+comillas y filas rectangulares siguen activas. Un delimitador diferente es otro contrato de validación
+que no puede reutilizarse como el anterior; la identidad de caché/lote también lo distingue.
+Los manifiestos de coma anteriores siguen verificándose y sus claves de caché no cambian.
