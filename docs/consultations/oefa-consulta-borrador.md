@@ -1,20 +1,22 @@
 # Consulta a OEFA — borrador para revisión de Keneth
 
-Estado: no enviado. Destinatario propuesto: Enrique Manco <emanco@oefa.gob.pe>, publicado en el
-catálogo nacional del conjunto. Remitente propuesto: Keneth Arias <keneth.arias@outlook.com>.
+Estado: no enviado. Destinatario: Servicio de Información y Atención al Ciudadano del OEFA
+<consultas@oefa.gob.pe>, verificado en su página institucional de contacto. Remitente propuesto: Keneth Arias <keneth.arias@outlook.com>.
 Sin copia a otros contactos ni archivos adjuntos. Envío requiere instrucción de Keneth.
 
 Asunto: Consulta y orientación sobre datos de calidad del aire para proyecto educativo AirAware Perú
 
-Estimado señor Manco:
+Estimado equipo del Servicio de Información y Atención al Ciudadano del OEFA:
 
 Reciba un cordial saludo. Mi nombre es Keneth Arias, soy profesor peruano de Tecnologías de la
 Información y Comunicación. Junto con dos estudiantes peruanos estamos desarrollando AirAware Perú,
 un proyecto educativo de análisis y pronóstico de calidad del aire para nuestra participación en el
 hackathon TimeNet (https://challenge.timenet.ai/), con interés inicial en Lima y posible extensión al Perú.
 
-Le escribimos porque figura como contacto del conjunto «Vigilancia y Seguimiento ambiental en la
-calidad del aire» en la Plataforma Nacional de Datos Abiertos. Agradecemos que el OEFA ponga esta
+Nos dirigimos a su canal institucional para solicitar orientación sobre el conjunto «Vigilancia y
+Seguimiento ambiental en la calidad del aire» de la Plataforma Nacional de Datos Abiertos.
+Les agradeceríamos que, de corresponder, pudieran derivar esta consulta a la Dirección de Evaluación
+Ambiental (DEAM) o al equipo responsable de los datos. Agradecemos que el OEFA ponga esta
 información a disposición de la ciudadanía. Hemos revisado el CSV y sus documentos procurando
 conservar los originales y evitar interpretaciones que no estén sustentadas.
 
@@ -24,7 +26,7 @@ CA-HU-09, CA-RZC-01 y CA-RZC-02 encontramos valores de PM2.5 y PM10, pero no hem
 establecer sus instantes horarios con la documentación revisada. Es posible que nos falte conocer
 la estructura o una exportación más adecuada; por ello agradeceríamos su orientación.
 
-Si estuviera a su alcance, ¿podría ayudarnos con estas consultas o derivarnos al equipo correspondiente?
+Si estuviera a su alcance, ¿podrían ayudarnos con estas consultas o derivarnos al equipo correspondiente?
 
 1. ¿Existe un archivo o canal oficial de históricos validados de PM2.5 y PM10 para Lima, con fecha,
    hora y banderas de calidad? Nos serviría conocer estaciones, periodo disponible y enlace de descarga.

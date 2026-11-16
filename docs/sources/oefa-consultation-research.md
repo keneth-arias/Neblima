@@ -66,3 +66,11 @@ anunciado por la ficha nueva. Son diferencias de cobertura/versiones, no evidenc
 
 Borrador: docs/consultations/oefa-consulta-borrador.md. No enviado ni creado en Outlook.
 No hay garantía de respuesta, asesoría o existencia de un archivo que complete las horas.
+
+## Destinatario institucional actualizado por Keneth
+
+Keneth pidió sustituir el contacto personal por un canal institucional. La [página oficial de contacto](https://www.gob.pe/institucion/oefa/contacto-y-numeros-de-emergencias)
+publica consultas@oefa.gob.pe para la sede Lima; se verificó con Lightpanda. La consulta se dirige
+al Servicio de Información y Atención al Ciudadano, solicitando derivación a DEAM o al equipo responsable.
+No se envía ni copia a emanco@oefa.gob.pe. La continuidad laboral del contacto personal no está
+verificada y no se afirma que haya dejado la institución. El borrador sigue sin enviar.

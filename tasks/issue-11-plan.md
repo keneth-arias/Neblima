@@ -71,7 +71,7 @@ Los conteos no crean splits (#19), ventanas de entrenamiento (#18) ni etiquetas 
 
 Nueva ficha EAS de OEFA declara cobertura hasta junio 2024; tabla no cargada, estructura/horas/licencia
 por recurso sin verificar. No descargar masivamente ni sustituir silenciosamente el CSV.
-Consulta preparada para Enrique Manco, contacto publicado del conjunto. Envío pendiente de instrucción
+Consulta dirigida al canal institucional consultas@oefa.gob.pe para orientación y derivación a DEAM. Envío pendiente de instrucción
 expresa; no se ha enviado. Pedir orientación hacia DEAM y archivos/metadata existentes, no presumir
 asesoría disponible ni pedir que OEFA genere una base nueva. La respuesta puede resolver reglas de
 horas, calidad y acceso; su ausencia no bloquea contratos/pruebas ni conteos diagnósticos.
