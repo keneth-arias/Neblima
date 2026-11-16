@@ -139,6 +139,12 @@ biomasa, generación eléctrica, actividad industrial, construcción y polvo, fe
 elevación y forma urbana. Agregar información estática solo con una relación documentada con el
 problema de pronóstico. No inventar fuentes para completar esta lista.
 
+### Medio de consulta y descarga
+
+Usar Lightpanda para consultar páginas y descargar recursos web. Registrar URL, fecha UTC, estado
+HTTP disponible, límites y bloqueos según [el protocolo](web-access.md). Las pruebas locales siguen
+sin navegador ni internet; no se descargan datos masivos en CI.
+
 ### Requisitos del catálogo
 
 Mantener configs/sources.yaml con identificador único, nombre, descripción, publicador, URL original,

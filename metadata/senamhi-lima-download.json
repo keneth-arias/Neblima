@@ -1,0 +1,43 @@
+{
+  "retrieved_at_utc": "2026-11-15T23:54:18.824364+00:00",
+  "source_url": "https://www.datosabiertos.gob.pe/sites/default/files/Monitoreo%20de%20los%20contaminantes%20del%20aire%20en%20Lima%20Metropolitana%20-%20%5BServicio%20Nacional%20de%20Meteorolog%C3%ADa%20e%20Hidrolog%C3%ADa%20del%20Per%C3%BA%20-%20SENAMHI%5D_1.csv",
+  "source_filename": "Monitoreo de los contaminantes del aire en Lima Metropolitana - [Servicio Nacional de Meteorología e Hidrología del Perú - SENAMHI]_1.csv",
+  "local_filename": "senamhi_lima_monitoreo_1.csv",
+  "download_method": "Lightpanda download",
+  "catalog_url": "https://www.datosabiertos.gob.pe/dataset/monitoreo-de-los-contaminantes-del-aire-en-lima-metropolitana-servicio-nacional-de",
+  "catalog_http_status": 200,
+  "csv_http_status": null,
+  "csv_status_note": "La herramienta no expuso el código exacto; guarda respuestas HTTP 200–203.",
+  "content_type": "application/octet-stream",
+  "size_bytes": 68501558,
+  "sha256": "896ae8a106fb128460e81b3f58096f6b9c4d582ef28fffa46e5394c5875c40d4",
+  "csv_validation": {
+    "encoding_read": "utf-8-sig",
+    "delimiter": ",",
+    "columns": [
+      "ID",
+      "ESTACION",
+      "FECHA",
+      "HORA",
+      "LONGITUD",
+      "LATITUD",
+      "ALTITUD",
+      "PM10",
+      "PM2_5",
+      "NO2",
+      "DEPARTAMENTO",
+      "PROVINCIA",
+      "DISTRITO",
+      "UBIGEO",
+      "FECHA_CORTE"
+    ],
+    "data_rows": 577794,
+    "inconsistent_rows": 0,
+    "unique_station_strings": 7,
+    "raw_date_min": "20150101",
+    "raw_date_max": "20240531"
+  },
+  "license_status": "pending_verification",
+  "normalization": "none",
+  "notes": "Bytes originales sin modificar. Comprobación estructural; no valida unidades, fechas, calidad científica ni derechos de redistribución."
+}

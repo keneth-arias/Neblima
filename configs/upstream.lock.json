@@ -8,13 +8,22 @@
       "timenet-connectors": "0.12.0"
     },
     "requires_python": ">=3.11",
-    "verification": "Revisión documental completa de contratos, pruebas fuente, ejemplos, reglas y licencias. Copia limpia y HEAD remoto coinciden; SDK y pruebas externas no ejecutados.",
+    "verification": "Revisión documental completa y ejecución sintética hello-world verificadas. SDK y conectores instalados solo en tools/timenet-smoke; suite externa de TimeNet no ejecutada.",
     "review_document": "docs/timenet-integration.md",
     "environmental_search": {
       "pattern": "weather|climate|air.?quality|meteorolog|pollution|senamhi|oefa",
       "dataset_cards": 12,
       "connector_files": 12,
       "matches": []
+    },
+    "runtime_smoke": {
+      "project": "tools/timenet-smoke",
+      "dataset": "timenet/hello-world@1.0.0",
+      "registry": "data/timef",
+      "report": "data/timef/hello-world-validation.json",
+      "reader_verify": true,
+      "sdk_local_load": true,
+      "synthetic": true
     }
   },
   "opentslm": {

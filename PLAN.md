@@ -7,3 +7,7 @@ El PR #36 está integrado en main; #2 quedó cerrada. Keneth mantiene el lideraz
 La [investigación de la tarea #1](tasks/issue-1-plan.md) está ejecutada y lista para revisión.
 Usamos almacenamiento local y GitHub Actions. Luego: verificar SENAMHI/OEFA (#4/#5) e implementar
 las descargas reanudables (#6/#7). Revisa la [guía de inicio](docs/team-onboarding.md).
+
+El PR #40 ya está integrado y #1 quedó cerrada. hello-world se construyó y verificó en el registro
+local data/timef. El [inventario #3](tasks/issue-3-plan.md) ya cuenta con evidencia Lightpanda para los 37 candidatos
+y una descarga SENAMHI comprobada. Continúan la revisión de derechos/semántica #4/#5 y el descargador #6/#7.

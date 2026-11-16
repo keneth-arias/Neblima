@@ -1,262 +1,647 @@
-# Inventario de candidatos. Los campos desconocidos usan los valores por defecto del esquema.
+# Inventario revisado con Lightpanda; declaraciones documentales diferenciadas de mediciones.
 schema_version: 1
 sources:
 - source_id: senamhi-lima
   name: Calidad del aire en Lima — SENAMHI
   catalog_url: https://www.datosabiertos.gob.pe/dataset/monitoreo-de-los-contaminantes-del-aire-en-lima-metropolitana-servicio-nacional-de
   priority: 0
-  status: discovered
-  notes: Recurso candidato del plan inicial. El acceso, la cobertura, el significado
-    de las mediciones y los derechos están pendientes de verificación.
+  status: verified
+  notes: 'Lightpanda: accessible; HTTP 200. Evidencia: metadata/source-access.json (senamhi-lima). #4:
+    revisar diccionario, metodología y aplicación de la licencia al CSV.'
+  description: Recurso documental o candidato revisado; alcance y evidencia en docs/sources/inventory-review.md.
+  publisher: SENAMHI
+  data_category: ground_measured
+  geographic_coverage: Lima Metropolitana (declarado por SENAMHI)
+  historical_coverage: null
+  license: 'Open Data Commons Attribution License (declarada por catálogo; aplicación pendiente en #4)'
+  redistribution: unknown
+  last_verified_at: '2026-11-16T00:00:17.455Z'
+  limitations: Inventario documental; no acredita calidad, continuidad, unidades ni derechos de redistribución.
+  variables:
+  - PM10
+  - PM2_5
+  - NO2
+  temporal_resolution: Horaria, declarada por catálogo
+  update_frequency: Mensual, declarada por catálogo
+  resource_urls:
+  - https://www.datosabiertos.gob.pe/sites/default/files/Monitoreo%20de%20los%20contaminantes%20del%20aire%20en%20Lima%20Metropolitana%20-%20%5BServicio%20Nacional%20de%20Meteorolog%C3%ADa%20e%20Hidrolog%C3%ADa%20del%20Per%C3%BA%20-%20SENAMHI%5D_1.csv
+  - https://www.datosabiertos.gob.pe/sites/default/files/Diccionario_Datos_Monitoreo%20de%20los%20contaminantes%20del%20aire%20en%20Lima%20Metropolitana%20-%20%5BServicio%20Nacional%20de%20Meteorolog%C3%ADa%20e%20Hidrolog%C3%ADa%20del%20Per%C3%BA%20-%20SENAMHI%5D.xlsx
+  - https://www.datosabiertos.gob.pe/sites/default/files/Metadatos_Monitoreo%20de%20los%20contaminantes%20del%20aire%20en%20Lima%20Metropolitana%20-%20%5BServicio%20Nacional%20de%20Meteorolog%C3%ADa%20e%20Hidrolog%C3%ADa%20del%20Per%C3%BA%20-%20SENAMHI%5D.docx
+  license_url: http://opendefinition.org/licenses/odc-by/
 - source_id: senamhi-lima-csv
   name: Datos CSV de SENAMHI Lima
   catalog_url: https://www.datosabiertos.gob.pe/dataset/monitoreo-de-los-contaminantes-del-aire-en-lima-metropolitana-servicio-nacional-de-0
   priority: 0
-  status: discovered
-  notes: Recurso candidato del plan inicial. El acceso, la cobertura, el significado
-    de las mediciones y los derechos están pendientes de verificación.
+  status: downloaded
+  notes: 'Lightpanda: accessible; HTTP 200. Evidencia: metadata/source-access.json (senamhi-lima-csv).
+    #4/#8: verificar derechos y semántica; reutilizar original comprobando SHA-256. Archivo original inspeccionado:
+    577794 filas, 15 columnas; SHA-256 en metadata/senamhi-lima-download.json. Sin normalización ni permiso
+    de redistribución confirmado.'
+  description: Recurso documental o candidato revisado; alcance y evidencia en docs/sources/inventory-review.md.
+  publisher: SENAMHI
+  data_category: ground_measured
+  geographic_coverage: Lima Metropolitana (declarado por SENAMHI)
+  historical_coverage: null
+  license: null
+  redistribution: unknown
+  last_verified_at: '2026-11-16T00:00:28.716Z'
+  limitations: Inventario documental; no acredita calidad, continuidad, unidades ni derechos de redistribución.
+  variables:
+  - PM10
+  - PM2_5
+  - NO2
+  size_bytes: 68501558
+  resource_urls:
+  - https://www.datosabiertos.gob.pe/sites/default/files/Monitoreo%20de%20los%20contaminantes%20del%20aire%20en%20Lima%20Metropolitana%20-%20%5BServicio%20Nacional%20de%20Meteorolog%C3%ADa%20e%20Hidrolog%C3%ADa%20del%20Per%C3%BA%20-%20SENAMHI%5D_1.csv
+  file_formats:
+  - CSV
 - source_id: senamhi-data-dictionary
   name: Diccionario de datos de SENAMHI
   catalog_url: https://www.datosabiertos.gob.pe/dataset/monitoreo-de-los-contaminantes-del-aire-en-lima-metropolitana-servicio-nacional-de-1
   priority: 0
-  status: discovered
-  notes: Recurso candidato del plan inicial. El acceso, la cobertura, el significado
-    de las mediciones y los derechos están pendientes de verificación.
+  status: verified
+  notes: 'Lightpanda: accessible; HTTP 200. Evidencia: metadata/source-access.json (senamhi-data-dictionary).
+    #4: descargar e inspeccionar XLSX; confirmar unidades y códigos.'
+  description: Recurso documental o candidato revisado; alcance y evidencia en docs/sources/inventory-review.md.
+  publisher: SENAMHI
+  data_category: context
+  geographic_coverage: Documentación del conjunto Lima Metropolitana
+  historical_coverage: null
+  license: null
+  redistribution: unknown
+  last_verified_at: '2026-11-16T00:00:40.741Z'
+  limitations: Inventario documental; no acredita calidad, continuidad, unidades ni derechos de redistribución.
+  variables:
+  - PM10
+  - PM2_5
+  - NO2
+  file_formats:
+  - XLSX (declarado)
+  resource_urls:
+  - https://www.datosabiertos.gob.pe/sites/default/files/Diccionario_Datos_Monitoreo%20de%20los%20contaminantes%20del%20aire%20en%20Lima%20Metropolitana%20-%20%5BServicio%20Nacional%20de%20Meteorolog%C3%ADa%20e%20Hidrolog%C3%ADa%20del%20Per%C3%BA%20-%20SENAMHI%5D.xlsx
 - source_id: senamhi-metadata
   name: Metadatos de SENAMHI
   catalog_url: https://www.datosabiertos.gob.pe/dataset/monitoreo-de-los-contaminantes-del-aire-en-lima-metropolitana-servicio-nacional-de-2
   priority: 0
-  status: discovered
-  notes: Recurso candidato del plan inicial. El acceso, la cobertura, el significado
-    de las mediciones y los derechos están pendientes de verificación.
+  status: verified
+  notes: 'Lightpanda: accessible; HTTP 200. Evidencia: metadata/source-access.json (senamhi-metadata).
+    #4: descargar e inspeccionar DOCX; confirmar metodología y atribución.'
+  description: Recurso documental o candidato revisado; alcance y evidencia en docs/sources/inventory-review.md.
+  publisher: SENAMHI
+  data_category: context
+  geographic_coverage: Documentación del conjunto Lima Metropolitana
+  historical_coverage: null
+  license: null
+  redistribution: unknown
+  last_verified_at: '2026-11-16T00:00:51.307Z'
+  limitations: Inventario documental; no acredita calidad, continuidad, unidades ni derechos de redistribución.
+  file_formats:
+  - DOCX (declarado)
+  resource_urls:
+  - https://www.datosabiertos.gob.pe/sites/default/files/Metadatos_Monitoreo%20de%20los%20contaminantes%20del%20aire%20en%20Lima%20Metropolitana%20-%20%5BServicio%20Nacional%20de%20Meteorolog%C3%ADa%20e%20Hidrolog%C3%ADa%20del%20Per%C3%BA%20-%20SENAMHI%5D.docx
 - source_id: oefa-national
   name: Calidad del aire a nivel nacional — OEFA
   catalog_url: https://www.datosabiertos.gob.pe/dataset/vigilancia-y-seguimiento-ambiental-en-la-calidad-del-aire-organismo-de-evaluaci%C3%B3n-y
   priority: 0
-  status: discovered
-  notes: Recurso candidato del plan inicial. El acceso, la cobertura, el significado
-    de las mediciones y los derechos están pendientes de verificación.
+  status: verified
+  notes: 'Lightpanda: accessible; HTTP 200. Evidencia: metadata/source-access.json (oefa-national). #5/#9:
+    Cristopher revisará coordenadas, términos y recursos oficiales.'
+  description: Recurso documental o candidato revisado; alcance y evidencia en docs/sources/inventory-review.md.
+  publisher: OEFA
+  data_category: ground_measured
+  geographic_coverage: Perú; 34 estaciones declaradas, no contadas en archivo
+  historical_coverage: null
+  license: 'Open Data Commons Attribution License (declarada por catálogo; revisión pendiente en #5)'
+  redistribution: unknown
+  last_verified_at: '2026-11-16T00:01:01.540Z'
+  limitations: Inventario documental; no acredita calidad, continuidad, unidades ni derechos de redistribución.
+  update_frequency: Anual, declarada por catálogo
+  resource_urls:
+  - https://www.datosabiertos.gob.pe/sites/default/files/1a_Vigilancia%20y%20Seguimiento%20ambiental%20en%20la%20calidad%20del%20aire.csv
+  - https://www.datosabiertos.gob.pe/sites/default/files/1c_Formato_DiccionarioDatos_Vigilancia%20y%20Seguimiento%20ambiental%20en%20la%20calidad%20del%20aire.xlsx
+  - https://www.datosabiertos.gob.pe/sites/default/files/1b_Formato_Metadatos_Vigilancia%20y%20Seguimiento%20ambiental%20en%20la%20calidad%20del%20aire.docx
+  license_url: http://opendefinition.org/licenses/odc-by/
 - source_id: oefa-csv
   name: Datos CSV de OEFA
   catalog_url: https://www.datosabiertos.gob.pe/dataset/vigilancia-y-seguimiento-ambiental-en-la-calidad-del-aire-organismo-de-evaluaci%C3%B3n-y-0
   priority: 0
-  status: discovered
-  notes: Recurso candidato del plan inicial. El acceso, la cobertura, el significado
-    de las mediciones y los derechos están pendientes de verificación.
+  status: verified
+  notes: 'Lightpanda: accessible; HTTP 200. Evidencia: metadata/source-access.json (oefa-csv). #5/#9:
+    Cristopher revisará coordenadas, términos y recursos oficiales.'
+  description: Recurso documental o candidato revisado; alcance y evidencia en docs/sources/inventory-review.md.
+  publisher: OEFA
+  data_category: ground_measured
+  geographic_coverage: 'Perú; estaciones por verificar en #5'
+  historical_coverage: null
+  license: null
+  redistribution: unknown
+  last_verified_at: '2026-11-16T00:01:11.670Z'
+  limitations: Inventario documental; no acredita calidad, continuidad, unidades ni derechos de redistribución.
+  resource_urls:
+  - https://www.datosabiertos.gob.pe/sites/default/files/1a_Vigilancia%20y%20Seguimiento%20ambiental%20en%20la%20calidad%20del%20aire.csv
 - source_id: oefa-monitoring-portal
   name: Portal de monitoreo de OEFA
   catalog_url: https://sistemas.oefa.gob.pe/pifa/mfe/
   priority: 0
-  status: discovered
-  notes: Recurso candidato del plan inicial. El acceso, la cobertura, el significado
-    de las mediciones y los derechos están pendientes de verificación.
+  status: verified
+  notes: 'Lightpanda: accessible; HTTP 200. Evidencia: metadata/source-access.json (oefa-monitoring-portal).
+    #5/#9: Cristopher revisará coordenadas, términos y recursos oficiales.'
+  description: Recurso documental o candidato revisado; alcance y evidencia en docs/sources/inventory-review.md.
+  publisher: OEFA
+  data_category: mixed
+  geographic_coverage: Perú; portal de información ambiental
+  historical_coverage: null
+  license: null
+  redistribution: unknown
+  last_verified_at: '2026-11-16T00:01:24.131Z'
+  limitations: Inventario documental; no acredita calidad, continuidad, unidades ni derechos de redistribución.
 - source_id: senamhi-monitoring-service
   name: Servicio de monitoreo de SENAMHI
   catalog_url: https://www.gob.pe/9433
   priority: 0
-  status: discovered
-  notes: Recurso candidato del plan inicial. El acceso, la cobertura, el significado
-    de las mediciones y los derechos están pendientes de verificación.
+  status: verified
+  notes: 'Lightpanda: accessible; HTTP 200. Evidencia: metadata/source-access.json (senamhi-monitoring-service).
+    #11/#31: resolver recursos, cobertura peruana, derechos y posibles duplicados.'
+  description: Recurso documental o candidato revisado; alcance y evidencia en docs/sources/inventory-review.md.
+  publisher: SENAMHI
+  data_category: context
+  geographic_coverage: Lima Metropolitana y Callao
+  historical_coverage: null
+  license: null
+  redistribution: unknown
+  last_verified_at: '2026-11-16T00:01:28.751Z'
+  limitations: Inventario documental; no acredita calidad, continuidad, unidades ni derechos de redistribución.
 - source_id: digesa-lima-historical-data
   name: Datos históricos de Lima — DIGESA
   catalog_url: https://www.digesa.minsa.gob.pe/DCOVI/mapas/DIGESA_AIR_MR_CalidadAireAnual_LIMA.html
   priority: 0
-  status: discovered
-  notes: Recurso candidato del plan inicial. El acceso, la cobertura, el significado
-    de las mediciones y los derechos están pendientes de verificación.
+  status: verified
+  notes: 'Lightpanda: accessible; HTTP 200. Evidencia: metadata/source-access.json (digesa-lima-historical-data).
+    #11/#31: resolver recursos, cobertura peruana, derechos y posibles duplicados.'
+  description: Recurso documental o candidato revisado; alcance y evidencia en docs/sources/inventory-review.md.
+  publisher: DIGESA
+  data_category: ground_measured
+  geographic_coverage: Lima y Callao, según título del portal
+  historical_coverage: 2007–2024 en título del portal; no verificado en archivos
+  license: null
+  redistribution: unknown
+  last_verified_at: '2026-11-16T00:01:32.273Z'
+  limitations: Inventario documental; no acredita calidad, continuidad, unidades ni derechos de redistribución.
 - source_id: senamhi-reports
   name: Informes de SENAMHI
   catalog_url: https://www.gob.pe/institucion/senamhi/colecciones/51679-vigilancia-de-la-calidad-del-aire-en-el-area-metropolitana-de-lima-y-callao
   priority: 0
-  status: discovered
-  notes: Recurso candidato del plan inicial. El acceso, la cobertura, el significado
-    de las mediciones y los derechos están pendientes de verificación.
+  status: verified
+  notes: 'Lightpanda: accessible; HTTP 200. Evidencia: metadata/source-access.json (senamhi-reports).
+    #11/#31: resolver recursos, cobertura peruana, derechos y posibles duplicados.'
+  description: Recurso documental o candidato revisado; alcance y evidencia en docs/sources/inventory-review.md.
+  publisher: SENAMHI
+  data_category: derived
+  geographic_coverage: Lima Metropolitana y Callao; informes e índices
+  historical_coverage: null
+  license: null
+  redistribution: unknown
+  last_verified_at: '2026-11-16T00:01:43.302Z'
+  limitations: Inventario documental; no acredita calidad, continuidad, unidades ni derechos de redistribución.
 - source_id: openaq-explorer
   name: Explorador OpenAQ
   catalog_url: https://explore.openaq.org/
   priority: 1
   status: discovered
-  notes: Recurso candidato del plan inicial. El acceso, la cobertura, el significado
-    de las mediciones y los derechos están pendientes de verificación.
+  notes: 'Lightpanda: partial; HTTP 200. Evidencia: metadata/source-access.json (openaq-explorer). La
+    aplicación muestra Error | Uncaught Client Exception. #31: reintentar aplicación o usar documentación/API
+    oficial; comprobar cobertura peruana.'
+  description: Recurso documental o candidato revisado; alcance y evidencia en docs/sources/inventory-review.md.
+  publisher: OpenAQ
+  data_category: unknown
+  geographic_coverage: null
+  historical_coverage: null
+  license: null
+  redistribution: unknown
+  last_verified_at: '2026-11-16T00:01:36.342Z'
+  limitations: Inventario documental; no acredita calidad, continuidad, unidades ni derechos de redistribución.
 - source_id: openaq-api-v3
   name: API v3 de OpenAQ
   catalog_url: https://docs.openaq.org/
   priority: 1
-  status: discovered
-  notes: Recurso candidato del plan inicial. El acceso, la cobertura, el significado
-    de las mediciones y los derechos están pendientes de verificación.
+  status: verified
+  notes: 'Lightpanda: accessible; HTTP 200. Evidencia: metadata/source-access.json (openaq-api-v3). #11/#31:
+    resolver recursos, cobertura peruana, derechos y posibles duplicados.'
+  description: Recurso documental o candidato revisado; alcance y evidencia en docs/sources/inventory-review.md.
+  publisher: OpenAQ
+  data_category: context
+  geographic_coverage: null
+  historical_coverage: null
+  license: null
+  redistribution: unknown
+  last_verified_at: '2026-11-16T00:01:43.302Z'
+  limitations: Inventario documental; no acredita calidad, continuidad, unidades ni derechos de redistribución.
 - source_id: openaq-s3-archive
   name: Archivo S3 de OpenAQ
   catalog_url: https://registry.opendata.aws/openaq/
   priority: 1
-  status: discovered
-  notes: Recurso candidato del plan inicial. El acceso, la cobertura, el significado
-    de las mediciones y los derechos están pendientes de verificación.
+  status: verified
+  notes: 'Lightpanda: accessible; HTTP 200. Evidencia: metadata/source-access.json (openaq-s3-archive).
+    #11/#31: resolver recursos, cobertura peruana, derechos y posibles duplicados.'
+  description: Recurso documental o candidato revisado; alcance y evidencia en docs/sources/inventory-review.md.
+  publisher: OpenAQ
+  data_category: mixed
+  geographic_coverage: Global; disponibilidad para Perú pendiente
+  historical_coverage: null
+  license: null
+  redistribution: unknown
+  last_verified_at: '2026-11-16T00:01:43.366Z'
+  limitations: Inventario documental; no acredita calidad, continuidad, unidades ni derechos de redistribución.
 - source_id: openaq-archive-documentation
   name: Documentación del archivo OpenAQ
   catalog_url: https://docs.openaq.org/aws/about
   priority: 1
-  status: discovered
-  notes: Recurso candidato del plan inicial. El acceso, la cobertura, el significado
-    de las mediciones y los derechos están pendientes de verificación.
+  status: verified
+  notes: 'Lightpanda: accessible; HTTP 200. Evidencia: metadata/source-access.json (openaq-archive-documentation).
+    #11/#31: resolver recursos, cobertura peruana, derechos y posibles duplicados.'
+  description: Recurso documental o candidato revisado; alcance y evidencia en docs/sources/inventory-review.md.
+  publisher: OpenAQ
+  data_category: context
+  geographic_coverage: Documentación del archivo global
+  historical_coverage: null
+  license: null
+  redistribution: unknown
+  last_verified_at: '2026-11-16T00:01:52.839Z'
+  limitations: Inventario documental; no acredita calidad, continuidad, unidades ni derechos de redistribución.
 - source_id: world-air-quality-index-peru
   name: Índice Mundial de Calidad del Aire — Perú
   catalog_url: https://aqicn.org/country/peru/es/
   priority: 1
-  status: discovered
-  notes: Recurso candidato del plan inicial. El acceso, la cobertura, el significado
-    de las mediciones y los derechos están pendientes de verificación.
+  status: verified
+  notes: 'Lightpanda: accessible; HTTP 200. Evidencia: metadata/source-access.json (world-air-quality-index-peru).
+    #11/#31: resolver recursos, cobertura peruana, derechos y posibles duplicados.'
+  description: Recurso documental o candidato revisado; alcance y evidencia en docs/sources/inventory-review.md.
+  publisher: WAQI
+  data_category: derived
+  geographic_coverage: Perú; incluye enlaces de Lima
+  historical_coverage: null
+  license: null
+  redistribution: unknown
+  last_verified_at: '2026-11-16T00:01:53.830Z'
+  limitations: Inventario documental; no acredita calidad, continuidad, unidades ni derechos de redistribución.
 - source_id: waqi-historical-data
   name: Datos históricos de WAQI
   catalog_url: https://aqicn.org/historical/
   priority: 1
-  status: discovered
-  notes: Recurso candidato del plan inicial. El acceso, la cobertura, el significado
-    de las mediciones y los derechos están pendientes de verificación.
+  status: verified
+  notes: 'Lightpanda: accessible; HTTP 200. Evidencia: metadata/source-access.json (waqi-historical-data).
+    #11/#31: revisar restricciones; los valores publicados son AQI, no concentraciones.'
+  description: Recurso documental o candidato revisado; alcance y evidencia en docs/sources/inventory-review.md.
+  publisher: WAQI
+  data_category: derived
+  geographic_coverage: Global; disponibilidad para Perú pendiente
+  historical_coverage: Desde aproximadamente 2012 según página; Perú pendiente
+  license: null
+  redistribution: unknown
+  last_verified_at: '2026-11-16T00:01:57.910Z'
+  limitations: Inventario documental; no acredita calidad, continuidad, unidades ni derechos de redistribución.
 - source_id: airnow-international
   name: AirNow International
   catalog_url: https://gispub.epa.gov/airnowembassy/
   priority: 1
   status: discovered
-  notes: Recurso candidato del plan inicial. El acceso, la cobertura, el significado
-    de las mediciones y los derechos están pendientes de verificación.
+  notes: 'Lightpanda: partial; HTTP 200. Evidencia: metadata/source-access.json (airnow-international).
+    Solo se observa la interfaz del mapa; no se confirmó una estación ni un archivo peruano. #11: confirmar
+    estaciones y disponibilidad histórica para Perú antes de integrar.'
+  description: Recurso documental o candidato revisado; alcance y evidencia en docs/sources/inventory-review.md.
+  publisher: US EPA / Department of State
+  data_category: unknown
+  geographic_coverage: null
+  historical_coverage: null
+  license: null
+  redistribution: unknown
+  last_verified_at: '2026-11-16T00:01:59.823Z'
+  limitations: Inventario documental; no acredita calidad, continuidad, unidades ni derechos de redistribución.
 - source_id: calidad-aire-lima
   name: Calidad Aire Lima
   catalog_url: https://github.com/Cristhianbgf/calidad-aire-lima
   priority: 1
-  status: discovered
-  notes: Recurso candidato del plan inicial. El acceso, la cobertura, el significado
-    de las mediciones y los derechos están pendientes de verificación.
+  status: verified
+  notes: 'Lightpanda: accessible; HTTP 200. Evidencia: metadata/source-access.json (calidad-aire-lima).
+    #11/#14: comparar procedencia SENAMHI; no contar como observaciones independientes.'
+  description: Recurso documental o candidato revisado; alcance y evidencia en docs/sources/inventory-review.md.
+  publisher: Cristhianbgf
+  data_category: derived
+  geographic_coverage: Lima Metropolitana, declarado en README
+  historical_coverage: 2015–2024 declarado en README; derivado de SENAMHI
+  license: null
+  redistribution: unknown
+  last_verified_at: '2026-11-16T00:02:01.858Z'
+  limitations: Inventario documental; no acredita calidad, continuidad, unidades ni derechos de redistribución.
 - source_id: limaair
   name: Limaair
   catalog_url: https://github.com/quishqa/limaair
   priority: 1
-  status: discovered
-  notes: Recurso candidato del plan inicial. El acceso, la cobertura, el significado
-    de las mediciones y los derechos están pendientes de verificación.
+  status: verified
+  notes: 'Lightpanda: accessible; HTTP 200. Evidencia: metadata/source-access.json (limaair). #4/#16:
+    revisar endpoints y validación; MIT del código no licencia datos descargados.'
+  description: Recurso documental o candidato revisado; alcance y evidencia en docs/sources/inventory-review.md.
+  publisher: quishqa
+  data_category: context
+  geographic_coverage: Lima; herramienta de descarga, no conjunto independiente
+  historical_coverage: null
+  license: null
+  redistribution: unknown
+  last_verified_at: '2026-11-16T00:02:03.189Z'
+  limitations: Inventario documental; no acredita calidad, continuidad, unidades ni derechos de redistribución.
 - source_id: who-air-quality-database
   name: Base de datos de calidad del aire de la OMS
   catalog_url: https://www.who.int/data/gho/data/themes/air-pollution
   priority: 1
-  status: discovered
-  notes: Recurso candidato del plan inicial. El acceso, la cobertura, el significado
-    de las mediciones y los derechos están pendientes de verificación.
+  status: verified
+  notes: 'Lightpanda: accessible; HTTP 200. Evidencia: metadata/source-access.json (who-air-quality-database).
+    #11/#31: resolver recursos, cobertura peruana, derechos y posibles duplicados.'
+  description: Recurso documental o candidato revisado; alcance y evidencia en docs/sources/inventory-review.md.
+  publisher: OMS
+  data_category: mixed
+  geographic_coverage: Global; portal combina observaciones y estimaciones
+  historical_coverage: null
+  license: null
+  redistribution: unknown
+  last_verified_at: '2026-11-16T00:02:04.257Z'
+  limitations: Inventario documental; no acredita calidad, continuidad, unidades ni derechos de redistribución.
 - source_id: inei-environmental-statistics
   name: Estadísticas ambientales del INEI
   catalog_url: https://www1.inei.gob.pe/biblioteca-virtual/boletines/estadisticas-ambientales/
   priority: 1
-  status: discovered
-  notes: Recurso candidato del plan inicial. El acceso, la cobertura, el significado
-    de las mediciones y los derechos están pendientes de verificación.
+  status: blocked
+  notes: 'Lightpanda: blocked; HTTP no expuesto. Evidencia: metadata/source-access.json (inei-environmental-statistics).
+    Lightpanda: navigation failed Reintentar enlace con Lightpanda y buscar alternativa oficial; no inferir
+    indisponibilidad general. #11/#31: resolver recursos, cobertura peruana, derechos y posibles duplicados.'
+  description: Recurso documental o candidato revisado; alcance y evidencia en docs/sources/inventory-review.md.
+  publisher: INEI (candidato del plan)
+  data_category: unknown
+  geographic_coverage: null
+  historical_coverage: null
+  license: null
+  redistribution: unknown
+  last_verified_at: '2026-11-16T00:02:04.890Z'
+  limitations: Inventario documental; no acredita calidad, continuidad, unidades ni derechos de redistribución.
 - source_id: minam-sinia
   name: SINIA — MINAM
   catalog_url: https://sinia.minam.gob.pe/portal/datos-abiertos/
   priority: 1
-  status: discovered
-  notes: Recurso candidato del plan inicial. El acceso, la cobertura, el significado
-    de las mediciones y los derechos están pendientes de verificación.
+  status: blocked
+  notes: 'Lightpanda: blocked; HTTP no expuesto. Evidencia: metadata/source-access.json (minam-sinia).
+    Lightpanda: navigation failed Reintentar enlace con Lightpanda y buscar alternativa oficial; no inferir
+    indisponibilidad general. #11/#31: resolver recursos, cobertura peruana, derechos y posibles duplicados.'
+  description: Recurso documental o candidato revisado; alcance y evidencia en docs/sources/inventory-review.md.
+  publisher: MINAM (candidato del plan)
+  data_category: unknown
+  geographic_coverage: null
+  historical_coverage: null
+  license: null
+  redistribution: unknown
+  last_verified_at: '2026-11-16T00:02:05.768Z'
+  limitations: Inventario documental; no acredita calidad, continuidad, unidades ni derechos de redistribución.
 - source_id: senamhi-hourly-meteorology
   name: Meteorología horaria de SENAMHI
   catalog_url: https://www.datosabiertos.gob.pe/dataset/variables-meteorologicas-de-las-estaciones-autom%C3%A1ticas-de-intercambio-internacional-servicio
   priority: 2
-  status: discovered
-  notes: Recurso candidato del plan inicial. El acceso, la cobertura, el significado
-    de las mediciones y los derechos están pendientes de verificación.
+  status: blocked
+  notes: 'Lightpanda: blocked; HTTP no expuesto. Evidencia: metadata/source-access.json (senamhi-hourly-meteorology).
+    Lightpanda: navigation timed out Reintentar enlace con Lightpanda y buscar alternativa oficial; no
+    inferir indisponibilidad general. #16: comprobar estaciones/modelos, términos y muestra pertinente
+    para Perú.'
+  description: Recurso documental o candidato revisado; alcance y evidencia en docs/sources/inventory-review.md.
+  publisher: SENAMHI (candidato del plan)
+  data_category: unknown
+  geographic_coverage: null
+  historical_coverage: null
+  license: null
+  redistribution: unknown
+  last_verified_at: '2026-11-16T00:02:06.109Z'
+  limitations: Inventario documental; no acredita calidad, continuidad, unidades ni derechos de redistribución.
 - source_id: senamhi-station-network
   name: Red de estaciones de SENAMHI
   catalog_url: https://www.senamhi.gob.pe/servicios/?p=estaciones
   priority: 2
-  status: discovered
-  notes: Recurso candidato del plan inicial. El acceso, la cobertura, el significado
-    de las mediciones y los derechos están pendientes de verificación.
+  status: verified
+  notes: 'Lightpanda: accessible; HTTP 200. Evidencia: metadata/source-access.json (senamhi-station-network).
+    #16: comprobar estaciones/modelos, términos y muestra pertinente para Perú.'
+  description: Recurso documental o candidato revisado; alcance y evidencia en docs/sources/inventory-review.md.
+  publisher: SENAMHI
+  data_category: context
+  geographic_coverage: Perú; red de estaciones
+  historical_coverage: null
+  license: null
+  redistribution: unknown
+  last_verified_at: '2026-11-16T00:02:16.120Z'
+  limitations: Inventario documental; no acredita calidad, continuidad, unidades ni derechos de redistribución.
 - source_id: open-meteo-historical-weather
   name: Meteorología histórica de Open-Meteo
   catalog_url: https://open-meteo.com/en/docs/historical-weather-api
   priority: 2
-  status: discovered
-  notes: Recurso candidato del plan inicial. El acceso, la cobertura, el significado
-    de las mediciones y los derechos están pendientes de verificación.
+  status: verified
+  notes: 'Lightpanda: accessible; HTTP 200. Evidencia: metadata/source-access.json (open-meteo-historical-weather).
+    #16: comprobar estaciones/modelos, términos y muestra pertinente para Perú.'
+  description: Recurso documental o candidato revisado; alcance y evidencia en docs/sources/inventory-review.md.
+  publisher: Open-Meteo
+  data_category: reanalysis
+  geographic_coverage: Global; depende del modelo seleccionado
+  historical_coverage: Desde 1940 ERA5 / 1950 ERA5-Land, declarado; sin muestra local
+  license: null
+  redistribution: unknown
+  last_verified_at: '2026-11-16T00:02:33.695Z'
+  limitations: Inventario documental; no acredita calidad, continuidad, unidades ni derechos de redistribución.
 - source_id: open-meteo-historical-forecasts
   name: Pronósticos históricos de Open-Meteo
   catalog_url: https://open-meteo.com/en/docs/historical-forecast-api
   priority: 2
-  status: discovered
-  notes: Recurso candidato del plan inicial. El acceso, la cobertura, el significado
-    de las mediciones y los derechos están pendientes de verificación.
+  status: verified
+  notes: 'Lightpanda: accessible; HTTP 200. Evidencia: metadata/source-access.json (open-meteo-historical-forecasts).
+    #16: comprobar estaciones/modelos, términos y muestra pertinente para Perú.'
+  description: Recurso documental o candidato revisado; alcance y evidencia en docs/sources/inventory-review.md.
+  publisher: Open-Meteo
+  data_category: forecast
+  geographic_coverage: Global y regional según modelo
+  historical_coverage: Aproximadamente desde 2022; varía por modelo, según documentación
+  license: null
+  redistribution: unknown
+  last_verified_at: '2026-11-16T00:02:34.208Z'
+  limitations: Inventario documental; no acredita calidad, continuidad, unidades ni derechos de redistribución.
 - source_id: era5-and-era5-land
   name: ERA5 y ERA5-Land
   catalog_url: https://cds.climate.copernicus.eu/
   priority: 2
   status: discovered
-  notes: Recurso candidato del plan inicial. El acceso, la cobertura, el significado
-    de las mediciones y los derechos están pendientes de verificación.
+  notes: 'Lightpanda: partial; HTTP 200. Evidencia: metadata/source-access.json (era5-and-era5-land).
+    El enlace es la portada CDS; falta resolver productos ERA5 y ERA5-Land concretos. #16: resolver fichas
+    específicas, cuenta, términos y muestra acotada.'
+  description: Recurso documental o candidato revisado; alcance y evidencia en docs/sources/inventory-review.md.
+  publisher: Copernicus C3S / ECMWF
+  data_category: context
+  geographic_coverage: null
+  historical_coverage: null
+  license: null
+  redistribution: unknown
+  last_verified_at: '2026-11-16T00:02:34.525Z'
+  limitations: Inventario documental; no acredita calidad, continuidad, unidades ni derechos de redistribución.
 - source_id: nasa-power
   name: NASA POWER
   catalog_url: https://power.larc.nasa.gov/docs/services/api/temporal/hourly/
   priority: 2
-  status: discovered
-  notes: Recurso candidato del plan inicial. El acceso, la cobertura, el significado
-    de las mediciones y los derechos están pendientes de verificación.
+  status: verified
+  notes: 'Lightpanda: accessible; HTTP 200. Evidencia: metadata/source-access.json (nasa-power). #16:
+    comprobar estaciones/modelos, términos y muestra pertinente para Perú.'
+  description: Recurso documental o candidato revisado; alcance y evidencia en docs/sources/inventory-review.md.
+  publisher: NASA POWER
+  data_category: mixed
+  geographic_coverage: null
+  historical_coverage: Desde 2001-01-01 hasta casi tiempo real para servicio horario, declarado
+  license: null
+  redistribution: unknown
+  last_verified_at: '2026-11-16T00:02:35.097Z'
+  limitations: Inventario documental; no acredita calidad, continuidad, unidades ni derechos de redistribución.
 - source_id: noaa-integrated-surface-database
   name: Base integrada de datos de superficie de NOAA
   catalog_url: https://www.ncei.noaa.gov/products/land-based-station/integrated-surface-database
   priority: 2
-  status: discovered
-  notes: Recurso candidato del plan inicial. El acceso, la cobertura, el significado
-    de las mediciones y los derechos están pendientes de verificación.
+  status: verified
+  notes: 'Lightpanda: accessible; HTTP 200. Evidencia: metadata/source-access.json (noaa-integrated-surface-database).
+    #16: comprobar estaciones/modelos, términos y muestra pertinente para Perú.'
+  description: Recurso documental o candidato revisado; alcance y evidencia en docs/sources/inventory-review.md.
+  publisher: NOAA NCEI
+  data_category: ground_measured
+  geographic_coverage: Global; estaciones de Perú pendientes
+  historical_coverage: null
+  license: null
+  redistribution: unknown
+  last_verified_at: '2026-11-16T00:02:36.419Z'
+  limitations: Inventario documental; no acredita calidad, continuidad, unidades ni derechos de redistribución.
 - source_id: noaa-atmospheric-soundings
   name: Sondeos atmosféricos de NOAA
   catalog_url: https://www.ncei.noaa.gov/products/weather-balloon/integrated-global-radiosonde-archive
   priority: 2
-  status: discovered
-  notes: Recurso candidato del plan inicial. El acceso, la cobertura, el significado
-    de las mediciones y los derechos están pendientes de verificación.
+  status: verified
+  notes: 'Lightpanda: accessible; HTTP 200. Evidencia: metadata/source-access.json (noaa-atmospheric-soundings).
+    #16: comprobar estaciones/modelos, términos y muestra pertinente para Perú.'
+  description: Recurso documental o candidato revisado; alcance y evidencia en docs/sources/inventory-review.md.
+  publisher: NOAA NCEI
+  data_category: ground_measured
+  geographic_coverage: Global; estaciones de Perú pendientes
+  historical_coverage: Desde 1905 globalmente, declarado; no implica cobertura peruana
+  license: null
+  redistribution: unknown
+  last_verified_at: '2026-11-16T00:02:42.748Z'
+  limitations: Inventario documental; no acredita calidad, continuidad, unidades ni derechos de redistribución.
 - source_id: cams-eac4-global-reanalysis
   name: Reanálisis global CAMS EAC4
   catalog_url: https://ads.atmosphere.copernicus.eu/datasets/cams-global-reanalysis-eac4
   priority: 3
-  status: discovered
-  notes: Recurso candidato del plan inicial. El acceso, la cobertura, el significado
-    de las mediciones y los derechos están pendientes de verificación.
+  status: verified
+  notes: 'Lightpanda: accessible; HTTP 200. Evidencia: metadata/source-access.json (cams-eac4-global-reanalysis).
+    #33/#34: verificar versión, términos y pertinencia antes de adquirir datos.'
+  description: Recurso documental o candidato revisado; alcance y evidencia en docs/sources/inventory-review.md.
+  publisher: Copernicus CAMS / ECMWF
+  data_category: reanalysis
+  geographic_coverage: Global, según ficha EAC4
+  historical_coverage: 2003–2025 en ficha consultada; no descargado
+  license: CC-BY (etiqueta de catálogo; versión y términos por revisar)
+  redistribution: unknown
+  last_verified_at: '2026-11-16T00:02:48.185Z'
+  limitations: Inventario documental; no acredita calidad, continuidad, unidades ni derechos de redistribución.
 - source_id: copernicus-sentinel-5p
   name: Copernicus Sentinel-5P
   catalog_url: https://dataspace.copernicus.eu/data-collections/copernicus-sentinel-missions/sentinel-5p
   priority: 3
-  status: discovered
-  notes: Recurso candidato del plan inicial. El acceso, la cobertura, el significado
-    de las mediciones y los derechos están pendientes de verificación.
+  status: verified
+  notes: 'Lightpanda: accessible; HTTP 200. Evidencia: metadata/source-access.json (copernicus-sentinel-5p).
+    #33/#34: verificar versión, términos y pertinencia antes de adquirir datos.'
+  description: Recurso documental o candidato revisado; alcance y evidencia en docs/sources/inventory-review.md.
+  publisher: Copernicus
+  data_category: satellite
+  geographic_coverage: Global, según misión TROPOMI
+  historical_coverage: Nivel 2 desde abril de 2018, declarado
+  license: null
+  redistribution: unknown
+  last_verified_at: '2026-11-16T00:02:49.595Z'
+  limitations: Inventario documental; no acredita calidad, continuidad, unidades ni derechos de redistribución.
 - source_id: nasa-modis-maiac-mcd19a2
   name: NASA MODIS MAIAC MCD19A2
   catalog_url: https://www.earthdata.nasa.gov/
   priority: 3
   status: discovered
-  notes: Recurso candidato del plan inicial. El acceso, la cobertura, el significado
-    de las mediciones y los derechos están pendientes de verificación.
+  notes: 'Lightpanda: partial; HTTP 200. Evidencia: metadata/source-access.json (nasa-modis-maiac-mcd19a2).
+    El enlace es la portada Earthdata; no identifica el producto MCD19A2 concreto. #33: resolver ficha
+    oficial y versión MCD19A2; verificar derechos y cobertura.'
+  description: Recurso documental o candidato revisado; alcance y evidencia en docs/sources/inventory-review.md.
+  publisher: NASA Earthdata
+  data_category: unknown
+  geographic_coverage: null
+  historical_coverage: null
+  license: null
+  redistribution: unknown
+  last_verified_at: '2026-11-16T00:02:50.162Z'
+  limitations: Inventario documental; no acredita calidad, continuidad, unidades ni derechos de redistribución.
 - source_id: acag-global-surface-pm2-5
   name: PM2.5 superficial global de ACAG
   catalog_url: https://sites.wustl.edu/acag/surface-pm2-5/
   priority: 3
-  status: discovered
-  notes: Recurso candidato del plan inicial. El acceso, la cobertura, el significado
-    de las mediciones y los derechos están pendientes de verificación.
+  status: verified
+  notes: 'Lightpanda: accessible; HTTP 200. Evidencia: metadata/source-access.json (acag-global-surface-pm2-5).
+    #33/#34: verificar versión, términos y pertinencia antes de adquirir datos.'
+  description: Recurso documental o candidato revisado; alcance y evidencia en docs/sources/inventory-review.md.
+  publisher: ACAG
+  data_category: derived
+  geographic_coverage: Global; versión V6.GL.02.04
+  historical_coverage: 1998–2023 para V6.GL.02.04, declarado
+  license: CC BY 4.0 (declarada para V6.GL.02.04; términos por revisar)
+  redistribution: unknown
+  last_verified_at: '2026-11-16T00:02:52.186Z'
+  limitations: Inventario documental; no acredita calidad, continuidad, unidades ni derechos de redistribución.
 - source_id: open-meteo-cams-air-quality
   name: Calidad del aire CAMS — Open-Meteo
   catalog_url: https://open-meteo.com/en/docs/air-quality-api
   priority: 3
-  status: discovered
-  notes: Recurso candidato del plan inicial. El acceso, la cobertura, el significado
-    de las mediciones y los derechos están pendientes de verificación.
+  status: verified
+  notes: 'Lightpanda: accessible; HTTP 200. Evidencia: metadata/source-access.json (open-meteo-cams-air-quality).
+    #33/#34: verificar versión, términos y pertinencia antes de adquirir datos.'
+  description: Recurso documental o candidato revisado; alcance y evidencia en docs/sources/inventory-review.md.
+  publisher: Open-Meteo / CAMS
+  data_category: forecast
+  geographic_coverage: Global y Europa; usar dominio global para Lima
+  historical_coverage: Dominio global desde agosto de 2022, declarado; no descargado
+  license: null
+  redistribution: unknown
+  last_verified_at: '2026-11-16T00:02:55.705Z'
+  limitations: Inventario documental; no acredita calidad, continuidad, unidades ni derechos de redistribución.
 - source_id: processed-lima-cams-dataset
   name: Conjunto procesado CAMS para Lima
   catalog_url: https://zenodo.org/records/18673925
   priority: 3
-  status: discovered
-  notes: Recurso candidato del plan inicial. El acceso, la cobertura, el significado
-    de las mediciones y los derechos están pendientes de verificación.
+  status: verified
+  notes: 'Lightpanda: accessible; HTTP 200. Evidencia: metadata/source-access.json (processed-lima-cams-dataset).
+    #33/#34: verificar versión, términos y pertinencia antes de adquirir datos.'
+  description: Recurso documental o candidato revisado; alcance y evidencia en docs/sources/inventory-review.md.
+  publisher: Nitiraj Kulkarni (Zenodo)
+  data_category: modeled
+  geographic_coverage: Lima, según descripción del depósito
+  historical_coverage: 2022-08-01 a 2026-02-18, declarado en depósito; no descargado
+  license: null
+  redistribution: unknown
+  last_verified_at: '2026-11-16T00:02:56.005Z'
+  limitations: Inventario documental; no acredita calidad, continuidad, unidades ni derechos de redistribución.
+  resource_urls:
+  - https://zenodo.org/records/18673925/files/lima-pe-3936456.zip?download=1
 - source_id: nasa-firms-wildfire-observations
   name: Observaciones de incendios de NASA FIRMS
   catalog_url: https://firms.modaps.eosdis.nasa.gov/
   priority: 3
-  status: discovered
-  notes: Recurso candidato del plan inicial. El acceso, la cobertura, el significado
-    de las mediciones y los derechos están pendientes de verificación.
+  status: verified
+  notes: 'Lightpanda: accessible; HTTP 200. Evidencia: metadata/source-access.json (nasa-firms-wildfire-observations).
+    #33/#34: verificar versión, términos y pertinencia antes de adquirir datos.'
+  description: Recurso documental o candidato revisado; alcance y evidencia en docs/sources/inventory-review.md.
+  publisher: NASA FIRMS
+  data_category: satellite
+  geographic_coverage: Global; detecciones de incendios MODIS/VIIRS
+  historical_coverage: null
+  license: null
+  redistribution: unknown
+  last_verified_at: '2026-11-16T00:02:56.964Z'
+  limitations: Inventario documental; no acredita calidad, continuidad, unidades ni derechos de redistribución.

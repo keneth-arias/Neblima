@@ -3,7 +3,7 @@
 Fuente: [plan inicial completo](../docs/initial-plan.md), adaptado al español del Perú.
 El estado vigente está en las [tareas de GitHub](https://github.com/keneth-arias/airaware/issues) y el
 [tablero](https://github.com/users/keneth-arias/projects/1). Este documento es un índice ordenado;
-no afirma que ya se recolectaron datos ni que existen resultados de modelos.
+distingue evidencia documental, descargas y resultados de modelos.
 
 ## Decisiones de ejecución
 
@@ -15,6 +15,7 @@ no afirma que ya se recolectaron datos ni que existen resultados de modelos.
   Cuatro estaciones, 24 meses, frecuencia horaria y ventanas 72/24 son metas provisionales.
 - Esta preparación no autoriza publicar datos masivos, abrir PR externos ni ejecutar descargas o
   entrenamientos costosos o sin límites. Se mantienen las autorizaciones expresas del plan.
+- Usar Lightpanda para páginas y descargas web, según [el protocolo](../docs/web-access.md).
 - Empezar con Python/uv y dependencias mínimas. Incorporar Polars, DuckDB, HTTPX, herramientas
   geoespaciales o de ráster cuando se utilicen. No usar infraestructura distribuida sin necesidad medida.
 
@@ -85,7 +86,7 @@ Los comandos del plan inicial son propuestas, no API implementadas.
 Keneth lidera datos y plataforma. La decisión inicial es almacenamiento local y GitHub Actions (ADR-001).
 El PR #36 ya está integrado en main y cerró #2. Preparó la evidencia inicial de #1/#3,
 las herramientas, el catálogo, los comandos, CI y las guías.
-Las fuentes siguen sin verificar. Lo siguiente es #4/#5 y el descargador #6/#7.
+El inventario #3 ya tiene evidencia de acceso para los 37 candidatos. Continúan #4/#5 y el descargador #6/#7.
 
 Se reservaron 18 de las 35 tareas: 16 para qriqs y dos para J0r-PS, mediante etiquetas y notas de
 entrega mientras sus invitaciones están pendientes. Keneth conserva 17 tareas. Mantener una tarea
@@ -97,6 +98,14 @@ El idioma vigente es español del Perú (ADR-002), incluidos tareas, documentaci
 
 El [plan y resultado de #1](issue-1-plan.md) documenta cuatro pasos ejecutados:
 confirmar revisión, completar matriz de API, revisar ejemplos y vincular requisitos del hackathon.
-Responsable: Keneth. La investigación está lista para revisión; el cierre de #1 espera integrar su PR y no equivale a validar TimeF en ejecución.
+Responsable: Keneth. La investigación quedó integrada en #40 y #1 está cerrada. La prueba TimeF sintética ya se ejecutó.
 Cristopher ya tiene asignadas sus 16 tareas de forma nativa; Jordan conserva sus dos reservas
 mientras acepta la invitación. Estos avances no modifican las dependencias.
+
+## Siguiente paso: inventario con SENAMHI
+
+#40 está integrado y #1 cerrada. La prueba sintética hello-world ya se ejecutó, con datos en data/timef
+y entorno aislado en tools/timenet-smoke. Continúa [el plan de #3](issue-3-plan.md), empezando por
+SENAMHI en coordinación con #4; OEFA #5 sigue con Cristopher. El primer acceso web al catálogo
+SENAMHI devolvió 403 con otra herramienta. Lightpanda permitió descargar el CSV y revisar los 37 enlaces;
+la [evidencia](../docs/sources/inventory-review.md) distingue metadatos, estructura y pendientes de derechos.
