@@ -1,4 +1,4 @@
-# Adquisición local con trazabilidad (#6)
+# Adquisición local con trazabilidad (#6 y #7)
 
 Esta herramienta conserva bytes originales y registra su procedencia. No normaliza observaciones
 ni confirma unidades, tiempos o derechos. Las aclaraciones SENAMHI siguen en #43.
@@ -45,7 +45,7 @@ Guardar como data/staging/request.json y ejecutar, reemplazando la ruta por el a
 uv run --locked airaware acquire import-file --spec data/staging/request.json --file ruta/al/original.csv
 ```
 
-max_bytes es obligatorio y nunca puede superar 1 GiB. expected_sha256 es opcional, pero debe usarse
+max_bytes es obligatorio y nunca puede superar **1000 GiB (1 073 741 824 000 bytes)**. expected_sha256 es opcional, pero debe usarse
 cuando existe una suma previa confiable. acquired_at requiere zona horaria si se conoce la fecha
 real de obtención; dejarlo nulo si se desconoce. verified_at se registra al comprobar bytes. final_url
 es opcional para la URL resuelta por Lightpanda: no inventarla. Las URL no admiten usuario/contraseña,
@@ -109,12 +109,12 @@ uv run --locked airaware acquire api --spec data/staging/api-request.json --allo
 
 El adaptador exige HTTPS en puerto 443 y una lista explícita de hosts; comprueba que todas las IP
 resueltas sean públicas y no multicast. Rechaza redirecciones, cookies entre intentos, compresión HTTP
-y respuestas distintas de 200 (salvo errores transitorios que se reintentan). No hereda proxies del
+y respuestas distintas de 200/206/304 (salvo errores transitorios que se reintentan). No hereda proxies del
 entorno ni envía cabeceras de autenticación. La comprobación DNS y la conexión son operaciones
 separadas: no fija la IP frente a cambios DNS entre ambas. Es una CLI local para fuentes autorizadas,
 no un servicio de descarga para URL suministradas por terceros.
 
-Máximo: tres intentos, una transferencia por invocación; connect timeout de 5 s, lectura/escritura/pool
+Máximo: tres intentos por recurso; connect timeout de 5 s, lectura/escritura/pool
 de 10 s y presupuesto de 60 s comprobado entre operaciones/chunks. Una operación de red o DNS ya
 iniciada puede terminar después del presupuesto; no se promete un corte de proceso a los 60 s.
 Retry-After admite segundos o fecha HTTP hasta 30 s; valores inválidos/excesivos detienen la operación.
@@ -166,9 +166,55 @@ SHA-256 896ae8a106fb128460e81b3f58096f6b9c4d582ef28fffa46e5394c5875c40d4. Tambi�
 XLSX/DOCX reales por referencia, sin red, copias nuevas ni cambios en sus originales/manifiestos previos.
 El manifiesto de adquisición es nuevo y distinto de la evidencia histórica de #3/#4, que se conserva.
 
-Reanudación Range, caché de servidor, concurrencia configurable, filtros y estimaciones quedan en #7.
+La CLI API agrega caché condicional, reanudación y presupuestos mediante #7 (ver abajo).
 Las decisiones de unidades, reloj y publicación continúan en #43.
 
 Referencias verificadas con Lightpanda: [HTTPX streaming](https://www.python-httpx.org/quickstart/#streaming-responses),
 [transportes simulados](https://www.python-httpx.org/advanced/transports/#mock-transports) y
 [rename de Python](https://docs.python.org/3/library/os.html#os.rename).
+
+
+## Caché, reanudación y límites de API (#7)
+
+El máximo de 1000 GiB por archivo es un techo autorizado por Keneth, no una estimación de tamaño,
+una reserva de disco ni una descarga solicitada. Conviene fijar max_bytes cerca del tamaño previsto.
+Los límites estructurales de JSON y Office siguen siendo más pequeños y no cambian.
+
+La CLI `acquire api` usa el motor con caché; la función histórica `http.fetch_api` conserva su
+comportamiento simple para consumidores anteriores. Se verifican suma, estructura y contrato antes
+de reutilizar un original. ETag o Last-Modified permiten una consulta condicional; un 304 no evita
+la verificación local. Sin validador se solicita la representación completa.
+
+```bash
+uv run --locked airaware acquire api --spec data/staging/api-request.json --allow-host api.example.org --budget-bytes 2000000 --deadline-seconds 120
+uv run --locked airaware acquire api --spec data/staging/api-request.json --allow-host api.example.org --offline
+```
+
+`--offline` no consulta red ni DNS; falla si no existe un original verificable. `--refresh` reinicia
+el parcial y consulta sin condición; no se combina con offline. El presupuesto de payload incluye
+bytes recibidos en intentos fallidos, reinicios y reanudaciones. Sin --budget-bytes, una consulta API
+usa max_bytes como presupuesto total. No es un contador de tráfico físico: excluye TLS/cabeceras;
+el chunk que supera el límite ya se recibió y se contabiliza antes de abortar. Con concurrencia,
+las respuestas que ya estaban en curso también pueden entregar un chunk. No se inician solicitudes
+nuevas cuando el presupuesto ya está agotado. El plazo configurable admite hasta 86 400 segundos
+por recurso y sigue siendo cooperativo entre operaciones.
+
+Los parciales y su estado atómico quedan en data/.acquisition-cache/<clave>/, fuera de Git.
+Cada checkpoint registra tamaño y SHA-256; una cola no confirmada tras una caída se recorta solo
+cuando el prefijo registrado pasa la verificación. Un parcial alterado o sin procedencia falla sin
+sobrescribirse. Se anexa únicamente con ETag fuerte idéntico y 206/Content-Range coherentes.
+Un 200 reinicia desde cero; un 416 no prueba integridad. Sin ETag fuerte se reinicia la transferencia.
+La publicación final mantiene la validación de #6 y registra el estado HTTP realmente observado.
+
+Se comprueba espacio libre para el parcial y la copia temporal de publicación más 64 KiB; si falta
+Content-Length, se usa max_bytes para el cálculo conservador. No se preasigna el tamaño autorizado.
+El espacio puede cambiar durante una transferencia: una falla de escritura no publica un parcial.
+Un cambio de contenido produce otra versión por SHA-256 sin reemplazar los originales anteriores.
+Cache-Control: no-store impide conservar un índice HTTP reutilizable o un parcial para otra solicitud;
+el archivo adquirido deliberadamente se conserva como original del proyecto, separado de esa caché.
+No se implementa un proxy ni una caché HTTP general; un cierre abrupto puede dejar un parcial marcado
+para eliminación al siguiente acceso, después de verificar que pertenece a este recurso.
+
+Protocolo consultado con Lightpanda el 16/11/2026:
+[RFC 9110: condiciones y rangos](https://www.rfc-editor.org/rfc/rfc9110.html) y
+[RFC 9111: no-store](https://www.rfc-editor.org/rfc/rfc9111.html#section-5.2.2.5).
