@@ -109,3 +109,11 @@ y entorno aislado en tools/timenet-smoke. Continúa [el plan de #3](issue-3-plan
 SENAMHI en coordinación con #4; OEFA #5 sigue con Cristopher. El primer acceso web al catálogo
 SENAMHI devolvió 403 con otra herramienta. Lightpanda permitió descargar el CSV y revisar los 37 enlaces;
 la [evidencia](../docs/sources/inventory-review.md) distingue metadatos, estructura y pendientes de derechos.
+
+## Planificación de #4: SENAMHI
+
+#3 quedó integrada en #41. El [plan de #4](issue-4-plan.md) ordena la preservación de documentos,
+el contraste de derechos, la matriz de significado de campos y la entrega de evidencia.
+La lista de trabajo se mantiene en GitHub #4. Keneth conserva la responsabilidad; la ejecución
+espera su decisión sobre cómo proceder si los documentos oficiales resultan insuficientes.
+No se inició la investigación ni se modificaron los estados del catálogo durante esta planificación.
