@@ -9,12 +9,14 @@ runner = CliRunner()
 CATALOG = Path(__file__).resolve().parents[1] / "configs/sources.yaml"
 
 
-def test_catalog_summary_is_offline_and_reports_unverified_sources():
+def test_catalog_summary_is_offline_and_reports_evidenced_statuses():
     result = runner.invoke(app, ["catalog", "validate", "--path", str(CATALOG)])
     assert result.exit_code == 0
     summary = json.loads(result.stdout)
     assert summary["total"] >= 30
-    assert summary["statuses"] == {"discovered": summary["total"]}
+    assert sum(summary["statuses"].values()) == summary["total"]
+    assert summary["statuses"]["downloaded"] == 1
+    assert summary["statuses"]["blocked"] > 0
 
 
 def test_invalid_catalog_exits_nonzero_without_echoing_input(tmp_path):

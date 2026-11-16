@@ -34,3 +34,12 @@ Las líneas sin una fuente concreta siguen como investigación: tránsito/movili
 generación eléctrica, construcción/polvo, feriados, uso del suelo, elevación y forma urbana.
 No inventes enlaces para convertir temas en conjuntos de datos. NASA FIRMS ya figura como candidato
 para incendios. Verifica disponibilidad, derechos y pertinencia antes de integrar cada fuente.
+
+## Revisión vigente
+
+Los 37 candidatos tienen [evidencia de acceso fechada](sources/inventory-review.md).
+La revisión documental deja 29 verified, uno downloaded, cuatro discovered con acceso parcial y tres
+blocked. verified se limita a las afirmaciones de la ficha; no significa calidad o licencia aprobadas.
+La evidencia de cada ID está en metadata/source-access.json. Las pruebas comprueban su correspondencia
+con el catálogo sin red. Para nuevas consultas y descargas web usa [Lightpanda](web-access.md).
+La ficha [SENAMHI](sources/senamhi.md) y el manifiesto distinguen descarga, estructura y pendientes de #4.

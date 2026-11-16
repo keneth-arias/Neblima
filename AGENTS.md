@@ -26,6 +26,7 @@ Las pruebas y la validación del catálogo deben funcionar sin internet después
 
 - `configs/sources.yaml` y `airaware.catalog` definen el inventario y su esquema.
 - `metadata/*.csv` son plantillas antiguas, no el inventario vigente.
+- Usa Lightpanda para consultar páginas web y descargar sus recursos; sigue docs/web-access.md.
 - Separa la descarga por red de la conversión local determinista.
 - Conserva los datos originales sin cambios y registra la procedencia de cada observación derivada.
 - No inventes unidades, fechas, coordenadas, mediciones faltantes ni permisos de uso.

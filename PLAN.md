@@ -9,4 +9,5 @@ Usamos almacenamiento local y GitHub Actions. Luego: verificar SENAMHI/OEFA (#4/
 las descargas reanudables (#6/#7). Revisa la [guía de inicio](docs/team-onboarding.md).
 
 El PR #40 ya está integrado y #1 quedó cerrada. hello-world se construyó y verificó en el registro
-local data/timef. El siguiente trabajo es [el plan de #3 con SENAMHI primero](tasks/issue-3-plan.md).
+local data/timef. El [inventario #3](tasks/issue-3-plan.md) ya cuenta con evidencia Lightpanda para los 37 candidatos
+y una descarga SENAMHI comprobada. Continúan la revisión de derechos/semántica #4/#5 y el descargador #6/#7.
