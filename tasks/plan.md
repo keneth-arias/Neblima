@@ -136,3 +136,10 @@ La [guía de adquisición](../docs/acquisition.md) documenta acquire import-file
 almacenamiento atómico y referencias a originales existentes. #44 entrega #6 con HTTP simulado,
 pruebas sin internet y verificación local SENAMHI. Las fuentes no cambian a integrated por registrar
 sus bytes. El siguiente trabajo de plataforma es #7; las aclaraciones SENAMHI permanecen en #43.
+
+## Trabajo autorizado de Keneth
+
+La [cola de trabajo](keneth-work-queue.md) ordena las 13 tareas abiertas asignadas y sus dependencias.
+Comienza [#7](issue-7-plan.md), con límite por archivo de 1000 GiB indicado por Keneth, presupuestos
+explícitos por lote y pruebas sin descargas masivas. Los siguientes pasos científicos requieren las
+entregas de Cristopher y las aclaraciones de #43; no se declaran completados por anticipación.
