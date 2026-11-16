@@ -94,7 +94,7 @@ activa por persona y las dependencias originales. Consulta la [distribución](..
 la [guía de inicio](../docs/team-onboarding.md) y los [servicios](../docs/services.md).
 El idioma vigente es español del Perú (ADR-002), incluidos tareas, documentación y PR.
 
-## Trabajo activo: tarea #1
+## Antecedente completado: tarea #1
 
 El [plan y resultado de #1](issue-1-plan.md) documenta cuatro pasos ejecutados:
 confirmar revisión, completar matriz de API, revisar ejemplos y vincular requisitos del hackathon.
@@ -102,7 +102,7 @@ Responsable: Keneth. La investigación quedó integrada en #40 y #1 está cerrad
 Cristopher ya tiene asignadas sus 16 tareas de forma nativa; Jordan conserva sus dos reservas
 mientras acepta la invitación. Estos avances no modifican las dependencias.
 
-## Siguiente paso: inventario con SENAMHI
+## Antecedente completado: inventario con SENAMHI
 
 #40 está integrado y #1 cerrada. La prueba sintética hello-world ya se ejecutó, con datos en data/timef
 y entorno aislado en tools/timenet-smoke. Continúa [el plan de #3](issue-3-plan.md), empezando por
@@ -110,10 +110,22 @@ SENAMHI en coordinación con #4; OEFA #5 sigue con Cristopher. El primer acceso 
 SENAMHI devolvió 403 con otra herramienta. Lightpanda permitió descargar el CSV y revisar los 37 enlaces;
 la [evidencia](../docs/sources/inventory-review.md) distingue metadatos, estructura y pendientes de derechos.
 
-## Planificación de #4: SENAMHI
+## Investigación completada de #4: SENAMHI
 
 #3 quedó integrada en #41. El [plan de #4](issue-4-plan.md) ordena la preservación de documentos,
 el contraste de derechos, la matriz de significado de campos y la entrega de evidencia.
 La lista de trabajo se mantiene en GitHub #4. Keneth aprobó la ejecución y pidió búsqueda profunda
 ante vacíos. La investigación quedó ejecutada con documentos originales, contraste adicional y consulta
 revisada y enviada con autorización de Keneth; el informe de #4 distingue resultados de preguntas pendientes.
+
+## Siguiente paso de Keneth: #6, adquisición atómica
+
+#42 está integrado y #4 quedó cerrada. La consulta SENAMHI se envió con autorización de Keneth;
+las aclaraciones pendientes pasan a [#43](https://github.com/keneth-arias/airaware/issues/43).
+Este cierre no confirma unidades, zona horaria ni publicación. No se esperará la respuesta para
+implementar herramientas que solo preservan bytes y procedencia.
+
+El [plan de #6](issue-6-plan.md) propone cuatro entregas: contrato y pruebas; validación/publicación
+atómica; transporte API acotado con HTTP simulado; CLI y guía para el equipo. La implementación
+no ha comenzado. #7 continúa con reanudación y capacidades adicionales. #5 sigue con Cristopher;
+no se cambia la asignación de Jordan ni las ramas de sus copias locales.
