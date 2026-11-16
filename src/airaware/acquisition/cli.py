@@ -11,6 +11,7 @@ from pydantic import ValidationError
 from airaware.acquisition.batch import BatchPlan, estimate_jobs, execute_jobs, select_jobs
 from airaware.acquisition.budget import ByteBudget
 from airaware.acquisition.models import AcquisitionError, AcquisitionResult, AcquisitionSpec
+from airaware.acquisition.public_file import fetch_public_file
 from airaware.acquisition.store import ingest_file
 from airaware.acquisition.transfer import fetch_cached_api as fetch_api
 
@@ -29,13 +30,14 @@ def _read_spec(path: Path) -> AcquisitionSpec:
     return AcquisitionSpec.model_validate_json(content)
 
 
-def _show_result(result: AcquisitionResult) -> None:
+def _show_result(result: AcquisitionResult, network_bytes: int | None = None) -> None:
     typer.echo(
         json.dumps(
             {
                 "artifact": str(result.artifact),
                 "manifest": str(result.manifest),
                 "reused": result.reused,
+                **({"network_bytes": network_bytes} if network_bytes is not None else {}),
             },
             indent=2,
         )
@@ -179,5 +181,38 @@ def acquire_batch(
         )
         if outcome["errors"]:
             raise typer.Exit(1)
+    except (AcquisitionError, ValidationError, OSError, ValueError):
+        _fail()
+
+
+@acquisition_app.command("file")
+def acquire_public_file(
+    spec_file: SpecFile,
+    allow_host: Annotated[list[str], typer.Option(help="Host exacto autorizado del archivo.")],
+    budget_bytes: Annotated[
+        int, typer.Option(help="Presupuesto compartido de consulta y transferencia.")
+    ],
+    data_dir: DataDirectory = Path("data"),
+    offline: Annotated[
+        bool, typer.Option(help="Solo verificar caché local, sin consultar el recurso.")
+    ] = False,
+    deadline_seconds: Annotated[
+        float, typer.Option(help="Plazo cooperativo del recurso, hasta 86400 s.")
+    ] = 1200,
+) -> None:
+    """Adquirir un archivo público estático resuelto previamente con Lightpanda."""
+    try:
+        if budget_bytes < 0 or (not offline and budget_bytes == 0):
+            raise AcquisitionError("Se requiere presupuesto explícito para transferir")
+        budget = ByteBudget(budget_bytes or 1)
+        result = fetch_public_file(
+            _read_spec(spec_file),
+            data_dir,
+            allowed_hosts=set(allow_host),
+            network_budget=budget,
+            offline=offline,
+            deadline_seconds=deadline_seconds,
+        )
+        _show_result(result, budget.used)
     except (AcquisitionError, ValidationError, OSError, ValueError):
         _fail()

@@ -22,7 +22,7 @@ def _check_destination(
 ) -> None:
     host = spec.resource_url.host or ""
     if (
-        spec.method != "api"
+        spec.method not in {"api", "http_file"}
         or spec.resource_url.scheme != "https"
         or spec.resource_url.port != 443
         or host not in allowed_hosts

@@ -157,7 +157,7 @@ def _publish(
     return result
 
 
-def fetch_cached_api(
+def _fetch_cached_http(
     spec: AcquisitionSpec,
     data_dir: Path,
     *,
@@ -177,7 +177,7 @@ def fetch_cached_api(
     if (
         not math.isfinite(deadline_seconds)
         or not 0 < deadline_seconds <= 86400
-        or spec.method != "api"
+        or spec.method not in {"api", "http_file"}
         or (offline and refresh)
     ):
         raise AcquisitionError("La política de transferencia API no es válida")
@@ -210,7 +210,10 @@ def fetch_cached_api(
                 follow_redirects=False,
                 trust_env=False,
                 timeout=httpx.Timeout(10, connect=5),
-                headers={"Accept-Encoding": "identity"},
+                headers={
+                    "Accept-Encoding": "identity",
+                    "User-Agent": "AirAware/0.1 (+https://github.com/keneth-arias/airaware)",
+                },
             ) as client:
                 for attempt in range(1, 4):
                     check_time()
@@ -314,3 +317,39 @@ def fetch_cached_api(
         raise AcquisitionError("La transferencia no se completó tras tres intentos")
     except (OSError, ValidationError) as error:
         raise AcquisitionError("No se pudo completar o verificar la transferencia local") from error
+
+
+def fetch_cached_api(
+    spec: AcquisitionSpec,
+    data_dir: Path,
+    *,
+    allowed_hosts: set[str],
+    network_budget: ByteBudget | None = None,
+    offline: bool = False,
+    refresh: bool = False,
+    deadline_seconds: float = 60,
+    transport: httpx.BaseTransport | None = None,
+    resolve: Callable[[str], list[str]] = _resolve,
+    sleep: Callable[[float], None] = time.sleep,
+    clock: Callable[[], datetime] = lambda: datetime.now(UTC),
+    monotonic: Callable[[], float] = time.monotonic,
+    available_space: Callable[[Path], int] = lambda path: shutil.disk_usage(path).free,
+) -> AcquisitionResult:
+    """Adaptador API histórico; archivos estáticos usan public_file explícitamente."""
+    if spec.method != "api":
+        raise AcquisitionError("El adaptador API requiere method=api")
+    return _fetch_cached_http(
+        spec,
+        data_dir,
+        allowed_hosts=allowed_hosts,
+        network_budget=network_budget,
+        offline=offline,
+        refresh=refresh,
+        deadline_seconds=deadline_seconds,
+        transport=transport,
+        resolve=resolve,
+        sleep=sleep,
+        clock=clock,
+        monotonic=monotonic,
+        available_space=available_space,
+    )
