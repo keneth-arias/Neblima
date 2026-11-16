@@ -16,3 +16,7 @@ y una descarga SENAMHI comprobada. Continúan la revisión de derechos/semántic
 El seguimiento externo continúa en [#43](https://github.com/keneth-arias/airaware/issues/43).
 El siguiente paso de Keneth es [planificar #6: adquisición atómica](tasks/issue-6-plan.md).
 La implementación espera la revisión del plan; los bloqueos científicos y de publicación se conservan.
+
+El plan de #6 fue aprobado y ejecutado en #44. La [adquisición](docs/acquisition.md) ya tiene CLI,
+validación e integridad probadas, con reutilización local SENAMHI. Continúa #7 para reanudación,
+caché y límites adicionales; las incógnitas científicas y de publicación siguen en #43.

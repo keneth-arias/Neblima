@@ -58,7 +58,9 @@ El conjunto hello-world está en data/timef; no contiene observaciones ambiental
 - `.github/`: integración continua (CI), responsables y plantillas de tareas y PR.
 
 Empiecen por verificar SENAMHI en [#4](https://github.com/keneth-arias/airaware/issues/4) y OEFA en
-[#5](https://github.com/keneth-arias/airaware/issues/5). Sigan el [protocolo Lightpanda](docs/web-access.md) y preparen descargas reproducibles en #6/#7.
+[#5](https://github.com/keneth-arias/airaware/issues/5). Sigan el [protocolo Lightpanda](docs/web-access.md) y la [guía de adquisición](docs/acquisition.md).
+La CLI acquire de #6 ya registra originales y consulta API públicas explícitas con integridad;
+reanudación y capacidades adicionales continúan en #7.
 El [plan vigente](tasks/plan.md), el [tablero](https://github.com/users/keneth-arias/projects/1) y las
 [tareas](https://github.com/keneth-arias/airaware/issues) muestran el trabajo pendiente.
 La [arquitectura](ARCHITECTURE.md) diferencia lo implementado de lo propuesto.

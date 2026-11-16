@@ -15,7 +15,7 @@ from pathlib import Path
 import httpx
 
 from airaware.acquisition.models import AcquisitionError, AcquisitionResult, AcquisitionSpec
-from airaware.acquisition.store import CHUNK_SIZE, ingest_chunks
+from airaware.acquisition.store import ingest_chunks
 
 
 def _resolve(host: str) -> list[str]:
@@ -84,7 +84,7 @@ def _response_chunks(
     except ValueError as error:
         raise AcquisitionError("Content-Length no cumple el límite de adquisición") from error
     size = 0
-    for chunk in response.iter_raw(chunk_size=CHUNK_SIZE):
+    for chunk in response.iter_raw():
         check_time()
         size += len(chunk)
         if size > spec.max_bytes:

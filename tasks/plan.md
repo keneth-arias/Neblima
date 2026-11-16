@@ -127,5 +127,12 @@ implementar herramientas que solo preservan bytes y procedencia.
 
 El [plan de #6](issue-6-plan.md) propone cuatro entregas: contrato y pruebas; validación/publicación
 atómica; transporte API acotado con HTTP simulado; CLI y guía para el equipo. La implementación
-no ha comenzado. #7 continúa con reanudación y capacidades adicionales. #5 sigue con Cristopher;
+quedó ejecutada con pruebas y demostración local sin nuevas descargas. #7 continúa con reanudación y capacidades adicionales. #5 sigue con Cristopher;
 no se cambia la asignación de Jordan ni las ramas de sus copias locales.
+
+## Entrega de #6
+
+La [guía de adquisición](../docs/acquisition.md) documenta acquire import-file y acquire api,
+almacenamiento atómico y referencias a originales existentes. #44 entrega #6 con HTTP simulado,
+pruebas sin internet y verificación local SENAMHI. Las fuentes no cambian a integrated por registrar
+sus bytes. El siguiente trabajo de plataforma es #7; las aclaraciones SENAMHI permanecen en #43.

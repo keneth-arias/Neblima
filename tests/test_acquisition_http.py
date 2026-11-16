@@ -233,3 +233,23 @@ def test_api_records_the_known_final_url_without_redirects(tmp_path):
     manifest = json.loads(result.manifest.read_text())
     assert manifest["spec"]["final_url"] == "https://api.example.org/data"
     assert manifest["original_name"] is None
+
+
+def test_deadline_is_checked_between_small_network_chunks(tmp_path):
+    elapsed, consumed = [0.0], []
+
+    class SlowStream(httpx.SyncByteStream):
+        def __iter__(self):
+            for index, chunk in enumerate([b"{", b'"results"', b":", b"[]}"]):
+                elapsed[0] += 25
+                consumed.append(index)
+                yield chunk
+
+    with pytest.raises(AcquisitionError):
+        acquire(
+            tmp_path,
+            lambda r: httpx.Response(200, stream=SlowStream()),
+            monotonic=lambda: elapsed[0],
+        )
+    assert consumed == [0, 1, 2]
+    assert not list((tmp_path / "data").rglob("manifest.json"))

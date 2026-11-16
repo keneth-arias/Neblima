@@ -324,3 +324,18 @@ def test_original_name_and_optional_resolved_url_are_preserved(tmp_path):
     manifest = json.loads(result.manifest.read_text())
     assert manifest["original_name"] == "fuente.csv"
     assert manifest["spec"]["final_url"] == "https://cdn.example.org/source.csv"
+
+
+def test_byte_limit_stops_consuming_the_source_immediately(tmp_path):
+    from airaware.acquisition.store import ingest_chunks
+
+    consumed = []
+
+    def chunks():
+        for index in range(10):
+            consumed.append(index)
+            yield b"x" * 32
+
+    with pytest.raises(AcquisitionError):
+        ingest_chunks(spec(max_bytes=64), chunks(), tmp_path / "data")
+    assert consumed == [0, 1, 2]

@@ -13,7 +13,7 @@ Estado revisado el 15/11/2026; vuelve a verificar accesos antes de depender de e
 | GitHub Actions | Pasaron controles de Python 3.11, Python 3.13.13 y auditoría | Conservar los tres controles aprobados |
 | Datos locales | Carpetas independientes por integrante | Revisar espacio disponible antes de descargar; usar AIRAWARE_DATA_DIR si corresponde |
 | Respaldo | No configurado | Definirlo y probarlo antes de una recolección irremplazable |
-| SENAMHI/OEFA | Enlaces candidatos; acceso y derechos pendientes | Revisar #4/#5 y registrar recursos, términos y bloqueos |
+| SENAMHI/OEFA | SENAMHI preservado y revisado; aclaraciones en #43; OEFA sigue en #5 | Usar adquisición #6 y conservar incógnitas antes de normalizar/publicar |
 | OpenAQ | Opcional para #31; sin clave configurada | Seguir la [guía oficial](https://docs.openaq.org/using-the-api/api-key) cuando se necesite |
 | TimeNet | SDK/conectores fijados en tools/timenet-smoke; hello-world construido y verificado localmente | Repetir la verificación documentada; SENAMHI sigue pendiente |
 | OpenTSLM | Revisión remota anotada; interfaz de entrenamiento pendiente | Esperar #27 y la validación de datos |

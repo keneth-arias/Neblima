@@ -76,3 +76,10 @@ El 15/11/2026 ambos usuarios aprobaron doctor, 29 pruebas sin servicios externos
 estático, tipos, catálogo, generación de paquetes y auditoría de dependencias. La traducción agrega
 pruebas de idioma; los resultados actuales se registran en el PR. El acceso a proveedores y los
 derechos de sus datos siguen sin verificar. Consulta la [distribución de tareas](team-work-allocation.md).
+
+## Herramientas de adquisición (#6)
+
+Después de actualizar tu copia, ejecuta make setup para instalar las dependencias fijadas, incluido
+HTTPX. Consulta [la guía de adquisición](acquisition.md): todos usan los mismos comandos acquire,
+pero cada integrante conserva sus carpetas y entorno. Registrar un archivo de Lightpanda no requiere
+instalar ese navegador dentro del paquete Python. Las pruebas usan HTTP simulado y no necesitan claves.

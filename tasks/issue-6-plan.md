@@ -3,7 +3,8 @@
 Responsable: Keneth (@keneth-arias), liderazgo de datos y plataforma.
 Seguimiento y lista de trabajo: [#6](https://github.com/keneth-arias/airaware/issues/6).
 Dependencias: #2 y #4. La investigación #4 quedó cerrada con #42; las aclaraciones externas siguen en #43.
-Estado: plan preparado para revisión; implementación no iniciada.
+Estado: plan aprobado por Keneth; implementación de #6 ejecutada y verificada.
+Entrega en PR #44; sin nuevas descargas SENAMHI/OEFA.
 
 ## Objetivo
 
@@ -125,3 +126,18 @@ Si se quiere automatizar Lightpanda desde las tres máquinas como parte de la CL
 su instalación, proceso y protocolo disponible: es una ampliación respecto de esta primera entrega,
 no una capacidad que se pueda asumir a partir de las herramientas del agente.
 No se contratarán servicios ni se harán adquisiciones masivas durante la implementación.
+
+## Resultado de ejecución
+
+- [x] Contrato Pydantic, errores seguros y manifiesto versionado.
+- [x] Validación CSV/JSON/XLSX/DOCX, SHA-256, límites y publicación atómica con exclusión por fuente.
+- [x] API públicas explícitas con host autorizado, streaming, tiempos/reintentos y HTTP simulado.
+- [x] CLI acquire import-file / acquire api y guía para las copias locales del equipo.
+- [x] Reutilización real de CSV, XLSX y DOCX SENAMHI sin red, nuevas copias ni cambios de originales.
+
+Las referencias previas pueden estar bajo raw/<familia> aunque el ID sea de un recurso distinto;
+se verifican y se registran por ruta relativa dentro de raw. El límite de JSON de análisis es 8 MiB
+y el manifiesto es de hasta 64 KiB. Son controles adicionales documentados, sin reducir el contrato.
+Los valores propuestos de intentos/espera se adoptaron. Guía y límites efectivos: docs/acquisition.md.
+La reanudación/caché/filtros y concurrencia configurable siguen en #7. #43 mantiene las aclaraciones
+externas; la adquisición no confirma semántica ni derechos. Verificación final en la entrega del PR.
