@@ -1,0 +1,125 @@
+{
+  "verified_at_utc": "2026-11-16T20:56:38.675730+00:00",
+  "plan": "configs/acquisition/senamhi-local.json",
+  "network_bytes": 0,
+  "originals_unchanged": true,
+  "existing_manifests_unchanged": true,
+  "resources": [
+    {
+      "source_id": "senamhi-lima-csv",
+      "local_path": "data/raw/senamhi/senamhi_lima_monitoreo_1.csv",
+      "size_bytes": 68501558,
+      "sha256": "896ae8a106fb128460e81b3f58096f6b9c4d582ef28fffa46e5394c5875c40d4",
+      "format": "CSV",
+      "acquisition_manifest": "data/raw/senamhi-lima-csv/896ae8a106fb128460e81b3f58096f6b9c4d582ef28fffa46e5394c5875c40d4/manifest.json"
+    },
+    {
+      "source_id": "senamhi-data-dictionary",
+      "local_path": "data/raw/senamhi/senamhi_dictionary.xlsx",
+      "size_bytes": 10471,
+      "sha256": "d795fb9c0c8695ed0e99bbad98a94c5f698ffc2a2401f37303883d716654caae",
+      "format": "XLSX",
+      "acquisition_manifest": "data/raw/senamhi-data-dictionary/d795fb9c0c8695ed0e99bbad98a94c5f698ffc2a2401f37303883d716654caae/manifest.json"
+    },
+    {
+      "source_id": "senamhi-metadata",
+      "local_path": "data/raw/senamhi/senamhi_metadata.docx",
+      "size_bytes": 41626,
+      "sha256": "b2a1ab0b081e9d5ebb79efe0be91014b00013caf567f12fffff11f689728b945",
+      "format": "DOCX",
+      "acquisition_manifest": "data/raw/senamhi-metadata/b2a1ab0b081e9d5ebb79efe0be91014b00013caf567f12fffff11f689728b945/manifest.json"
+    },
+    {
+      "source_id": "senamhi-quality-control-reference",
+      "local_path": "data/raw/senamhi/senamhi_quality_control.pdf",
+      "size_bytes": 831789,
+      "sha256": "c7d9bd7f525dc068005e13ef3263d13dc468d4385f440cbee7ea98cd0702f030",
+      "format": "PDF",
+      "acquisition_manifest": null
+    },
+    {
+      "source_id": "senamhi-network-evaluation-reference",
+      "local_path": "data/raw/senamhi/senamhi_network_evaluation.pdf",
+      "size_bytes": 2291577,
+      "sha256": "544174da90534b4924ca869d1a5bcb2d66d196babe20774e33300b3436db8a8d",
+      "format": "PDF",
+      "acquisition_manifest": null
+    },
+    {
+      "source_id": "senamhi-bulletin-reference",
+      "local_path": "data/raw/senamhi/senamhi_bulletin_201802.pdf",
+      "size_bytes": 3282212,
+      "sha256": "6d1c82e51d4f4baa2c6689d60c7761a4b9ba5799957bf49ba5d15c6870b489c1",
+      "format": "PDF",
+      "acquisition_manifest": null
+    }
+  ],
+  "dry_run": {
+    "known_size_bytes": 68553655,
+    "unknown_count": 0,
+    "authorized_max_bytes": 72097152,
+    "resources": [
+      {
+        "source_id": "senamhi-lima-csv",
+        "size_bytes": 68501558,
+        "size_origin": "local_stat"
+      },
+      {
+        "source_id": "senamhi-data-dictionary",
+        "size_bytes": 10471,
+        "size_origin": "local_stat"
+      },
+      {
+        "source_id": "senamhi-metadata",
+        "size_bytes": 41626,
+        "size_origin": "local_stat"
+      }
+    ],
+    "input_count": 3,
+    "selected_count": 3
+  },
+  "runs": [
+    {
+      "completed": [
+        {
+          "artifact": "data/raw/senamhi/senamhi_lima_monitoreo_1.csv",
+          "manifest": "data/raw/senamhi-lima-csv/896ae8a106fb128460e81b3f58096f6b9c4d582ef28fffa46e5394c5875c40d4/manifest.json",
+          "reused": true
+        },
+        {
+          "artifact": "data/raw/senamhi/senamhi_dictionary.xlsx",
+          "manifest": "data/raw/senamhi-data-dictionary/d795fb9c0c8695ed0e99bbad98a94c5f698ffc2a2401f37303883d716654caae/manifest.json",
+          "reused": true
+        },
+        {
+          "artifact": "data/raw/senamhi/senamhi_metadata.docx",
+          "manifest": "data/raw/senamhi-metadata/b2a1ab0b081e9d5ebb79efe0be91014b00013caf567f12fffff11f689728b945/manifest.json",
+          "reused": true
+        }
+      ],
+      "errors": [],
+      "network_bytes": 0
+    },
+    {
+      "completed": [
+        {
+          "artifact": "data/raw/senamhi/senamhi_lima_monitoreo_1.csv",
+          "manifest": "data/raw/senamhi-lima-csv/896ae8a106fb128460e81b3f58096f6b9c4d582ef28fffa46e5394c5875c40d4/manifest.json",
+          "reused": true
+        },
+        {
+          "artifact": "data/raw/senamhi/senamhi_dictionary.xlsx",
+          "manifest": "data/raw/senamhi-data-dictionary/d795fb9c0c8695ed0e99bbad98a94c5f698ffc2a2401f37303883d716654caae/manifest.json",
+          "reused": true
+        },
+        {
+          "artifact": "data/raw/senamhi/senamhi_metadata.docx",
+          "manifest": "data/raw/senamhi-metadata/b2a1ab0b081e9d5ebb79efe0be91014b00013caf567f12fffff11f689728b945/manifest.json",
+          "reused": true
+        }
+      ],
+      "errors": [],
+      "network_bytes": 0
+    }
+  ]
+}
