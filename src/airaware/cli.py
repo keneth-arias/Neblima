@@ -1,4 +1,4 @@
-"""Comandos locales iniciales; la descarga se implementará en tareas posteriores.
+"""Comandos de datos, entorno y adquisición explícita de originales.
 
 Referencia de comandos y pruebas de Typer: https://typer.tiangolo.com/tutorial/testing/
 """
@@ -14,6 +14,7 @@ from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 import typer
 
+from airaware.acquisition.cli import acquisition_app
 from airaware.catalog import CatalogError, load_catalog
 
 app = typer.Typer(
@@ -25,6 +26,7 @@ catalog_app = typer.Typer(
 workspace_app = typer.Typer(
     no_args_is_help=True, help="Preparar las carpetas locales de datos y resultados."
 )
+app.add_typer(acquisition_app, name="acquire")
 app.add_typer(catalog_app, name="catalog")
 app.add_typer(workspace_app, name="workspace")
 LAYERS = ("raw", "staging", "normalized", "curated", "benchmarks", "timef")

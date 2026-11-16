@@ -30,7 +30,8 @@ La cobertura o las unidades desconocidas permanecen nulas. Mantengan las fuentes
 su explicación. Los estados avanzados requieren evidencia con fecha y zona horaria;
 `integrated` exige además permiso documentado de redistribución y categoría de medición conocida.
 
-Después se implementa el descargador #6/#7 antes de adquirir datos #8/#9.
+El núcleo de adquisición #6 está implementado; #7 agrega reanudación y capacidades adicionales antes
+de ampliar adquisiciones #8/#9. Consulta docs/acquisition.md y conserva los bloqueos científicos de #43.
 Se inspeccionan los archivos, se miden calidad y cobertura #10/#11 y recién se define el conjunto
 inicial de evaluación. Cuatro estaciones, 24 meses y ventanas de 72/24 horas son metas provisionales.
 
@@ -63,5 +64,6 @@ Conserva los archivos originales sin cambios y haz reproducibles los derivados.
 ## Alcance actual
 
 La preparación incluye entorno fijado, catálogo, tres comandos sin red, pruebas y CI.
-No implementa descarga, análisis de datos, normalización, TimeF ni entrenamiento.
+La entrega inicial #2 no implementó adquisición ni procesamiento científico. #6 incorpora ahora
+adquisición con manifiestos; análisis, normalización y entrega TimeF real siguen en las tareas respectivas.
 Las notas de integración distinguen inspección del código externo de validación en ejecución.

@@ -2,15 +2,18 @@
 
 AirAware tendrá una secuencia reproducible de descarga, revisión y preparación de observaciones.
 Un conector mínimo para TimeNet convertirá las versiones aprobadas usando las API oficiales de TimeF.
-Actualmente solo están implementados el entorno local, la validación del catálogo y el diagnóstico.
-Todavía no hay descarga ni procesamiento científico de datos.
+Están implementados el entorno local, catálogo, diagnóstico y adquisición acotada de #6.
+Lightpanda consulta páginas/recursos web; la CLI registra originales o consulta API públicas explícitas.
+SENAMHI se preserva localmente; no hay todavía normalización ni procesamiento científico de producción.
 
 ## Componentes actuales
 
 - `src/airaware/catalog.py`: contrato de fuentes con Pydantic y lectura segura de YAML.
   Un valor nulo indica información desconocida.
-- `src/airaware/cli.py`: comandos sin acceso a red; los errores no muestran valores de configuración.
-- `configs/sources.yaml`: 37 recursos candidatos del plan inicial, aún sin verificar.
+- `src/airaware/cli.py`: catálogo, entorno y entrada al grupo acquire; errores sin valores de configuración.
+- `src/airaware/acquisition/`: contrato, validación de formatos, almacenamiento atómico, transporte API
+  y CLI; [guía y límites](docs/acquisition.md). La red está separada de la normalización.
+- `configs/sources.yaml`: 37 recursos con evidencia de revisión y bloqueos conservados.
 - `configs/upstream.lock.json`: revisiones externas inspeccionadas; no instala el SDK.
 - `uv.lock`: dependencias exactas del proyecto y de desarrollo. Python se fija por separado.
 - `.github/workflows/ci.yml`: instalación, controles, generación de paquetes y auditoría de dependencias.
