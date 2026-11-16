@@ -277,3 +277,30 @@ para el recurso OEFA, sin convertir ni autodetectar los bytes. Las mismas reglas
 comillas y filas rectangulares siguen activas. Un delimitador diferente es otro contrato de validación
 que no puede reutilizarse como el anterior; la identidad de caché/lote también lo distingue.
 Los manifiestos de coma anteriores siguen verificándose y sus claves de caché no cambian.
+
+## Archivo público estático con presupuesto compartido (#9)
+
+El canal http_file requiere source_page_url (página oficial que resolvió el recurso) y no pretende
+ser una API. Primero revisar/resolver el enlace con Lightpanda. Crear una solicitud como las anteriores,
+con method=http_file, source_page_url, resource_url, format, max_bytes y csv_delimiter cuando corresponda.
+
+```bash
+uv run --locked airaware acquire file --spec data/staging/oefa-request.json --allow-host www.datosabiertos.gob.pe --budget-bytes 2147483648 --deadline-seconds 1200
+uv run --locked airaware acquire file --spec data/staging/oefa-request.json --allow-host www.datosabiertos.gob.pe --budget-bytes 0 --offline
+```
+
+La consulta inicial solicita hasta 64 KiB y confirma un tamaño acotado por Content-Length/Content-Range;
+no publica el prefijo como original. Si se ignora Range, solo se consume el prefijo antes de cerrar.
+Tamaño desconocido, rango inválido, 403/418 u otro estado no admitido detienen la operación. Se usa un
+User-Agent honesto AirAware, sin cambiar identidad ante un rechazo. La procedencia incluye la página
+oficial; no se inventa documentación API. Tanto consulta como transferencia consumen el mismo ByteBudget.
+El plazo de consulta es 20 s cooperativos y forma parte del plazo total. El cuerpo completo pasa el
+motor común de caché/reanudación/publicación y no puede superar el tamaño confirmado en la consulta.
+Un original de otro tamaño mayor requiere una nueva consulta/estimación. Los límites de identidad DNS,
+chunks recibidos, disco y tiempo cooperativo de #7 se mantienen. La consulta no garantiza que el recurso
+no cambie después; el manifiesto final acredita los bytes realmente recibidos con su propio SHA-256.
+
+Offline no consulta ni resuelve DNS y verifica la caché completa. import-file no permite atribuir a un
+original local el método http_file; ese método exige el transporte correspondiente. acquire batch
+reconoce http_file como tarea de red y exige presupuesto global explícito; el contador incluye la consulta.
+La función API histórica conserva method=api. Los archivos estáticos usan public_file.fetch_public_file.

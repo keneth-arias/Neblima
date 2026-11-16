@@ -201,7 +201,7 @@ def ingest_chunks(
 
 def ingest_file(spec: AcquisitionSpec, original: Path, data_dir: Path) -> AcquisitionResult:
     """Registrar una descarga previa sin afirmar que se obtuvo por la red en esta operación."""
-    if spec.method == "api":
+    if spec.method in {"api", "http_file"}:
         raise AcquisitionError("La adquisición API requiere el transporte explícito")
     root = data_dir.expanduser().resolve()
     path = original.expanduser().absolute()
