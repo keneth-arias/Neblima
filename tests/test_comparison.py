@@ -123,3 +123,36 @@ def test_an_unknown_clock_is_dropped_before_numeric_filter():
         NULL::TIMESTAMP end_ts,'lima' geography,true hourly,'NA' PM10""")
         r = prepare_points(c, "PM10", "lima")
         assert r["clock"] == 1 and r["unique_points"] == 0 and "value" not in r
+
+
+def test_comparison_run_verifies_input_and_keeps_semantically_blocked_counts_null(tmp_path):
+    import json
+
+    from airaware.comparison.models import Policy
+    from airaware.comparison.runner import compare
+    from tests.test_profiling import fixture
+
+    spec = fixture(tmp_path, [(f"{i:02d}0000", "10") for i in range(24)])
+    policy = Policy(
+        histories=[24], horizons=[6], signals=["pm25"], blockers={"fixture": ["clock_unverified"]}
+    )
+    output = compare([spec], policy, tmp_path / "reports")
+    summary = json.loads((output / "summary.json").read_text())
+    assert summary["sources"][0]["scientific_score"] is None
+    with duckdb.connect() as c:
+        row = c.execute(
+            "select scientific_valid_windows,structural_complete from read_parquet(?) limit 1",
+            [str(output / "forecasting-readiness.parquet")],
+        ).fetchone()
+        assert row == (None, 0)
+    assert json.loads((output / "manifest.json").read_text())["inputs_unchanged"]
+    assert spec.manifest.exists()
+
+
+def test_policy_rejects_silent_source_eligibility_and_weights_outside_scale():
+    from pydantic import ValidationError
+
+    from airaware.comparison.models import Policy
+
+    with pytest.raises(ValidationError):
+        Policy(weights=[0.9, 0.9, 0, 0, 0])
