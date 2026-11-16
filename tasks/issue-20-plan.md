@@ -7,7 +7,7 @@ Se aplican planificación, implementación incremental y pruebas antes de códig
 
 #18 sigue abierta: no existe todavía un constructor de ventanas reales que integrar.
 No asumir unidades, reloj ni validación de calidad en los datos SENAMHI (#43).
-Mantener #20 abierta hasta verificar integración, salvo decisión explícita de separar esa entrega.
+Decisión explícita de Keneth: mantener #20 abierta hasta verificar integración con #18.
 No cambiar tareas/ramas de Cristopher ni implementar el constructor de #18.
 
 ## Entregas
@@ -37,3 +37,21 @@ excedencias por año para el criterio diario. El módulo no evalúa el criterio 
 Método automático: mínimo 18 horas válidas por día y promedios terminados 01:00 a 00:00 siguiente.
 Método manual: muestra de 24 h con mínimo 22 h; no aplicar 18 de 24 a filtros gravimétricos.
 El 100 % de objetivos de pronóstico es política de #18, independiente de suficiencia normativa.
+
+
+## Avance y revisión de entrega
+
+- [x] Investigación de fuentes primarias, páginas/tablas inspeccionadas y manifiesto de archivos locales.
+- [x] Contrato y configuración versionados para PM2.5, sin nuevas dependencias de ejecución.
+- [x] 29 pruebas enfocadas de reglas, integridad, fechas, calidad y procedencia.
+- [x] make check: 175 pruebas y controles estáticos aprobados; Python 3.11: 175 aprobadas.
+- [x] make build: sdist y wheel generados. make audit: sin vulnerabilidades conocidas.
+- [x] Revisión local: reglas normativas contrastadas, biblioteca pura acotada a 24 registros,
+  tipos explícitos, sin lectura de datos reales ni modificación del constructor/ramas de Cristopher.
+- [ ] Integrar con constructor real de #18 y comprobar correspondencia temporal y de estación.
+- [ ] Probar con objetivos medidos, sin imputación, semántica acreditada y conteos de descarte compartidos.
+
+No se declara cumplimiento legal anual ni se etiqueta concentración como libre de riesgo.
+Cambiar la referencia de 2017 o relajar suficiencia exige una versión de política revisada.
+La implementación no recibe historias ni crea entradas de modelos: #18 conserva esa responsabilidad.
+Validación con ejemplos sintéticos no reemplaza las dos comprobaciones de integración pendientes.
