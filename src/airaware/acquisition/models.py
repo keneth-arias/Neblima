@@ -24,7 +24,7 @@ class AcquisitionSpec(BaseModel):
     api_documentation_url: HttpUrl | None = None
     method: Literal["lightpanda", "api", "local"]
     format: Literal["csv", "json", "xlsx", "docx"]
-    max_bytes: int = Field(strict=True, gt=0, le=1_073_741_824)
+    max_bytes: int = Field(strict=True, gt=0, le=1_073_741_824_000)
     expected_sha256: str | None = Field(default=None, pattern=r"^[a-f0-9]{64}$")
     acquired_at: datetime | None = None
     json_required_keys: tuple[str, ...] = ()
