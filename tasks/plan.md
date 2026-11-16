@@ -168,3 +168,9 @@ OEFA de dialecto y canal explícito se integraron en #53/#54. reports/acquisitio
 metadata/oefa-acquisition-check.json registran documentación verificada y CSV bloqueado por HTTP 418.
 No se cambió de canal ni se inició otra transferencia después del rechazo. #9 conserva el pendiente
 CSV y #10 puede comenzar por SENAMHI, separando la ausencia de señales OEFA de los documentos.
+
+## #10: perfilamiento de originales locales completos
+
+Plan adaptado en [issue-10-plan.md](issue-10-plan.md). #8/#9 cerradas y archivos completos disponibles.
+Implementación autorizada por Keneth: perfiles por fuente/estación/serie y señales con Parquet local,
+pruebas sintéticas y ejecución real posterior, sin normalizar incertidumbres ni escoger el benchmark.
