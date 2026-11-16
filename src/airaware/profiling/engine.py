@@ -19,7 +19,7 @@ from pydantic import BaseModel, ConfigDict, Field
 from airaware.acquisition.models import Manifest
 from airaware.acquisition.store import _chunks, verify_bundle
 
-VERSION = "raw-profile-v1"
+VERSION = "raw-profile-v2"
 
 
 class ProfileSpec(BaseModel):
@@ -112,6 +112,7 @@ def _signal(c: duckdb.DuckDBPyConnection, name: str, ordinal: int) -> None:
     column = _q(name)
     c.execute(f"""CREATE OR REPLACE TEMP TABLE cells AS
         SELECT series_id, station_key, station_label, series_context, ts, end_ts, hourly,
+        start_status,
         {column} AS raw_token, trim({column}) AS token,
         try_cast(trim({column}) AS DOUBLE) AS number,
         CASE WHEN token='' THEN 'empty'
@@ -131,13 +132,17 @@ def _signal(c: duckdb.DuckDBPyConnection, name: str, ordinal: int) -> None:
         min(value) minimum, max(value) maximum, quantile_cont(value,0.25) q25,
         quantile_cont(value,0.5) median, quantile_cont(value,0.75) q75,
         count(*) FILTER(WHERE ts IS NULL) unparsed_start_rows,
+        count(value) FILTER(WHERE ts IS NOT NULL) parsed_finite_count,
+        count(*) FILTER(WHERE start_status='clock_missing') clock_missing_rows,
+        count(*) FILTER(WHERE start_status='clock_unsupported') clock_unsupported_rows,
+        count(*) FILTER(WHERE ts IS NOT NULL AND date_trunc('hour',ts)!=ts) off_grid_start_rows,
         bool_or(hourly) hourly_candidate FROM cells GROUP BY series_id""")
     c.execute("""CREATE OR REPLACE TEMP TABLE slots AS SELECT series_id,ts,end_ts,count(*) n,
         count(DISTINCT value) distinct_values, min(value) AS value, bool_and(hourly) hourly
         FROM cells WHERE ts IS NOT NULL GROUP BY series_id,ts,end_ts""")
     c.execute("""CREATE OR REPLACE TEMP TABLE points AS SELECT series_id,ts,min(value) AS value
-        FROM slots WHERE hourly AND distinct_values=1 AND date_trunc('hour',ts)=ts
-        GROUP BY series_id,ts HAVING count(*)=1""")
+        FROM slots GROUP BY series_id,ts HAVING count(*)=1
+        AND bool_and(hourly AND distinct_values=1 AND date_trunc('hour',ts)=ts)""")
     c.execute("""CREATE OR REPLACE TEMP TABLE ordered AS SELECT *,
         lag(ts) OVER w prev_ts, lag(value) OVER w prev_value
         FROM points WINDOW w AS (PARTITION BY series_id ORDER BY ts)""")
@@ -165,7 +170,7 @@ def _signal(c: duckdb.DuckDBPyConnection, name: str, ordinal: int) -> None:
         e.extreme_count FROM stats s LEFT JOIN duplicates d USING(series_id)
         LEFT JOIN spans p USING(series_id) LEFT JOIN runs r USING(series_id)
         LEFT JOIN extremes e USING(series_id)""")
-    c.execute(f"""CREATE OR REPLACE TABLE tokens_{ordinal} AS SELECT series_id,
+    c.execute(f"""CREATE OR REPLACE TABLE tokens_{ordinal} AS SELECT 'signal' dimension,series_id,
         {_literal(name)} signal,class,raw_token token,count(*) count FROM cells
         WHERE class NOT IN ('finite','empty') GROUP BY series_id,class,raw_token""")
 
@@ -177,7 +182,11 @@ def profile(
     started = time.monotonic()
     manifest_path = spec.manifest.resolve()
     raw_root = spec.raw_root.resolve()
-    manifest = Manifest.model_validate_json(manifest_path.read_bytes())
+    with manifest_path.open("rb") as stream:
+        content = stream.read(65537)
+    if len(content) > 65536:
+        raise ValueError("El manifiesto supera 64 KiB")
+    manifest = Manifest.model_validate_json(content)
     if manifest.spec.source_id != spec.source_id or manifest.sha256 != spec.sha256:
         raise ValueError("El contrato de perfilamiento no coincide con la adquisición")
     if manifest.spec.format != "csv":
@@ -227,12 +236,25 @@ def profile(
         )
         station_json = _json_fields(station)
         context_json = _json_fields(context) if context else "'[]'"
+        date_column = "FECHA" if spec.kind == "senamhi" else "FECHA_INICIO"
+        clock_column = "HORA" if spec.kind == "senamhi" else "HORA_INICIO"
+        date_format = "%Y%m%d" if spec.kind == "senamhi" else "%Y-%m-%d"
+        date_pattern = "[0-9]{8}" if spec.kind == "senamhi" else "[0-9]{4}-[0-9]{2}-[0-9]{2}"
+        parsed_date = (
+            f"CASE WHEN regexp_full_match({_q(date_column)},'{date_pattern}') "
+            f"THEN try_strptime({_q(date_column)},'{date_format}')::DATE END"
+        )
         c.execute(f"""CREATE TABLE base AS SELECT *,sha256({_json_fields(columns)}) row_hash,
           {station_json} station_context,
           sha256({_literal(spec.source_id)}||station_context) station_key,
           {_q(station[0])} station_label,{context_json} series_context,
           sha256(station_key||series_context) series_id,{start} ts,{end} end_ts,
-          {hourly} hourly FROM input""")
+          {hourly} hourly,{parsed_date} parsed_date,{_q(date_column)} source_date_text,
+          {_q(clock_column)} source_clock_text,
+          CASE WHEN parsed_date IS NULL THEN 'date_unparsed'
+            WHEN upper(trim(source_clock_text)) IN ('','NA','N/A','-','ND','NULL','NAN')
+              THEN 'clock_missing'
+            WHEN ts IS NULL THEN 'clock_unsupported' ELSE 'parsed' END start_status FROM input""")
         c.execute("DROP TABLE input")
         count = c.execute("SELECT count(*) FROM base").fetchone()
         if count is None or (spec.expected_rows is not None and count[0] != spec.expected_rows):
@@ -244,7 +266,12 @@ def profile(
           count(DISTINCT station_key) provisional_station_count,
           count(DISTINCT station_label) raw_station_name_count,
           count(*) FILTER(WHERE ts IS NULL) unparsed_start_rows,min(ts) first_parsed_clock,
-          max(ts) last_parsed_clock,'unverified_source_clock' clock_status FROM base""",
+          max(ts) last_parsed_clock,min(parsed_date) first_date,max(parsed_date) last_date,
+          count(*) FILTER(WHERE start_status='date_unparsed') unparsed_date_rows,
+          count(*) FILTER(WHERE start_status='clock_missing') clock_missing_rows,
+          count(*) FILTER(WHERE start_status='clock_unsupported') clock_unsupported_rows,
+          count(*) FILTER(WHERE ts IS NOT NULL AND date_trunc('hour',ts)!=ts) off_grid_start_rows,
+          'unverified_source_clock' clock_status FROM base""",
             pending / "datasets.parquet",
             spec,
         )
@@ -253,7 +280,8 @@ def profile(
             """SELECT station_key,min(station_label) station_label,
           min(station_context) station_context,
           count(*) AS "rows",count(DISTINCT series_id) series_count,min(ts) first_parsed_clock,
-          max(ts) last_parsed_clock,count(*) FILTER(WHERE ts IS NULL) unparsed_start_rows
+          max(ts) last_parsed_clock,min(parsed_date) first_date,max(parsed_date) last_date,
+          count(*) FILTER(WHERE ts IS NULL) unparsed_start_rows
           FROM base GROUP BY station_key ORDER BY station_key""",
             pending / "stations.parquet",
             spec,
@@ -265,8 +293,19 @@ def profile(
         union = " UNION ALL ".join(f"SELECT * FROM signal_{i}" for i in range(len(spec.signals)))
         _export(c, union + " ORDER BY series_id,signal", pending / "signals.parquet", spec)
         tokens = " UNION ALL ".join(f"SELECT * FROM tokens_{i}" for i in range(len(spec.signals)))
+        temporal = (
+            f"SELECT 'start_clock' dimension,series_id,{_literal(clock_column)} signal,"
+            "start_status AS class,source_clock_text token,count(*) count FROM base "
+            "WHERE start_status!='parsed' GROUP BY series_id,start_status,source_clock_text "
+            f"UNION ALL SELECT 'start_date',series_id,{_literal(date_column)},"
+            "'date_unparsed',source_date_text,count(*) FROM base WHERE parsed_date IS NULL "
+            "GROUP BY series_id,source_date_text"
+        )
         _export(
-            c, tokens + " ORDER BY series_id,signal,class,token", pending / "tokens.parquet", spec
+            c,
+            tokens + " UNION ALL " + temporal + " ORDER BY dimension,series_id,signal,class,token",
+            pending / "tokens.parquet",
+            spec,
         )
         after = original.stat()
         if (before.st_size, before.st_mtime_ns, before.st_ino) != (
@@ -294,6 +333,7 @@ def profile(
             "algorithm": VERSION,
             "source_id": spec.source_id,
             "kind": spec.kind,
+            "profile_spec": spec.model_dump(mode="json"),
             "input_sha256": spec.sha256,
             "acquisition_manifest": str(spec.manifest),
             "verified_at_utc": datetime.now(UTC).isoformat(),
