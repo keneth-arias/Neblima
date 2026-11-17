@@ -1,5 +1,5 @@
-# Política aprobada por Keneth antes de ejecutar. Diagnóstico, no benchmark científico aprobado.
-version: comparison-v2
+# Política operativa aprobada por Keneth: pronóstico con timestamps UTC publicados.
+version: comparison-v3
 histories: [24, 48, 72, 168]
 horizons: [6, 12, 24, 48]
 geographies: [lima, callao]
@@ -16,3 +16,15 @@ blockers:
     - attribution_review_pending
 # Pesos históricos solo para reproducir v1; comparison-v2 no calcula puntuación.
 weights: [0.35, 0.25, 0.15, 0.15, 0.10]
+operating_selection:
+  source_id: senamhi-lima-csv
+  input_sha256: 896ae8a106fb128460e81b3f58096f6b9c4d582ef28fffa46e5394c5875c40d4
+  geography: lima
+  signal: pm25
+  authorized_by: keneth-arias
+  approval_reference: docs/decisions/005-senamhi-operating-policy.md
+  timestamp_basis: published_utc
+  accepted_unknowns: [interval_position_unverified, quality_flags_unverified]
+  quality: unknown
+  interval_position: unknown
+  daily_regulatory_labels: false

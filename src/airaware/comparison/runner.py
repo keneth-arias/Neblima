@@ -33,6 +33,7 @@ READINESS = {
     "future_missing": "BIGINT",
     "structural_complete": "BIGINT",
     "scientific_valid_windows": "BIGINT",
+    "accepted_forecasting_windows": "BIGINT",
     "blockers": "VARCHAR",
     "first_clock": "TIMESTAMP",
     "last_clock": "TIMESTAMP",
@@ -69,6 +70,13 @@ def compare(specs: list[ProfileSpec], policy: Policy, output_root: Path) -> Path
         raise ValueError("Declarar elegibilidad/bloqueos de cada fuente explícitamente")
     if any(output_root.resolve().is_relative_to(s.raw_root.resolve()) for s in specs):
         raise ValueError("Los informes no pueden escribirse dentro de raw")
+    approved = policy.operating_selection
+    if approved is not None:
+        matches = [s for s in specs if s.source_id == approved.source_id]
+        if len(matches) != 1 or matches[0].sha256 != approved.input_sha256:
+            raise ValueError("La aprobación no corresponde al original seleccionado")
+        if not set(policy.blockers[approved.source_id]).issubset(approved.accepted_unknowns):
+            raise ValueError("Hay bloqueos no aceptados por la política operativa")
     policy_json = policy.model_dump_json()
     policy_hash = hashlib.sha256(policy_json.encode()).hexdigest()
     output_root.mkdir(parents=True, exist_ok=True)
@@ -99,6 +107,12 @@ def compare(specs: list[ProfileSpec], policy: Policy, output_root: Path) -> Path
                         ("PM2_5" if spec.kind == "senamhi" else "PM2.5")
                         if signal == "pm25"
                         else "PM10"
+                    )
+                    operating_accepted = bool(
+                        approved is not None
+                        and approved.source_id == spec.source_id
+                        and approved.geography == geography
+                        and approved.signal == signal
                     )
                     trace = prepare_points(c, field, geography)
                     common = common_coverage(c, policy.target_stations or 1)
@@ -164,7 +178,12 @@ def compare(specs: list[ProfileSpec], policy: Policy, output_root: Path) -> Path
                                         history_missing=w.get("history_missing", 0),
                                         future_missing=w.get("future_missing", 0),
                                         structural_complete=n,
-                                        scientific_valid_windows=None if blockers else n,
+                                        scientific_valid_windows=None
+                                        if blockers or operating_accepted
+                                        else n,
+                                        accepted_forecasting_windows=n
+                                        if operating_accepted
+                                        else None,
                                         blockers=json.dumps(blockers),
                                         first_clock=w.get("first_clock"),
                                         last_clock=w.get("last_clock"),
@@ -198,6 +217,9 @@ def compare(specs: list[ProfileSpec], policy: Policy, output_root: Path) -> Path
                                     history_hours=h,
                                     horizon_hours=f,
                                     structural_complete=complete,
+                                    accepted_forecasting_windows=complete
+                                    if operating_accepted
+                                    else None,
                                     candidate_origins=candidates,
                                     stations_with_windows=len(station_keys),
                                     longest_run_hours=extent,
@@ -254,11 +276,17 @@ def compare(specs: list[ProfileSpec], policy: Policy, output_root: Path) -> Path
         if (pending / "spill").exists():
             shutil.rmtree(pending / "spill")
         selected = sorted({s["source_id"] for s in summaries if s["scientific_score"] is not None})
+        if approved is not None and not any(s["accepted_forecasting_windows"] for s in summaries):
+            raise ValueError("La selección aprobada no tiene ventanas completas")
         summary = dict(
             policy=policy.model_dump(mode="json"),
             policy_sha256=policy_hash,
-            selection_status="blocked" if not selected else "eligible_candidates_require_review",
-            selected_source=None,
+            selection_status="selected_under_operating_policy"
+            if approved
+            else ("blocked" if not selected else "eligible_candidates_require_review"),
+            selected_source=approved.source_id if approved else None,
+            selected_signal=approved.signal if approved else None,
+            selected_geography=approved.geography if approved else None,
             sources=summaries,
             overlap=overlap,
         )
