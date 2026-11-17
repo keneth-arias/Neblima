@@ -158,7 +158,7 @@ def test_inventory_has_dated_access_evidence_for_every_candidate():
     catalog = load_catalog(root / "configs/sources.yaml")
     evidence = json.loads((root / "metadata/source-access.json").read_text())
     rows = evidence["resources"]
-    assert len(rows) == len(catalog.sources) == 37
+    assert len(rows) == len(catalog.sources) == 38
     indexed = {row["source_id"]: row for row in rows}
     assert len(indexed) == len(rows)
     assert set(indexed) == {source.source_id for source in catalog.sources}
@@ -198,6 +198,7 @@ def test_inventory_has_dated_access_evidence_for_every_candidate():
                 "senamhi-data-dictionary",
                 "senamhi-metadata",
                 "oefa-csv",
+                "oefa-eas-aire",
             }
         assert source.redistribution == "unknown"
 
@@ -262,3 +263,27 @@ def test_oefa_download_preserves_historical_channel_failure():
     assert old["csv"]["resource_url"] == new["source_url"]
     assert new["http_status"] is None  # Lightpanda no expuso el código exacto del archivo.
     assert new["normalization"] == "none"
+
+
+def test_oefa_eas_air_is_a_separate_user_supplied_long_format_candidate():
+    root = Path(__file__).resolve().parents[1]
+    evidence = json.loads((root / "metadata/oefa-eas-aire-local.json").read_text())
+    plan = json.loads((root / "configs/acquisition/oefa-eas-aire-local.json").read_text())
+    job = plan["jobs"][0]
+    assert job["spec"]["source_id"] == "oefa-eas-aire" != "oefa-csv"
+    assert job["spec"]["method"] == "local" and evidence["supplied_by"] == "user"
+    assert job["spec"]["resource_url"].endswith("/EAS_Aire_0.csv")
+    assert job["spec"]["expected_sha256"] == evidence["sha256"]
+    assert job["expected_size_bytes"] == evidence["size_bytes"] > 0
+    assert job["local_file"] == evidence["local_path"]
+    assert len(evidence["sha256"]) == 64 and evidence["data_rows"] > 0
+    assert len(evidence["columns"]) == 23
+    assert {"Valor", "Parámetro", "Fecha.inicio", "Hora.inicio"} <= set(evidence["columns"])
+    assert evidence["network_http_status_for_file"] is None
+    assert evidence["scientific_ready"] is False
+    assert evidence["date_encoding_confirmed"] is False
+    sources = {s.source_id: s for s in load_catalog(root / "configs/sources.yaml").sources}
+    assert sources["oefa-eas-aire"].status == "downloaded"
+    assert sources["oefa-eas-aire"].size_bytes == evidence["size_bytes"]
+    notes = sources["oefa-eas-aire"].notes
+    assert notes is not None and "metadata/oefa-eas-aire-local.json" in notes
