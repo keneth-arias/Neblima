@@ -1,5 +1,9 @@
 # Revisión de métodos SENAMHI y diccionario OEFA
 
+> Decisión vigente del 17/11/2026: [SENAMHI listo para #13](senamhi-normalization-handoff.md).
+> UTC confirmado por Keneth, unidades inferidas aceptadas y ODC-BY-1.0 con atribución.
+> Esta revisión previa se conserva como evidencia histórica, no como bloqueo de normalización.
+
 Revisión: 17/11/2026 UTC, Keneth. Evidencia para #11/#43; no cambia reglas ni originales.
 Registro numérico reproducido: [metadata-methods-review.json](../../metadata/metadata-methods-review.json).
 Se leyó código externo, sin ejecutarlo ni instalar sus requisitos en AirAware. No se copió su código.

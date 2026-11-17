@@ -200,7 +200,12 @@ def test_inventory_has_dated_access_evidence_for_every_candidate():
                 "oefa-csv",
                 "oefa-eas-aire",
             }
-        assert source.redistribution == "unknown"
+        assert source.redistribution == (
+            "allowed"
+            if source.source_id
+            in {"senamhi-lima-csv", "senamhi-data-dictionary", "senamhi-metadata", "senamhi-lima"}
+            else "unknown"
+        )
 
 
 def test_senamhi_download_has_public_provenance_without_bundling_raw_data():
@@ -215,8 +220,8 @@ def test_senamhi_download_has_public_provenance_without_bundling_raw_data():
     assert evidence["csv_validation"]["data_rows"] == 577794
     assert evidence["normalization"] == "none"
     assert source.license == "ODC-BY-1.0"
-    assert source.redistribution == "unknown"
-    assert source.units == {}
+    assert source.redistribution == "allowed"
+    assert source.units == {"PM10": "ug/m3", "PM2_5": "ug/m3", "NO2": "ug/m3"}
 
 
 def test_senamhi_documentation_preserves_field_and_document_provenance():

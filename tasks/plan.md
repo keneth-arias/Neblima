@@ -12,7 +12,8 @@ distingue evidencia documental, descargas y resultados de modelos.
 - Priorizar M0–M3, la primera entrega TimeF de M5 y las referencias/modelo temporal de M8.
   M4 depende de meteorología verificada. El primer flujo completo puede usar solo contaminación.
 - Licencias incompatibles y significado de medición desconocido son motivos de exclusión.
-  Cuatro estaciones, 24 meses, frecuencia horaria y ventanas 72/24 son metas provisionales.
+  No hay cuota fija de estaciones ni meses continuos; se mide cobertura real sin imputación.
+  La frecuencia es horaria y las historias/horizontes se evalúan por separado.
 - Esta preparación no autoriza publicar datos masivos, abrir PR externos ni ejecutar descargas o
   entrenamientos costosos o sin límites. Se mantienen las autorizaciones expresas del plan.
 - Usar Lightpanda para páginas y descargas web, según [el protocolo](../docs/web-access.md).
@@ -206,7 +207,7 @@ Propuesta para revisión de Keneth; no iniciar normalización ni cambiar el obje
 2. **Keneth — #11: diagnóstico EAS largo, separado del parser ancho.** Contrastar seriales de fecha contra registros/informes verificables; no inferir la época del CSV a partir de XLSX distintos. Definir etiquetas PM inequívocas, unidades, horas y contextos. Ejecutar luego las 16 parejas H/F sobre las 11 407 394 filas locales con conteos reconciliados, conflictos, ventanas y continuidad por estación; mantener nulo lo científicamente no confirmado. Dos entregas: parser con fixtures y ejecución/informe con hashes, sin red ni cambios de originales. Criterio: conocer si CA-HU-04/09 aportan continuidad real a Lima, sin concatenar campañas ni duplicar fuentes.
 3. **Keneth — #43/#11: cerrar evidencias de reloj, calidad y derechos.** Incorporar respuestas institucionales ya solicitadas; preparar una lista concreta de dudas con filas/informes para OEFA. Sin reenviar correos automáticamente. Afinar por señal el bloqueo de unidades del CSV ancho conforme al diccionario; no habilitar otras dimensiones por inferencia. Criterio: matriz fuente/señal/contexto con evidencia y bloqueos, luego nueva comparación reproducible.
 4. **Cristopher — #13/#30/#14: entregas coordinadas.** Tras estabilizar #12, priorizar normalización SENAMHI y su trazabilidad; OEFA nacional permanece separado y requiere identidad/compatibilidad. EAF solo se propone como piloto de eventos (204 h máximas en candidatos Lima), no sustituto del benchmark. No cambiar asignaciones ni iniciar ramas ajenas. Jordan puede revisar instrucciones y reproducibilidad de fixtures, sin quedar en la ruta crítica ni reasignar tareas existentes.
-5. **Punto de decisión — #11.** Mantener PM2.5, Lima y meta de cuatro estaciones/24 meses. Si no existe cobertura elegible, presentar alternativas y pedir decisión explícita antes de cambiar alcance. Con selección justificada: #15/#18 → #19 → integración #20 → #21/#22/#23. #20 permanece abierto hasta verificar ventanas reales de #18.
+5. **Punto de decisión — #11.** Mantener PM2.5 y Lima, sin cuota fija de estaciones ni meses continuos (decisión de Keneth del 17/11/2026). Elegir periodos por cobertura real y registrar faltantes. Con selección justificada: #15/#18 → #19 → integración #20 → #21/#22/#23. #20 permanece abierto hasta verificar ventanas reales de #18.
 
 Verificación en cada entrega ejecutable: pruebas sin red, make check/build/audit, SHA antes/después y conciliación de pérdidas. Metadatos desconocidos quedan nulos con motivo; no imputar, convertir censura en cero ni publicar observaciones masivas. El rastreador de tareas es GitHub Issues; esta propuesta amplía #11/#12 y conserva los criterios existentes.
 
@@ -220,3 +221,12 @@ con trazabilidad en #12/#11, pruebas por incremento y decisiones científicas pe
 [Plan acotado](senamhi-exploratory-plan.md), solicitado por Keneth: grillas y resúmenes trazables
 sin imputación, evidencia fijada de Cristhianbgf/DataGabo y escenarios de reloj separados.
 No sustituye #13 ni declara elegibilidad de #11.
+
+
+## Decisión vigente para desbloquear #13 (17/11/2026)
+
+Keneth retiró la cuota fija de estaciones/meses, confirmó UTC para toda la exportación y aceptó
+las unidades inferidas. ODC-BY-1.0 documentada; atribución en DATA_ATTRIBUTION.md.
+Guía operativa: [entrega a qriqs](../docs/sources/senamhi-normalization-handoff.md).
+Política tipada y helpers listos, sin modificar su copia ni completar su normalizador.
+#43 conserva solo dudas de intervalo/calidad y no bloquea normalización.

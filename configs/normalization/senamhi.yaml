@@ -1,0 +1,18 @@
+schema_version: 1
+policy_id: senamhi-normalization-20261117-v1
+source_id: senamhi-lima-csv
+input_sha256: 896ae8a106fb128460e81b3f58096f6b9c4d582ef28fffa46e5394c5875c40d4
+timezone: UTC
+timezone_basis: Confirmación explícita de Keneth para toda la exportación el 17/11/2026
+interval_position: unknown
+units:
+  PM10: ug/m3
+  PM2_5: ug/m3
+  NO2: ug/m3
+units_basis: inferred_accepted_by_project_lead
+units_evidence: docs/sources/senamhi.md; docs/sources/metadata-methods-review.md
+license: ODC-BY-1.0
+license_url: https://opendatacommons.org/licenses/by/1-0/
+catalog_url: https://www.datosabiertos.gob.pe/dataset/monitoreo-de-los-contaminantes-del-aire-en-lima-metropolitana-servicio-nacional-de
+quality_default: unknown
+imputation: false

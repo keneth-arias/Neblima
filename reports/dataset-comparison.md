@@ -1,5 +1,10 @@
 # Comparación real de fuentes y preparación del benchmark — #11
 
+> Actualización del 17/11/2026: Keneth eliminó el requisito de cuatro estaciones/24 meses.
+> Para SENAMHI se adopta UTC por confirmación del responsable, unidades inferidas aceptadas y
+> ODC-BY-1.0 con atribución. Las afirmaciones de bloqueo anteriores son históricas; ver
+> [decisión vigente](../docs/sources/senamhi-normalization-handoff.md).
+
 Ejecutada con la política aprobada en configs/benchmark.yaml. Método y denominadores:
 [docs/comparison.md](../docs/comparison.md). Evidencia y hashes: [metadata/benchmark-run.json](../metadata/benchmark-run.json).
 La consulta a consultas@oefa.gob.pe se envió el 16/11/2026 a las 23:52:57 UTC desde Outlook de

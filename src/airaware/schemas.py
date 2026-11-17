@@ -80,6 +80,7 @@ class Observation(Record):
     value_status: Literal["finite", "censored", "missing", "unresolved", "nonfinite"]
     kind: Literal["measured", "derived", "modeled", "reanalysis", "forecast", "imputed"]
     time_raw: dict[str, str | None]
+    observed_at: datetime | None = None
     start: datetime | None
     end: datetime | None
     timezone: str | None
@@ -96,14 +97,14 @@ class Observation(Record):
             raise ValueError("Solo finite admite y exige un valor numérico")
         if self.value is not None and not math.isfinite(self.value):
             raise ValueError("El valor debe ser finito")
-        for instant in (self.start, self.end, self.available_at):
+        for instant in (self.observed_at, self.start, self.end, self.available_at):
             if instant is not None and instant.utcoffset() is None:
                 raise ValueError("Los instantes interpretados requieren zona horaria")
         if self.start is not None and self.end is not None and self.end <= self.start:
             raise ValueError("El fin debe ser posterior al inicio")
         if self.kind in {"derived", "imputed"} and not self.parent_ids:
             raise ValueError("Datos derivados o imputados requieren registros padres")
-        if (self.start is not None or self.end is not None) and (
+        if (self.observed_at is not None or self.start is not None or self.end is not None) and (
             not self.timezone or not self.semantic_evidence
         ):
             raise ValueError("Interpretar el reloj requiere zona y evidencia")

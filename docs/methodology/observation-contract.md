@@ -9,6 +9,8 @@ El esquema JSON se obtiene con Observation.model_json_schema(); no se mantiene u
   no finitos se distinguen; cero sigue siendo un número. No se impone signo por intuición.
 - provenance identifica fuente, SHA-256 y número de registro (CSV: encabezado=1) o fila/hoja XLSX.
 - station_id y sensor_id son nulos hasta resolver identidad; un nombre de punto no prueba permanencia.
+- observed_at conserva el timestamp publicado con zona/evidencia aunque la posición del intervalo
+  sea desconocida; no implica inicio/fin. Es opcional y compatible con registros v1 anteriores.
 - start/end son instantes con zona, evidencia y fin posterior. Los relojes hipotéticos se conservan
   fuera de estos campos en diagnósticos separados. available_at no se inventa desde la fecha medida.
 - quality=unknown no equivale a valid. kind distingue measured, derived, modeled, reanalysis,

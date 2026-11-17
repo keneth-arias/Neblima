@@ -21,6 +21,7 @@ def observation():
         value_status="censored",
         kind="measured",
         time_raw={"Fecha.inicio": "44927"},
+        observed_at=None,
         start=None,
         end=None,
         timezone=None,

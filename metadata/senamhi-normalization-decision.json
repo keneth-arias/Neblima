@@ -1,0 +1,74 @@
+{
+  "decision_id": "senamhi-normalization-20261117-v1",
+  "recorded_at_utc": "2026-11-17T11:39:54.875528+00:00",
+  "authorized_by": "keneth-arias",
+  "input_sha256": "896ae8a106fb128460e81b3f58096f6b9c4d582ef28fffa46e5394c5875c40d4",
+  "size_requirements": {
+    "minimum_stations": null,
+    "minimum_continuous_months": null,
+    "decision": "removed_by_project_lead"
+  },
+  "timestamp": {
+    "timezone": "UTC",
+    "basis": "explicit_confirmation_by_project_lead",
+    "scope": "entire_export",
+    "interval_position": null
+  },
+  "units": {
+    "PM10": "ug/m3",
+    "PM2_5": "ug/m3",
+    "NO2": "ug/m3",
+    "status": "inferred_accepted_by_project_lead",
+    "evidence": [
+      "docs/sources/senamhi.md",
+      "docs/sources/metadata-methods-review.md"
+    ],
+    "no2_caveat": "El manual instrumental menciona ppb; se usa ug/m3 de forma inferida por coincidencias sin conversión con boletín y decisión de Keneth. No aplicar conversión de gases."
+  },
+  "license": {
+    "identifier": "ODC-BY-1.0",
+    "catalog_url": "https://www.datosabiertos.gob.pe/dataset/monitoreo-de-los-contaminantes-del-aire-en-lima-metropolitana-servicio-nacional-de",
+    "observed_text": "Open Data Commons Attribution License",
+    "observed_link": "http://opendefinition.org/licenses/odc-by/",
+    "license_url": "https://opendatacommons.org/licenses/by/1-0/",
+    "verification_method": "Lightpanda markdown y extract; el catálogo enlaza el CSV _1.csv ya adquirido",
+    "http_status": null,
+    "redistribution": "allowed_with_attribution",
+    "attribution_file": "DATA_ATTRIBUTION.md"
+  },
+  "normalization_ready": true,
+  "quality_default": "unknown",
+  "imputation": false,
+  "remaining_questions": [
+    "interval_position",
+    "individual_quality_flags"
+  ],
+  "follow_up_issue": 43,
+  "preflight": {
+    "rows": 577794,
+    "observations_validated": 1733382,
+    "rejections": 0,
+    "counts": {
+      "PM10:finite": 380982,
+      "PM2_5:missing": 210203,
+      "NO2:missing": 278602,
+      "PM2_5:finite": 367591,
+      "PM10:missing": 196812,
+      "NO2:finite": 299192
+    },
+    "input_sha256": "896ae8a106fb128460e81b3f58096f6b9c4d582ef28fffa46e5394c5875c40d4",
+    "inputs_unchanged": true,
+    "policy_id": "senamhi-normalization-20261117-v1",
+    "notes": "Prevalidación del contrato; no exporta el dataset normalizado de #13"
+  },
+  "comparison_v2_run": {
+    "output_directory": "reports/generated/comparison/comparison-62f435f7858749f1a2560a5e67ba1fc9",
+    "policy_sha256": "90c8aad64febe8d04dc115e977ea0a50a009966807e0f78ec4a78da679558ac5",
+    "inputs_unchanged": true,
+    "scoring": "disabled_without_size_quotas",
+    "remaining_senamhi_blockers": [
+      "interval_position_unverified",
+      "quality_flags_unverified"
+    ]
+  }
+}

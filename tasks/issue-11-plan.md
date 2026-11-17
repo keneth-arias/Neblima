@@ -30,8 +30,8 @@ Investigación y consultas: docs/sources/oefa-consultation-research.md.
 - Separar conteos estructurales en reloj original de ventanas científicamente válidas. Unidades,
   zona/instante del intervalo, calidad y derechos sin resolver generan estado bloqueado, no aprobación
   ni conteos presentados como ventanas válidas. Si no se puede determinar, usar nulo con motivo.
-- Cuatro estaciones y 24 meses son metas, no hechos ni umbrales que se relajen silenciosamente.
-  Medir continuidad, periodo común y ventanas; cualquier cambio de alcance requiere justificación y feedback.
+- Keneth eliminó la cuota de estaciones/meses el 17/11/2026. Medir continuidad, periodo común
+  y ventanas reales sin requerir una cohorte fija ni inventar datos para aumentar cobertura.
 
 ## Incrementos pequeños, secuenciales
 

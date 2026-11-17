@@ -62,7 +62,7 @@ def _write(c, rows, schema, destination: Path):
 
 
 def compare(specs: list[ProfileSpec], policy: Policy, output_root: Path) -> Path:
-    """No elige una fuente con bloqueos, ni interpreta las horas como UTC."""
+    """Preserva el reloj fuente; no elige una fuente con bloqueos científicos."""
     if not specs or len({s.source_id for s in specs}) != len(specs):
         raise ValueError("Fuentes vacías o duplicadas")
     if set(policy.blockers) != {s.source_id for s in specs}:
@@ -101,7 +101,8 @@ def compare(specs: list[ProfileSpec], policy: Policy, output_root: Path) -> Path
                         else "PM10"
                     )
                     trace = prepare_points(c, field, geography)
-                    common = common_coverage(c, policy.target_stations)
+                    common = common_coverage(c, policy.target_stations or 1)
+                    common["quorum_stations"] = policy.target_stations or 1
                     total = c.execute("SELECT count(*) FROM base").fetchone()
                     assert total is not None
                     assert (
@@ -169,18 +170,25 @@ def compare(specs: list[ProfileSpec], policy: Policy, output_root: Path) -> Path
                                         last_clock=w.get("last_clock"),
                                     )
                                 )
-                            denominator = (
-                                policy.target_stations
-                                * policy.target_months
-                                * policy.hours_per_month
-                            )
-                            components = [
-                                min(complete / denominator, 1),
-                                complete / candidates if candidates else 0,
-                                min(len(station_keys) / policy.target_stations, 1),
-                                min(extent / (policy.target_months * policy.hours_per_month), 1),
-                                0.5 if blockers else 1,
-                            ]
+                            components = None
+                            if (
+                                policy.target_stations is not None
+                                and policy.target_months is not None
+                            ):
+                                denominator = (
+                                    policy.target_stations
+                                    * policy.target_months
+                                    * policy.hours_per_month
+                                )
+                                components = [
+                                    min(complete / denominator, 1),
+                                    complete / candidates if candidates else 0,
+                                    min(len(station_keys) / policy.target_stations, 1),
+                                    min(
+                                        extent / (policy.target_months * policy.hours_per_month), 1
+                                    ),
+                                    0.5 if blockers else 1,
+                                ]
                             eligible = not blockers and complete > 0
                             summaries.append(
                                 dict(
@@ -196,10 +204,14 @@ def compare(specs: list[ProfileSpec], policy: Policy, output_root: Path) -> Path
                                     components=components,
                                     scientific_score=score(
                                         components, eligible=eligible, weights=policy.weights
-                                    ),
+                                    )
+                                    if components is not None
+                                    else None,
                                     sensitivity_equal=score(
                                         components, eligible=eligible, weights=(0.2,) * 5
-                                    ),
+                                    )
+                                    if components is not None
+                                    else None,
                                     blockers=blockers,
                                     rows_trace=trace,
                                     common_coverage=common,

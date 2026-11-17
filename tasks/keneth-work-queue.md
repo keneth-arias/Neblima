@@ -14,7 +14,7 @@ en el repositorio; respuestas y resúmenes para Keneth en inglés.
 | #10 | Perfilamiento de cobertura/calidad con datos reales y límites por fuente | #10 cerrada; PR #57/#58 integrados, perfiles reales verificados |
 | #11 | Plan de comparación, conteo real de ventanas y puntuación con trazas de filtros | Plan aprobado e implementación diagnóstica ejecutada; selección científica pendiente de aclaraciones institucionales |
 
-| #12 | Contrato de observaciones/estaciones, nulabilidad, procedencia y disponibilidad | Espera selección #11; se puede preparar propuesta sin fijar unidades desconocidas |
+| #12 | Contrato de observaciones/estaciones, nulabilidad, procedencia y disponibilidad | #12 completada; contrato y política operativa SENAMHI listos para #13 |
 | #14 | Reglas de identidad, reubicación y duplicados; regresiones de procedencia | Espera normalización #13, a cargo de Cristopher |
 | #19 | Particiones cronológicas y purga de ventanas, sin fuga ni ajuste fuera de entrenamiento | Espera #18; fechas reales requieren cobertura verificada |
 | #20 | Investigación oficial peruana de umbrales, promedios y completitud | Metodología/módulo independientes implementados; falta integración #18. Mantener abierta por decisión de Keneth |
@@ -41,3 +41,6 @@ Para incógnitas: documentos oficiales primero, búsqueda adicional, comparació
 registro de evidencia y consulta a Keneth si queda una elección. No reiterar correos SENAMHI sin instrucción.
 Las decisiones de unidades, reloj, publicación, particiones reales y cómputo no se suponen resueltas
 por cerrar tareas de plataforma. Las licencias AGPL del código y de los datos siguen separadas.
+
+Decisión vigente 17/11/2026: #13 listo para @qriqs; sin cuota de estaciones/meses, UTC confirmado
+por Keneth y ug/m3 inferidos aceptados. Ver docs/sources/senamhi-normalization-handoff.md.

@@ -42,23 +42,19 @@ geografía, H/F, conteos, límites del reloj y bloqueos. Si falta una definició
 ventanas de entrenamiento de #18 ni los splits de #19. Las estadísticas no determinan filtros usando
 resultados de prueba futuros. No se descartan negativos ni extremos solo por su magnitud.
 
-## Puntuación fijada antes del cálculo
+## Política vigente comparison-v2 (17/11/2026)
 
-Solo puntúan candidatos sin bloqueos y con alguna ventana completa. La escala es 0–1, con saturación
-a 1. No se normaliza respecto al mejor candidato observado:
+Keneth eliminó la cuota fija de estaciones y meses continuos. No hay denominador de 4×24×720
+ni puntuación de tamaño sustituta. Se publican ventanas, estaciones, rachas y pérdidas reales;
+components, scientific_score y sensitivity_equal quedan nulos en v2. Los pesos históricos no
+se aplican. La cobertura simultánea se informa para al menos una estación (quorum_stations=1),
+como disponibilidad del archivo y no como una nueva condición de aceptación.
 
-1. Volumen: ventanas completas / (4 estaciones × 24 meses × 720 horas), peso 0,35.
-2. Continuidad: ventanas completas / orígenes candidatos, peso 0,25; cero si no hay candidatos.
-3. Estaciones: identidades provisionales con ventanas / 4, peso 0,15.
-4. Extensión: mayor racha continua de puntos / (24 × 720 horas), peso 0,15.
-5. Trazabilidad/validación: 0,5 por la adquisición verificada; 1 al resolver también las condiciones
-   institucionales requeridas, peso 0,10. Mientras hay bloqueos no se publica puntuación científica.
-
-La convención fija de 720 horas es un denominador de puntuación, no una equivalencia de 24 meses
-calendario ni evidencia de cumplimiento de esa meta. El informe debe indicar su diferencia con
-cobertura común y periodos continuos reales. La sensibilidad usa pesos iguales de 0,2 sin alterar
-filtros; las puntuaciones bloqueadas siguen nulas. La selección siempre requiere revisión científica;
-no se promueve automáticamente a ganador una fuente sin aclaraciones ni se elige H/F por desempeño.
+La política comparison-v1 conserva compatibilidad de lectura con denominadores explícitos para
+reproducir informes históricos; no es la configuración vigente. No cambiar hashes ni resultados
+viejos para simular que se calcularon con v2. Los bloqueos científicos siguen siendo independientes
+de tener más o menos datos. Para SENAMHI, UTC y unidades operativas están en la decisión #13;
+la posición del intervalo y la calidad individual quedan pendientes, sin bloquear normalización.
 
 ## Solapamientos y publicación
 
@@ -78,5 +74,5 @@ vacía tras revisión documentada. Cambiarla no aporta por sí mismo evidencia d
 calidad o derechos. Toda revisión debe conservar la procedencia institucional que justifique el cambio.
 La configuración y su versión forman parte de los hashes de cada entrega.
 
-La composición de las cuatro estaciones simultáneas puede cambiar entre horas; este diagnóstico
-no demuestra una cohorte fija de cuatro estaciones con 24 meses de ventanas comunes.
+La cobertura simultánea no implica una cohorte fija. En v2 se informa disponibilidad con al menos
+una estación; no se exige un número de estaciones o meses continuos.

@@ -1,5 +1,10 @@
 # AirAware Perú: ingeniería de conjuntos de datos ambientales temporales
 
+> Actualización del 17/11/2026: Keneth eliminó el requisito de cuatro estaciones/24 meses.
+> Para SENAMHI se adopta UTC por confirmación del responsable, unidades inferidas aceptadas y
+> ODC-BY-1.0 con atribución. Las afirmaciones de bloqueo anteriores son históricas; ver
+> [decisión vigente](sources/senamhi-normalization-handoff.md).
+
 ## 1. Rol y objetivo
 
 Trabajar con criterios de ingeniería de datos, ciencia ambiental, plataformas de aprendizaje automático

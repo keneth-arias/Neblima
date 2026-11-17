@@ -1,5 +1,10 @@
 # Contrato común y diagnóstico EAS: implementación aprobada
 
+> Actualización del 17/11/2026: Keneth eliminó el requisito de cuatro estaciones/24 meses.
+> Para SENAMHI se adopta UTC por confirmación del responsable, unidades inferidas aceptadas y
+> ODC-BY-1.0 con atribución. Las afirmaciones de bloqueo anteriores son históricas; ver
+> [decisión vigente](../docs/sources/senamhi-normalization-handoff.md).
+
 Keneth aprobó la planificación e implementación el 17/11/2026. Tareas en GitHub #12/#11;
 se conserva el resto de tasks/plan.md. No se cambia el objetivo PM2.5 de Lima.
 
