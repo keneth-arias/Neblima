@@ -1,5 +1,9 @@
 # Comparación local y preparación de ventanas (#11)
 
+> Política operativa aprobada: [ADR-005](decisions/005-senamhi-operating-policy.md). comparison-v3 selecciona SENAMHI/Lima/PM2.5
+> para pronóstico con etiquetas UTC publicadas y acepta calidad/posición del intervalo desconocidas.
+> Esto no bloquea #13 ni #18; las etiquetas regulatorias diarias siguen diferidas.
+
 Ejecutar desde la raíz, después de `make setup`, con las adquisiciones de #8/#9:
 
 ```bash

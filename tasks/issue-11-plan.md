@@ -1,5 +1,8 @@
 # Plan revisado de #11: comparación con evidencia y selección condicionada
 
+> Selección completada bajo política operativa aprobada: [resultado vigente](../reports/benchmark-selection.md).
+> SENAMHI/Lima/PM2.5 con timestamp UTC publicado y aceptación de calidad/intervalo desconocidos.
+
 Responsable: Keneth. Plan aprobado por Keneth el 16/11/2026; implementación y ejecución autorizadas.
 Seguimiento: issue #11; dependencias #9/#10 cerradas, PR #57/#58 integrados en main.
 Se conserva el alcance original: ventanas, puntuación y comparación/solapamientos reales.

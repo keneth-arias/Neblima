@@ -1,0 +1,675 @@
+{
+  "policy_version": "comparison-v3",
+  "policy_sha256": "954680844a4347e441315891a55b5f29d358518121f75534d8161d1fb7fab5cd",
+  "selection_status": "selected_under_operating_policy",
+  "selected_source": "senamhi-lima-csv",
+  "selected_signal": "pm25",
+  "selected_geography": "lima",
+  "approval": {
+    "source_id": "senamhi-lima-csv",
+    "input_sha256": "896ae8a106fb128460e81b3f58096f6b9c4d582ef28fffa46e5394c5875c40d4",
+    "geography": "lima",
+    "signal": "pm25",
+    "authorized_by": "keneth-arias",
+    "approval_reference": "docs/decisions/005-senamhi-operating-policy.md",
+    "timestamp_basis": "published_utc",
+    "accepted_unknowns": [
+      "interval_position_unverified",
+      "quality_flags_unverified"
+    ],
+    "quality": "unknown",
+    "interval_position": "unknown",
+    "daily_regulatory_labels": false
+  },
+  "source_units": "ug/m3",
+  "units_status": "inferred_accepted_by_project_lead",
+  "license": "ODC-BY-1.0",
+  "scientific_validation_status": "unresolved_not_claimed",
+  "output_directory": "reports/generated/comparison/comparison-d81430b305d24d49a5ecab1a01566c2c",
+  "manifest": {
+    "algorithm": "comparison-v3",
+    "policy_sha256": "954680844a4347e441315891a55b5f29d358518121f75534d8161d1fb7fab5cd",
+    "verified_at_utc": "2026-11-17T16:12:48.677699+00:00",
+    "duckdb_version": "1.5.6",
+    "profile_specs": [
+      {
+        "source_id": "senamhi-lima-csv",
+        "kind": "senamhi",
+        "manifest": "data/raw/senamhi-lima-csv/896ae8a106fb128460e81b3f58096f6b9c4d582ef28fffa46e5394c5875c40d4/manifest.json",
+        "raw_root": "data/raw",
+        "sha256": "896ae8a106fb128460e81b3f58096f6b9c4d582ef28fffa46e5394c5875c40d4",
+        "columns": [
+          "ID",
+          "ESTACION",
+          "FECHA",
+          "HORA",
+          "LONGITUD",
+          "LATITUD",
+          "ALTITUD",
+          "PM10",
+          "PM2_5",
+          "NO2",
+          "DEPARTAMENTO",
+          "PROVINCIA",
+          "DISTRITO",
+          "UBIGEO",
+          "FECHA_CORTE"
+        ],
+        "signals": [
+          "PM10",
+          "PM2_5",
+          "NO2"
+        ],
+        "expected_rows": 577794
+      },
+      {
+        "source_id": "oefa-csv",
+        "kind": "oefa",
+        "manifest": "data/raw/oefa-csv/1f09a8064ee0aed0b3a9a0a90b96f63ce226b45a969dace49f73e45134f26d92/manifest.json",
+        "raw_root": "data/raw",
+        "sha256": "1f09a8064ee0aed0b3a9a0a90b96f63ce226b45a969dace49f73e45134f26d92",
+        "columns": [
+          "NOMBRE_EVALUACION",
+          "COMPONENTE_AMBIENTAL",
+          "PROCEDENCIA_MUESTRA",
+          "NOMBRE_PUNTO",
+          "ESTE",
+          "NORTE",
+          "ALTITUD",
+          "ZONA",
+          "DATUM",
+          "DEPARTAMENTO",
+          "PROVINCIA",
+          "DISTRITO",
+          "UBIGEO",
+          "DESCRIPCION_UBICACION",
+          "TIPO_MUESTRA",
+          "TIPO_ANALISIS",
+          "PERIODO",
+          "FECHA_INICIO",
+          "HORA_INICIO",
+          "FECHA_FIN",
+          "HORA_FIN",
+          "UNIDAD_MEDIDA",
+          "DIOXIDO_AZUFRE",
+          "DIRECCION_VIENTO",
+          "HUMEDAD_RELATIVA",
+          "PM10",
+          "PM2.5",
+          "MONOXIDO_CARBONO",
+          "OZONO",
+          "PRECIPITACION",
+          "PRESION_BAROMETRICA",
+          "RADIACION_SOLAR",
+          "SULFURO_HIDROGENO",
+          "TEMPERATURA",
+          "VELOCIDAD_VIENTO",
+          "FECHA_CORTE"
+        ],
+        "signals": [
+          "DIOXIDO_AZUFRE",
+          "DIRECCION_VIENTO",
+          "HUMEDAD_RELATIVA",
+          "PM10",
+          "PM2.5",
+          "MONOXIDO_CARBONO",
+          "OZONO",
+          "PRECIPITACION",
+          "PRESION_BAROMETRICA",
+          "RADIACION_SOLAR",
+          "SULFURO_HIDROGENO",
+          "TEMPERATURA",
+          "VELOCIDAD_VIENTO"
+        ],
+        "expected_rows": 2883877
+      }
+    ],
+    "inputs_unchanged": true,
+    "files": {
+      "summary.json": {
+        "sha256": "e1753cbfe7428c80eceba44a746595386e29eb8e3ee8bbf8f23f817e62cfc129",
+        "size_bytes": 131618
+      },
+      "forecasting-readiness.parquet": {
+        "sha256": "cf32381f0a0863ec693a01196c638ab695478fb26aaef21e4a7a3f199e285d62",
+        "size_bytes": 17263
+      },
+      "source-overlap.parquet": {
+        "sha256": "9c366f859ce796668b2d66da5ad81c65b85a73595de0fefdffb41c36ad053092",
+        "size_bytes": 1765
+      }
+    }
+  },
+  "accepted_scenarios": [
+    {
+      "source_id": "senamhi-lima-csv",
+      "geography": "lima",
+      "signal": "pm25",
+      "history_hours": 24,
+      "horizon_hours": 6,
+      "structural_complete": 339205,
+      "accepted_forecasting_windows": 339205,
+      "candidate_origins": 574994,
+      "stations_with_windows": 7,
+      "longest_run_hours": 3982,
+      "components": null,
+      "scientific_score": null,
+      "sensitivity_equal": null,
+      "blockers": [
+        "interval_position_unverified",
+        "quality_flags_unverified"
+      ],
+      "rows_trace": {
+        "value": 210203,
+        "ambiguous": 70,
+        "accepted_rows": 367521,
+        "unique_points": 367518,
+        "collapsed_repetitions": 3
+      },
+      "common_coverage": {
+        "common_hour_slots": 81385,
+        "first_common_clock": "2015-01-01 05:00:00",
+        "last_common_clock": "2024-05-31 23:00:00",
+        "longest_common_run_hours": 26483,
+        "quorum_stations": 1
+      }
+    },
+    {
+      "source_id": "senamhi-lima-csv",
+      "geography": "lima",
+      "signal": "pm25",
+      "history_hours": 24,
+      "horizon_hours": 12,
+      "structural_complete": 334134,
+      "accepted_forecasting_windows": 334134,
+      "candidate_origins": 574952,
+      "stations_with_windows": 7,
+      "longest_run_hours": 3982,
+      "components": null,
+      "scientific_score": null,
+      "sensitivity_equal": null,
+      "blockers": [
+        "interval_position_unverified",
+        "quality_flags_unverified"
+      ],
+      "rows_trace": {
+        "value": 210203,
+        "ambiguous": 70,
+        "accepted_rows": 367521,
+        "unique_points": 367518,
+        "collapsed_repetitions": 3
+      },
+      "common_coverage": {
+        "common_hour_slots": 81385,
+        "first_common_clock": "2015-01-01 05:00:00",
+        "last_common_clock": "2024-05-31 23:00:00",
+        "longest_common_run_hours": 26483,
+        "quorum_stations": 1
+      }
+    },
+    {
+      "source_id": "senamhi-lima-csv",
+      "geography": "lima",
+      "signal": "pm25",
+      "history_hours": 24,
+      "horizon_hours": 24,
+      "structural_complete": 324463,
+      "accepted_forecasting_windows": 324463,
+      "candidate_origins": 574868,
+      "stations_with_windows": 7,
+      "longest_run_hours": 3982,
+      "components": null,
+      "scientific_score": null,
+      "sensitivity_equal": null,
+      "blockers": [
+        "interval_position_unverified",
+        "quality_flags_unverified"
+      ],
+      "rows_trace": {
+        "value": 210203,
+        "ambiguous": 70,
+        "accepted_rows": 367521,
+        "unique_points": 367518,
+        "collapsed_repetitions": 3
+      },
+      "common_coverage": {
+        "common_hour_slots": 81385,
+        "first_common_clock": "2015-01-01 05:00:00",
+        "last_common_clock": "2024-05-31 23:00:00",
+        "longest_common_run_hours": 26483,
+        "quorum_stations": 1
+      }
+    },
+    {
+      "source_id": "senamhi-lima-csv",
+      "geography": "lima",
+      "signal": "pm25",
+      "history_hours": 24,
+      "horizon_hours": 48,
+      "structural_complete": 306645,
+      "accepted_forecasting_windows": 306645,
+      "candidate_origins": 574700,
+      "stations_with_windows": 7,
+      "longest_run_hours": 3982,
+      "components": null,
+      "scientific_score": null,
+      "sensitivity_equal": null,
+      "blockers": [
+        "interval_position_unverified",
+        "quality_flags_unverified"
+      ],
+      "rows_trace": {
+        "value": 210203,
+        "ambiguous": 70,
+        "accepted_rows": 367521,
+        "unique_points": 367518,
+        "collapsed_repetitions": 3
+      },
+      "common_coverage": {
+        "common_hour_slots": 81385,
+        "first_common_clock": "2015-01-01 05:00:00",
+        "last_common_clock": "2024-05-31 23:00:00",
+        "longest_common_run_hours": 26483,
+        "quorum_stations": 1
+      }
+    },
+    {
+      "source_id": "senamhi-lima-csv",
+      "geography": "lima",
+      "signal": "pm25",
+      "history_hours": 48,
+      "horizon_hours": 6,
+      "structural_complete": 319839,
+      "accepted_forecasting_windows": 319839,
+      "candidate_origins": 574826,
+      "stations_with_windows": 7,
+      "longest_run_hours": 3982,
+      "components": null,
+      "scientific_score": null,
+      "sensitivity_equal": null,
+      "blockers": [
+        "interval_position_unverified",
+        "quality_flags_unverified"
+      ],
+      "rows_trace": {
+        "value": 210203,
+        "ambiguous": 70,
+        "accepted_rows": 367521,
+        "unique_points": 367518,
+        "collapsed_repetitions": 3
+      },
+      "common_coverage": {
+        "common_hour_slots": 81385,
+        "first_common_clock": "2015-01-01 05:00:00",
+        "last_common_clock": "2024-05-31 23:00:00",
+        "longest_common_run_hours": 26483,
+        "quorum_stations": 1
+      }
+    },
+    {
+      "source_id": "senamhi-lima-csv",
+      "geography": "lima",
+      "signal": "pm25",
+      "history_hours": 48,
+      "horizon_hours": 12,
+      "structural_complete": 315339,
+      "accepted_forecasting_windows": 315339,
+      "candidate_origins": 574784,
+      "stations_with_windows": 7,
+      "longest_run_hours": 3982,
+      "components": null,
+      "scientific_score": null,
+      "sensitivity_equal": null,
+      "blockers": [
+        "interval_position_unverified",
+        "quality_flags_unverified"
+      ],
+      "rows_trace": {
+        "value": 210203,
+        "ambiguous": 70,
+        "accepted_rows": 367521,
+        "unique_points": 367518,
+        "collapsed_repetitions": 3
+      },
+      "common_coverage": {
+        "common_hour_slots": 81385,
+        "first_common_clock": "2015-01-01 05:00:00",
+        "last_common_clock": "2024-05-31 23:00:00",
+        "longest_common_run_hours": 26483,
+        "quorum_stations": 1
+      }
+    },
+    {
+      "source_id": "senamhi-lima-csv",
+      "geography": "lima",
+      "signal": "pm25",
+      "history_hours": 48,
+      "horizon_hours": 24,
+      "structural_complete": 306645,
+      "accepted_forecasting_windows": 306645,
+      "candidate_origins": 574700,
+      "stations_with_windows": 7,
+      "longest_run_hours": 3982,
+      "components": null,
+      "scientific_score": null,
+      "sensitivity_equal": null,
+      "blockers": [
+        "interval_position_unverified",
+        "quality_flags_unverified"
+      ],
+      "rows_trace": {
+        "value": 210203,
+        "ambiguous": 70,
+        "accepted_rows": 367521,
+        "unique_points": 367518,
+        "collapsed_repetitions": 3
+      },
+      "common_coverage": {
+        "common_hour_slots": 81385,
+        "first_common_clock": "2015-01-01 05:00:00",
+        "last_common_clock": "2024-05-31 23:00:00",
+        "longest_common_run_hours": 26483,
+        "quorum_stations": 1
+      }
+    },
+    {
+      "source_id": "senamhi-lima-csv",
+      "geography": "lima",
+      "signal": "pm25",
+      "history_hours": 48,
+      "horizon_hours": 48,
+      "structural_complete": 290492,
+      "accepted_forecasting_windows": 290492,
+      "candidate_origins": 574532,
+      "stations_with_windows": 7,
+      "longest_run_hours": 3982,
+      "components": null,
+      "scientific_score": null,
+      "sensitivity_equal": null,
+      "blockers": [
+        "interval_position_unverified",
+        "quality_flags_unverified"
+      ],
+      "rows_trace": {
+        "value": 210203,
+        "ambiguous": 70,
+        "accepted_rows": 367521,
+        "unique_points": 367518,
+        "collapsed_repetitions": 3
+      },
+      "common_coverage": {
+        "common_hour_slots": 81385,
+        "first_common_clock": "2015-01-01 05:00:00",
+        "last_common_clock": "2024-05-31 23:00:00",
+        "longest_common_run_hours": 26483,
+        "quorum_stations": 1
+      }
+    },
+    {
+      "source_id": "senamhi-lima-csv",
+      "geography": "lima",
+      "signal": "pm25",
+      "history_hours": 72,
+      "horizon_hours": 6,
+      "structural_complete": 302448,
+      "accepted_forecasting_windows": 302448,
+      "candidate_origins": 574658,
+      "stations_with_windows": 7,
+      "longest_run_hours": 3982,
+      "components": null,
+      "scientific_score": null,
+      "sensitivity_equal": null,
+      "blockers": [
+        "interval_position_unverified",
+        "quality_flags_unverified"
+      ],
+      "rows_trace": {
+        "value": 210203,
+        "ambiguous": 70,
+        "accepted_rows": 367521,
+        "unique_points": 367518,
+        "collapsed_repetitions": 3
+      },
+      "common_coverage": {
+        "common_hour_slots": 81385,
+        "first_common_clock": "2015-01-01 05:00:00",
+        "last_common_clock": "2024-05-31 23:00:00",
+        "longest_common_run_hours": 26483,
+        "quorum_stations": 1
+      }
+    },
+    {
+      "source_id": "senamhi-lima-csv",
+      "geography": "lima",
+      "signal": "pm25",
+      "history_hours": 72,
+      "horizon_hours": 12,
+      "structural_complete": 298360,
+      "accepted_forecasting_windows": 298360,
+      "candidate_origins": 574616,
+      "stations_with_windows": 7,
+      "longest_run_hours": 3982,
+      "components": null,
+      "scientific_score": null,
+      "sensitivity_equal": null,
+      "blockers": [
+        "interval_position_unverified",
+        "quality_flags_unverified"
+      ],
+      "rows_trace": {
+        "value": 210203,
+        "ambiguous": 70,
+        "accepted_rows": 367521,
+        "unique_points": 367518,
+        "collapsed_repetitions": 3
+      },
+      "common_coverage": {
+        "common_hour_slots": 81385,
+        "first_common_clock": "2015-01-01 05:00:00",
+        "last_common_clock": "2024-05-31 23:00:00",
+        "longest_common_run_hours": 26483,
+        "quorum_stations": 1
+      }
+    },
+    {
+      "source_id": "senamhi-lima-csv",
+      "geography": "lima",
+      "signal": "pm25",
+      "history_hours": 72,
+      "horizon_hours": 24,
+      "structural_complete": 290492,
+      "accepted_forecasting_windows": 290492,
+      "candidate_origins": 574532,
+      "stations_with_windows": 7,
+      "longest_run_hours": 3982,
+      "components": null,
+      "scientific_score": null,
+      "sensitivity_equal": null,
+      "blockers": [
+        "interval_position_unverified",
+        "quality_flags_unverified"
+      ],
+      "rows_trace": {
+        "value": 210203,
+        "ambiguous": 70,
+        "accepted_rows": 367521,
+        "unique_points": 367518,
+        "collapsed_repetitions": 3
+      },
+      "common_coverage": {
+        "common_hour_slots": 81385,
+        "first_common_clock": "2015-01-01 05:00:00",
+        "last_common_clock": "2024-05-31 23:00:00",
+        "longest_common_run_hours": 26483,
+        "quorum_stations": 1
+      }
+    },
+    {
+      "source_id": "senamhi-lima-csv",
+      "geography": "lima",
+      "signal": "pm25",
+      "history_hours": 72,
+      "horizon_hours": 48,
+      "structural_complete": 275694,
+      "accepted_forecasting_windows": 275694,
+      "candidate_origins": 574364,
+      "stations_with_windows": 7,
+      "longest_run_hours": 3982,
+      "components": null,
+      "scientific_score": null,
+      "sensitivity_equal": null,
+      "blockers": [
+        "interval_position_unverified",
+        "quality_flags_unverified"
+      ],
+      "rows_trace": {
+        "value": 210203,
+        "ambiguous": 70,
+        "accepted_rows": 367521,
+        "unique_points": 367518,
+        "collapsed_repetitions": 3
+      },
+      "common_coverage": {
+        "common_hour_slots": 81385,
+        "first_common_clock": "2015-01-01 05:00:00",
+        "last_common_clock": "2024-05-31 23:00:00",
+        "longest_common_run_hours": 26483,
+        "quorum_stations": 1
+      }
+    },
+    {
+      "source_id": "senamhi-lima-csv",
+      "geography": "lima",
+      "signal": "pm25",
+      "history_hours": 168,
+      "horizon_hours": 6,
+      "structural_complete": 246651,
+      "accepted_forecasting_windows": 246651,
+      "candidate_origins": 573986,
+      "stations_with_windows": 7,
+      "longest_run_hours": 3982,
+      "components": null,
+      "scientific_score": null,
+      "sensitivity_equal": null,
+      "blockers": [
+        "interval_position_unverified",
+        "quality_flags_unverified"
+      ],
+      "rows_trace": {
+        "value": 210203,
+        "ambiguous": 70,
+        "accepted_rows": 367521,
+        "unique_points": 367518,
+        "collapsed_repetitions": 3
+      },
+      "common_coverage": {
+        "common_hour_slots": 81385,
+        "first_common_clock": "2015-01-01 05:00:00",
+        "last_common_clock": "2024-05-31 23:00:00",
+        "longest_common_run_hours": 26483,
+        "quorum_stations": 1
+      }
+    },
+    {
+      "source_id": "senamhi-lima-csv",
+      "geography": "lima",
+      "signal": "pm25",
+      "history_hours": 168,
+      "horizon_hours": 12,
+      "structural_complete": 243740,
+      "accepted_forecasting_windows": 243740,
+      "candidate_origins": 573944,
+      "stations_with_windows": 7,
+      "longest_run_hours": 3982,
+      "components": null,
+      "scientific_score": null,
+      "sensitivity_equal": null,
+      "blockers": [
+        "interval_position_unverified",
+        "quality_flags_unverified"
+      ],
+      "rows_trace": {
+        "value": 210203,
+        "ambiguous": 70,
+        "accepted_rows": 367521,
+        "unique_points": 367518,
+        "collapsed_repetitions": 3
+      },
+      "common_coverage": {
+        "common_hour_slots": 81385,
+        "first_common_clock": "2015-01-01 05:00:00",
+        "last_common_clock": "2024-05-31 23:00:00",
+        "longest_common_run_hours": 26483,
+        "quorum_stations": 1
+      }
+    },
+    {
+      "source_id": "senamhi-lima-csv",
+      "geography": "lima",
+      "signal": "pm25",
+      "history_hours": 168,
+      "horizon_hours": 24,
+      "structural_complete": 238014,
+      "accepted_forecasting_windows": 238014,
+      "candidate_origins": 573860,
+      "stations_with_windows": 7,
+      "longest_run_hours": 3982,
+      "components": null,
+      "scientific_score": null,
+      "sensitivity_equal": null,
+      "blockers": [
+        "interval_position_unverified",
+        "quality_flags_unverified"
+      ],
+      "rows_trace": {
+        "value": 210203,
+        "ambiguous": 70,
+        "accepted_rows": 367521,
+        "unique_points": 367518,
+        "collapsed_repetitions": 3
+      },
+      "common_coverage": {
+        "common_hour_slots": 81385,
+        "first_common_clock": "2015-01-01 05:00:00",
+        "last_common_clock": "2024-05-31 23:00:00",
+        "longest_common_run_hours": 26483,
+        "quorum_stations": 1
+      }
+    },
+    {
+      "source_id": "senamhi-lima-csv",
+      "geography": "lima",
+      "signal": "pm25",
+      "history_hours": 168,
+      "horizon_hours": 48,
+      "structural_complete": 227053,
+      "accepted_forecasting_windows": 227053,
+      "candidate_origins": 573692,
+      "stations_with_windows": 7,
+      "longest_run_hours": 3982,
+      "components": null,
+      "scientific_score": null,
+      "sensitivity_equal": null,
+      "blockers": [
+        "interval_position_unverified",
+        "quality_flags_unverified"
+      ],
+      "rows_trace": {
+        "value": 210203,
+        "ambiguous": 70,
+        "accepted_rows": 367521,
+        "unique_points": 367518,
+        "collapsed_repetitions": 3
+      },
+      "common_coverage": {
+        "common_hour_slots": 81385,
+        "first_common_clock": "2015-01-01 05:00:00",
+        "last_common_clock": "2024-05-31 23:00:00",
+        "longest_common_run_hours": 26483,
+        "quorum_stations": 1
+      }
+    }
+  ],
+  "raw_data_modified": false,
+  "daily_regulatory_labels": false
+}

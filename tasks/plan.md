@@ -230,3 +230,11 @@ las unidades inferidas. ODC-BY-1.0 documentada; atribución en DATA_ATTRIBUTION.
 Guía operativa: [entrega a qriqs](../docs/sources/senamhi-normalization-handoff.md).
 Política tipada y helpers listos, sin modificar su copia ni completar su normalizador.
 #43 conserva solo dudas de intervalo/calidad y no bloquea normalización.
+
+
+## #11: selección operativa aprobada por Keneth
+
+[ADR-005](../docs/decisions/005-senamhi-operating-policy.md): SENAMHI/Lima/PM2.5 con etiquetas
+UTC publicadas; aceptación explícita de calidad y posición del intervalo desconocidas. Se difieren
+etiquetas regulatorias diarias. comparison-v3 distingue ventanas aceptadas operativamente de
+validación científica. #13/#14/#18/#19 continúan como entregas propias; #20/#43 no se cierran.
