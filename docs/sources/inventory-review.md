@@ -65,3 +65,10 @@ La revisión SENAMHI del 16/11/2026 descargó diccionario y metadatos; el catál
 27 verified y tres downloaded, además de cuatro discovered y tres blocked. El registro de acceso
 de #3 conserva su fecha original. La evidencia posterior está en metadata/senamhi-documentation.json;
 la licencia de la base ya está documentada, pero unidades/tiempo y publicación conservan preguntas.
+
+## Candidato adicional del 17/11/2026
+
+El inventario vigente suma 38 registros. EAS_Aire se agregó por solicitud de Keneth: ficha accesible
+con Lightpanda, descargas del agente fallidas y archivo completo proporcionado por el usuario.
+La [evidencia específica](../../reports/acquisition/oefa-eas-aire.md) separa esos resultados;
+no se reescribe la revisión histórica de los 37 recursos iniciales.

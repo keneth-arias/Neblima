@@ -671,3 +671,24 @@ sources:
   redistribution: unknown
   last_verified_at: '2026-11-16T00:02:56.964Z'
   limitations: Inventario documental; no acredita calidad, continuidad, unidades ni derechos de redistribución.
+- source_id: oefa-eas-aire
+  name: EAS — componente aire (archivo alternativo)
+  catalog_url: https://www.datosabiertos.gob.pe/dataset/evaluaciones-ambientales-de-seguimiento-eas
+  priority: 0
+  status: downloaded
+  notes: 'Original aportado por Keneth; validación local completa y SHA-256 en metadata/oefa-eas-aire-local.json. Lightpanda verificó la ficha; sus descargas no completaron.'
+  description: Evaluaciones ambientales de seguimiento; observaciones por parámetro en formato largo.
+  publisher: OEFA
+  data_category: ground_measured
+  geographic_coverage: Perú; puntos de monitoreo, sin homologación geográfica de AirAware.
+  historical_coverage: 'Fecha.inicio contiene seriales numéricos; época sin confirmar. El catálogo declara actualización a junio 2024.'
+  temporal_resolution: Mixta por Periodo; no equivale a todas las filas horarias.
+  file_formats: [csv]
+  size_bytes: 5153626505
+  license: ODC-BY-1.0 declarada en el catálogo
+  license_url: https://opendatacommons.org/licenses/by/1-0/
+  redistribution: unknown
+  last_verified_at: '2026-11-17T00:47:52.206373+00:00'
+  limitations: Fechas seriales, relojes y etiquetas requieren un contrato específico; no usar el parser ancho de oefa-csv ni declarar elegibilidad.
+  resource_urls:
+  - https://www.datosabiertos.gob.pe/sites/default/files/EAS_Aire_0.csv

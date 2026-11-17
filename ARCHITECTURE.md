@@ -15,7 +15,7 @@ SENAMHI se preserva localmente; no hay todavía normalización ni procesamiento 
   y CLI; [guía y límites](docs/acquisition.md). La red está separada de la normalización.
 - `src/airaware/profiling/`: lectura local verificada, perfiles Parquet por fuente/estación/señal
   y tokens; [metodología](docs/profiling.md). No convierte datos al esquema normalizado.
-- `configs/sources.yaml`: 37 recursos con evidencia de revisión y bloqueos conservados.
+- `configs/sources.yaml`: 38 recursos con evidencia de revisión y bloqueos conservados.
 - `configs/upstream.lock.json`: revisiones externas inspeccionadas; no instala el SDK.
 - `uv.lock`: dependencias exactas del proyecto y de desarrollo. Python se fija por separado.
 - `.github/workflows/ci.yml`: instalación, controles, generación de paquetes y auditoría de dependencias.

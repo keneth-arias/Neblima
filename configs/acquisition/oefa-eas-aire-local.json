@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "jobs": [
+    {
+      "spec": {
+        "source_id": "oefa-eas-aire",
+        "resource_url": "https://www.datosabiertos.gob.pe/sites/default/files/EAS_Aire_0.csv",
+        "final_url": null,
+        "api_documentation_url": null,
+        "source_page_url": "https://www.datosabiertos.gob.pe/dataset/evaluaciones-ambientales-de-seguimiento-eas",
+        "method": "local",
+        "format": "csv",
+        "max_bytes": 5153626505,
+        "expected_sha256": "81b219665c12cd1f2e72fa5c93deb6ffd3255fd73465bc02e38b087deda66d6a",
+        "acquired_at": null,
+        "json_required_keys": [],
+        "csv_delimiter": ","
+      },
+      "local_file": "data/raw/oefa-eas-aire-local/EAS_Aire_0.csv",
+      "expected_size_bytes": 5153626505
+    }
+  ]
+}

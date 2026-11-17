@@ -234,3 +234,10 @@ validación estructural y reutilización local del original/manifiesto sin cambi
 archivo queda nulo porque la herramienta no lo expuso. El CSV no se normalizó ni se publicó en Git.
 Este resultado resuelve la adquisición de #9; el 418 del canal http_file permanece como historial,
 no como bloqueo actual del archivo disponible localmente. #10 mantiene el perfilamiento científico.
+
+## Relectura completa del diccionario para #11
+
+La [revisión por celdas y cruce de unidades](metadata-methods-review.md) confirma el significado
+oficial de los campos temporales y de UNIDAD_MEDIDA. Todas las celdas PM2.5/PM10 finitas del archivo
+actual llevan ug/m3; no corresponde describir su etiqueta de unidad como totalmente desconocida.
+Esto no recupera las horas faltantes de Lima ni resuelve banderas, repeticiones o todos los contextos.
