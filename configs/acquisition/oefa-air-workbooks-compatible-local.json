@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "jobs": [
+    {
+      "spec": {
+        "source_id": "oefa-ipash-aire",
+        "resource_url": "https://www.datosabiertos.gob.pe/sites/default/files/IPASH_Aire.xlsx",
+        "final_url": null,
+        "api_documentation_url": null,
+        "source_page_url": "https://www.datosabiertos.gob.pe/dataset/oefa-evaluaci%C3%B3n-ambiental/resource/29444134-7b19-4a98-bdd3-c8eea8e82349",
+        "method": "lightpanda",
+        "format": "xlsx",
+        "max_bytes": 146427,
+        "expected_sha256": "9f7032e246992fd28e066916191481c7b6afb6c07179adeaa7cd9e35bae88ea1",
+        "acquired_at": null,
+        "json_required_keys": [],
+        "csv_delimiter": ","
+      },
+      "local_file": "data/raw/oefa-air-evaluation/IPASH_Aire.xlsx",
+      "expected_size_bytes": 146427
+    },
+    {
+      "spec": {
+        "source_id": "oefa-eat-aire",
+        "resource_url": "https://www.datosabiertos.gob.pe/sites/default/files/EAT%20-%20Aire.xlsx",
+        "final_url": null,
+        "api_documentation_url": null,
+        "source_page_url": "https://www.datosabiertos.gob.pe/dataset/oefa-evaluaci%C3%B3n-ambiental/resource/fa7485be-84e1-40b5-bffa-ceb77ffe6dae",
+        "method": "lightpanda",
+        "format": "xlsx",
+        "max_bytes": 294972,
+        "expected_sha256": "5b7f27e399912cd5efd7fc2049fcda6421859e028f4d9cbf397a6994c568e0fa",
+        "acquired_at": null,
+        "json_required_keys": [],
+        "csv_delimiter": ","
+      },
+      "local_file": "data/raw/oefa-air-evaluation/EAT - Aire.xlsx",
+      "expected_size_bytes": 294972
+    }
+  ]
+}
