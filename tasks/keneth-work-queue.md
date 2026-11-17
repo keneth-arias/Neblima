@@ -13,10 +13,11 @@ en el repositorio; respuestas y resúmenes para Keneth en inglés.
 | #9 | Documentación OEFA y CSV acotado; resolver dialecto/canal antes de transferir | #9 cerrada; PR #56 integrado, CSV completo Lightpanda verificado |
 | #10 | Perfilamiento de cobertura/calidad con datos reales y límites por fuente | #10 cerrada; PR #57/#58 integrados, perfiles reales verificados |
 | #11 | Plan de comparación, conteo real de ventanas y puntuación con trazas de filtros | Plan aprobado e implementación diagnóstica ejecutada; selección científica pendiente de aclaraciones institucionales |
+
 | #12 | Contrato de observaciones/estaciones, nulabilidad, procedencia y disponibilidad | Espera selección #11; se puede preparar propuesta sin fijar unidades desconocidas |
 | #14 | Reglas de identidad, reubicación y duplicados; regresiones de procedencia | Espera normalización #13, a cargo de Cristopher |
 | #19 | Particiones cronológicas y purga de ventanas, sin fuga ni ajuste fuera de entrenamiento | Espera #18; fechas reales requieren cobertura verificada |
-| #20 | Investigación oficial peruana de umbrales, promedios y completitud | Espera #18 para validar etiquetas; separar contexto normativo y objetivos ML |
+| #20 | Investigación oficial peruana de umbrales, promedios y completitud | Metodología/módulo independientes implementados; falta integración #18. Mantener abierta por decisión de Keneth |
 | #21 | Conector TimeNet fijado, descarga separada de conversión, muestra tipada | Espera #13 y aclaraciones pertinentes de #43; #1 ya cerrada |
 | #22 | Exportación TimeF con padres/particiones fijos y lectura SDK | Espera #19/#21 |
 | #23 | Flujo pequeño sin red en CI y medición de memoria/tiempo | Espera #22 |

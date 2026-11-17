@@ -1,0 +1,37 @@
+{
+  "reviewed_at_utc": "2026-11-16T20:27:58.159006+00:00",
+  "method": "lightpanda",
+  "resources": [
+    {
+      "path": "data/raw/normativa/eca-2017.pdf",
+      "url": "https://cdn.www.gob.pe/uploads/document/file/12871/DS-003-2017-MINAM.pdf?v=1530656701",
+      "size_bytes": 759664,
+      "sha256": "a6b850b9fb3ba72dfeeab350fe331b91cfb9e3b0f3bfc5268495cc362d1fb3e1",
+      "inspected_pdf_page": 4,
+      "http_status": null,
+      "note": "Lightpanda no expuso código HTTP del archivo"
+    },
+    {
+      "path": "data/raw/normativa/protocolo-2019.7z",
+      "url": "https://cdn.www.gob.pe/uploads/document/file/5323993/4773310-d-s-n-10-2019-minam.7z?v=1698186349",
+      "size_bytes": 18941047,
+      "sha256": "4fb043520e0b7f8ab791dbdae48dd264c5737045ff876222e1eac252c03efc8d",
+      "inspected_pdf_page": null,
+      "http_status": null,
+      "note": "Lightpanda no expuso código HTTP del archivo"
+    },
+    {
+      "path": "data/raw/normativa/protocolo-2019/DS_N_10-2019-MINAM.PDF",
+      "url": null,
+      "size_bytes": 22568911,
+      "sha256": "3fa571bdc7d1e6299175e98708806d481377af29aac94811d9b776f1e2279579",
+      "inspected_pdf_page": 93,
+      "http_status": null,
+      "note": "Extraído localmente del 7z oficial"
+    }
+  ],
+  "limitations": [
+    "PDF SINIA y MINAM bloqueados por robots; se usaron copias oficiales Gob.pe CDN con Lightpanda.",
+    "No se presume semántica de datos SENAMHI ni se generaron etiquetas reales."
+  ]
+}

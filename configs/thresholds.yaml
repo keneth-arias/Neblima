@@ -1,0 +1,11 @@
+schema_version: 1
+policy_id: pe-pm25-reference-2017-v1
+pollutant: PM2.5
+unit: ug/m3
+threshold_ug_m3: 50.0
+comparison: gt
+period_hours: 24
+forecast_min_valid_hours: 24
+calendar_min_valid_hours: 18
+reference: DS-003-2017-MINAM
+completeness_reference: DS-010-2019-MINAM-anexo-1-c-i
