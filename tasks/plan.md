@@ -8,7 +8,7 @@ distingue evidencia documental, descargas y resultados de modelos.
 ## Ruta vigente para la primera ronda (17/11/2026)
 
 La [matriz del jurado](../docs/hackathon.md) organiza la evidencia. El [plan de #21](issue-21-plan.md)
-parte de #13 integrada. Keneth puede trabajar primero en #14 → #15 → #18 → #19 o en #21;
+parte de #13 integrada. El PR #73 entregó la depuración de SENAMHI. Keneth empieza con #15 → #18 → #19 y puede adelantar #21;
 ambas líneas confluyen en #22. Después de #22, #23 y #25 habilitan #27 → #28. Jordan puede
 preparar la ficha y el guion mientras espera las verificaciones de #24 y #28 para cerrar #29.
 Mantener las asignaciones vigentes en GitHub y una tarea activa por persona.
@@ -284,16 +284,7 @@ validación científica. #13/#14/#18/#19 continúan como entregas propias; #20/#
 
 ## Próximas entregas de Keneth para la primera ronda
 
-| Orden | Tarea y primer resultado verificable |
-| --- | --- |
-| 1 | [#14](issue-14-plan.md). Auditar las decisiones por señal sobre el Parquet verificado de #13. Conciliar los conteos de PM2.5 con #11. |
-| 2 | [#15](https://github.com/keneth-arias/airaware/issues/15). Construir una grilla horaria UTC por identidad y señal compatible desde la auditoría de #14. Probar un cero medido, un dato publicado sin valor, un conflicto y una hora ausente. Conciliar los valores conservados por estación. |
-| 3 | [#18](https://github.com/keneth-arias/airaware/issues/18). Crear identificadores estables de ventanas con 24 horas completas de historia y seis de objetivo, paso de una hora. Probar que una hora faltante invalida cada ventana que la contiene y conciliar las 339 205 ventanas de #11 antes de particionar. |
-| 4 | [#19](https://github.com/keneth-arias/airaware/issues/19). Publicar manifiestos locales con fechas de corte UTC, ventanas por estación y ventanas purgadas. Comprobar que las horas de historia y objetivo sean disjuntas entre particiones. Congelar el manifiesto antes de seleccionar el modelo. |
-| En paralelo a la cadena de datos | [#21](https://github.com/keneth-arias/airaware/issues/21). Usar el entorno fijado para escribir, verificar y leer primero una serie sintética con un cero y un nulo. Repetir el recorrido con una muestra del Parquet de #13 conservando atribución, unidad inferida y procedencia. |
-| Con #19 y #21 | [#22](https://github.com/keneth-arias/airaware/issues/22). Leer una tarea TimeF real con el lector oficial y contrastar sus 24 entradas, seis objetivos y partición con el manifiesto. Entregar ese recorrido a #23 y los objetivos comunes a #25. |
-| Con #23 y #25 | [#27](https://github.com/keneth-arias/airaware/issues/27) y [#28](https://github.com/keneth-arias/airaware/issues/28). Verificar licencia, revisión y presupuesto del modelo. Probar un lote y después ajustar en entrenamiento, seleccionar en validación y comparar contra las referencias en prueba. |
-
-La muestra inicial de TimeF puede usar #13 mientras avanza la cadena de datos. La tarea final de
-pronóstico usa las particiones fijas y la vista depurada. Se mantienen las dependencias de #20
-para etiquetas y #43 para aclaraciones institucionales.
+El [plan de PR de Keneth](keneth-work-queue.md) detalla el alcance, los insumos y el criterio de
+cierre de sus 12 tareas abiertas. La [auditoría de #73](issue-14-plan.md) permite iniciar #15.
+La primera entrega de #21 se puede desarrollar desde la misma versión de main. #19 y #21
+confluyen en #22; #23 y #25 habilitan el ajuste temporal en #27 y la evaluación en #28.
