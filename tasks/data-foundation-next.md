@@ -21,3 +21,12 @@ se conserva el resto de tasks/plan.md. No se cambia el objetivo PM2.5 de Lima.
 Cada entrega usa pruebas sin red, make check/build/audit y revisión antes de PR. Dos PR pequeñas
 apiladas: contrato y diagnóstico EAS. No modificar copias de compañeros ni dependencias principales.
 #20 permanece abierto hasta integración real #18; #11 hasta selección defendible.
+
+## Resultado de implementación
+
+- Incremento 1 integrado en PR #66; #12 completado con doce pruebas del contrato y guía.
+- Incrementos 2/3 implementados en PR #67: 11 407 394 filas EAS, seis pruebas y reporte real;
+  hipótesis de fecha explícita, hashes intactos, sin selección científica.
+- Incremento 4 pendiente de evidencia institucional/documental y entregas #13/#14; no se
+  puede acreditar reloj/calidad/derechos mediante una decisión técnica. #11/#20 siguen abiertos.
+- 270 pruebas completas, build y auditoría aprobados; 47 pruebas focalizadas también en 3.11.
