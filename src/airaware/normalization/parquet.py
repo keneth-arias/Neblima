@@ -180,8 +180,18 @@ def iter_observations(target: Path, batch_size: int = 1000) -> Iterator[Observat
     """Leer de vuelta las observaciones publicadas, en orden determinista de partición y archivo."""
     if batch_size < 1:
         raise ValueError("batch_size debe ser positivo")
-    for path in sorted(target.glob("source_id=*/year=*/month=*/part-*.parquet")):
-        parquet = pq.ParquetFile(path)
+    manifest = Manifest.model_validate_json((target / MANIFEST).read_bytes())
+    root = target.resolve()
+    for entry in [*manifest.files, manifest.rejection_trace]:
+        artifact = root / entry.path
+        if (
+            not artifact.resolve().is_relative_to(root)
+            or not artifact.is_file()
+            or _sha256(artifact) != entry.sha256
+        ):
+            raise ValueError(f"Artefacto ausente o distinto del manifiesto: {entry.path}")
+    for entry in sorted(manifest.files, key=lambda item: item.path):
+        parquet = pq.ParquetFile(root / entry.path)
         for batch in parquet.iter_batches(batch_size=batch_size):
             for record in batch.to_pylist():
                 restored = dict(record)
@@ -276,7 +286,8 @@ def _validate(provisional: Path, rows_per_file: dict[str, int], rejections_total
             raise ValueError(f"filas inesperadas en {relative}")
         if not parquet.schema_arrow.equals(OBSERVATION_SCHEMA):
             raise ValueError(f"esquema físico inesperado en {relative}")
-    lines = (provisional / REJECTION_TRACE).read_bytes().count(b"\n")
+    with (provisional / REJECTION_TRACE).open("rb") as trace:
+        lines = sum(chunk.count(b"\n") for chunk in iter(lambda: trace.read(CHUNK), b""))
     if lines != rejections_total:
         raise ValueError("la traza de rechazos no coincide con el conteo")
 

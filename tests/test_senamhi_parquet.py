@@ -16,6 +16,7 @@ from airaware.normalization import (
     Manifest,
     Rejection,
     iter_observations,
+    stream_observations,
     write_parquet_output,
 )
 from airaware.schemas import Observation
@@ -394,3 +395,48 @@ def test_manifiesto_rechaza_conteos_que_no_reconcilian(tmp_path):
     }
     with pytest.raises(ValueError):
         Manifest.model_validate(base)
+
+
+def test_reemplazo_del_csv_despues_de_verificar_impide_publicar(tmp_path):
+    source = tmp_path / "input.csv"
+    policy = synthetic_policy(write_csv(source, [fila()]))
+    batches = stream_observations(source, policy)
+    source.write_bytes(source.read_bytes() + source.read_bytes().splitlines(keepends=True)[-1])
+    target = tmp_path / "output"
+
+    with pytest.raises(ValueError, match="SHA-256"):
+        write_parquet_output(batches, policy, target)
+    assert not target.exists()
+
+
+@pytest.mark.parametrize("damage", ["missing", "modified", "trace"])
+def test_lector_rechaza_artefactos_que_no_coinciden_con_manifiesto(tmp_path, damage):
+    source = tmp_path / "input.csv"
+    policy = synthetic_policy(write_csv(source, [fila()]))
+    target = tmp_path / "output"
+    manifest = write_parquet_output(stream_observations(source, policy), policy, target)
+    partition = target / manifest.files[0].path
+    if damage == "missing":
+        partition.unlink()
+    elif damage == "modified":
+        partition.write_bytes(b"contenido alterado")
+    else:
+        (target / manifest.rejection_trace.path).write_bytes(b"{}\n")
+
+    with pytest.raises(ValueError, match="manifiesto"):
+        next(iter_observations(target))
+
+
+def test_validacion_de_rechazos_no_carga_la_traza_completa(tmp_path, monkeypatch):
+    source = tmp_path / "input.csv"
+    policy = synthetic_policy(write_csv(source, [fila(hora="999999")]))
+    original = Path.read_bytes
+
+    def forbid_trace_read(path):
+        if path.name == "rejections.jsonl":
+            pytest.fail("La traza de rechazos debe verificarse por bloques")
+        return original(path)
+
+    monkeypatch.setattr(Path, "read_bytes", forbid_trace_read)
+    manifest = write_parquet_output(stream_observations(source, policy), policy, tmp_path / "out")
+    assert manifest.rejection_trace.rows == 3

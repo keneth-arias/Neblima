@@ -2,6 +2,7 @@
 
 import csv
 import hashlib
+import io
 from collections.abc import Iterator
 from pathlib import Path
 
@@ -81,8 +82,33 @@ def stream_observations(
     return _stream(path, policy, batch_size)
 
 
+class _HashingInput(io.RawIOBase):
+    """Registrar los bytes entregados al decodificador CSV."""
+
+    def __init__(self, source: io.FileIO) -> None:
+        super().__init__()
+        self.source = source
+        self.digest = hashlib.sha256()
+
+    def readable(self) -> bool:
+        return True
+
+    def readinto(self, buffer) -> int:
+        count = self.source.readinto(buffer)
+        if count is None:
+            raise OSError("No se pudo leer el original")
+        self.digest.update(memoryview(buffer)[:count])
+        return count
+
+
 def _stream(path: Path, policy: PreparationPolicy, batch_size: int) -> Iterator[list[RowOutcomes]]:
-    with path.open("r", encoding="utf-8-sig", newline="") as stream:
-        reader = csv.reader(stream, delimiter=",", strict=True)
-        header = validate_header(next(reader, []))
-        yield from iter_batches(reader, header, policy, batch_size)
+    with io.FileIO(path, "r") as source:
+        hashed = _HashingInput(source)
+        with io.TextIOWrapper(
+            io.BufferedReader(hashed), encoding="utf-8-sig", newline=""
+        ) as stream:
+            reader = csv.reader(stream, delimiter=",", strict=True)
+            header = validate_header(next(reader, []))
+            yield from iter_batches(reader, header, policy, batch_size)
+        if hashed.digest.hexdigest() != policy.input_sha256:
+            raise ValueError("SHA-256 de los bytes convertidos no coincide con la política")
