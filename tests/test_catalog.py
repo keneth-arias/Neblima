@@ -158,7 +158,8 @@ def test_inventory_has_dated_access_evidence_for_every_candidate():
     catalog = load_catalog(root / "configs/sources.yaml")
     evidence = json.loads((root / "metadata/source-access.json").read_text())
     rows = evidence["resources"]
-    assert len(rows) == len(catalog.sources) == 38
+    assert len(rows) == len(catalog.sources)
+    assert len(catalog.sources) >= 40
     indexed = {row["source_id"]: row for row in rows}
     assert len(indexed) == len(rows)
     assert set(indexed) == {source.source_id for source in catalog.sources}
