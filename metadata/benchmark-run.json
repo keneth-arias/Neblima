@@ -1,0 +1,715 @@
+{
+  "schema_version": 1,
+  "report": "reports/generated/comparison/comparison-fe066c1522014c03a2d753cea3bd2e4c",
+  "manifest": {
+    "algorithm": "comparison-v1",
+    "policy_sha256": "dd026273cb454c5cf75b2ba87d506e1f599fef111a343cb15182a3fd4048a625",
+    "verified_at_utc": "2026-11-17T00:03:14.044950+00:00",
+    "duckdb_version": "1.5.6",
+    "profile_specs": [
+      {
+        "source_id": "senamhi-lima-csv",
+        "kind": "senamhi",
+        "manifest": "data/raw/senamhi-lima-csv/896ae8a106fb128460e81b3f58096f6b9c4d582ef28fffa46e5394c5875c40d4/manifest.json",
+        "raw_root": "data/raw",
+        "sha256": "896ae8a106fb128460e81b3f58096f6b9c4d582ef28fffa46e5394c5875c40d4",
+        "columns": [
+          "ID",
+          "ESTACION",
+          "FECHA",
+          "HORA",
+          "LONGITUD",
+          "LATITUD",
+          "ALTITUD",
+          "PM10",
+          "PM2_5",
+          "NO2",
+          "DEPARTAMENTO",
+          "PROVINCIA",
+          "DISTRITO",
+          "UBIGEO",
+          "FECHA_CORTE"
+        ],
+        "signals": [
+          "PM10",
+          "PM2_5",
+          "NO2"
+        ],
+        "expected_rows": 577794
+      },
+      {
+        "source_id": "oefa-csv",
+        "kind": "oefa",
+        "manifest": "data/raw/oefa-csv/1f09a8064ee0aed0b3a9a0a90b96f63ce226b45a969dace49f73e45134f26d92/manifest.json",
+        "raw_root": "data/raw",
+        "sha256": "1f09a8064ee0aed0b3a9a0a90b96f63ce226b45a969dace49f73e45134f26d92",
+        "columns": [
+          "NOMBRE_EVALUACION",
+          "COMPONENTE_AMBIENTAL",
+          "PROCEDENCIA_MUESTRA",
+          "NOMBRE_PUNTO",
+          "ESTE",
+          "NORTE",
+          "ALTITUD",
+          "ZONA",
+          "DATUM",
+          "DEPARTAMENTO",
+          "PROVINCIA",
+          "DISTRITO",
+          "UBIGEO",
+          "DESCRIPCION_UBICACION",
+          "TIPO_MUESTRA",
+          "TIPO_ANALISIS",
+          "PERIODO",
+          "FECHA_INICIO",
+          "HORA_INICIO",
+          "FECHA_FIN",
+          "HORA_FIN",
+          "UNIDAD_MEDIDA",
+          "DIOXIDO_AZUFRE",
+          "DIRECCION_VIENTO",
+          "HUMEDAD_RELATIVA",
+          "PM10",
+          "PM2.5",
+          "MONOXIDO_CARBONO",
+          "OZONO",
+          "PRECIPITACION",
+          "PRESION_BAROMETRICA",
+          "RADIACION_SOLAR",
+          "SULFURO_HIDROGENO",
+          "TEMPERATURA",
+          "VELOCIDAD_VIENTO",
+          "FECHA_CORTE"
+        ],
+        "signals": [
+          "DIOXIDO_AZUFRE",
+          "DIRECCION_VIENTO",
+          "HUMEDAD_RELATIVA",
+          "PM10",
+          "PM2.5",
+          "MONOXIDO_CARBONO",
+          "OZONO",
+          "PRECIPITACION",
+          "PRESION_BAROMETRICA",
+          "RADIACION_SOLAR",
+          "SULFURO_HIDROGENO",
+          "TEMPERATURA",
+          "VELOCIDAD_VIENTO"
+        ],
+        "expected_rows": 2883877
+      }
+    ],
+    "inputs_unchanged": true,
+    "files": {
+      "summary.json": {
+        "sha256": "ac0f7cb0fac82971c0c9ec69e70b7cc65fae1913d209710611982b5618422e38",
+        "size_bytes": 135619
+      },
+      "forecasting-readiness.parquet": {
+        "sha256": "e9d68816732b3d37828e43b8b5f9c3185ec0d4091b112ae2a40d72c21585b759",
+        "size_bytes": 16654
+      },
+      "source-overlap.parquet": {
+        "sha256": "d7767c27f925ba6810cb6597b6dd2040b5dcb78b3a8c77ab16b4915dc3a82489",
+        "size_bytes": 1766
+      }
+    }
+  },
+  "selection_status": "blocked",
+  "representative_pair_24_6": [
+    {
+      "source_id": "senamhi-lima-csv",
+      "geography": "lima",
+      "signal": "pm25",
+      "history_hours": 24,
+      "horizon_hours": 6,
+      "structural_complete": 339205,
+      "candidate_origins": 574994,
+      "stations_with_windows": 7,
+      "longest_run_hours": 3982,
+      "components": [
+        1,
+        0.5899278948997728,
+        1,
+        0.23043981481481482,
+        0.5
+      ],
+      "scientific_score": null,
+      "sensitivity_equal": null,
+      "blockers": [
+        "units_unverified",
+        "timezone_and_interval_unverified",
+        "quality_flags_unverified",
+        "redistribution_review_pending"
+      ],
+      "rows_trace": {
+        "value": 210203,
+        "ambiguous": 70,
+        "accepted_rows": 367521,
+        "unique_points": 367518,
+        "collapsed_repetitions": 3
+      },
+      "common_coverage": {
+        "common_hour_slots": 55857,
+        "first_common_clock": "2015-01-01 05:00:00",
+        "last_common_clock": "2024-05-31 23:00:00",
+        "longest_common_run_hours": 5718
+      }
+    },
+    {
+      "source_id": "senamhi-lima-csv",
+      "geography": "lima",
+      "signal": "pm10",
+      "history_hours": 24,
+      "horizon_hours": 6,
+      "structural_complete": 359251,
+      "candidate_origins": 570750,
+      "stations_with_windows": 7,
+      "longest_run_hours": 4667,
+      "components": [
+        1,
+        0.6294367060884801,
+        1,
+        0.2700810185185185,
+        0.5
+      ],
+      "scientific_score": null,
+      "sensitivity_equal": null,
+      "blockers": [
+        "units_unverified",
+        "timezone_and_interval_unverified",
+        "quality_flags_unverified",
+        "redistribution_review_pending"
+      ],
+      "rows_trace": {
+        "value": 196812,
+        "ambiguous": 70,
+        "accepted_rows": 380912,
+        "unique_points": 380909,
+        "collapsed_repetitions": 3
+      },
+      "common_coverage": {
+        "common_hour_slots": 58362,
+        "first_common_clock": "2015-01-01 05:00:00",
+        "last_common_clock": "2024-05-31 23:00:00",
+        "longest_common_run_hours": 6329
+      }
+    },
+    {
+      "source_id": "senamhi-lima-csv",
+      "geography": "callao",
+      "signal": "pm25",
+      "history_hours": 24,
+      "horizon_hours": 6,
+      "structural_complete": 0,
+      "candidate_origins": 0,
+      "stations_with_windows": 0,
+      "longest_run_hours": 0,
+      "components": [
+        0.0,
+        0,
+        0.0,
+        0.0,
+        0.5
+      ],
+      "scientific_score": null,
+      "sensitivity_equal": null,
+      "blockers": [
+        "units_unverified",
+        "timezone_and_interval_unverified",
+        "quality_flags_unverified",
+        "redistribution_review_pending"
+      ],
+      "rows_trace": {
+        "outside": 577794,
+        "ambiguous": 0,
+        "accepted_rows": 0,
+        "unique_points": 0,
+        "collapsed_repetitions": 0
+      },
+      "common_coverage": {
+        "common_hour_slots": 0,
+        "first_common_clock": null,
+        "last_common_clock": null,
+        "longest_common_run_hours": 0
+      }
+    },
+    {
+      "source_id": "senamhi-lima-csv",
+      "geography": "callao",
+      "signal": "pm10",
+      "history_hours": 24,
+      "horizon_hours": 6,
+      "structural_complete": 0,
+      "candidate_origins": 0,
+      "stations_with_windows": 0,
+      "longest_run_hours": 0,
+      "components": [
+        0.0,
+        0,
+        0.0,
+        0.0,
+        0.5
+      ],
+      "scientific_score": null,
+      "sensitivity_equal": null,
+      "blockers": [
+        "units_unverified",
+        "timezone_and_interval_unverified",
+        "quality_flags_unverified",
+        "redistribution_review_pending"
+      ],
+      "rows_trace": {
+        "outside": 577794,
+        "ambiguous": 0,
+        "accepted_rows": 0,
+        "unique_points": 0,
+        "collapsed_repetitions": 0
+      },
+      "common_coverage": {
+        "common_hour_slots": 0,
+        "first_common_clock": null,
+        "last_common_clock": null,
+        "longest_common_run_hours": 0
+      }
+    },
+    {
+      "source_id": "oefa-csv",
+      "geography": "lima",
+      "signal": "pm25",
+      "history_hours": 24,
+      "horizon_hours": 6,
+      "structural_complete": 0,
+      "candidate_origins": 0,
+      "stations_with_windows": 0,
+      "longest_run_hours": 0,
+      "components": [
+        0.0,
+        0,
+        0.0,
+        0.0,
+        0.5
+      ],
+      "scientific_score": null,
+      "sensitivity_equal": null,
+      "blockers": [
+        "lima_timestamps_unresolved",
+        "timezone_and_interval_unverified",
+        "wide_table_parameter_units_unresolved",
+        "quality_flags_unverified",
+        "attribution_review_pending"
+      ],
+      "rows_trace": {
+        "clock": 180806,
+        "outside": 2671415,
+        "period": 31656,
+        "ambiguous": 0,
+        "accepted_rows": 0,
+        "unique_points": 0,
+        "collapsed_repetitions": 0
+      },
+      "common_coverage": {
+        "common_hour_slots": 0,
+        "first_common_clock": null,
+        "last_common_clock": null,
+        "longest_common_run_hours": 0
+      }
+    },
+    {
+      "source_id": "oefa-csv",
+      "geography": "lima",
+      "signal": "pm10",
+      "history_hours": 24,
+      "horizon_hours": 6,
+      "structural_complete": 0,
+      "candidate_origins": 0,
+      "stations_with_windows": 0,
+      "longest_run_hours": 0,
+      "components": [
+        0.0,
+        0,
+        0.0,
+        0.0,
+        0.5
+      ],
+      "scientific_score": null,
+      "sensitivity_equal": null,
+      "blockers": [
+        "lima_timestamps_unresolved",
+        "timezone_and_interval_unverified",
+        "wide_table_parameter_units_unresolved",
+        "quality_flags_unverified",
+        "attribution_review_pending"
+      ],
+      "rows_trace": {
+        "clock": 180806,
+        "outside": 2671415,
+        "period": 31656,
+        "ambiguous": 0,
+        "accepted_rows": 0,
+        "unique_points": 0,
+        "collapsed_repetitions": 0
+      },
+      "common_coverage": {
+        "common_hour_slots": 0,
+        "first_common_clock": null,
+        "last_common_clock": null,
+        "longest_common_run_hours": 0
+      }
+    },
+    {
+      "source_id": "oefa-csv",
+      "geography": "callao",
+      "signal": "pm25",
+      "history_hours": 24,
+      "horizon_hours": 6,
+      "structural_complete": 0,
+      "candidate_origins": 0,
+      "stations_with_windows": 0,
+      "longest_run_hours": 0,
+      "components": [
+        0.0,
+        0,
+        0.0,
+        0.0,
+        0.5
+      ],
+      "scientific_score": null,
+      "sensitivity_equal": null,
+      "blockers": [
+        "lima_timestamps_unresolved",
+        "timezone_and_interval_unverified",
+        "wide_table_parameter_units_unresolved",
+        "quality_flags_unverified",
+        "attribution_review_pending"
+      ],
+      "rows_trace": {
+        "clock": 1028,
+        "outside": 2881779,
+        "period": 1070,
+        "ambiguous": 0,
+        "accepted_rows": 0,
+        "unique_points": 0,
+        "collapsed_repetitions": 0
+      },
+      "common_coverage": {
+        "common_hour_slots": 0,
+        "first_common_clock": null,
+        "last_common_clock": null,
+        "longest_common_run_hours": 0
+      }
+    },
+    {
+      "source_id": "oefa-csv",
+      "geography": "callao",
+      "signal": "pm10",
+      "history_hours": 24,
+      "horizon_hours": 6,
+      "structural_complete": 0,
+      "candidate_origins": 0,
+      "stations_with_windows": 0,
+      "longest_run_hours": 0,
+      "components": [
+        0.0,
+        0,
+        0.0,
+        0.0,
+        0.5
+      ],
+      "scientific_score": null,
+      "sensitivity_equal": null,
+      "blockers": [
+        "lima_timestamps_unresolved",
+        "timezone_and_interval_unverified",
+        "wide_table_parameter_units_unresolved",
+        "quality_flags_unverified",
+        "attribution_review_pending"
+      ],
+      "rows_trace": {
+        "clock": 1028,
+        "outside": 2881779,
+        "period": 1070,
+        "ambiguous": 0,
+        "accepted_rows": 0,
+        "unique_points": 0,
+        "collapsed_repetitions": 0
+      },
+      "common_coverage": {
+        "common_hour_slots": 0,
+        "first_common_clock": null,
+        "last_common_clock": null,
+        "longest_common_run_hours": 0
+      }
+    }
+  ],
+  "overlap": [
+    {
+      "geography": "lima",
+      "signal": "pm25",
+      "left_source": "senamhi-lima-csv",
+      "right_source": "oefa-csv",
+      "raw_clock_intersection": 0,
+      "scientific_intersection": null,
+      "reason": "cross_source_clock_compatibility_unverified",
+      "policy_sha256": "dd026273cb454c5cf75b2ba87d506e1f599fef111a343cb15182a3fd4048a625"
+    },
+    {
+      "geography": "lima",
+      "signal": "pm10",
+      "left_source": "senamhi-lima-csv",
+      "right_source": "oefa-csv",
+      "raw_clock_intersection": 0,
+      "scientific_intersection": null,
+      "reason": "cross_source_clock_compatibility_unverified",
+      "policy_sha256": "dd026273cb454c5cf75b2ba87d506e1f599fef111a343cb15182a3fd4048a625"
+    },
+    {
+      "geography": "callao",
+      "signal": "pm25",
+      "left_source": "senamhi-lima-csv",
+      "right_source": "oefa-csv",
+      "raw_clock_intersection": 0,
+      "scientific_intersection": null,
+      "reason": "cross_source_clock_compatibility_unverified",
+      "policy_sha256": "dd026273cb454c5cf75b2ba87d506e1f599fef111a343cb15182a3fd4048a625"
+    },
+    {
+      "geography": "callao",
+      "signal": "pm10",
+      "left_source": "senamhi-lima-csv",
+      "right_source": "oefa-csv",
+      "raw_clock_intersection": 0,
+      "scientific_intersection": null,
+      "reason": "cross_source_clock_compatibility_unverified",
+      "policy_sha256": "dd026273cb454c5cf75b2ba87d506e1f599fef111a343cb15182a3fd4048a625"
+    }
+  ],
+  "readiness_rows": 3104,
+  "scientific_valid_rows": 0,
+  "all_16_pairs_senamhi_lima": [
+    {
+      "signal": "pm25",
+      "history_hours": 24,
+      "horizon_hours": 6,
+      "candidate_origins": 574994,
+      "structural_complete": 339205
+    },
+    {
+      "signal": "pm25",
+      "history_hours": 24,
+      "horizon_hours": 12,
+      "candidate_origins": 574952,
+      "structural_complete": 334134
+    },
+    {
+      "signal": "pm25",
+      "history_hours": 24,
+      "horizon_hours": 24,
+      "candidate_origins": 574868,
+      "structural_complete": 324463
+    },
+    {
+      "signal": "pm25",
+      "history_hours": 24,
+      "horizon_hours": 48,
+      "candidate_origins": 574700,
+      "structural_complete": 306645
+    },
+    {
+      "signal": "pm25",
+      "history_hours": 48,
+      "horizon_hours": 6,
+      "candidate_origins": 574826,
+      "structural_complete": 319839
+    },
+    {
+      "signal": "pm25",
+      "history_hours": 48,
+      "horizon_hours": 12,
+      "candidate_origins": 574784,
+      "structural_complete": 315339
+    },
+    {
+      "signal": "pm25",
+      "history_hours": 48,
+      "horizon_hours": 24,
+      "candidate_origins": 574700,
+      "structural_complete": 306645
+    },
+    {
+      "signal": "pm25",
+      "history_hours": 48,
+      "horizon_hours": 48,
+      "candidate_origins": 574532,
+      "structural_complete": 290492
+    },
+    {
+      "signal": "pm25",
+      "history_hours": 72,
+      "horizon_hours": 6,
+      "candidate_origins": 574658,
+      "structural_complete": 302448
+    },
+    {
+      "signal": "pm25",
+      "history_hours": 72,
+      "horizon_hours": 12,
+      "candidate_origins": 574616,
+      "structural_complete": 298360
+    },
+    {
+      "signal": "pm25",
+      "history_hours": 72,
+      "horizon_hours": 24,
+      "candidate_origins": 574532,
+      "structural_complete": 290492
+    },
+    {
+      "signal": "pm25",
+      "history_hours": 72,
+      "horizon_hours": 48,
+      "candidate_origins": 574364,
+      "structural_complete": 275694
+    },
+    {
+      "signal": "pm25",
+      "history_hours": 168,
+      "horizon_hours": 6,
+      "candidate_origins": 573986,
+      "structural_complete": 246651
+    },
+    {
+      "signal": "pm25",
+      "history_hours": 168,
+      "horizon_hours": 12,
+      "candidate_origins": 573944,
+      "structural_complete": 243740
+    },
+    {
+      "signal": "pm25",
+      "history_hours": 168,
+      "horizon_hours": 24,
+      "candidate_origins": 573860,
+      "structural_complete": 238014
+    },
+    {
+      "signal": "pm25",
+      "history_hours": 168,
+      "horizon_hours": 48,
+      "candidate_origins": 573692,
+      "structural_complete": 227053
+    },
+    {
+      "signal": "pm10",
+      "history_hours": 24,
+      "horizon_hours": 6,
+      "candidate_origins": 570750,
+      "structural_complete": 359251
+    },
+    {
+      "signal": "pm10",
+      "history_hours": 24,
+      "horizon_hours": 12,
+      "candidate_origins": 570708,
+      "structural_complete": 355183
+    },
+    {
+      "signal": "pm10",
+      "history_hours": 24,
+      "horizon_hours": 24,
+      "candidate_origins": 570624,
+      "structural_complete": 347302
+    },
+    {
+      "signal": "pm10",
+      "history_hours": 24,
+      "horizon_hours": 48,
+      "candidate_origins": 570456,
+      "structural_complete": 332414
+    },
+    {
+      "signal": "pm10",
+      "history_hours": 48,
+      "horizon_hours": 6,
+      "candidate_origins": 570582,
+      "structural_complete": 343502
+    },
+    {
+      "signal": "pm10",
+      "history_hours": 48,
+      "horizon_hours": 12,
+      "candidate_origins": 570540,
+      "structural_complete": 339753
+    },
+    {
+      "signal": "pm10",
+      "history_hours": 48,
+      "horizon_hours": 24,
+      "candidate_origins": 570456,
+      "structural_complete": 332414
+    },
+    {
+      "signal": "pm10",
+      "history_hours": 48,
+      "horizon_hours": 48,
+      "candidate_origins": 570288,
+      "structural_complete": 318405
+    },
+    {
+      "signal": "pm10",
+      "history_hours": 72,
+      "horizon_hours": 6,
+      "candidate_origins": 570414,
+      "structural_complete": 328844
+    },
+    {
+      "signal": "pm10",
+      "history_hours": 72,
+      "horizon_hours": 12,
+      "candidate_origins": 570372,
+      "structural_complete": 325321
+    },
+    {
+      "signal": "pm10",
+      "history_hours": 72,
+      "horizon_hours": 24,
+      "candidate_origins": 570288,
+      "structural_complete": 318405
+    },
+    {
+      "signal": "pm10",
+      "history_hours": 72,
+      "horizon_hours": 48,
+      "candidate_origins": 570120,
+      "structural_complete": 304949
+    },
+    {
+      "signal": "pm10",
+      "history_hours": 168,
+      "horizon_hours": 6,
+      "candidate_origins": 569742,
+      "structural_complete": 277307
+    },
+    {
+      "signal": "pm10",
+      "history_hours": 168,
+      "horizon_hours": 12,
+      "candidate_origins": 569700,
+      "structural_complete": 274486
+    },
+    {
+      "signal": "pm10",
+      "history_hours": 168,
+      "horizon_hours": 24,
+      "candidate_origins": 569616,
+      "structural_complete": 268936
+    },
+    {
+      "signal": "pm10",
+      "history_hours": 168,
+      "horizon_hours": 48,
+      "candidate_origins": 569448,
+      "structural_complete": 258151
+    }
+  ]
+}

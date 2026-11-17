@@ -90,12 +90,18 @@ def _measure(chunks: Iterable[bytes], max_bytes: int, output: Path | None) -> tu
 
 
 def _identity(spec: AcquisitionSpec) -> tuple[object, ...]:
-    return (
+    identity = (
         spec.source_id,
         str(spec.resource_url),
         spec.method,
         spec.format,
         spec.json_required_keys,
+    )
+    # Conservar claves históricas y contratos de coma sin reescribir manifiestos.
+    return (
+        identity
+        if spec.csv_delimiter == ","
+        else (*identity, ("csv_delimiter", spec.csv_delimiter))
     )
 
 
@@ -195,7 +201,7 @@ def ingest_chunks(
 
 def ingest_file(spec: AcquisitionSpec, original: Path, data_dir: Path) -> AcquisitionResult:
     """Registrar una descarga previa sin afirmar que se obtuvo por la red en esta operación."""
-    if spec.method == "api":
+    if spec.method in {"api", "http_file"}:
         raise AcquisitionError("La adquisición API requiere el transporte explícito")
     root = data_dir.expanduser().resolve()
     path = original.expanduser().absolute()

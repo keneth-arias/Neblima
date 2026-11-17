@@ -11,7 +11,8 @@ from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 from airaware.acquisition.budget import ByteBudget
 from airaware.acquisition.models import AcquisitionError, AcquisitionResult, AcquisitionSpec
-from airaware.acquisition.store import ingest_file
+from airaware.acquisition.public_file import fetch_public_file
+from airaware.acquisition.store import _identity, ingest_file
 from airaware.acquisition.transfer import fetch_cached_api
 
 
@@ -45,7 +46,7 @@ class AcquisitionJob(BaseModel):
             self.start is not None and self.end is not None and self.start > self.end
         ):
             raise ValueError("La cobertura del recurso requiere un intervalo completo y válido")
-        if self.spec.method != "api" and self.local_file is None:
+        if self.spec.method not in {"api", "http_file"} and self.local_file is None:
             raise ValueError(
                 "Los recursos Lightpanda/local requieren un archivo previamente adquirido"
             )
@@ -74,14 +75,7 @@ def select_jobs(
                 continue
             if (start and job.end < start) or (end and job.start > end):
                 continue
-        key = (
-            job.spec.source_id,
-            str(job.spec.resource_url),
-            job.spec.format,
-            job.spec.json_required_keys,
-            job.spec.method,
-            job.spec.expected_sha256,
-        )
+        key = (*_identity(job.spec), job.spec.expected_sha256)
         if key not in seen:
             selected.append(job)
             seen.add(key)
@@ -151,7 +145,7 @@ def execute_jobs(
     ):
         raise AcquisitionError("La política de ejecución del lote no es válida")
     selected = select_jobs(jobs)
-    network_jobs = [j for j in selected if j.spec.method == "api"]
+    network_jobs = [j for j in selected if j.spec.method in {"api", "http_file"}]
     if network_jobs and not offline:
         if budget_bytes <= 0:
             raise AcquisitionError("El lote de API requiere un presupuesto total explícito")
@@ -164,12 +158,20 @@ def execute_jobs(
             )
     budget = ByteBudget(budget_bytes or 1)
     source_locks = {job.spec.source_id: threading.Lock() for job in selected}
-    fetch = fetcher if fetcher is not None else fetch_cached_api
 
     def run(job: AcquisitionJob) -> tuple[AcquisitionResult | None, BatchFailure | None]:
         try:
             with source_locks[job.spec.source_id]:
-                if job.spec.method == "api":
+                if job.spec.method in {"api", "http_file"}:
+                    fetch = (
+                        fetcher
+                        if fetcher is not None
+                        else (
+                            fetch_public_file
+                            if job.spec.method == "http_file"
+                            else fetch_cached_api
+                        )
+                    )
                     result = fetch(
                         job.spec,
                         data_dir,

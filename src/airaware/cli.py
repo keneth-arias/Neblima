@@ -16,6 +16,8 @@ import typer
 
 from airaware.acquisition.cli import acquisition_app
 from airaware.catalog import CatalogError, load_catalog
+from airaware.comparison.cli import comparison_app
+from airaware.profiling.cli import profile_app
 
 app = typer.Typer(
     no_args_is_help=True, help="Herramientas locales de datos y plataforma de AirAware."
@@ -27,6 +29,8 @@ workspace_app = typer.Typer(
     no_args_is_help=True, help="Preparar las carpetas locales de datos y resultados."
 )
 app.add_typer(acquisition_app, name="acquire")
+app.add_typer(profile_app, name="profile")
+app.add_typer(comparison_app, name="compare")
 app.add_typer(catalog_app, name="catalog")
 app.add_typer(workspace_app, name="workspace")
 LAYERS = ("raw", "staging", "normalized", "curated", "benchmarks", "timef")

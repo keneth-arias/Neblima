@@ -1,4 +1,3 @@
-# Inventario revisado con Lightpanda; declaraciones documentales diferenciadas de mediciones.
 schema_version: 1
 sources:
 - source_id: senamhi-lima
@@ -6,8 +5,9 @@ sources:
   catalog_url: https://www.datosabiertos.gob.pe/dataset/monitoreo-de-los-contaminantes-del-aire-en-lima-metropolitana-servicio-nacional-de
   priority: 0
   status: verified
-  notes: 'Revisión #4: metadata/senamhi-documentation.json y docs/sources/senamhi.md. Documentación oficial
-    preservada; incertidumbres y consulta revisada sin enviar. No integrado.'
+  notes: 'Adquisición #8: metadata/senamhi-acquisition-check.json y reports/acquisition/senamhi.md. Originales
+    reutilizados y verificados sin red. Semántica/publicación pendientes en #43; consulta institucional
+    enviada anteriormente, sin nuevo envío.'
   description: Recurso documental o candidato revisado; alcance y evidencia en docs/sources/inventory-review.md.
   publisher: SENAMHI
   data_category: ground_measured
@@ -16,7 +16,7 @@ sources:
     continuidad comprobada
   license: ODC-BY-1.0
   redistribution: unknown
-  last_verified_at: '2026-11-16T00:27:26.408947+00:00'
+  last_verified_at: '2026-11-16T20:56:38.675730+00:00'
   limitations: Unidades de contaminantes, zona horaria, intervalo y controles de exportación pendientes
     de aclaración; derechos de publicación aún sin aprobar.
   variables:
@@ -39,8 +39,9 @@ sources:
   catalog_url: https://www.datosabiertos.gob.pe/dataset/monitoreo-de-los-contaminantes-del-aire-en-lima-metropolitana-servicio-nacional-de-0
   priority: 0
   status: downloaded
-  notes: 'Revisión #4: metadata/senamhi-documentation.json y docs/sources/senamhi.md. Documentación oficial
-    preservada; incertidumbres y consulta revisada sin enviar. No integrado.'
+  notes: 'Adquisición #8: metadata/senamhi-acquisition-check.json y reports/acquisition/senamhi.md. Originales
+    reutilizados y verificados sin red. Semántica/publicación pendientes en #43; consulta institucional
+    enviada anteriormente, sin nuevo envío.'
   description: Recurso documental o candidato revisado; alcance y evidencia en docs/sources/inventory-review.md.
   publisher: SENAMHI
   data_category: ground_measured
@@ -49,7 +50,7 @@ sources:
     continuidad comprobada
   license: ODC-BY-1.0
   redistribution: unknown
-  last_verified_at: '2026-11-16T00:27:26.408947+00:00'
+  last_verified_at: '2026-11-16T20:56:38.675730+00:00'
   limitations: Unidades de contaminantes, zona horaria, intervalo y controles de exportación pendientes
     de aclaración; derechos de publicación aún sin aprobar.
   variables:
@@ -73,8 +74,9 @@ sources:
   catalog_url: https://www.datosabiertos.gob.pe/dataset/monitoreo-de-los-contaminantes-del-aire-en-lima-metropolitana-servicio-nacional-de-1
   priority: 0
   status: downloaded
-  notes: 'Revisión #4: metadata/senamhi-documentation.json y docs/sources/senamhi.md. Documentación oficial
-    preservada; incertidumbres y consulta revisada sin enviar. No integrado.'
+  notes: 'Adquisición #8: metadata/senamhi-acquisition-check.json y reports/acquisition/senamhi.md. Originales
+    reutilizados y verificados sin red. Semántica/publicación pendientes en #43; consulta institucional
+    enviada anteriormente, sin nuevo envío.'
   description: Recurso documental o candidato revisado; alcance y evidencia en docs/sources/inventory-review.md.
   publisher: SENAMHI
   data_category: context
@@ -82,7 +84,7 @@ sources:
   historical_coverage: null
   license: null
   redistribution: unknown
-  last_verified_at: '2026-11-16T00:27:26.408947+00:00'
+  last_verified_at: '2026-11-16T20:56:38.675730+00:00'
   limitations: Unidades de contaminantes, zona horaria, intervalo y controles de exportación pendientes
     de aclaración; derechos de publicación aún sin aprobar.
   variables:
@@ -99,8 +101,9 @@ sources:
   catalog_url: https://www.datosabiertos.gob.pe/dataset/monitoreo-de-los-contaminantes-del-aire-en-lima-metropolitana-servicio-nacional-de-2
   priority: 0
   status: downloaded
-  notes: 'Revisión #4: metadata/senamhi-documentation.json y docs/sources/senamhi.md. Documentación oficial
-    preservada; incertidumbres y consulta revisada sin enviar. No integrado.'
+  notes: 'Adquisición #8: metadata/senamhi-acquisition-check.json y reports/acquisition/senamhi.md. Originales
+    reutilizados y verificados sin red. Semántica/publicación pendientes en #43; consulta institucional
+    enviada anteriormente, sin nuevo envío.'
   description: Recurso documental o candidato revisado; alcance y evidencia en docs/sources/inventory-review.md.
   publisher: SENAMHI
   data_category: context
@@ -108,7 +111,7 @@ sources:
   historical_coverage: null
   license: null
   redistribution: unknown
-  last_verified_at: '2026-11-16T00:27:26.408947+00:00'
+  last_verified_at: '2026-11-16T20:56:38.675730+00:00'
   limitations: Unidades de contaminantes, zona horaria, intervalo y controles de exportación pendientes
     de aclaración; derechos de publicación aún sin aprobar.
   file_formats:
@@ -121,41 +124,47 @@ sources:
   catalog_url: https://www.datosabiertos.gob.pe/dataset/vigilancia-y-seguimiento-ambiental-en-la-calidad-del-aire-organismo-de-evaluaci%C3%B3n-y
   priority: 0
   status: verified
-  notes: 'Lightpanda: accessible; HTTP 200. Evidencia: metadata/source-access.json (oefa-national). #5/#9:
-    Cristopher revisará coordenadas, términos y recursos oficiales.'
+  notes: CSV completo adquirido con Lightpanda por solicitud explícita de Keneth; metadata/oefa-lightpanda-download.json
+    y reports/acquisition/oefa.md. Estructura y SHA-256 verificados, reutilización local sin cambios.
+    El 418 histórico solo corresponde al canal http_file.
   description: Recurso documental o candidato revisado; alcance y evidencia en docs/sources/inventory-review.md.
   publisher: OEFA
   data_category: ground_measured
   geographic_coverage: Perú; 34 estaciones declaradas, no contadas en archivo
   historical_coverage: null
-  license: 'Open Data Commons Attribution License (declarada por catálogo; revisión pendiente en #5)'
+  license: ODC-BY-1.0 (declarada para la base de EAS; publicación pendiente)
   redistribution: unknown
-  last_verified_at: '2026-11-16T00:01:01.540Z'
-  limitations: Inventario documental; no acredita calidad, continuidad, unidades ni derechos de redistribución.
+  last_verified_at: '2026-11-16T21:46:37.993366+00:00'
+  limitations: Adquirido y validado estructuralmente, sin normalizar ni perfilar cobertura/calidad científica.
+    Reloj, CRS, marcadores y publicación pendientes; ver docs/sources/oefa.md.
   update_frequency: Anual, declarada por catálogo
   resource_urls:
   - https://www.datosabiertos.gob.pe/sites/default/files/1a_Vigilancia%20y%20Seguimiento%20ambiental%20en%20la%20calidad%20del%20aire.csv
   - https://www.datosabiertos.gob.pe/sites/default/files/1c_Formato_DiccionarioDatos_Vigilancia%20y%20Seguimiento%20ambiental%20en%20la%20calidad%20del%20aire.xlsx
   - https://www.datosabiertos.gob.pe/sites/default/files/1b_Formato_Metadatos_Vigilancia%20y%20Seguimiento%20ambiental%20en%20la%20calidad%20del%20aire.docx
-  license_url: http://opendefinition.org/licenses/odc-by/
+  license_url: https://opendatacommons.org/licenses/by/1-0/
 - source_id: oefa-csv
   name: Datos CSV de OEFA
   catalog_url: https://www.datosabiertos.gob.pe/dataset/vigilancia-y-seguimiento-ambiental-en-la-calidad-del-aire-organismo-de-evaluaci%C3%B3n-y-0
   priority: 0
-  status: verified
-  notes: 'Lightpanda: accessible; HTTP 200. Evidencia: metadata/source-access.json (oefa-csv). #5/#9:
-    Cristopher revisará coordenadas, términos y recursos oficiales.'
+  status: downloaded
+  notes: CSV completo adquirido con Lightpanda por solicitud explícita de Keneth; metadata/oefa-lightpanda-download.json
+    y reports/acquisition/oefa.md. Estructura y SHA-256 verificados, reutilización local sin cambios.
+    El 418 histórico solo corresponde al canal http_file.
   description: Recurso documental o candidato revisado; alcance y evidencia en docs/sources/inventory-review.md.
   publisher: OEFA
   data_category: ground_measured
   geographic_coverage: 'Perú; estaciones por verificar en #5'
   historical_coverage: null
-  license: null
+  license: ODC-BY-1.0 (declarada para la base de EAS; publicación pendiente)
   redistribution: unknown
-  last_verified_at: '2026-11-16T00:01:11.670Z'
-  limitations: Inventario documental; no acredita calidad, continuidad, unidades ni derechos de redistribución.
+  last_verified_at: '2026-11-16T21:46:37.993366+00:00'
+  limitations: Adquirido y validado estructuralmente, sin normalizar ni perfilar cobertura/calidad científica.
+    Reloj, CRS, marcadores y publicación pendientes; ver docs/sources/oefa.md.
   resource_urls:
   - https://www.datosabiertos.gob.pe/sites/default/files/1a_Vigilancia%20y%20Seguimiento%20ambiental%20en%20la%20calidad%20del%20aire.csv
+  license_url: https://opendatacommons.org/licenses/by/1-0/
+  size_bytes: 1317949839
 - source_id: oefa-monitoring-portal
   name: Portal de monitoreo de OEFA
   catalog_url: https://sistemas.oefa.gob.pe/pifa/mfe/

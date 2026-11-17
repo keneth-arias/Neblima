@@ -7,11 +7,19 @@ GitHub conserva responsables, criterios y dependencias. Una tarea activa por per
 
 | Responsable | Función | Tareas reservadas |
 | --- | --- | --- |
-| Keneth / keneth-arias | Liderazgo de datos y plataforma; contratos comunes, decisiones científicas, CI, prevención de fuga de información y publicaciones | #1, #2, #3, #4, #6, #7, #11, #12, #14, #19, #20, #21, #22, #23, #27, #28, #32 |
-| Cristopher / qriqs | Dedicación completa; investigación de fuentes e implementación acotada con pruebas | #5, #8, #9, #10, #13, #15, #16, #17, #18, #25, #26, #30, #31, #33, #34, #35 |
+| Keneth / keneth-arias | Liderazgo de datos y plataforma; contratos comunes, decisiones científicas, CI, prevención de fuga de información y publicaciones | #1, #2, #3, #4, #6, #7, #8, #9, #10, #11, #12, #14, #19, #20, #21, #22, #23, #27, #28, #32 |
+| Cristopher / qriqs | Dedicación completa; investigación de fuentes e implementación acotada con pruebas | #5 (cerrada), #13, #15, #16, #17, #18, #25, #26, #30, #31, #33, #34, #35 |
 | Jordan / J0r-PS | Dedicación parcial; documentación guiada y preparación de la presentación | #24, #29 |
 
-## Qué puede empezar cada uno
+## Actualización de responsables
+
+Por solicitud explícita de Keneth, #8/#9/#10 pasan a @keneth-arias; #11 ya era suya.
+PR #45 integrado y #5 cerrada. Los planes #8/#9 esperan feedback antes de ejecución; consultar
+[tasks/issue-8-plan.md](../tasks/issue-8-plan.md) y [tasks/issue-9-plan.md](../tasks/issue-9-plan.md).
+Las notas siguientes conservan el orden de incorporación inicial, no autorizan retomar #5 ni
+revertir las asignaciones actuales. GitHub es la referencia vigente de responsables y estado.
+
+## Orden de incorporación inicial (histórico)
 
 - Cristopher: #5, revisar enlaces y diccionarios de OEFA y registrar evidencia y dudas en
   docs/sources/oefa.md. No descargar datos masivos ni suponer coordenadas. El cambio final del

@@ -1,0 +1,14 @@
+{
+  "source_id": "oefa-csv",
+  "resource_url": "https://www.datosabiertos.gob.pe/sites/default/files/1a_Vigilancia%20y%20Seguimiento%20ambiental%20en%20la%20calidad%20del%20aire.csv",
+  "final_url": null,
+  "api_documentation_url": null,
+  "source_page_url": "https://www.datosabiertos.gob.pe/dataset/vigilancia-y-seguimiento-ambiental-en-la-calidad-del-aire-organismo-de-evaluaci%C3%B3n-y",
+  "method": "http_file",
+  "format": "csv",
+  "max_bytes": 2147483648,
+  "expected_sha256": null,
+  "acquired_at": null,
+  "json_required_keys": [],
+  "csv_delimiter": ";"
+}

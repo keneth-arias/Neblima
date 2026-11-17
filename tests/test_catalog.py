@@ -176,7 +176,19 @@ def test_inventory_has_dated_access_evidence_for_every_candidate():
             assert source.status == "discovered"
             assert row["reason"]
         if row["outcome"] == "accessible":
-            assert source.status in {"verified", "downloaded"}
+            if source.source_id == "oefa-csv":
+                latest = json.loads((root / "metadata/oefa-lightpanda-download.json").read_text())
+                assert source.status == "downloaded"
+                assert latest["download_method"] == "Lightpanda download"
+                assert latest["source_url"] in {str(u) for u in source.resource_urls}
+                assert source.last_verified_at == datetime.fromisoformat(latest["verified_at_utc"])
+                assert "metadata/oefa-lightpanda-download.json" in source.notes
+                assert source.size_bytes == latest["size_bytes"] > 0
+                assert len(latest["sha256"]) == 64
+                assert latest["data_rows"] > 0 and latest["csv_delimiter"] == ";"
+                assert latest["reused"] and latest["manifest_unchanged"]
+            else:
+                assert source.status in {"verified", "downloaded"}
         if row["outcome"] == "blocked":
             assert source.status == "blocked"
             assert row["reason"]
@@ -185,6 +197,7 @@ def test_inventory_has_dated_access_evidence_for_every_candidate():
                 "senamhi-lima-csv",
                 "senamhi-data-dictionary",
                 "senamhi-metadata",
+                "oefa-csv",
             }
         assert source.redistribution == "unknown"
 
@@ -235,3 +248,17 @@ def test_senamhi_documentation_preserves_field_and_document_provenance():
     assert review["consultation"]["recipient_receipt_confirmed"] is False
     assert review["consultation"]["sender"] == "keneth.arias@outlook.com"
     assert review["consultation"]["reviewed"] is True
+
+
+def test_oefa_download_preserves_historical_channel_failure():
+    root = Path(__file__).resolve().parents[1]
+    old = json.loads((root / "metadata/oefa-acquisition-check.json").read_text())
+    new = json.loads((root / "metadata/oefa-lightpanda-download.json").read_text())
+    assert old["csv"]["status"] == "blocked" and old["csv"]["http_status"] == 418
+    assert "artifact" not in old["csv"]
+    assert datetime.fromisoformat(new["verified_at_utc"]) > datetime.fromisoformat(
+        old["finished_at_utc"]
+    )
+    assert old["csv"]["resource_url"] == new["source_url"]
+    assert new["http_status"] is None  # Lightpanda no expuso el código exacto del archivo.
+    assert new["normalization"] == "none"

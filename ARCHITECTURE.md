@@ -13,6 +13,8 @@ SENAMHI se preserva localmente; no hay todavía normalización ni procesamiento 
 - `src/airaware/cli.py`: catálogo, entorno y entrada al grupo acquire; errores sin valores de configuración.
 - `src/airaware/acquisition/`: contrato, validación de formatos, almacenamiento atómico, transporte API
   y CLI; [guía y límites](docs/acquisition.md). La red está separada de la normalización.
+- `src/airaware/profiling/`: lectura local verificada, perfiles Parquet por fuente/estación/señal
+  y tokens; [metodología](docs/profiling.md). No convierte datos al esquema normalizado.
 - `configs/sources.yaml`: 37 recursos con evidencia de revisión y bloqueos conservados.
 - `configs/upstream.lock.json`: revisiones externas inspeccionadas; no instala el SDK.
 - `uv.lock`: dependencias exactas del proyecto y de desarrollo. Python se fija por separado.
@@ -31,7 +33,7 @@ URL, fecha, SHA-256, parámetros y derechos de uso.
 
 ## Decisiones
 
-Empezamos con archivos locales y añadiremos herramientas analíticas cuando sean necesarias.
+Usamos archivos locales y DuckDB para el perfilamiento (#10; [ADR-004](docs/decisions/004-duckdb-perfilamiento-local.md)).
 No se configura ahora un servicio de base de datos, orquestación, almacenamiento remoto ni modelos.
 Consulta [ADR-001](docs/decisions/001-local-first-foundation.md), la [política de idioma](docs/decisions/002-espanol-peru.md)
 y las [notas de TimeNet](docs/timenet-integration.md).

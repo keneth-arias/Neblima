@@ -22,18 +22,29 @@ class AcquisitionSpec(BaseModel):
     resource_url: HttpUrl
     final_url: HttpUrl | None = None
     api_documentation_url: HttpUrl | None = None
-    method: Literal["lightpanda", "api", "local"]
+    source_page_url: HttpUrl | None = None
+    method: Literal["lightpanda", "api", "local", "http_file"]
     format: Literal["csv", "json", "xlsx", "docx"]
     max_bytes: int = Field(strict=True, gt=0, le=1_073_741_824_000)
     expected_sha256: str | None = Field(default=None, pattern=r"^[a-f0-9]{64}$")
     acquired_at: datetime | None = None
     json_required_keys: tuple[str, ...] = ()
+    csv_delimiter: Literal[",", ";"] = ","
 
     @model_validator(mode="after")
     def check_contract(self) -> Self:
+        if self.format != "csv" and self.csv_delimiter != ",":
+            raise ValueError("El delimitador solo describe recursos CSV")
         if self.method == "api" and self.api_documentation_url is None:
             raise ValueError("La API requiere una referencia de documentación")
-        for url in [self.resource_url, self.final_url, self.api_documentation_url]:
+        if self.method == "http_file" and self.source_page_url is None:
+            raise ValueError("El archivo público requiere página oficial de procedencia")
+        for url in [
+            self.resource_url,
+            self.final_url,
+            self.api_documentation_url,
+            self.source_page_url,
+        ]:
             if url is not None:
                 self._check_public_url(url)
         if self.acquired_at is not None and self.acquired_at.utcoffset() is None:

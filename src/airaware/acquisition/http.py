@@ -33,6 +33,8 @@ def fetch_api(
     monotonic: Callable[[], float] = time.monotonic,
 ) -> AcquisitionResult:
     """Hasta tres intentos y 60 s de presupuesto; rechaza redirecciones y no usa cookies/claves."""
+    if spec.method != "api":
+        raise AcquisitionError("El adaptador API requiere method=api")
     deadline = monotonic() + 60
 
     def check_time() -> None:
