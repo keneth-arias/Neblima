@@ -1,0 +1,528 @@
+{
+  "schema_version": 1,
+  "files": [
+    {
+      "source_id": "oefa-ipash-aire",
+      "resource_name": "IPASH_Aire",
+      "resource_url": "https://www.datosabiertos.gob.pe/sites/default/files/IPASH_Aire.xlsx",
+      "source_page_url": "https://www.datosabiertos.gob.pe/dataset/oefa-evaluaci%C3%B3n-ambiental/resource/29444134-7b19-4a98-bdd3-c8eea8e82349",
+      "local_path": "data/raw/oefa-air-evaluation/IPASH_Aire.xlsx",
+      "size_bytes": 146427,
+      "sha256": "9f7032e246992fd28e066916191481c7b6afb6c07179adeaa7cd9e35bae88ea1",
+      "download_method": "Lightpanda MCP download",
+      "http_status": null,
+      "http_status_note": "download informó bytes guardados y MIME XLSX; no expuso código HTTP exacto",
+      "download_content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "verified_at_utc": "2026-11-17T01:09:50.550415+00:00",
+      "zip_crc_verified": true,
+      "uncompressed_size_bytes": 1321267,
+      "largest_member_bytes": 1250767,
+      "sheets": [
+        {
+          "name": "Aire",
+          "sheet_id": "1"
+        }
+      ],
+      "worksheets": [
+        {
+          "member": "xl/worksheets/sheet1.xml",
+          "xml_row_count_including_header": 1331,
+          "first_row_cells": [
+            {
+              "cell": "A1",
+              "value": "Número de informe"
+            },
+            {
+              "cell": "B1",
+              "value": "Nombre de la Evaluación"
+            },
+            {
+              "cell": "C1",
+              "value": "Etapa"
+            },
+            {
+              "cell": "D1",
+              "value": "Componente ambiental"
+            },
+            {
+              "cell": "E1",
+              "value": "Procedencia de la Muestra"
+            },
+            {
+              "cell": "F1",
+              "value": "Procedencia Especifica de la Muestra"
+            },
+            {
+              "cell": "G1",
+              "value": "Nombre del punto"
+            },
+            {
+              "cell": "H1",
+              "value": "Este"
+            },
+            {
+              "cell": "I1",
+              "value": "Norte"
+            },
+            {
+              "cell": "J1",
+              "value": "Altitud"
+            },
+            {
+              "cell": "K1",
+              "value": "Zona"
+            },
+            {
+              "cell": "L1",
+              "value": "Datum"
+            },
+            {
+              "cell": "M1",
+              "value": "Descripción de ubicación"
+            },
+            {
+              "cell": "N1",
+              "value": "Tipo de muestra"
+            },
+            {
+              "cell": "O1",
+              "value": "Tipo de análisis"
+            },
+            {
+              "cell": "P1",
+              "value": "Periodo"
+            },
+            {
+              "cell": "Q1",
+              "value": "Fecha inicio"
+            },
+            {
+              "cell": "R1",
+              "value": "Hora inicio"
+            },
+            {
+              "cell": "S1",
+              "value": "Fecha fin"
+            },
+            {
+              "cell": "T1",
+              "value": "Hora fin"
+            },
+            {
+              "cell": "U1",
+              "value": "Valor"
+            },
+            {
+              "cell": "V1",
+              "value": "Parámetro"
+            },
+            {
+              "cell": "W1",
+              "value": "Unidad de medida"
+            }
+          ]
+        }
+      ],
+      "scientific_ready": false,
+      "manifest": "data/raw/oefa-ipash-aire/9f7032e246992fd28e066916191481c7b6afb6c07179adeaa7cd9e35bae88ea1/manifest.json",
+      "generic_import_status": "verified"
+    },
+    {
+      "source_id": "oefa-eac-aire",
+      "resource_name": "EAC_Aire",
+      "resource_url": "https://www.datosabiertos.gob.pe/sites/default/files/EAC_Aire_0.xlsx",
+      "source_page_url": "https://www.datosabiertos.gob.pe/dataset/oefa-evaluaci%C3%B3n-ambiental/resource/949cad62-77f9-4e92-a210-abec9f926e9a",
+      "local_path": "data/raw/oefa-air-evaluation/EAC_Aire_0.xlsx",
+      "size_bytes": 13682203,
+      "sha256": "068ade20115394200d18be9ad759477941c382e988da218c90b350348a22a7d5",
+      "download_method": "Lightpanda MCP download",
+      "http_status": null,
+      "http_status_note": "download informó bytes guardados y MIME XLSX; no expuso código HTTP exacto",
+      "download_content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "verified_at_utc": "2026-11-17T01:09:53.056527+00:00",
+      "zip_crc_verified": true,
+      "uncompressed_size_bytes": 137613309,
+      "largest_member_bytes": 137535869,
+      "sheets": [
+        {
+          "name": "Aire",
+          "sheet_id": "1"
+        }
+      ],
+      "worksheets": [
+        {
+          "member": "xl/worksheets/sheet1.xml",
+          "xml_row_count_including_header": 135723,
+          "first_row_cells": [
+            {
+              "cell": "A1",
+              "value": "Número de informe"
+            },
+            {
+              "cell": "B1",
+              "value": "Nombre de la Evaluación"
+            },
+            {
+              "cell": "C1",
+              "value": "Etapa"
+            },
+            {
+              "cell": "D1",
+              "value": "Componente ambiental"
+            },
+            {
+              "cell": "E1",
+              "value": "Procedencia de la Muestra"
+            },
+            {
+              "cell": "F1",
+              "value": "Procedencia Especifica de la Muestra"
+            },
+            {
+              "cell": "G1",
+              "value": "Nombre del punto"
+            },
+            {
+              "cell": "H1",
+              "value": "Este"
+            },
+            {
+              "cell": "I1",
+              "value": "Norte"
+            },
+            {
+              "cell": "J1",
+              "value": "Altitud"
+            },
+            {
+              "cell": "K1",
+              "value": "Zona"
+            },
+            {
+              "cell": "L1",
+              "value": "Datum"
+            },
+            {
+              "cell": "M1",
+              "value": "Descripción de ubicación"
+            },
+            {
+              "cell": "N1",
+              "value": "Tipo de muestra"
+            },
+            {
+              "cell": "O1",
+              "value": "Tipo de análisis"
+            },
+            {
+              "cell": "P1",
+              "value": "Caracterización de la muestra"
+            },
+            {
+              "cell": "Q1",
+              "value": "Periodo"
+            },
+            {
+              "cell": "R1",
+              "value": "Fecha inicio"
+            },
+            {
+              "cell": "S1",
+              "value": "Hora inicio"
+            },
+            {
+              "cell": "T1",
+              "value": "Fecha fin"
+            },
+            {
+              "cell": "U1",
+              "value": "Hora fin"
+            },
+            {
+              "cell": "V1",
+              "value": "Valor"
+            },
+            {
+              "cell": "W1",
+              "value": "Parámetro"
+            },
+            {
+              "cell": "X1",
+              "value": "Unidad de medida"
+            }
+          ]
+        }
+      ],
+      "scientific_ready": false,
+      "manifest": null,
+      "generic_import_status": "blocked_by_current_office_validation_limits",
+      "generic_import_reason": "Conservado y comprobado por CRC y SHA-256. El importador general limita cada miembro a 8 MiB y total a 32 MiB; no se modificaron esos límites."
+    },
+    {
+      "source_id": "oefa-eaf-aire",
+      "resource_name": "EAF_Aire",
+      "resource_url": "https://www.datosabiertos.gob.pe/sites/default/files/EAF_Aire_0.xlsx",
+      "source_page_url": "https://www.datosabiertos.gob.pe/dataset/oefa-evaluaci%C3%B3n-ambiental/resource/bbfc6055-5f61-4350-939f-e873456746a3",
+      "local_path": "data/raw/oefa-air-evaluation/EAF_Aire_0.xlsx",
+      "size_bytes": 1776627,
+      "sha256": "edbb5e45087a4dbb99c6d905643b901069726e55193f6ea89bb8bafd184831aa",
+      "download_method": "Lightpanda MCP download",
+      "http_status": null,
+      "http_status_note": "download informó bytes guardados y MIME XLSX; no expuso código HTTP exacto",
+      "download_content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "verified_at_utc": "2026-11-17T01:09:53.385879+00:00",
+      "zip_crc_verified": true,
+      "uncompressed_size_bytes": 17655715,
+      "largest_member_bytes": 17595436,
+      "sheets": [
+        {
+          "name": "Aire",
+          "sheet_id": "1"
+        }
+      ],
+      "worksheets": [
+        {
+          "member": "xl/worksheets/sheet1.xml",
+          "xml_row_count_including_header": 17610,
+          "first_row_cells": [
+            {
+              "cell": "A1",
+              "value": "Número de informe"
+            },
+            {
+              "cell": "B1",
+              "value": "Nombre de la Evaluación"
+            },
+            {
+              "cell": "C1",
+              "value": "Etapa"
+            },
+            {
+              "cell": "D1",
+              "value": "Componente ambiental"
+            },
+            {
+              "cell": "E1",
+              "value": "Procedencia de la Muestra"
+            },
+            {
+              "cell": "F1",
+              "value": "Procedencia Especifica de la Muestra"
+            },
+            {
+              "cell": "G1",
+              "value": "Nombre del punto"
+            },
+            {
+              "cell": "H1",
+              "value": "Este"
+            },
+            {
+              "cell": "I1",
+              "value": "Norte"
+            },
+            {
+              "cell": "J1",
+              "value": "Altitud"
+            },
+            {
+              "cell": "K1",
+              "value": "Zona"
+            },
+            {
+              "cell": "L1",
+              "value": "Datum"
+            },
+            {
+              "cell": "M1",
+              "value": "Descripción de ubicación"
+            },
+            {
+              "cell": "N1",
+              "value": "Tipo de muestra"
+            },
+            {
+              "cell": "O1",
+              "value": "Tipo de análisis"
+            },
+            {
+              "cell": "P1",
+              "value": "Caracterización de la muestra"
+            },
+            {
+              "cell": "Q1",
+              "value": "Periodo"
+            },
+            {
+              "cell": "R1",
+              "value": "Fecha inicio"
+            },
+            {
+              "cell": "S1",
+              "value": "Hora inicio"
+            },
+            {
+              "cell": "T1",
+              "value": "Fecha fin"
+            },
+            {
+              "cell": "U1",
+              "value": "Hora fin"
+            },
+            {
+              "cell": "V1",
+              "value": "Valor"
+            },
+            {
+              "cell": "W1",
+              "value": "Parámetro"
+            },
+            {
+              "cell": "X1",
+              "value": "Unidad de medida"
+            }
+          ]
+        }
+      ],
+      "scientific_ready": false,
+      "manifest": null,
+      "generic_import_status": "blocked_by_current_office_validation_limits",
+      "generic_import_reason": "Conservado y comprobado por CRC y SHA-256. El importador general limita cada miembro a 8 MiB y total a 32 MiB; no se modificaron esos límites."
+    },
+    {
+      "source_id": "oefa-eat-aire",
+      "resource_name": "EAT_Aire",
+      "resource_url": "https://www.datosabiertos.gob.pe/sites/default/files/EAT%20-%20Aire.xlsx",
+      "source_page_url": "https://www.datosabiertos.gob.pe/dataset/oefa-evaluaci%C3%B3n-ambiental/resource/fa7485be-84e1-40b5-bffa-ceb77ffe6dae",
+      "local_path": "data/raw/oefa-air-evaluation/EAT - Aire.xlsx",
+      "size_bytes": 294972,
+      "sha256": "5b7f27e399912cd5efd7fc2049fcda6421859e028f4d9cbf397a6994c568e0fa",
+      "download_method": "Lightpanda MCP download",
+      "http_status": null,
+      "http_status_note": "download informó bytes guardados y MIME XLSX; no expuso código HTTP exacto",
+      "download_content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "verified_at_utc": "2026-11-17T01:09:53.439820+00:00",
+      "zip_crc_verified": true,
+      "uncompressed_size_bytes": 2899865,
+      "largest_member_bytes": 2850674,
+      "sheets": [
+        {
+          "name": "Aire",
+          "sheet_id": "1"
+        }
+      ],
+      "worksheets": [
+        {
+          "member": "xl/worksheets/sheet1.xml",
+          "xml_row_count_including_header": 2941,
+          "first_row_cells": [
+            {
+              "cell": "A1",
+              "value": "Número de informe"
+            },
+            {
+              "cell": "B1",
+              "value": "Nombre de la Evaluación"
+            },
+            {
+              "cell": "C1",
+              "value": "Etapa"
+            },
+            {
+              "cell": "D1",
+              "value": "Componente ambiental"
+            },
+            {
+              "cell": "E1",
+              "value": "Procedencia de la Muestra"
+            },
+            {
+              "cell": "F1",
+              "value": "Procedencia Especifica de la Muestra"
+            },
+            {
+              "cell": "G1",
+              "value": "Nombre del punto"
+            },
+            {
+              "cell": "H1",
+              "value": "Este"
+            },
+            {
+              "cell": "I1",
+              "value": "Norte"
+            },
+            {
+              "cell": "J1",
+              "value": "Altitud"
+            },
+            {
+              "cell": "K1",
+              "value": "Zona"
+            },
+            {
+              "cell": "L1",
+              "value": "Datum"
+            },
+            {
+              "cell": "M1",
+              "value": "Descripción de ubicación"
+            },
+            {
+              "cell": "N1",
+              "value": "Tipo de muestra"
+            },
+            {
+              "cell": "O1",
+              "value": "Tipo de análisis"
+            },
+            {
+              "cell": "P1",
+              "value": "Periodo"
+            },
+            {
+              "cell": "Q1",
+              "value": "Fecha inicio"
+            },
+            {
+              "cell": "R1",
+              "value": "Hora inicio"
+            },
+            {
+              "cell": "S1",
+              "value": "Fecha fin"
+            },
+            {
+              "cell": "T1",
+              "value": "Hora fin"
+            },
+            {
+              "cell": "U1",
+              "value": "Valor"
+            },
+            {
+              "cell": "V1",
+              "value": "Parámetro"
+            },
+            {
+              "cell": "W1",
+              "value": "Unidad de medida"
+            }
+          ]
+        }
+      ],
+      "scientific_ready": false,
+      "manifest": "data/raw/oefa-eat-aire/5b7f27e399912cd5efd7fc2049fcda6421859e028f4d9cbf397a6994c568e0fa/manifest.json",
+      "generic_import_status": "verified"
+    }
+  ],
+  "offline_reuse_check": {
+    "source_ids": [
+      "oefa-ipash-aire",
+      "oefa-eat-aire"
+    ],
+    "errors": [],
+    "network_bytes": 0,
+    "reused": true
+  }
+}

@@ -1,0 +1,134 @@
+{
+  "local_path": "data/raw/oefa-eas-aire-local/EAS_Aire_0.csv",
+  "size_bytes": 5153626505,
+  "sha256": "81b219665c12cd1f2e72fa5c93deb6ffd3255fd73465bc02e38b087deda66d6a",
+  "csv_delimiter": ",",
+  "columns": [
+    "Número.de.informe",
+    "Nombre.de.la.Evaluación",
+    "Etapa",
+    "Componente.ambiental",
+    "Procedencia.de.la.Muestra",
+    "Procedencia.Especifica.de.la.Muestra",
+    "Nombre.del.punto",
+    "Este",
+    "Norte",
+    "Altitud",
+    "Zona",
+    "Datum",
+    "Descripción.de.ubicación",
+    "Tipo.de.muestra",
+    "Tipo.de.análisis",
+    "Periodo",
+    "Fecha.inicio",
+    "Hora.inicio",
+    "Fecha.fin",
+    "Hora.fin",
+    "Valor",
+    "Parámetro",
+    "Unidad.de.medida"
+  ],
+  "supplied_by": "user",
+  "source_url": "https://www.datosabiertos.gob.pe/sites/default/files/EAS_Aire_0.csv",
+  "source_page_url": "https://www.datosabiertos.gob.pe/dataset/evaluaciones-ambientales-de-seguimiento-eas",
+  "acquisition_method": "local user-supplied file; not a successful agent download",
+  "verified_at_utc": "2026-11-17T00:47:52.206373+00:00",
+  "manifest": "data/raw/oefa-eas-aire/81b219665c12cd1f2e72fa5c93deb6ffd3255fd73465bc02e38b087deda66d6a/manifest.json",
+  "network_http_status_for_file": null,
+  "scientific_ready": false,
+  "access_attempts": [
+    {
+      "channel": "Lightpanda MCP download",
+      "attempts": 2,
+      "outcome": "OperationTimedout"
+    },
+    {
+      "channel": "AirAware http_file",
+      "outcome": "probe rejected HTTP 418; stopped"
+    },
+    {
+      "channel": "Lightpanda local CLI",
+      "outcome": "catalog navigation timed out; no CSV transfer attempted"
+    }
+  ],
+  "catalog_declared_size": "4.8 GB (display label; not exact byte count)",
+  "catalog_declared_coverage": "updated through June 2024; not yet independently verified as measurement coverage",
+  "license_declared": "ODC-BY-1.0; attribution/reuse review pending",
+  "resource_ids": [
+    "509ddd93-3e75-4735-8fb8-cf03ebc7c325",
+    "24b9b227-f00d-47c6-b4bb-b45d631f2e02"
+  ],
+  "original_user_filename": "EAS_Aire_0.csv",
+  "original_user_copy_preserved": true,
+  "data_rows": 11407394,
+  "inspection_counts": {
+    "row_count": 11407394,
+    "raw_station_names": 151,
+    "parameters": 81,
+    "reports": 129,
+    "syntactic_hhmmss_rows": 3512243,
+    "missing_start_clock_rows": 422,
+    "five_digit_start_date_rows": 11407394,
+    "min_numeric_start_date": 43101.0,
+    "max_numeric_start_date": 45657.0,
+    "fractional_numeric_date_rows": 0,
+    "finite_value_rows": 8535307
+  },
+  "date_encoding_confirmed": false,
+  "date_encoding_note": "All Fecha.inicio values are five-digit integers; compatible with spreadsheet serial dates. Epoch and timezone are not confirmed for production.",
+  "candidate_date_bounds_if_1899_12_30_epoch": {
+    "first": "2018-01-01",
+    "last": "2024-12-31"
+  },
+  "known_lima_point_summary": [
+    {
+      "station": "CA-HU-04",
+      "parameter": "Material particulado con diámetro menor a 10 micras (PM10)",
+      "unit": "µg/m³",
+      "period": "1 hora",
+      "n": 17544,
+      "finite_values": 15048,
+      "finite_with_clock": 6871,
+      "min_numeric_start_date": 44927.0,
+      "max_numeric_start_date": 45657.0
+    },
+    {
+      "station": "CA-HU-04",
+      "parameter": "Material particulado con diámetro menor a 2,5 micras (PM2,5)",
+      "unit": "µg/m³",
+      "period": "1 hora",
+      "n": 8760,
+      "finite_values": 6871,
+      "finite_with_clock": 6871,
+      "min_numeric_start_date": 44927.0,
+      "max_numeric_start_date": 45291.0
+    },
+    {
+      "station": "CA-HU-09",
+      "parameter": "Material particulado con diámetro menor a 10 micras (PM10)",
+      "unit": "µg/m³",
+      "period": "1 hora",
+      "n": 17545,
+      "finite_values": 9150,
+      "finite_with_clock": 4461,
+      "min_numeric_start_date": 44927.0,
+      "max_numeric_start_date": 45657.0
+    },
+    {
+      "station": "CA-HU-09",
+      "parameter": "Material particulado con diámetro menor a 2,5 micras (PM2,5)",
+      "unit": "µg/m³",
+      "period": "1 hora",
+      "n": 8761,
+      "finite_values": 4461,
+      "finite_with_clock": 4461,
+      "min_numeric_start_date": 44927.0,
+      "max_numeric_start_date": 45291.0
+    }
+  ],
+  "local_structure_report": "reports/generated/oefa-eas-aire/81b219665c12cd1f2e72fa5c93deb6ffd3255fd73465bc02e38b087deda66d6a/structure.json",
+  "structure_report_sha256": "a14dfc882e8e14bfa7f95ee44a64e6f51b0d5451af19718830c9be97818e37bd",
+  "offline_reuse_verified": true,
+  "offline_network_bytes": 0,
+  "manifest_sha256": "85b27c0be48916eac7aff4e673c0d8d107495206f98f55924911a23be19e42e1"
+}
