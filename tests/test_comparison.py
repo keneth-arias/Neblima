@@ -125,7 +125,10 @@ def test_an_unknown_clock_is_dropped_before_numeric_filter():
         assert r["clock"] == 1 and r["unique_points"] == 0 and "value" not in r
 
 
-def test_comparison_run_verifies_input_and_keeps_semantically_blocked_counts_null(tmp_path):
+@pytest.mark.parametrize("version", ["comparison-v1", "comparison-v2"])
+def test_comparison_run_verifies_input_and_keeps_semantically_blocked_counts_null(
+    tmp_path, version
+):
     import json
 
     from airaware.comparison.models import Policy
@@ -134,11 +137,21 @@ def test_comparison_run_verifies_input_and_keeps_semantically_blocked_counts_nul
 
     spec = fixture(tmp_path, [(f"{i:02d}0000", "10") for i in range(24)])
     policy = Policy(
-        histories=[24], horizons=[6], signals=["pm25"], blockers={"fixture": ["clock_unverified"]}
+        version=version,
+        target_stations=4 if version == "comparison-v1" else None,
+        target_months=24 if version == "comparison-v1" else None,
+        histories=[24],
+        horizons=[6],
+        signals=["pm25"],
+        blockers={"fixture": ["clock_unverified"]},
     )
     output = compare([spec], policy, tmp_path / "reports")
     summary = json.loads((output / "summary.json").read_text())
     assert summary["sources"][0]["scientific_score"] is None
+    assert (summary["sources"][0]["components"] is None) == (version == "comparison-v2")
+    assert summary["sources"][0]["common_coverage"]["quorum_stations"] == (
+        4 if version == "comparison-v1" else 1
+    )
     with duckdb.connect() as c:
         row = c.execute(
             "select scientific_valid_windows,structural_complete from read_parquet(?) limit 1",
