@@ -1,0 +1,924 @@
+{
+  "schema_version": 1,
+  "task": "issue-16",
+  "attempt": "attempt-02-20261117T234251Z",
+  "generated_at_utc": "2026-11-17T23:48:39+00:00",
+  "plan_file": "configs/acquisition/weather-lima-sample-plan.json",
+  "totals": {
+    "resources_published": 14,
+    "published_original_bytes": 102337,
+    "sha256_all_match": true,
+    "offline_reuse_verified": "attempt-02: batch --offline --budget-bytes 0 per source selection; 14/14 reused; network_bytes=0; exit=0",
+    "noaa_isd": {
+      "status": "blocked",
+      "attempted_url": "https://www.ncei.noaa.gov/data/global-hourly/access/2015/84691099999.csv",
+      "exact_error": "Recurso público respondió HTTP 301; transferencia detenida",
+      "network_bytes_consumed": 0,
+      "redirect_target": "https://noaa-global-hourly-pds.s3.amazonaws.com/index.html",
+      "canonical_key_head": {
+        "url": "https://noaa-global-hourly-pds.s3.amazonaws.com/2015/84691099999.csv",
+        "http_status": 200,
+        "content_length_bytes": 4382554,
+        "etag": "\"1776345dd1a99dfe8300e11bdf803a1b\"",
+        "last_modified_utc": "2023-07-30T08:45:24Z"
+      },
+      "blocker": "El original en la ubicación canónica mide 4382554 bytes y supera el techo por recurso autorizado (max_bytes=4194304, fijado por la especificación); una transferencia parcial truncaría filas CSV de forma arbitraria y está prohibida por el contrato de adquisición."
+    }
+  },
+  "sources": {
+    "open-meteo-historical-weather": {
+      "resource_count": 7,
+      "published_bytes": 65867,
+      "all_sha256_match": true,
+      "request_window_utc": [
+        "2015-04-16T00:00",
+        "2015-04-23T23:00"
+      ],
+      "timestamps_per_resource": 192,
+      "hourly_units": {
+        "time": "iso8601",
+        "temperature_2m": "°C",
+        "relative_humidity_2m": "%",
+        "precipitation": "mm",
+        "surface_pressure": "hPa",
+        "wind_speed_10m": "km/h",
+        "wind_direction_10m": "°"
+      },
+      "returned_cells": [
+        [
+          -12.0,
+          -77.0,
+          54.0
+        ],
+        [
+          -12.0,
+          -77.0,
+          123.0
+        ],
+        [
+          -12.0,
+          -77.0,
+          130.0
+        ],
+        [
+          -12.0,
+          -77.0,
+          179.0
+        ],
+        [
+          -12.0,
+          -77.0,
+          237.0
+        ],
+        [
+          -12.0,
+          -77.0,
+          256.0
+        ],
+        [
+          -12.0,
+          -77.0,
+          272.0
+        ]
+      ]
+    },
+    "open-meteo-previous-model-runs": {
+      "resource_count": 7,
+      "published_bytes": 36470,
+      "all_sha256_match": true,
+      "request_window_utc": [
+        "2022-03-09T00:00",
+        "2022-03-15T23:00"
+      ],
+      "timestamps_per_resource": 168,
+      "hourly_units": {
+        "time": "iso8601",
+        "temperature_2m": "°C",
+        "temperature_2m_previous_day1": "°C"
+      },
+      "returned_cells": [
+        [
+          -12.124954,
+          -76.99219,
+          123.0
+        ],
+        [
+          -12.124954,
+          -76.99219,
+          130.0
+        ],
+        [
+          -12.124954,
+          -76.875,
+          272.0
+        ],
+        [
+          -12.007805,
+          -76.99219,
+          54.0
+        ],
+        [
+          -12.007805,
+          -76.99219,
+          237.0
+        ],
+        [
+          -12.007805,
+          -76.99219,
+          256.0
+        ],
+        [
+          -11.8906555,
+          -76.99219,
+          179.0
+        ]
+      ]
+    }
+  },
+  "stations": {
+    "CAMPO_DE_MARTE": {
+      "requested": {
+        "latitude": -12.0705,
+        "longitude": -77.0432
+      },
+      "era5": {
+        "sha256": "998524c452d65cd07ddc89e220456a6a04f4923691cd8c93affccdea0afce096",
+        "size_bytes": 9392,
+        "hash_ok": true,
+        "http_status": 200,
+        "acquired_at": "2026-11-17T23:41:44.781853Z",
+        "requested": null,
+        "returned": {
+          "latitude": -12.0,
+          "longitude": -77.0,
+          "elevation_m": 123.0
+        },
+        "time": {
+          "count": 192,
+          "first": "2015-04-16T00:00",
+          "last": "2015-04-23T23:00",
+          "duplicates": 0
+        },
+        "variables": {
+          "temperature_2m": {
+            "finite": 192,
+            "missing": 0
+          },
+          "relative_humidity_2m": {
+            "finite": 192,
+            "missing": 0
+          },
+          "precipitation": {
+            "finite": 192,
+            "missing": 0
+          },
+          "surface_pressure": {
+            "finite": 192,
+            "missing": 0
+          },
+          "wind_speed_10m": {
+            "finite": 192,
+            "missing": 0
+          },
+          "wind_direction_10m": {
+            "finite": 192,
+            "missing": 0
+          }
+        },
+        "hourly_units": {
+          "time": "iso8601",
+          "temperature_2m": "°C",
+          "relative_humidity_2m": "%",
+          "precipitation": "mm",
+          "surface_pressure": "hPa",
+          "wind_speed_10m": "km/h",
+          "wind_direction_10m": "°"
+        },
+        "slice_168h": {
+          "station": "CAMPO_DE_MARTE",
+          "slice_count": 168,
+          "first": "2015-04-16T18:00",
+          "last": "2015-04-23T17:00",
+          "finite_in_slice": {
+            "temperature_2m": 168,
+            "relative_humidity_2m": 168,
+            "precipitation": 168,
+            "surface_pressure": 168,
+            "wind_speed_10m": 168,
+            "wind_direction_10m": 168
+          }
+        }
+      },
+      "gfs_previous_day1": {
+        "sha256": "68e226286d2c09aeb286b104484dbe6cd64afac26aef279cc2b4c3ca5d7ffe34",
+        "size_bytes": 5209,
+        "hash_ok": true,
+        "http_status": 200,
+        "acquired_at": "2026-11-17T23:41:47.736809Z",
+        "requested": {
+          "latitude": -12.0705,
+          "longitude": -77.0432,
+          "station": "CAMPO_DE_MARTE"
+        },
+        "returned": {
+          "latitude": -12.124954,
+          "longitude": -76.99219,
+          "elevation_m": 123.0
+        },
+        "time": {
+          "count": 168,
+          "first": "2022-03-09T00:00",
+          "last": "2022-03-15T23:00",
+          "duplicates": 0
+        },
+        "variables": {
+          "temperature_2m": {
+            "finite": 168,
+            "missing": 0
+          },
+          "temperature_2m_previous_day1": {
+            "finite": 168,
+            "missing": 0
+          }
+        },
+        "hourly_units": {
+          "time": "iso8601",
+          "temperature_2m": "°C",
+          "temperature_2m_previous_day1": "°C"
+        }
+      }
+    },
+    "CARABAYLLO": {
+      "requested": {
+        "latitude": -11.9022,
+        "longitude": -77.0336
+      },
+      "era5": {
+        "sha256": "d36fd7e5f324e61ebd8c30458bf8a46add6fdbcd18d08cc8bcb46ebf26e9026c",
+        "size_bytes": 9381,
+        "hash_ok": true,
+        "http_status": 200,
+        "acquired_at": "2026-11-17T23:41:44.484621Z",
+        "requested": null,
+        "returned": {
+          "latitude": -12.0,
+          "longitude": -77.0,
+          "elevation_m": 179.0
+        },
+        "time": {
+          "count": 192,
+          "first": "2015-04-16T00:00",
+          "last": "2015-04-23T23:00",
+          "duplicates": 0
+        },
+        "variables": {
+          "temperature_2m": {
+            "finite": 192,
+            "missing": 0
+          },
+          "relative_humidity_2m": {
+            "finite": 192,
+            "missing": 0
+          },
+          "precipitation": {
+            "finite": 192,
+            "missing": 0
+          },
+          "surface_pressure": {
+            "finite": 192,
+            "missing": 0
+          },
+          "wind_speed_10m": {
+            "finite": 192,
+            "missing": 0
+          },
+          "wind_direction_10m": {
+            "finite": 192,
+            "missing": 0
+          }
+        },
+        "hourly_units": {
+          "time": "iso8601",
+          "temperature_2m": "°C",
+          "relative_humidity_2m": "%",
+          "precipitation": "mm",
+          "surface_pressure": "hPa",
+          "wind_speed_10m": "km/h",
+          "wind_direction_10m": "°"
+        },
+        "slice_168h": {
+          "station": "CARABAYLLO",
+          "slice_count": 168,
+          "first": "2015-04-16T18:00",
+          "last": "2015-04-23T17:00",
+          "finite_in_slice": {
+            "temperature_2m": 168,
+            "relative_humidity_2m": 168,
+            "precipitation": 168,
+            "surface_pressure": 168,
+            "wind_speed_10m": 168,
+            "wind_direction_10m": 168
+          }
+        }
+      },
+      "gfs_previous_day1": {
+        "sha256": "debbacdb895ac356572497c5d2a90ba20bad46d4249ec68a83f554a7c5b8bd6e",
+        "size_bytes": 5211,
+        "hash_ok": true,
+        "http_status": 200,
+        "acquired_at": "2026-11-17T23:41:47.288678Z",
+        "requested": {
+          "latitude": -11.9022,
+          "longitude": -77.0336,
+          "station": "CARABAYLLO"
+        },
+        "returned": {
+          "latitude": -11.8906555,
+          "longitude": -76.99219,
+          "elevation_m": 179.0
+        },
+        "time": {
+          "count": 168,
+          "first": "2022-03-09T00:00",
+          "last": "2022-03-15T23:00",
+          "duplicates": 0
+        },
+        "variables": {
+          "temperature_2m": {
+            "finite": 168,
+            "missing": 0
+          },
+          "temperature_2m_previous_day1": {
+            "finite": 168,
+            "missing": 0
+          }
+        },
+        "hourly_units": {
+          "time": "iso8601",
+          "temperature_2m": "°C",
+          "temperature_2m_previous_day1": "°C"
+        }
+      }
+    },
+    "SANTA_ANITA": {
+      "requested": {
+        "latitude": -12.043,
+        "longitude": -76.9714
+      },
+      "era5": {
+        "sha256": "4e33f413bb537e707f034c8b2a1c9c8de42ee9b8fd00700fc919378c543ca098",
+        "size_bytes": 9381,
+        "hash_ok": true,
+        "http_status": 200,
+        "acquired_at": "2026-11-17T23:41:46.315672Z",
+        "requested": null,
+        "returned": {
+          "latitude": -12.0,
+          "longitude": -77.0,
+          "elevation_m": 256.0
+        },
+        "time": {
+          "count": 192,
+          "first": "2015-04-16T00:00",
+          "last": "2015-04-23T23:00",
+          "duplicates": 0
+        },
+        "variables": {
+          "temperature_2m": {
+            "finite": 192,
+            "missing": 0
+          },
+          "relative_humidity_2m": {
+            "finite": 192,
+            "missing": 0
+          },
+          "precipitation": {
+            "finite": 192,
+            "missing": 0
+          },
+          "surface_pressure": {
+            "finite": 192,
+            "missing": 0
+          },
+          "wind_speed_10m": {
+            "finite": 192,
+            "missing": 0
+          },
+          "wind_direction_10m": {
+            "finite": 192,
+            "missing": 0
+          }
+        },
+        "hourly_units": {
+          "time": "iso8601",
+          "temperature_2m": "°C",
+          "relative_humidity_2m": "%",
+          "precipitation": "mm",
+          "surface_pressure": "hPa",
+          "wind_speed_10m": "km/h",
+          "wind_direction_10m": "°"
+        },
+        "slice_168h": {
+          "station": "SANTA_ANITA",
+          "slice_count": 168,
+          "first": "2015-04-16T18:00",
+          "last": "2015-04-23T17:00",
+          "finite_in_slice": {
+            "temperature_2m": 168,
+            "relative_humidity_2m": 168,
+            "precipitation": 168,
+            "surface_pressure": 168,
+            "wind_speed_10m": 168,
+            "wind_direction_10m": 168
+          }
+        }
+      },
+      "gfs_previous_day1": {
+        "sha256": "1042ce4db0b57a154e2fad618a2c3a427b02b8bef6afc429558133809506529c",
+        "size_bytes": 5210,
+        "hash_ok": true,
+        "http_status": 200,
+        "acquired_at": "2026-11-17T23:41:49.103923Z",
+        "requested": {
+          "latitude": -12.043,
+          "longitude": -76.9714,
+          "station": "SANTA_ANITA"
+        },
+        "returned": {
+          "latitude": -12.007805,
+          "longitude": -76.99219,
+          "elevation_m": 256.0
+        },
+        "time": {
+          "count": 168,
+          "first": "2022-03-09T00:00",
+          "last": "2022-03-15T23:00",
+          "duplicates": 0
+        },
+        "variables": {
+          "temperature_2m": {
+            "finite": 168,
+            "missing": 0
+          },
+          "temperature_2m_previous_day1": {
+            "finite": 168,
+            "missing": 0
+          }
+        },
+        "hourly_units": {
+          "time": "iso8601",
+          "temperature_2m": "°C",
+          "temperature_2m_previous_day1": "°C"
+        }
+      }
+    },
+    "SAN_BORJA": {
+      "requested": {
+        "latitude": -12.1086,
+        "longitude": -77.0077
+      },
+      "era5": {
+        "sha256": "b60e164d5c902322c6bfd720eee9e8c9202842b58ffaa19df1659e9bada4f4f4",
+        "size_bytes": 9380,
+        "hash_ok": true,
+        "http_status": 200,
+        "acquired_at": "2026-11-17T23:41:45.155811Z",
+        "requested": null,
+        "returned": {
+          "latitude": -12.0,
+          "longitude": -77.0,
+          "elevation_m": 130.0
+        },
+        "time": {
+          "count": 192,
+          "first": "2015-04-16T00:00",
+          "last": "2015-04-23T23:00",
+          "duplicates": 0
+        },
+        "variables": {
+          "temperature_2m": {
+            "finite": 192,
+            "missing": 0
+          },
+          "relative_humidity_2m": {
+            "finite": 192,
+            "missing": 0
+          },
+          "precipitation": {
+            "finite": 192,
+            "missing": 0
+          },
+          "surface_pressure": {
+            "finite": 192,
+            "missing": 0
+          },
+          "wind_speed_10m": {
+            "finite": 192,
+            "missing": 0
+          },
+          "wind_direction_10m": {
+            "finite": 192,
+            "missing": 0
+          }
+        },
+        "hourly_units": {
+          "time": "iso8601",
+          "temperature_2m": "°C",
+          "relative_humidity_2m": "%",
+          "precipitation": "mm",
+          "surface_pressure": "hPa",
+          "wind_speed_10m": "km/h",
+          "wind_direction_10m": "°"
+        },
+        "slice_168h": {
+          "station": "SAN_BORJA",
+          "slice_count": 168,
+          "first": "2015-04-16T18:00",
+          "last": "2015-04-23T17:00",
+          "finite_in_slice": {
+            "temperature_2m": 168,
+            "relative_humidity_2m": 168,
+            "precipitation": 168,
+            "surface_pressure": 168,
+            "wind_speed_10m": 168,
+            "wind_direction_10m": 168
+          }
+        }
+      },
+      "gfs_previous_day1": {
+        "sha256": "67bbbf7cb59c9b390e9b2c3bf5e6aca1fca2ff737d21ecc7b0faf267e7dd819e",
+        "size_bytes": 5211,
+        "hash_ok": true,
+        "http_status": 200,
+        "acquired_at": "2026-11-17T23:41:48.022482Z",
+        "requested": {
+          "latitude": -12.1086,
+          "longitude": -77.0077,
+          "station": "SAN_BORJA"
+        },
+        "returned": {
+          "latitude": -12.124954,
+          "longitude": -76.99219,
+          "elevation_m": 130.0
+        },
+        "time": {
+          "count": 168,
+          "first": "2022-03-09T00:00",
+          "last": "2022-03-15T23:00",
+          "duplicates": 0
+        },
+        "variables": {
+          "temperature_2m": {
+            "finite": 168,
+            "missing": 0
+          },
+          "temperature_2m_previous_day1": {
+            "finite": 168,
+            "missing": 0
+          }
+        },
+        "hourly_units": {
+          "time": "iso8601",
+          "temperature_2m": "°C",
+          "temperature_2m_previous_day1": "°C"
+        }
+      }
+    },
+    "SAN_JUAN_DE_LURIGANCHO": {
+      "requested": {
+        "latitude": -11.9816,
+        "longitude": -76.9992
+      },
+      "era5": {
+        "sha256": "76712187ffca0c6890c94f1660c2da047c6cc32836185fc92d87cf9145a4c33f",
+        "size_bytes": 9381,
+        "hash_ok": true,
+        "http_status": 200,
+        "acquired_at": "2026-11-17T23:41:45.516955Z",
+        "requested": null,
+        "returned": {
+          "latitude": -12.0,
+          "longitude": -77.0,
+          "elevation_m": 237.0
+        },
+        "time": {
+          "count": 192,
+          "first": "2015-04-16T00:00",
+          "last": "2015-04-23T23:00",
+          "duplicates": 0
+        },
+        "variables": {
+          "temperature_2m": {
+            "finite": 192,
+            "missing": 0
+          },
+          "relative_humidity_2m": {
+            "finite": 192,
+            "missing": 0
+          },
+          "precipitation": {
+            "finite": 192,
+            "missing": 0
+          },
+          "surface_pressure": {
+            "finite": 192,
+            "missing": 0
+          },
+          "wind_speed_10m": {
+            "finite": 192,
+            "missing": 0
+          },
+          "wind_direction_10m": {
+            "finite": 192,
+            "missing": 0
+          }
+        },
+        "hourly_units": {
+          "time": "iso8601",
+          "temperature_2m": "°C",
+          "relative_humidity_2m": "%",
+          "precipitation": "mm",
+          "surface_pressure": "hPa",
+          "wind_speed_10m": "km/h",
+          "wind_direction_10m": "°"
+        },
+        "slice_168h": {
+          "station": "SAN_JUAN_DE_LURIGANCHO",
+          "slice_count": 168,
+          "first": "2015-04-16T18:00",
+          "last": "2015-04-23T17:00",
+          "finite_in_slice": {
+            "temperature_2m": 168,
+            "relative_humidity_2m": 168,
+            "precipitation": 168,
+            "surface_pressure": 168,
+            "wind_speed_10m": 168,
+            "wind_direction_10m": 168
+          }
+        }
+      },
+      "gfs_previous_day1": {
+        "sha256": "71a24374363af6fea66ff6f29c8cb94047367353c9841b6036152793e2c218eb",
+        "size_bytes": 5210,
+        "hash_ok": true,
+        "http_status": 200,
+        "acquired_at": "2026-11-17T23:41:48.534672Z",
+        "requested": {
+          "latitude": -11.9816,
+          "longitude": -76.9992,
+          "station": "SAN_JUAN_DE_LURIGANCHO"
+        },
+        "returned": {
+          "latitude": -12.007805,
+          "longitude": -76.99219,
+          "elevation_m": 237.0
+        },
+        "time": {
+          "count": 168,
+          "first": "2022-03-09T00:00",
+          "last": "2022-03-15T23:00",
+          "duplicates": 0
+        },
+        "variables": {
+          "temperature_2m": {
+            "finite": 168,
+            "missing": 0
+          },
+          "temperature_2m_previous_day1": {
+            "finite": 168,
+            "missing": 0
+          }
+        },
+        "hourly_units": {
+          "time": "iso8601",
+          "temperature_2m": "°C",
+          "temperature_2m_previous_day1": "°C"
+        }
+      }
+    },
+    "SAN_MARTIN_DE_PORRES": {
+      "requested": {
+        "latitude": -12.0089,
+        "longitude": -77.0845
+      },
+      "era5": {
+        "sha256": "7d8dfb94764b4299bae12856177cd482c200c48058dfb59e933662c345d5987f",
+        "size_bytes": 9572,
+        "hash_ok": true,
+        "http_status": 200,
+        "acquired_at": "2026-11-17T23:41:45.905323Z",
+        "requested": null,
+        "returned": {
+          "latitude": -12.0,
+          "longitude": -77.0,
+          "elevation_m": 54.0
+        },
+        "time": {
+          "count": 192,
+          "first": "2015-04-16T00:00",
+          "last": "2015-04-23T23:00",
+          "duplicates": 0
+        },
+        "variables": {
+          "temperature_2m": {
+            "finite": 192,
+            "missing": 0
+          },
+          "relative_humidity_2m": {
+            "finite": 192,
+            "missing": 0
+          },
+          "precipitation": {
+            "finite": 192,
+            "missing": 0
+          },
+          "surface_pressure": {
+            "finite": 192,
+            "missing": 0
+          },
+          "wind_speed_10m": {
+            "finite": 192,
+            "missing": 0
+          },
+          "wind_direction_10m": {
+            "finite": 192,
+            "missing": 0
+          }
+        },
+        "hourly_units": {
+          "time": "iso8601",
+          "temperature_2m": "°C",
+          "relative_humidity_2m": "%",
+          "precipitation": "mm",
+          "surface_pressure": "hPa",
+          "wind_speed_10m": "km/h",
+          "wind_direction_10m": "°"
+        },
+        "slice_168h": {
+          "station": "SAN_MARTIN_DE_PORRES",
+          "slice_count": 168,
+          "first": "2015-04-16T18:00",
+          "last": "2015-04-23T17:00",
+          "finite_in_slice": {
+            "temperature_2m": 168,
+            "relative_humidity_2m": 168,
+            "precipitation": 168,
+            "surface_pressure": 168,
+            "wind_speed_10m": 168,
+            "wind_direction_10m": 168
+          }
+        }
+      },
+      "gfs_previous_day1": {
+        "sha256": "c59ca87211180bece3bdbf181ab6bbf773fe5e57eaf9f741e029d1b19ceb80d3",
+        "size_bytes": 5210,
+        "hash_ok": true,
+        "http_status": 200,
+        "acquired_at": "2026-11-17T23:41:48.816607Z",
+        "requested": {
+          "latitude": -12.0089,
+          "longitude": -77.0845,
+          "station": "SAN_MARTIN_DE_PORRES"
+        },
+        "returned": {
+          "latitude": -12.007805,
+          "longitude": -76.99219,
+          "elevation_m": 54.0
+        },
+        "time": {
+          "count": 168,
+          "first": "2022-03-09T00:00",
+          "last": "2022-03-15T23:00",
+          "duplicates": 0
+        },
+        "variables": {
+          "temperature_2m": {
+            "finite": 168,
+            "missing": 0
+          },
+          "temperature_2m_previous_day1": {
+            "finite": 168,
+            "missing": 0
+          }
+        },
+        "hourly_units": {
+          "time": "iso8601",
+          "temperature_2m": "°C",
+          "temperature_2m_previous_day1": "°C"
+        }
+      }
+    },
+    "VILLA_MARIA_DEL_TRIUNFO": {
+      "requested": {
+        "latitude": -12.1664,
+        "longitude": -76.92
+      },
+      "era5": {
+        "sha256": "5a8baff63f94320be4442e47f5126b38bbead1ad594574ef2e01e8c33b7f9cfc",
+        "size_bytes": 9380,
+        "hash_ok": true,
+        "http_status": 200,
+        "acquired_at": "2026-11-17T23:41:46.678032Z",
+        "requested": null,
+        "returned": {
+          "latitude": -12.0,
+          "longitude": -77.0,
+          "elevation_m": 272.0
+        },
+        "time": {
+          "count": 192,
+          "first": "2015-04-16T00:00",
+          "last": "2015-04-23T23:00",
+          "duplicates": 0
+        },
+        "variables": {
+          "temperature_2m": {
+            "finite": 192,
+            "missing": 0
+          },
+          "relative_humidity_2m": {
+            "finite": 192,
+            "missing": 0
+          },
+          "precipitation": {
+            "finite": 192,
+            "missing": 0
+          },
+          "surface_pressure": {
+            "finite": 192,
+            "missing": 0
+          },
+          "wind_speed_10m": {
+            "finite": 192,
+            "missing": 0
+          },
+          "wind_direction_10m": {
+            "finite": 192,
+            "missing": 0
+          }
+        },
+        "hourly_units": {
+          "time": "iso8601",
+          "temperature_2m": "°C",
+          "relative_humidity_2m": "%",
+          "precipitation": "mm",
+          "surface_pressure": "hPa",
+          "wind_speed_10m": "km/h",
+          "wind_direction_10m": "°"
+        },
+        "slice_168h": {
+          "station": "VILLA_MARIA_DEL_TRIUNFO",
+          "slice_count": 168,
+          "first": "2015-04-16T18:00",
+          "last": "2015-04-23T17:00",
+          "finite_in_slice": {
+            "temperature_2m": 168,
+            "relative_humidity_2m": 168,
+            "precipitation": 168,
+            "surface_pressure": 168,
+            "wind_speed_10m": 168,
+            "wind_direction_10m": 168
+          }
+        }
+      },
+      "gfs_previous_day1": {
+        "sha256": "8085551c68513c17b042a2f97940ac94b232f9d52ede135e0a2d6139a16cc281",
+        "size_bytes": 5209,
+        "hash_ok": true,
+        "http_status": 200,
+        "acquired_at": "2026-11-17T23:41:49.435672Z",
+        "requested": {
+          "latitude": -12.1664,
+          "longitude": -76.92,
+          "station": "VILLA_MARIA_DEL_TRIUNFO"
+        },
+        "returned": {
+          "latitude": -12.124954,
+          "longitude": -76.875,
+          "elevation_m": 272.0
+        },
+        "time": {
+          "count": 168,
+          "first": "2022-03-09T00:00",
+          "last": "2022-03-15T23:00",
+          "duplicates": 0
+        },
+        "variables": {
+          "temperature_2m": {
+            "finite": 168,
+            "missing": 0
+          },
+          "temperature_2m_previous_day1": {
+            "finite": 168,
+            "missing": 0
+          }
+        },
+        "hourly_units": {
+          "time": "iso8601",
+          "temperature_2m": "°C",
+          "temperature_2m_previous_day1": "°C"
+        }
+      }
+    }
+  }
+}
