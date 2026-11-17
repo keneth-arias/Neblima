@@ -1,0 +1,936 @@
+{
+  "schema_version": 1,
+  "algorithm": "oefa-workbook-review-v1",
+  "created_at_utc": "2026-11-17T02:02:06.299973+00:00",
+  "local_report_directory": "reports/generated/oefa-workbooks/review-20261117-02",
+  "manifest_sha256": "370ed57c6595b2845cf3c5c57658fbe55476bdef4acf57952d188887560cb6c9",
+  "files": {
+    "summary.json": {
+      "sha256": "9a5cf4f8526db0df5119661a48f079ebc22b6442124e1440624b4076122846fe",
+      "size_bytes": 13946442
+    },
+    "observations.parquet": {
+      "sha256": "d341f800657eacc4f0b3225909b0a1e86c0a82573b777a058b84efb9cec3fbe2",
+      "size_bytes": 8203003
+    },
+    "tokens.parquet": {
+      "sha256": "b7b055a064778d02f9617be1f5975245b096c2c57a2cb2fc0e4f30d1b051fe0c",
+      "size_bytes": 182542
+    }
+  },
+  "inputs": [
+    {
+      "source_id": "oefa-ipash-aire",
+      "sha256": "9f7032e246992fd28e066916191481c7b6afb6c07179adeaa7cd9e35bae88ea1",
+      "local_path": "data/raw/oefa-air-evaluation/IPASH_Aire.xlsx"
+    },
+    {
+      "source_id": "oefa-eac-aire",
+      "sha256": "068ade20115394200d18be9ad759477941c382e988da218c90b350348a22a7d5",
+      "local_path": "data/raw/oefa-air-evaluation/EAC_Aire_0.xlsx"
+    },
+    {
+      "source_id": "oefa-eaf-aire",
+      "sha256": "edbb5e45087a4dbb99c6d905643b901069726e55193f6ea89bb8bafd184831aa",
+      "local_path": "data/raw/oefa-air-evaluation/EAF_Aire_0.xlsx"
+    },
+    {
+      "source_id": "oefa-eat-aire",
+      "sha256": "5b7f27e399912cd5efd7fc2049fcda6421859e028f4d9cbf397a6994c568e0fa",
+      "local_path": "data/raw/oefa-air-evaluation/EAT - Aire.xlsx"
+    }
+  ],
+  "implementation_sha256": {
+    "review.py": "8575aaffbf67c71a7155b53be27c73592a621fec8185f0c71eef34ddca8226ea",
+    "analyze.py": "74e47b4d70a86d03afe3cd5fdad30e8f252ac59fea3313665da6ddf2cec2ac32"
+  },
+  "dependencies": {
+    "openpyxl": "3.1.5",
+    "duckdb": "1.5.6",
+    "et_xmlfile": "2.0.0",
+    "defusedxml": "0.7.1"
+  },
+  "workbook_epochs": {
+    "oefa-ipash-aire": "1899-12-30 00:00:00",
+    "oefa-eac-aire": "1899-12-30 00:00:00",
+    "oefa-eaf-aire": "1899-12-30 00:00:00",
+    "oefa-eat-aire": "1899-12-30 00:00:00"
+  },
+  "inputs_unchanged": true,
+  "row_counts_reconciled_with_download_inspection": true,
+  "sources": [
+    {
+      "source_id": "oefa-eac-aire",
+      "rows": 135722,
+      "distinct_decoded_rows": 125216,
+      "decoded_duplicate_extra_rows": 10506,
+      "provisional_point_groups": 191,
+      "point_names": 184,
+      "reports": 19,
+      "parameter_labels": 179,
+      "first_date": "2017-03-02",
+      "last_date": "2024-04-11",
+      "unresolved_date_rows": 25,
+      "parsed_start_rows": 122173,
+      "unresolved_start_rows": 13549,
+      "finite_values": 114026,
+      "censored_values": 5602,
+      "missing_values": 12204,
+      "other_value_rows": 3890,
+      "negative_values": 1,
+      "zero_values": 9621,
+      "hourly_label_rows": 95871,
+      "text_lima_candidate_rows": 11564,
+      "text_callao_candidate_rows": 0,
+      "negative_intervals": 18,
+      "hourly_duration_mismatch": 0,
+      "formula_cells": 126,
+      "excel_error_cells": 0
+    },
+    {
+      "source_id": "oefa-eaf-aire",
+      "rows": 17609,
+      "distinct_decoded_rows": 17609,
+      "decoded_duplicate_extra_rows": 0,
+      "provisional_point_groups": 73,
+      "point_names": 72,
+      "reports": 9,
+      "parameter_labels": 55,
+      "first_date": "2018-04-12",
+      "last_date": "2023-09-07",
+      "unresolved_date_rows": 0,
+      "parsed_start_rows": 17609,
+      "unresolved_start_rows": 0,
+      "finite_values": 16493,
+      "censored_values": 384,
+      "missing_values": 688,
+      "other_value_rows": 44,
+      "negative_values": 0,
+      "zero_values": 2016,
+      "hourly_label_rows": 16616,
+      "text_lima_candidate_rows": 2703,
+      "text_callao_candidate_rows": 0,
+      "negative_intervals": 9,
+      "hourly_duration_mismatch": 0,
+      "formula_cells": 0,
+      "excel_error_cells": 0
+    },
+    {
+      "source_id": "oefa-eat-aire",
+      "rows": 2940,
+      "distinct_decoded_rows": 2860,
+      "decoded_duplicate_extra_rows": 80,
+      "provisional_point_groups": 22,
+      "point_names": 22,
+      "reports": 8,
+      "parameter_labels": 59,
+      "first_date": "2017-05-08",
+      "last_date": "2019-08-01",
+      "unresolved_date_rows": 0,
+      "parsed_start_rows": 2940,
+      "unresolved_start_rows": 0,
+      "finite_values": 1608,
+      "censored_values": 1328,
+      "missing_values": 0,
+      "other_value_rows": 4,
+      "negative_values": 0,
+      "zero_values": 0,
+      "hourly_label_rows": 0,
+      "text_lima_candidate_rows": 0,
+      "text_callao_candidate_rows": 0,
+      "negative_intervals": 0,
+      "hourly_duration_mismatch": 0,
+      "formula_cells": 0,
+      "excel_error_cells": 0
+    },
+    {
+      "source_id": "oefa-ipash-aire",
+      "rows": 1330,
+      "distinct_decoded_rows": 1330,
+      "decoded_duplicate_extra_rows": 0,
+      "provisional_point_groups": 133,
+      "point_names": 133,
+      "reports": 60,
+      "parameter_labels": 10,
+      "first_date": "2019-04-13",
+      "last_date": "2024-11-20",
+      "unresolved_date_rows": 0,
+      "parsed_start_rows": 1330,
+      "unresolved_start_rows": 0,
+      "finite_values": 1330,
+      "censored_values": 0,
+      "missing_values": 0,
+      "other_value_rows": 0,
+      "negative_values": 0,
+      "zero_values": 1005,
+      "hourly_label_rows": 0,
+      "text_lima_candidate_rows": 0,
+      "text_callao_candidate_rows": 0,
+      "negative_intervals": 0,
+      "hourly_duration_mismatch": 0,
+      "formula_cells": 0,
+      "excel_error_cells": 0
+    }
+  ],
+  "periods": [
+    {
+      "source_id": "oefa-eac-aire",
+      "period_counts": {
+        "1 hora": 95871,
+        "": 10082,
+        "24 horas": 29250,
+        "24 Horas": 366,
+        "8 horas": 133,
+        "Mensual": 20
+      }
+    },
+    {
+      "source_id": "oefa-eaf-aire",
+      "period_counts": {
+        "1 hora": 16616,
+        "24 horas": 179,
+        "-": 796,
+        "8 horas": 18
+      }
+    },
+    {
+      "source_id": "oefa-eat-aire",
+      "period_counts": {
+        "24 horas": 2940
+      }
+    },
+    {
+      "source_id": "oefa-ipash-aire",
+      "period_counts": {
+        "-": 1330
+      }
+    }
+  ],
+  "hourly_pm": [
+    {
+      "source_id": "oefa-eac-aire",
+      "family": "pm25",
+      "hourly_contexts": 3,
+      "longest_run_hours": 542,
+      "lima_text_candidate_longest_run_hours": 0,
+      "windows": [
+        {
+          "history_hours": 24,
+          "horizon_hours": 6,
+          "all_structural_complete": 1645,
+          "lima_text_candidate_structural_complete": 0
+        },
+        {
+          "history_hours": 48,
+          "horizon_hours": 12,
+          "all_structural_complete": 1439,
+          "lima_text_candidate_structural_complete": 0
+        },
+        {
+          "history_hours": 72,
+          "horizon_hours": 24,
+          "all_structural_complete": 1223,
+          "lima_text_candidate_structural_complete": 0
+        },
+        {
+          "history_hours": 168,
+          "horizon_hours": 24,
+          "all_structural_complete": 693,
+          "lima_text_candidate_structural_complete": 0
+        }
+      ]
+    },
+    {
+      "source_id": "oefa-eac-aire",
+      "family": "pm10",
+      "hourly_contexts": 3,
+      "longest_run_hours": 542,
+      "lima_text_candidate_longest_run_hours": 0,
+      "windows": [
+        {
+          "history_hours": 24,
+          "horizon_hours": 6,
+          "all_structural_complete": 1645,
+          "lima_text_candidate_structural_complete": 0
+        },
+        {
+          "history_hours": 48,
+          "horizon_hours": 12,
+          "all_structural_complete": 1439,
+          "lima_text_candidate_structural_complete": 0
+        },
+        {
+          "history_hours": 72,
+          "horizon_hours": 24,
+          "all_structural_complete": 1223,
+          "lima_text_candidate_structural_complete": 0
+        },
+        {
+          "history_hours": 168,
+          "horizon_hours": 24,
+          "all_structural_complete": 693,
+          "lima_text_candidate_structural_complete": 0
+        }
+      ]
+    },
+    {
+      "source_id": "oefa-eaf-aire",
+      "family": "pm25",
+      "hourly_contexts": 6,
+      "longest_run_hours": 204,
+      "lima_text_candidate_longest_run_hours": 204,
+      "windows": [
+        {
+          "history_hours": 24,
+          "horizon_hours": 6,
+          "all_structural_complete": 647,
+          "lima_text_candidate_structural_complete": 491
+        },
+        {
+          "history_hours": 48,
+          "horizon_hours": 12,
+          "all_structural_complete": 362,
+          "lima_text_candidate_structural_complete": 275
+        },
+        {
+          "history_hours": 72,
+          "horizon_hours": 24,
+          "all_structural_complete": 185,
+          "lima_text_candidate_structural_complete": 134
+        },
+        {
+          "history_hours": 168,
+          "horizon_hours": 24,
+          "all_structural_complete": 13,
+          "lima_text_candidate_structural_complete": 13
+        }
+      ]
+    },
+    {
+      "source_id": "oefa-eaf-aire",
+      "family": "pm10",
+      "hourly_contexts": 7,
+      "longest_run_hours": 333,
+      "lima_text_candidate_longest_run_hours": 204,
+      "windows": [
+        {
+          "history_hours": 24,
+          "horizon_hours": 6,
+          "all_structural_complete": 951,
+          "lima_text_candidate_structural_complete": 491
+        },
+        {
+          "history_hours": 48,
+          "horizon_hours": 12,
+          "all_structural_complete": 636,
+          "lima_text_candidate_structural_complete": 275
+        },
+        {
+          "history_hours": 72,
+          "horizon_hours": 24,
+          "all_structural_complete": 423,
+          "lima_text_candidate_structural_complete": 134
+        },
+        {
+          "history_hours": 168,
+          "horizon_hours": 24,
+          "all_structural_complete": 155,
+          "lima_text_candidate_structural_complete": 13
+        }
+      ]
+    },
+    {
+      "source_id": "oefa-eat-aire",
+      "family": "pm25",
+      "hourly_contexts": 0,
+      "longest_run_hours": 0,
+      "lima_text_candidate_longest_run_hours": 0,
+      "windows": [
+        {
+          "history_hours": 24,
+          "horizon_hours": 6,
+          "all_structural_complete": 0,
+          "lima_text_candidate_structural_complete": 0
+        },
+        {
+          "history_hours": 48,
+          "horizon_hours": 12,
+          "all_structural_complete": 0,
+          "lima_text_candidate_structural_complete": 0
+        },
+        {
+          "history_hours": 72,
+          "horizon_hours": 24,
+          "all_structural_complete": 0,
+          "lima_text_candidate_structural_complete": 0
+        },
+        {
+          "history_hours": 168,
+          "horizon_hours": 24,
+          "all_structural_complete": 0,
+          "lima_text_candidate_structural_complete": 0
+        }
+      ]
+    },
+    {
+      "source_id": "oefa-eat-aire",
+      "family": "pm10",
+      "hourly_contexts": 0,
+      "longest_run_hours": 0,
+      "lima_text_candidate_longest_run_hours": 0,
+      "windows": [
+        {
+          "history_hours": 24,
+          "horizon_hours": 6,
+          "all_structural_complete": 0,
+          "lima_text_candidate_structural_complete": 0
+        },
+        {
+          "history_hours": 48,
+          "horizon_hours": 12,
+          "all_structural_complete": 0,
+          "lima_text_candidate_structural_complete": 0
+        },
+        {
+          "history_hours": 72,
+          "horizon_hours": 24,
+          "all_structural_complete": 0,
+          "lima_text_candidate_structural_complete": 0
+        },
+        {
+          "history_hours": 168,
+          "horizon_hours": 24,
+          "all_structural_complete": 0,
+          "lima_text_candidate_structural_complete": 0
+        }
+      ]
+    },
+    {
+      "source_id": "oefa-ipash-aire",
+      "family": "pm25",
+      "hourly_contexts": 0,
+      "longest_run_hours": 0,
+      "lima_text_candidate_longest_run_hours": 0,
+      "windows": [
+        {
+          "history_hours": 24,
+          "horizon_hours": 6,
+          "all_structural_complete": 0,
+          "lima_text_candidate_structural_complete": 0
+        },
+        {
+          "history_hours": 48,
+          "horizon_hours": 12,
+          "all_structural_complete": 0,
+          "lima_text_candidate_structural_complete": 0
+        },
+        {
+          "history_hours": 72,
+          "horizon_hours": 24,
+          "all_structural_complete": 0,
+          "lima_text_candidate_structural_complete": 0
+        },
+        {
+          "history_hours": 168,
+          "horizon_hours": 24,
+          "all_structural_complete": 0,
+          "lima_text_candidate_structural_complete": 0
+        }
+      ]
+    },
+    {
+      "source_id": "oefa-ipash-aire",
+      "family": "pm10",
+      "hourly_contexts": 0,
+      "longest_run_hours": 0,
+      "lima_text_candidate_longest_run_hours": 0,
+      "windows": [
+        {
+          "history_hours": 24,
+          "horizon_hours": 6,
+          "all_structural_complete": 0,
+          "lima_text_candidate_structural_complete": 0
+        },
+        {
+          "history_hours": 48,
+          "horizon_hours": 12,
+          "all_structural_complete": 0,
+          "lima_text_candidate_structural_complete": 0
+        },
+        {
+          "history_hours": 72,
+          "horizon_hours": 24,
+          "all_structural_complete": 0,
+          "lima_text_candidate_structural_complete": 0
+        },
+        {
+          "history_hours": 168,
+          "horizon_hours": 24,
+          "all_structural_complete": 0,
+          "lima_text_candidate_structural_complete": 0
+        }
+      ]
+    }
+  ],
+  "lima_text_candidate_pm_contexts": [
+    {
+      "source_id": "oefa-eaf-aire",
+      "point": "CA-VIC-01",
+      "report": "INFORME N° 00069-2023-OEFA/DEAM-STEC",
+      "family": "pm25",
+      "parameter": "Material particulado con diámetro menor a 2,5 micras (PM2,5)",
+      "unit": "µg/m³",
+      "distinct_hour_slots": 20,
+      "longest_run_hours": 20,
+      "first_clock": "2023-03-06 18:00:00",
+      "last_clock": "2023-03-07 13:00:00"
+    },
+    {
+      "source_id": "oefa-eaf-aire",
+      "point": "CA-RZC-01",
+      "report": "INFORME N° 00070-2023-OEFA/DEAM-STEC",
+      "family": "pm25",
+      "parameter": "Material particulado con diámetro menor a 2,5 micras (PM2,5)",
+      "unit": "µg/m³",
+      "distinct_hour_slots": 40,
+      "longest_run_hours": 40,
+      "first_clock": "2023-03-07 19:00:00",
+      "last_clock": "2023-03-09 10:00:00"
+    },
+    {
+      "source_id": "oefa-eaf-aire",
+      "point": "Estación OEFA 3 (P3) \n",
+      "report": "INFORME N° 00029-2019-OEFA/DEAM",
+      "family": "pm25",
+      "parameter": "Concentración de partículas PM2.5",
+      "unit": "µg/m3",
+      "distinct_hour_slots": 355,
+      "longest_run_hours": 204,
+      "first_clock": "2019-01-17 16:00:00",
+      "last_clock": "2019-02-01 13:00:00"
+    },
+    {
+      "source_id": "oefa-eaf-aire",
+      "point": "Estación OEFA 3 (P3) \n",
+      "report": "INFORME N° 00029-2019-OEFA/DEAM",
+      "family": "pm10",
+      "parameter": "Concentración de partículas PM10",
+      "unit": "µg/m3",
+      "distinct_hour_slots": 355,
+      "longest_run_hours": 204,
+      "first_clock": "2019-01-17 16:00:00",
+      "last_clock": "2019-02-01 13:00:00"
+    },
+    {
+      "source_id": "oefa-eaf-aire",
+      "point": "Estación OEFA 2 (P2) \n",
+      "report": "INFORME N° 00029-2019-OEFA/DEAM",
+      "family": "pm25",
+      "parameter": "Concentración de partículas PM2.5",
+      "unit": "µg/m3",
+      "distinct_hour_slots": 194,
+      "longest_run_hours": 73,
+      "first_clock": "2019-01-17 10:00:00",
+      "last_clock": "2019-01-30 01:00:00"
+    },
+    {
+      "source_id": "oefa-eaf-aire",
+      "point": "Estación OEFA 2 (P2) \n",
+      "report": "INFORME N° 00029-2019-OEFA/DEAM",
+      "family": "pm10",
+      "parameter": "Concentración de partículas PM10",
+      "unit": "µg/m3",
+      "distinct_hour_slots": 194,
+      "longest_run_hours": 73,
+      "first_clock": "2019-01-17 10:00:00",
+      "last_clock": "2019-01-30 01:00:00"
+    },
+    {
+      "source_id": "oefa-eaf-aire",
+      "point": "Estación OEFA 1 (P1) \n",
+      "report": "INFORME N° 00029-2019-OEFA/DEAM",
+      "family": "pm10",
+      "parameter": "Concentración de partículas PM10",
+      "unit": "µg/m3",
+      "distinct_hour_slots": 241,
+      "longest_run_hours": 110,
+      "first_clock": "2019-01-17 11:00:00",
+      "last_clock": "2019-02-01 12:00:00"
+    },
+    {
+      "source_id": "oefa-eaf-aire",
+      "point": "CA-VIC-01",
+      "report": "INFORME N° 00069-2023-OEFA/DEAM-STEC",
+      "family": "pm10",
+      "parameter": "Material particulado con diámetro menor a 10 micras (PM10)",
+      "unit": "µg/m³",
+      "distinct_hour_slots": 20,
+      "longest_run_hours": 20,
+      "first_clock": "2023-03-06 18:00:00",
+      "last_clock": "2023-03-07 13:00:00"
+    },
+    {
+      "source_id": "oefa-eaf-aire",
+      "point": "CA-RZC-01",
+      "report": "INFORME N° 00070-2023-OEFA/DEAM-STEC",
+      "family": "pm10",
+      "parameter": "Material particulado con diámetro menor a 10 micras (PM10)",
+      "unit": "µg/m³",
+      "distinct_hour_slots": 40,
+      "longest_run_hours": 40,
+      "first_clock": "2023-03-07 19:00:00",
+      "last_clock": "2023-03-09 10:00:00"
+    },
+    {
+      "source_id": "oefa-eaf-aire",
+      "point": "Estación OEFA 1 (P1) \n",
+      "report": "INFORME N° 00029-2019-OEFA/DEAM",
+      "family": "pm25",
+      "parameter": "Concentración de partículas PM2.5",
+      "unit": "µg/m3",
+      "distinct_hour_slots": 241,
+      "longest_run_hours": 110,
+      "first_clock": "2019-01-17 11:00:00",
+      "last_clock": "2019-02-01 12:00:00"
+    }
+  ],
+  "quality_examples_for_review": [
+    {
+      "source_id": "oefa-eac-aire",
+      "sheet": "Aire",
+      "row_number": 46339,
+      "point": "CA-SJ-01",
+      "report": "INFORME N° 00188-2024-OEFA/DEAM-STEC",
+      "parameter": "Humedad relativa",
+      "unit": "%",
+      "value": -100.0
+    },
+    {
+      "source_id": "oefa-eac-aire",
+      "sheet": "Aire",
+      "row_number": 64053,
+      "point": "CA-EC-01",
+      "report": "INFORME N° 00188-2024-OEFA/DEAM-STEC",
+      "parameter": "Presión atmosférica",
+      "unit": "mmHg",
+      "value": 1011.0
+    },
+    {
+      "source_id": "oefa-eac-aire",
+      "sheet": "Aire",
+      "row_number": 65627,
+      "point": "CA-EC-01",
+      "report": "INFORME N° 00188-2024-OEFA/DEAM-STEC",
+      "parameter": "Presión atmosférica",
+      "unit": "mmHg",
+      "value": 1011.0
+    },
+    {
+      "source_id": "oefa-eac-aire",
+      "sheet": "Aire",
+      "row_number": 65769,
+      "point": "CA-EC-01",
+      "report": "INFORME N° 00188-2024-OEFA/DEAM-STEC",
+      "parameter": "Presión atmosférica",
+      "unit": "mmHg",
+      "value": 1011.0
+    },
+    {
+      "source_id": "oefa-eac-aire",
+      "sheet": "Aire",
+      "row_number": 79742,
+      "point": "CA-AP-01",
+      "report": "INFORME N° 00180-2023-OEFA/DEAM-STEC",
+      "parameter": "Radiación solar",
+      "unit": "W/m2",
+      "value": 23576.0
+    },
+    {
+      "source_id": "oefa-eac-aire",
+      "sheet": "Aire",
+      "row_number": 89859,
+      "point": "CA-AP-06",
+      "report": "INFORME N° 00180-2023-OEFA/DEAM-STEC",
+      "parameter": "Velocidad del viento",
+      "unit": "m/s",
+      "value": 359.8
+    }
+  ],
+  "top_unresolved_tokens": {
+    "oefa-eac-aire": [
+      {
+        "source_id": "oefa-eac-aire",
+        "value_class": "missing",
+        "value_token": "-",
+        "n": 10877
+      },
+      {
+        "source_id": "oefa-eac-aire",
+        "value_class": "censored",
+        "value_token": "<L.C.",
+        "n": 2231
+      },
+      {
+        "source_id": "oefa-eac-aire",
+        "value_class": "censored",
+        "value_token": "<LC",
+        "n": 2029
+      },
+      {
+        "source_id": "oefa-eac-aire",
+        "value_class": "unparsed",
+        "value_token": "N.D.",
+        "n": 1951
+      },
+      {
+        "source_id": "oefa-eac-aire",
+        "value_class": "nonfinite",
+        "value_token": "NAN",
+        "n": 1328
+      },
+      {
+        "source_id": "oefa-eac-aire",
+        "value_class": "missing",
+        "value_token": "ND",
+        "n": 1327
+      },
+      {
+        "source_id": "oefa-eac-aire",
+        "value_class": "unparsed",
+        "value_token": "NC",
+        "n": 436
+      },
+      {
+        "source_id": "oefa-eac-aire",
+        "value_class": "censored",
+        "value_token": "<8.4",
+        "n": 338
+      },
+      {
+        "source_id": "oefa-eac-aire",
+        "value_class": "censored",
+        "value_token": "<1.0",
+        "n": 111
+      },
+      {
+        "source_id": "oefa-eac-aire",
+        "value_class": "censored",
+        "value_token": "<431.5",
+        "n": 107
+      }
+    ],
+    "oefa-eaf-aire": [
+      {
+        "source_id": "oefa-eaf-aire",
+        "value_class": "missing",
+        "value_token": "-",
+        "n": 649
+      },
+      {
+        "source_id": "oefa-eaf-aire",
+        "value_class": "censored",
+        "value_token": "<0.00013",
+        "n": 103
+      },
+      {
+        "source_id": "oefa-eaf-aire",
+        "value_class": "censored",
+        "value_token": "<0.00001",
+        "n": 57
+      },
+      {
+        "source_id": "oefa-eaf-aire",
+        "value_class": "censored",
+        "value_token": "<0.00004",
+        "n": 56
+      },
+      {
+        "source_id": "oefa-eaf-aire",
+        "value_class": "missing",
+        "value_token": "",
+        "n": 39
+      },
+      {
+        "source_id": "oefa-eaf-aire",
+        "value_class": "unparsed",
+        "value_token": "IE",
+        "n": 34
+      },
+      {
+        "source_id": "oefa-eaf-aire",
+        "value_class": "censored",
+        "value_token": "<0.00012",
+        "n": 31
+      },
+      {
+        "source_id": "oefa-eaf-aire",
+        "value_class": "censored",
+        "value_token": "<0.00133",
+        "n": 12
+      },
+      {
+        "source_id": "oefa-eaf-aire",
+        "value_class": "unparsed",
+        "value_token": "ID",
+        "n": 10
+      },
+      {
+        "source_id": "oefa-eaf-aire",
+        "value_class": "censored",
+        "value_token": "<0.00089",
+        "n": 10
+      }
+    ],
+    "oefa-eat-aire": [
+      {
+        "source_id": "oefa-eat-aire",
+        "value_class": "censored",
+        "value_token": "<L.C.",
+        "n": 514
+      },
+      {
+        "source_id": "oefa-eat-aire",
+        "value_class": "censored",
+        "value_token": "<0.00013",
+        "n": 48
+      },
+      {
+        "source_id": "oefa-eat-aire",
+        "value_class": "censored",
+        "value_token": "<0.0003",
+        "n": 32
+      },
+      {
+        "source_id": "oefa-eat-aire",
+        "value_class": "censored",
+        "value_token": "<0.00026",
+        "n": 24
+      },
+      {
+        "source_id": "oefa-eat-aire",
+        "value_class": "censored",
+        "value_token": "<0.00039",
+        "n": 24
+      },
+      {
+        "source_id": "oefa-eat-aire",
+        "value_class": "censored",
+        "value_token": "<0.00002",
+        "n": 22
+      },
+      {
+        "source_id": "oefa-eat-aire",
+        "value_class": "censored",
+        "value_token": "<0.00012",
+        "n": 21
+      },
+      {
+        "source_id": "oefa-eat-aire",
+        "value_class": "censored",
+        "value_token": "<0.005",
+        "n": 20
+      },
+      {
+        "source_id": "oefa-eat-aire",
+        "value_class": "censored",
+        "value_token": "<0.00007",
+        "n": 17
+      },
+      {
+        "source_id": "oefa-eat-aire",
+        "value_class": "censored",
+        "value_token": "<0.00009",
+        "n": 16
+      }
+    ],
+    "oefa-ipash-aire": []
+  },
+  "time_statuses": [
+    {
+      "source_id": "oefa-eac-aire",
+      "date_status": "native_datetime",
+      "clock_status": "text_clock",
+      "n": 74747
+    },
+    {
+      "source_id": "oefa-eac-aire",
+      "date_status": "native_datetime",
+      "clock_status": "native_time",
+      "n": 47065
+    },
+    {
+      "source_id": "oefa-eac-aire",
+      "date_status": "native_datetime",
+      "clock_status": "missing",
+      "n": 10838
+    },
+    {
+      "source_id": "oefa-eac-aire",
+      "date_status": "native_datetime",
+      "clock_status": "unresolved_datetime_clock",
+      "n": 2554
+    },
+    {
+      "source_id": "oefa-eac-aire",
+      "date_status": "native_datetime",
+      "clock_status": "base_date_and_clock",
+      "n": 361
+    },
+    {
+      "source_id": "oefa-eac-aire",
+      "date_status": "native_datetime",
+      "clock_status": "formula_or_excel_error_row",
+      "n": 126
+    },
+    {
+      "source_id": "oefa-eac-aire",
+      "date_status": "unsupported_date",
+      "clock_status": "native_time",
+      "n": 24
+    },
+    {
+      "source_id": "oefa-eac-aire",
+      "date_status": "native_datetime",
+      "clock_status": "unsupported_clock",
+      "n": 6
+    },
+    {
+      "source_id": "oefa-eac-aire",
+      "date_status": "unsupported_date",
+      "clock_status": "unresolved_datetime_clock",
+      "n": 1
+    },
+    {
+      "source_id": "oefa-eaf-aire",
+      "date_status": "native_datetime",
+      "clock_status": "native_time",
+      "n": 17389
+    },
+    {
+      "source_id": "oefa-eaf-aire",
+      "date_status": "native_datetime",
+      "clock_status": "text_clock",
+      "n": 220
+    },
+    {
+      "source_id": "oefa-eat-aire",
+      "date_status": "native_datetime",
+      "clock_status": "native_time",
+      "n": 2252
+    },
+    {
+      "source_id": "oefa-eat-aire",
+      "date_status": "native_datetime",
+      "clock_status": "text_clock",
+      "n": 688
+    },
+    {
+      "source_id": "oefa-ipash-aire",
+      "date_status": "native_datetime",
+      "clock_status": "native_time",
+      "n": 1330
+    }
+  ],
+  "scientific_selection": "not_established",
+  "geography_method": "Text mentions in evaluation/location descriptions; candidates only, not verified boundaries or station homologation."
+}
