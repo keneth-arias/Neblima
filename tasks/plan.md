@@ -281,3 +281,19 @@ Política tipada y helpers listos, sin modificar su copia ni completar su normal
 UTC publicadas; aceptación explícita de calidad y posición del intervalo desconocidas. Se difieren
 etiquetas regulatorias diarias. comparison-v3 distingue ventanas aceptadas operativamente de
 validación científica. #13/#14/#18/#19 continúan como entregas propias; #20/#43 no se cierran.
+
+## Próximas entregas de Keneth para la primera ronda
+
+| Orden | Tarea y primer resultado verificable |
+| --- | --- |
+| 1 | [#14](issue-14-plan.md). Auditar las decisiones por señal sobre el Parquet verificado de #13. Conciliar los conteos de PM2.5 con #11. |
+| 2 | [#15](https://github.com/keneth-arias/airaware/issues/15). Construir una grilla horaria UTC por identidad y señal compatible desde la auditoría de #14. Probar un cero medido, un dato publicado sin valor, un conflicto y una hora ausente. Conciliar los valores conservados por estación. |
+| 3 | [#18](https://github.com/keneth-arias/airaware/issues/18). Crear identificadores estables de ventanas con 24 horas completas de historia y seis de objetivo, paso de una hora. Probar que una hora faltante invalida cada ventana que la contiene y conciliar las 339 205 ventanas de #11 antes de particionar. |
+| 4 | [#19](https://github.com/keneth-arias/airaware/issues/19). Publicar manifiestos locales con fechas de corte UTC, ventanas por estación y ventanas purgadas. Comprobar que las horas de historia y objetivo sean disjuntas entre particiones. Congelar el manifiesto antes de seleccionar el modelo. |
+| En paralelo a la cadena de datos | [#21](https://github.com/keneth-arias/airaware/issues/21). Usar el entorno fijado para escribir, verificar y leer primero una serie sintética con un cero y un nulo. Repetir el recorrido con una muestra del Parquet de #13 conservando atribución, unidad inferida y procedencia. |
+| Con #19 y #21 | [#22](https://github.com/keneth-arias/airaware/issues/22). Leer una tarea TimeF real con el lector oficial y contrastar sus 24 entradas, seis objetivos y partición con el manifiesto. Entregar ese recorrido a #23 y los objetivos comunes a #25. |
+| Con #23 y #25 | [#27](https://github.com/keneth-arias/airaware/issues/27) y [#28](https://github.com/keneth-arias/airaware/issues/28). Verificar licencia, revisión y presupuesto del modelo. Probar un lote y después ajustar en entrenamiento, seleccionar en validación y comparar contra las referencias en prueba. |
+
+La muestra inicial de TimeF puede usar #13 mientras avanza la cadena de datos. La tarea final de
+pronóstico usa las particiones fijas y la vista depurada. Se mantienen las dependencias de #20
+para etiquetas y #43 para aclaraciones institucionales.

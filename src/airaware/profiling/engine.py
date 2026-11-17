@@ -18,6 +18,7 @@ from pydantic import BaseModel, ConfigDict, Field
 
 from airaware.acquisition.models import Manifest
 from airaware.acquisition.store import _chunks, verify_bundle
+from airaware.senamhi_preparation import SENAMHI_STATION_FIELDS
 
 VERSION = "raw-profile-v2"
 
@@ -48,15 +49,7 @@ def _json_fields(names: list[str]) -> str:
 
 def _layout(kind: str) -> tuple[list[str], list[str], str, str, str]:
     if kind == "senamhi":
-        station = [
-            "ESTACION",
-            "LONGITUD",
-            "LATITUD",
-            "ALTITUD",
-            "DEPARTAMENTO",
-            "PROVINCIA",
-            "DISTRITO",
-        ]
+        station = list(SENAMHI_STATION_FIELDS)
         clock = "lpad(HORA,6,'0')"
         start = f"""CASE WHEN regexp_full_match(FECHA,'[0-9]{{8}}')
             AND regexp_full_match(HORA,'[0-9]{{1,6}}')

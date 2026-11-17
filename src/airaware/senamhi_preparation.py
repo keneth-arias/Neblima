@@ -11,6 +11,16 @@ from pydantic import BaseModel, ConfigDict, Field
 
 from airaware.schemas import Observation, Provenance
 
+SENAMHI_STATION_FIELDS = (
+    "ESTACION",
+    "LONGITUD",
+    "LATITUD",
+    "ALTITUD",
+    "DEPARTAMENTO",
+    "PROVINCIA",
+    "DISTRITO",
+)
+
 
 class PreparationPolicy(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True)
