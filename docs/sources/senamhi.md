@@ -163,3 +163,10 @@ El plan configs/acquisition/senamhi-local.json y el informe reports/acquisition/
 la adquisición local aprobada. metadata/senamhi-acquisition-check.json comprueba seis originales y
 la reutilización de CSV/XLSX/DOCX en dos recorridos offline; cero bytes de red y archivos/manifiestos
 previos intactos. No se cambian las conclusiones científicas ni los pendientes de #43.
+
+## Revisión posterior de métodos externos y controles diarios
+
+La [evaluación del repositorio y nuevo contraste](metadata-methods-review.md) identifica el mismo
+CSV por SHA-256. Diez máximos diarios PM10/PM2.5 coinciden con fechas y precisión del boletín de
+febrero 2018 al usar una vista diagnóstica crudo−5 h con al menos 18 observaciones diarias.
+Esto refuerza la hipótesis temporal anterior, sin confirmar todo el histórico ni convertir producción.
