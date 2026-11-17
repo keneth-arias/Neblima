@@ -1,0 +1,125 @@
+{
+  "task_id": "airaware-issue-13",
+  "attempt_id": "attempt-05",
+  "policy_id": "senamhi-normalization-20261117-v1",
+  "recorded_at_utc": "2026-11-17T18:40:00Z",
+  "branch": "feat/issue-13-senamhi-normalization",
+  "head": "a8ca7f702ad4ef67f352e914e46489dfb23e708b",
+  "command": {
+    "argv": "uv run --locked airaware normalize senamhi --input data/raw/senamhi/senamhi_lima_monitoreo_1.csv --policy configs/normalization/senamhi.yaml --output data/normalized/senamhi/senamhi-normalization-20261117-v1 --batch-size 5000",
+    "exit_code": 0,
+    "started_at_utc": "2026-11-17T18:29:38Z",
+    "finished_at_utc": "2026-11-17T18:30:16Z",
+    "executions": 1,
+    "batch_size": 5000
+  },
+  "policy": {
+    "path": "configs/normalization/senamhi.yaml",
+    "policy_id": "senamhi-normalization-20261117-v1",
+    "source_id": "senamhi-lima-csv",
+    "policy_sha256": "8564bf7e6cfff861a842d51a5e26e9249d5e7e450a4409b7cdc416fd094ffe3c",
+    "pyarrow_version": "25.0.1"
+  },
+  "input": {
+    "path": "data/raw/senamhi/senamhi_lima_monitoreo_1.csv",
+    "size_bytes": 68501558,
+    "sha256_before": "896ae8a106fb128460e81b3f58096f6b9c4d582ef28fffa46e5394c5875c40d4",
+    "sha256_after": "896ae8a106fb128460e81b3f58096f6b9c4d582ef28fffa46e5394c5875c40d4",
+    "inode_mtime_unchanged": true,
+    "expected_sha256_match": true
+  },
+  "acquisition": {
+    "method": "Lightpanda download (herramienta MCP download de lightpanda mcp 1.1.0-nightly.12173)",
+    "requested_url": "https://www.datosabiertos.gob.pe/sites/default/files/Monitoreo%20de%20los%20contaminantes%20del%20aire%20en%20Lima%20Metropolitana%20-%20%5BServicio%20Nacional%20de%20Meteorolog%C3%ADa%20e%20Hidrolog%C3%ADa%20del%20Per%C3%BA%20-%20SENAMHI%5D_1.csv",
+    "final_url": null,
+    "final_url_note": "La herramienta download no expuso la URL final; se solicitó la URL documentada en metadata/senamhi-lima-download.json.",
+    "catalog_page_url": "https://www.datosabiertos.gob.pe/dataset/monitoreo-de-los-contaminantes-del-aire-en-lima-metropolitana-servicio-nacional-de",
+    "catalog_page_http_status": 200,
+    "csv_http_status": null,
+    "csv_http_status_note": "La herramienta download guardó el recurso sin exponer el código HTTP exacto; solo conserva respuestas 200-203.",
+    "verified_at_utc": "2026-11-17T18:28:40Z",
+    "size_bytes": 68501558,
+    "sha256": "896ae8a106fb128460e81b3f58096f6b9c4d582ef28fffa46e5394c5875c40d4",
+    "download_attempts": 1,
+    "retries": 0,
+    "authorized_cap_bytes": 70000000,
+    "authorized_files": 1,
+    "registration": {
+      "command": "uv run --locked airaware acquire import-file --spec data/staging/senamhi-acquisition-request.json --file data/raw/senamhi/senamhi_lima_monitoreo_1.csv",
+      "exit_code": 0,
+      "reused": true,
+      "request_spec": "data/staging/senamhi-acquisition-request.json",
+      "acquisition_manifest": "data/raw/senamhi-lima-csv/896ae8a106fb128460e81b3f58096f6b9c4d582ef28fffa46e5394c5875c40d4/manifest.json",
+      "acquisition_manifest_sha256": "ea917c283e39fd11b3a5522f6f5e82cb3f84c1008002a0ad058fb03d6d714932"
+    }
+  },
+  "output": {
+    "path": "data/normalized/senamhi/senamhi-normalization-20261117-v1",
+    "manifest": "manifest.json",
+    "manifest_sha256": "fcb427601777342217bad48518cdcd386f91fde7792799a5dfb622e201ad32fb",
+    "files_total": 115,
+    "parquet_files": 113,
+    "partitions": "source_id=senamhi-lima-csv/year=YYYY/month=MM (UTC), 2015-01 a 2024-05",
+    "total_bytes": 72739669,
+    "rejections_file": "rejections.jsonl",
+    "rejections_bytes": 0,
+    "rejections_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "git_tracked": false
+  },
+  "manifest_counts": {
+    "input_rows": 577794,
+    "observations_total": 1733382,
+    "rejections_total": 0,
+    "observations_by_signal": {"PM10": 577794, "PM2_5": 577794, "NO2": 577794},
+    "observations_by_class": {
+      "finite": 1047765,
+      "missing": 685617,
+      "censored": 0,
+      "unresolved": 0,
+      "nonfinite": 0
+    }
+  },
+  "independent_reconciliation": {
+    "ok": true,
+    "errors": [],
+    "scope": "Relectura directa de los 113 Parquet publicados (no solo el manifiesto): totales, tabla paramétrica signal×value_status, SHA de cada archivo contra el manifiesto, filas por archivo, rutas relativas, partición observada_at UTC de todas las filas, IDs de política/fuente/hash, versión pyarrow y muestra contractual acotada.",
+    "total_rows_read": 1733382,
+    "crosstab_parameter_status": {
+      "PM10:finite": 380982,
+      "PM10:missing": 196812,
+      "PM2_5:finite": 367591,
+      "PM2_5:missing": 210203,
+      "NO2:finite": 299192,
+      "NO2:missing": 278602,
+      "PM10:censored": 0,
+      "PM2_5:censored": 0,
+      "NO2:censored": 0,
+      "PM10:unresolved": 0,
+      "PM2_5:unresolved": 0,
+      "NO2:unresolved": 0,
+      "PM10:nonfinite": 0,
+      "PM2_5:nonfinite": 0,
+      "NO2:nonfinite": 0
+    },
+    "contract_expected_match": true,
+    "files_sha256_match_disk": true,
+    "rows_per_file_match_manifest": true,
+    "partition_layout_violations": 0,
+    "rejection_trace_lines": 0,
+    "contract_sample_validated": 200,
+    "contract_full_pydantic_validation": false,
+    "contract_sample_note": "Validación Pydantic del contrato Observation solo sobre una muestra acotada de 200 filas leídas de vuelta; no se afirma validación contractual completa."
+  },
+  "retained_local_resources": [
+    "data/raw/senamhi/senamhi_lima_monitoreo_1.csv",
+    "data/raw/senamhi-lima-csv/896ae8a106fb128460e81b3f58096f6b9c4d582ef28fffa46e5394c5875c40d4/manifest.json",
+    "data/staging/senamhi-acquisition-request.json",
+    "data/normalized/senamhi/senamhi-normalization-20261117-v1/"
+  ],
+  "limits": [
+    "Ejecución única real con el original identificado por SHA; sin segundas corridas ni sobrescrituras.",
+    "Validación Pydantic completa fila a fila no realizada; se conciliaron conteos/estructura completos y una muestra acotada de 200.",
+    "No resuelve identidad de estaciones (#14), posición del intervalo ni calidad individual (#43).",
+    "Sin publicación externa; cualquier distribución futura requiere DATA_ATTRIBUTION.md (ODC-BY-1.0)."
+  ]
+}
