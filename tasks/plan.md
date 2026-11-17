@@ -183,4 +183,6 @@ permanecen locales. La selección de #11 conserva las incertidumbres de reloj/un
 
 #10 cerrada con PR #57/#58 integrados. La propuesta de [issue-11-plan.md](issue-11-plan.md)
 separa conteos estructurales de elegibilidad científica, geografía Lima/Callao y escenarios nacionales.
-Investigación OEFA y borrador de consulta preparados; pendientes de feedback, sin envío ni implementación.
+Plan aprobado e implementado. Consulta OEFA enviada desde Outlook el 16/11/2026, 23:52:57 UTC.
+[Comparación real](../reports/dataset-comparison.md) y [método](../docs/comparison.md) entregan
+conteos estructurales con bloqueos; la selección científica de #11 permanece pendiente.

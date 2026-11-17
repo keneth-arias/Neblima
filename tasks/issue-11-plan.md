@@ -1,6 +1,6 @@
 # Plan revisado de #11: comparación con evidencia y selección condicionada
 
-Responsable: Keneth. Propuesta del 16/11/2026, pendiente de feedback antes de implementar.
+Responsable: Keneth. Plan aprobado por Keneth el 16/11/2026; implementación y ejecución autorizadas.
 Seguimiento: issue #11; dependencias #9/#10 cerradas, PR #57/#58 integrados en main.
 Se conserva el alcance original: ventanas, puntuación y comparación/solapamientos reales.
 
@@ -19,9 +19,9 @@ Investigación y consultas: docs/sources/oefa-consultation-research.md.
 ## Contrato propuesto y decisiones de Keneth
 
 - Objetivo inicial propuesto: PM2.5 horaria univariada; PM10 como escenario separado. No elegir
-  automáticamente el mejor resultado entre objetivos. Confirmar PM2.5 antes de fijar benchmark.yaml.
+  automáticamente el mejor resultado entre objetivos. PM2.5 confirmado con la aprobación del plan; PM10 se conserva separado.
 - Geografía principal: provincia LIMA, no todo el departamento LIMA. Proponer CALLAO como escenario
-  adicional separado, pendiente de decisión; no ampliar a Piura para alcanzar una cuota de estaciones.
+  adicional separado aprobado; no ampliar a Piura para alcanzar una cuota de estaciones.
 - Grilla: una hora, sin imputación; series por identidad provisional y contexto de #10. Los negativos
   y extremos no se eliminan por una regla estadística sin fundamento. No mezclar periodos/unidades.
 - Para origen t, historia [t−(H−1)h,t] y objetivo [t+1h,t+Fh]. Evaluar las 16 parejas
@@ -71,10 +71,11 @@ Los conteos no crean splits (#19), ventanas de entrenamiento (#18) ni etiquetas 
 
 Nueva ficha EAS de OEFA declara cobertura hasta junio 2024; tabla no cargada, estructura/horas/licencia
 por recurso sin verificar. No descargar masivamente ni sustituir silenciosamente el CSV.
-Consulta dirigida al canal institucional consultas@oefa.gob.pe para orientación y derivación a DEAM. Envío pendiente de instrucción
-expresa; no se ha enviado. Pedir orientación hacia DEAM y archivos/metadata existentes, no presumir
+Consulta dirigida al canal institucional consultas@oefa.gob.pe para orientación y derivación a DEAM. Consulta enviada el 16/11/2026, 23:52:57 UTC, con aprobación expresa; copia localizada en Outlook. Pedir orientación hacia DEAM y archivos/metadata existentes, no presumir
 asesoría disponible ni pedir que OEFA genere una base nueva. La respuesta puede resolver reglas de
 horas, calidad y acceso; su ausencia no bloquea contratos/pruebas ni conteos diagnósticos.
 
-Feedback solicitado: PM2.5 como objetivo inicial; Lima provincia como ámbito principal con Callao
-separado; política estricta sin imputación; pesos propuestos; autorización para enviar la consulta.
+Decisiones aprobadas: PM2.5 inicial, PM10 separado, Lima provincia y Callao como escenarios
+separados, política estricta sin imputación, pesos propuestos y envío institucional. La selección
+científica sigue condicionada a evidencia de unidades/reloj/calidad y derechos; aprobar el plan
+no confirma esos hechos. No cerrar #11 únicamente por entregar el diagnóstico.
