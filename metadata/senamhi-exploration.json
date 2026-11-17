@@ -1,0 +1,215 @@
+{
+  "algorithm": "senamhi-exploration-v1",
+  "source_id": "senamhi-lima-csv",
+  "input_sha256": "896ae8a106fb128460e81b3f58096f6b9c4d582ef28fffa46e5394c5875c40d4",
+  "rows": 577794,
+  "scientific_eligible": false,
+  "timezone_confirmed": false,
+  "daily_min_hours": 18,
+  "denominator": "full_days_between_station_first_last_raw_timestamp",
+  "scenarios": [
+    {
+      "signal": "PM10",
+      "clock_view": "raw",
+      "offset_hours": 0,
+      "losses": {
+        "value": 196812,
+        "ambiguous": 70,
+        "accepted_rows": 380912,
+        "unique_points": 380909,
+        "collapsed_repetitions": 3
+      },
+      "expected_hours": 577752,
+      "valid_hours": 380909,
+      "daily_eligible": 15655
+    },
+    {
+      "signal": "PM2_5",
+      "clock_view": "raw",
+      "offset_hours": 0,
+      "losses": {
+        "value": 210203,
+        "ambiguous": 70,
+        "accepted_rows": 367521,
+        "unique_points": 367518,
+        "collapsed_repetitions": 3
+      },
+      "expected_hours": 577752,
+      "valid_hours": 367518,
+      "daily_eligible": 15103
+    },
+    {
+      "signal": "NO2",
+      "clock_view": "raw",
+      "offset_hours": 0,
+      "losses": {
+        "value": 278602,
+        "ambiguous": 64,
+        "accepted_rows": 299128,
+        "unique_points": 299125,
+        "collapsed_repetitions": 3
+      },
+      "expected_hours": 577752,
+      "valid_hours": 299125,
+      "daily_eligible": 12161
+    },
+    {
+      "signal": "PM10",
+      "clock_view": "raw_minus5_hypothesis",
+      "offset_hours": -5,
+      "losses": {
+        "value": 196812,
+        "ambiguous": 70,
+        "accepted_rows": 380912,
+        "unique_points": 380909,
+        "collapsed_repetitions": 3
+      },
+      "expected_hours": 577752,
+      "valid_hours": 380909,
+      "daily_eligible": 15551
+    },
+    {
+      "signal": "PM2_5",
+      "clock_view": "raw_minus5_hypothesis",
+      "offset_hours": -5,
+      "losses": {
+        "value": 210203,
+        "ambiguous": 70,
+        "accepted_rows": 367521,
+        "unique_points": 367518,
+        "collapsed_repetitions": 3
+      },
+      "expected_hours": 577752,
+      "valid_hours": 367518,
+      "daily_eligible": 15009
+    },
+    {
+      "signal": "NO2",
+      "clock_view": "raw_minus5_hypothesis",
+      "offset_hours": -5,
+      "losses": {
+        "value": 278602,
+        "ambiguous": 64,
+        "accepted_rows": 299128,
+        "unique_points": 299125,
+        "collapsed_repetitions": 3
+      },
+      "expected_hours": 577752,
+      "valid_hours": 299125,
+      "daily_eligible": 12110
+    }
+  ],
+  "raw_district_means": [
+    {
+      "district_raw": "CARABAYLLO",
+      "source_rows": 82542,
+      "pm10": 71.79205524019619,
+      "pm25": 27.850139143481485,
+      "no2": 22.568339104210924,
+      "district_normalized": "CARABAYLLO"
+    },
+    {
+      "district_raw": "JESUS_MARIA",
+      "source_rows": 82542,
+      "pm10": 30.715066063932547,
+      "pm25": 16.9077332548678,
+      "no2": 17.859676949421168,
+      "district_normalized": "JESUS MARIA"
+    },
+    {
+      "district_raw": "SANTA_ANITA",
+      "source_rows": 82542,
+      "pm10": 62.944336993704084,
+      "pm25": 30.042924375284212,
+      "no2": 25.373188076490507,
+      "district_normalized": "SANTA ANITA"
+    },
+    {
+      "district_raw": "SAN_BORJA",
+      "source_rows": 82542,
+      "pm10": 58.768755603337524,
+      "pm25": 18.666637719676697,
+      "no2": 20.954854289146155,
+      "district_normalized": "SAN BORJA"
+    },
+    {
+      "district_raw": "SAN_JUAN_DE_LURIGANCHO",
+      "source_rows": 82542,
+      "pm10": 74.87453247293814,
+      "pm25": 31.384924632257633,
+      "no2": 31.38355474515957,
+      "district_normalized": "SAN JUAN DE LURIGANCHO"
+    },
+    {
+      "district_raw": "SAN_MARTIN_DE_PORRES",
+      "source_rows": 82542,
+      "pm10": 41.51255382166422,
+      "pm25": 18.684188088494054,
+      "no2": 23.08168046729587,
+      "district_normalized": "SAN MARTIN DE PORRES"
+    },
+    {
+      "district_raw": "VILLA_MARIA_DEL_TRIUNFO",
+      "source_rows": 82542,
+      "pm10": 97.43308072053726,
+      "pm25": 26.25707421627959,
+      "no2": 17.74607742548378,
+      "district_normalized": "VILLA MARIA DEL TRIUNFO"
+    }
+  ],
+  "output_directory": "reports/generated/senamhi-exploration/review-20261117-01",
+  "manifest": {
+    "algorithm": "senamhi-exploration-v1",
+    "input_sha256": "896ae8a106fb128460e81b3f58096f6b9c4d582ef28fffa46e5394c5875c40d4",
+    "inputs_unchanged": true,
+    "files": {
+      "PM10--5-cycle.parquet": "46daab8ba9e391fc8d7e0bfee088aeef790f0bb98e51506368e9444402a0cf80",
+      "summary.json": "2ded6ea04770e1e6519b7f2945e693acc4a0dcbbbe1c1c85c622e92c39734539",
+      "PM10-0-annual.parquet": "f16f6027a5ed1f550c55822b7c13b47062326f978b789d1e7ab4d1400c11b656",
+      "PM2_5--5-annual.parquet": "1b1af7a1369e866c97c7d519872186122e5659d3768bf03d239c40e4935e3bb8",
+      "NO2-0-daily.parquet": "aba165d8a6968810a18fb26f1bf0fac777f37a80c356a68940c3f89799046a5d",
+      "NO2--5-daily.parquet": "6d86f9572f8da478588809664c99541fcff42e492a4f3634bdbc13c36ddf416a",
+      "PM2_5-0-annual.parquet": "cab3113e2be4407aea25a7816e16b920284d9ba85bc8fb83390b5a2956600e2a",
+      "PM2_5--5-cycle.parquet": "f343bd98b0586025f31d9ef8f25f953539b08685fd5c3d38d525bff0ed119058",
+      "NO2--5-hourly.parquet": "dd29eafcc10b6a8e583c0da62ec6134b403831e73041a32ecfb3538cf55c8f7c",
+      "PM2_5-0-cycle.parquet": "bb72f4823b103c970add3a1a404c4a8e89fcd98020ac917a1075f16a18483a13",
+      "PM10-0-hourly.parquet": "e5be2dd7e6c1f7c8e21dfe7df6b4852005ded76554605668696b2b0a445010b6",
+      "PM2_5--5-monthly.parquet": "6f5e9efcc150a78c680878d511dcf730b9f850aba2bf6c1adfa461b3dcaa2ee6",
+      "NO2--5-cycle.parquet": "022c3f1a3f1e8d0612230cf0c88a1132f69b02dd82360861632bafbe6b596ca5",
+      "NO2--5-monthly.parquet": "97516aaaf28ee3a83c41f9d5254729a0ef557f6f54411c955fbdc3cd2219aeac",
+      "PM2_5-0-hourly.parquet": "10c59f9c252392d241286a51c91a76c56eb9be2f14afcc639914ba1c7d890685",
+      "NO2--5-annual.parquet": "a75984d32f734a9d8a09e016ed0515ea07d7b49dd185e8a912cd03735d13f4b4",
+      "PM10--5-annual.parquet": "615fdcc9fe018555203ddad93aafde88f9e21ee0e676ee2d11b1260c00a91e7b",
+      "PM2_5--5-hourly.parquet": "689651e6b793d80042594a2f100fb87ef6a9e0fc53c6fb013769b6f12e767294",
+      "PM2_5-0-daily.parquet": "11bb55c04aeda3be47c69472eaa0f83388198509efecd27251e1b0c9350c1a41",
+      "PM10--5-hourly.parquet": "6e4c09e55d1696b24b621a074f7e2e1ffb8cac8728f52f92bee79552637b09d8",
+      "NO2-0-monthly.parquet": "1f9becbdba48aa4981d9f9aab12776aa363a67e892d5577a717954f6fff279dd",
+      "PM10--5-monthly.parquet": "4c24ac33082ef0a4b3322113f5c0c34053a5bc018456a75cbfe1a2f779d67374",
+      "PM2_5--5-daily.parquet": "e2d8691bc474e5cd6e919cb6f742b87558fcaeb4df07710def3679c1614d18b2",
+      "PM2_5-0-monthly.parquet": "bc4f628db8d8915d0e05184028804daca25a071c13f4edcab311e7adad01d850",
+      "PM10-0-daily.parquet": "34f6e69a4af60f5d8f937f902edacd77b0a15cc1e0085da21743d0bffa37a3fb",
+      "NO2-0-cycle.parquet": "1be4fea4ab4095a41d1ad4f275b75c5d8b4bbaf9a2e5f5203a5cd3e773e9bcb8",
+      "PM10-0-monthly.parquet": "c7ca7af38155d95583f91f7b4c75acb777f7479b008a500914c2848233a90454",
+      "PM10-0-cycle.parquet": "1249d602336365fcd955e9eda64faa1deb69bb7dd621c6622542595394db630b",
+      "NO2-0-annual.parquet": "62351f7ab74f2fdfe294cd16bd9eaa857e358a76b164085df9dd572894588629",
+      "NO2-0-hourly.parquet": "b8f363a2e3d317e57ba6c6aedb5eaa0e6609e6deb443fcc10c71aa0b53cc10f6",
+      "source-rows.parquet": "a0590e3396f017e910a875110a943056718e26a8c6df575d91e6f40577620e5d",
+      "PM10--5-daily.parquet": "e451b15edfe3eab00a0265c2a4c80a73d98abd059407458ee994a6f26008679c"
+    }
+  },
+  "code_sha256": "fa2886ef8e6ee738052be938871196f22662d680967f90335682391c540e6ca9",
+  "references": [
+    {
+      "repository": "Cristhianbgf/calidad-aire-lima",
+      "commit": "8d2deaa70c9e6c4d0d4b2b6699cda3b3a6dfa85f",
+      "license": "MIT"
+    },
+    {
+      "repository": "DataGabo/Analisis-de-la-calidad-del-aire-y-la-movilidad-urbana-en-la-ciudad-de-Lima",
+      "commit": "4f287870b7e90e562e498fddabd264854f1eb335",
+      "notebook_blob": "876dec7ba163f1b3dbbc38a0baf4367beb40dedc",
+      "license": null
+    }
+  ],
+  "datagabo_displayed_means_matching": 18
+}
