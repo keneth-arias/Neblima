@@ -1,8 +1,9 @@
-# Consulta a OEFA — borrador para revisión de Keneth
+# Consulta a OEFA — copia del mensaje enviado
 
-Estado: no enviado. Destinatario: Servicio de Información y Atención al Ciudadano del OEFA
-<consultas@oefa.gob.pe>, verificado en su página institucional de contacto. Remitente propuesto: Keneth Arias <keneth.arias@outlook.com>.
-Sin copia a otros contactos ni archivos adjuntos. Envío requiere instrucción de Keneth.
+Estado: enviado el 16/11/2026 a las 23:52:57 UTC, con aprobación expresa de Keneth.
+Envío aceptado por Outlook y copia localizada en el buzón del remitente. Destinatario: Servicio de Información y Atención al Ciudadano del OEFA
+<consultas@oefa.gob.pe>, verificado en su página institucional de contacto. Remitente: Keneth Arias <keneth.arias@outlook.com>.
+Sin copia a otros contactos ni archivos adjuntos. No se confirma aún recepción ni respuesta de OEFA.
 
 Asunto: Consulta y orientación sobre datos de calidad del aire para proyecto educativo AirAware Perú
 

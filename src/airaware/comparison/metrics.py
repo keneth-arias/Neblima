@@ -46,3 +46,22 @@ def score(
     if any(not math.isfinite(x) or not 0 <= x <= 1 for x in (*components, *weights)):
         raise ValueError("Componentes fuera de escala 0–1")
     return sum(x * w for x, w in zip(components, weights, strict=True)) if eligible else None
+
+
+def common_coverage(c: duckdb.DuckDBPyConnection, station_target: int) -> dict:
+    """Cobertura simultánea de puntos, no ventanas ni estaciones homologadas."""
+    if station_target < 1:
+        raise ValueError("La meta de estaciones debe ser positiva")
+    return records(
+        c,
+        """WITH identities AS (SELECT DISTINCT series_id,station_key FROM base),
+      quorum AS (SELECT ts FROM points JOIN identities USING(series_id) GROUP BY ts
+        HAVING count(DISTINCT station_key)>=?),
+      ordered AS (SELECT ts,ts-row_number() OVER(ORDER BY ts)*INTERVAL '1 hour' run FROM quorum),
+      runs AS (SELECT count(*) n FROM ordered GROUP BY run)
+      SELECT (SELECT count(*) FROM quorum)::BIGINT common_hour_slots,
+        (SELECT min(ts) FROM quorum) first_common_clock,
+        (SELECT max(ts) FROM quorum) last_common_clock,
+        coalesce(max(n),0)::BIGINT longest_common_run_hours FROM runs""",
+        [station_target],
+    )[0]
