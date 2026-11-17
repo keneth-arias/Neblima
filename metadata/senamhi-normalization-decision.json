@@ -70,5 +70,15 @@
       "interval_position_unverified",
       "quality_flags_unverified"
     ]
+  },
+  "operating_forecast_approval": {
+    "authorized_by": "keneth-arias",
+    "status": "approved",
+    "scope": "SENAMHI/Lima/PM2.5 retrospectivo con etiquetas UTC publicadas",
+    "adr": "docs/decisions/005-senamhi-operating-policy.md",
+    "receipt": "metadata/benchmark-selection.json",
+    "unknown_quality_accepted": true,
+    "unknown_interval_position_accepted": true,
+    "daily_regulatory_labels": false
   }
 }

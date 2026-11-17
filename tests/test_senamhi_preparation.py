@@ -51,7 +51,7 @@ def test_current_comparison_has_no_size_quota_or_size_score():
     from airaware.comparison.models import Policy
 
     policy = Policy.model_validate(yaml.safe_load(Path("configs/benchmark.yaml").read_text()))
-    assert policy.version == "comparison-v2"
+    assert policy.version == "comparison-v3"
     assert policy.target_stations is None and policy.target_months is None
     with pytest.raises(ValueError):
         Policy(version="comparison-v2", target_stations=4, target_months=24)

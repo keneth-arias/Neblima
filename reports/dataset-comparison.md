@@ -1,5 +1,8 @@
 # Comparación real de fuentes y preparación del benchmark — #11
 
+> Selección completada bajo política operativa aprobada: [resultado vigente](benchmark-selection.md).
+> SENAMHI/Lima/PM2.5 con timestamp UTC publicado y aceptación de calidad/intervalo desconocidos.
+
 > Actualización del 17/11/2026: Keneth eliminó el requisito de cuatro estaciones/24 meses.
 > Para SENAMHI se adopta UTC por confirmación del responsable, unidades inferidas aceptadas y
 > ODC-BY-1.0 con atribución. Las afirmaciones de bloqueo anteriores son históricas; ver
