@@ -1,21 +1,21 @@
 {
   "schema_version": 1,
-  "algorithm": "oefa-workbook-review-v1",
-  "created_at_utc": "2026-11-17T02:02:06.299973+00:00",
-  "local_report_directory": "reports/generated/oefa-workbooks/review-20261117-02",
-  "manifest_sha256": "370ed57c6595b2845cf3c5c57658fbe55476bdef4acf57952d188887560cb6c9",
+  "algorithm": "oefa-workbook-review-v2",
+  "created_at_utc": "2026-11-17T02:18:49.381131+00:00",
+  "local_report_directory": "reports/generated/oefa-workbooks/review-20261117-03",
+  "manifest_sha256": "3b7e888dfe1177e8ffaa0349853404fa235541447837e82e691ff09dcd6b1da5",
   "files": {
     "summary.json": {
-      "sha256": "9a5cf4f8526db0df5119661a48f079ebc22b6442124e1440624b4076122846fe",
-      "size_bytes": 13946442
+      "sha256": "64c49f594d1452130050030422abc2944d36c36c6c9eb9762647bbcadf6ed86c",
+      "size_bytes": 13946443
     },
     "observations.parquet": {
-      "sha256": "d341f800657eacc4f0b3225909b0a1e86c0a82573b777a058b84efb9cec3fbe2",
-      "size_bytes": 8203003
+      "sha256": "4a6968e372a24dc6272fa43eb63b909c8a35f657adeba3171f218c798567f872",
+      "size_bytes": 8202973
     },
     "tokens.parquet": {
-      "sha256": "b7b055a064778d02f9617be1f5975245b096c2c57a2cb2fc0e4f30d1b051fe0c",
-      "size_bytes": 182542
+      "sha256": "dc3b15bba6deeffc07a3751c4df0fbbd58a1b5cd31c1765839650443021a9573",
+      "size_bytes": 182540
     }
   },
   "inputs": [
@@ -41,8 +41,8 @@
     }
   ],
   "implementation_sha256": {
-    "review.py": "8575aaffbf67c71a7155b53be27c73592a621fec8185f0c71eef34ddca8226ea",
-    "analyze.py": "74e47b4d70a86d03afe3cd5fdad30e8f252ac59fea3313665da6ddf2cec2ac32"
+    "review.py": "ad68d2ffbea3a8a33ab9fdf3bb55a0e877d084b14a14c85df4a2683d46b7eef5",
+    "analyze.py": "7b11370ebebe012850cc5e8b504c30ddb918da4c327c9d8a0621031212c300e4"
   },
   "dependencies": {
     "openpyxl": "3.1.5",
@@ -75,8 +75,8 @@
       "unresolved_start_rows": 13549,
       "finite_values": 114026,
       "censored_values": 5602,
-      "missing_values": 12204,
-      "other_value_rows": 3890,
+      "missing_values": 10877,
+      "other_value_rows": 5217,
       "negative_values": 1,
       "zero_values": 9621,
       "hourly_label_rows": 95871,
@@ -690,7 +690,7 @@
       },
       {
         "source_id": "oefa-eac-aire",
-        "value_class": "missing",
+        "value_class": "unparsed",
         "value_token": "ND",
         "n": 1327
       },
@@ -839,7 +839,7 @@
       {
         "source_id": "oefa-eat-aire",
         "value_class": "censored",
-        "value_token": "<0.00009",
+        "value_token": "<0.0002",
         "n": 16
       }
     ],

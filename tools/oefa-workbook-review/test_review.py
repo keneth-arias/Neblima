@@ -17,6 +17,8 @@ class InterpretationTests(unittest.TestCase):
         self.assertEqual(numeric_value(-2), ("finite", -2.0))
         self.assertEqual(numeric_value(math.inf)[0], "nonfinite")
         self.assertEqual(numeric_value("1,2")[0], "unparsed")
+        self.assertEqual(numeric_value("ND")[0], "unparsed")
+        self.assertEqual(numeric_value("N.D.")[0], "unparsed")
 
     def test_dates_use_explicit_workbook_epoch_and_keep_ambiguous_text_unknown(self):
         epoch = datetime(1899, 12, 30)

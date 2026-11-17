@@ -23,7 +23,7 @@ La selección científica sigue pendiente; esta revisión no habilita entrenamie
 | Archivo | Filas | Parámetros (etiquetas) | Nombres de puntos | Fechas interpretables | Numéricos finitos | Censurados | Marcadores ausentes | Otros tokens |
 | --- | ---: | ---: | ---: | --- | ---: | ---: | ---: | ---: |
 | IPASH | 1 330 | 10 | 133 | 2019-04-13 a 2024-11-20 | 1 330 | 0 | 0 | 0 |
-| EAC | 135 722 | 179 | 184 | 2017-03-02 a 2024-04-11 | 114 026 | 5 602 | 12 204 | 3 890 |
+| EAC | 135 722 | 179 | 184 | 2017-03-02 a 2024-04-11 | 114 026 | 5 602 | 10 877 | 5 217 |
 | EAF | 17 609 | 55 | 72 | 2018-04-12 a 2023-09-07 | 16 493 | 384 | 688 | 44 |
 | EAT | 2 940 | 59 | 22 | 2017-05-08 a 2019-08-01 | 1 608 | 1 328 | 0 | 4 |
 
@@ -106,7 +106,7 @@ no prueba ausencia de mediciones de Lima en otros archivos, etiquetas o represen
   se superponen: consultar la tabla conjunta, no sumar los números sin considerar su intersección.
 - Hay 18 intervalos negativos interpretables en EAC y nueve en EAF. Pueden requerir corregir fechas
   finales o documentación; no se suma un día automáticamente para hacerlos válidos.
-- Códigos como N.D., NC, IE e ID quedan separados sin inventar significado. Los puntos cardinales
+- Códigos como ND, N.D., NC, IE e ID quedan separados sin inventar significado. Los puntos cardinales
   de Dirección de Viento y nombres de Mineral pueden ser categorías legítimas, no errores numéricos.
 
 Ejemplos trazables en la hoja Aire de EAC, conservados para revisión y sin borrado automático:
@@ -145,3 +145,8 @@ proveniencia por fuente/hoja/fila; no se publican observaciones masivas en Git.
    aislados, definir tareas compatibles en vez de forzarlos a un pronóstico horario.
 5. Incorporar respuestas institucionales de #43/OEFA y revisar licencias por producto. No cerrar #11
    ni declarar elegibilidad científica con esta inspección solamente.
+
+Verificación final: nueve pruebas de investigación aprobadas en Python 3.11 y 3.13, formato/análisis
+estático y tipos del lector aprobados, auditoría de sus dependencias sin vulnerabilidades conocidas.
+Los controles del proyecto aprobaron (222 pruebas, build y auditoría). La mutación de la clasificación
+de marcadores fue detectada por las pruebas y restaurada antes de generar la entrega.

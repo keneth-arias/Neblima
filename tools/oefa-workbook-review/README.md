@@ -54,3 +54,6 @@ genérico (8 MiB por miembro / 32 MiB total). El lector utiliza defusedxml en es
 
 Referencias oficiales: [lectura read-only](https://openpyxl.readthedocs.io/en/stable/optimized.html),
 [fechas/épocas y ausencia de zona en Excel](https://openpyxl.readthedocs.io/en/stable/datetime.html).
+
+La versión v2 conserva ND/N.D./N/D como códigos no interpretados, sin decidir si significan
+no detectado, no disponible o no aplica. No se suman automáticamente a ausencias o censura.

@@ -9,7 +9,7 @@ from pathlib import Path
 from openpyxl import load_workbook
 from openpyxl.utils.datetime import from_excel
 
-MISSING = {"", "-", "NA", "N/A", "NULL", "ND", "N/D"}
+MISSING = {"", "-", "NA", "N/A", "NULL"}
 
 
 def fold(value):

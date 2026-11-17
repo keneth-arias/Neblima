@@ -16,7 +16,7 @@ from review import clock_value, date_value, fold, iter_records, numeric_value, p
 
 from airaware.comparison.metrics import count_windows, records
 
-VERSION = "oefa-workbook-review-v1"
+VERSION = "oefa-workbook-review-v2"
 LIMA_TERMS = (
     "lima",
     "villa el salvador",
