@@ -1,0 +1,413 @@
+{
+  "input_sha256": "896ae8a106fb128460e81b3f58096f6b9c4d582ef28fffa46e5394c5875c40d4",
+  "reference_revision": "8d2deaa70c9e6c4d0d4b2b6699cda3b3a6dfa85f",
+  "conflicts_by_clock": [
+    [
+      "2024-05-01 00:00:00",
+      7
+    ],
+    [
+      "2024-05-01 01:00:00",
+      7
+    ],
+    [
+      "2024-05-01 02:00:00",
+      7
+    ],
+    [
+      "2024-05-01 03:00:00",
+      7
+    ],
+    [
+      "2024-05-01 04:00:00",
+      7
+    ],
+    [
+      "2024-05-30 00:00:00",
+      7
+    ]
+  ],
+  "daily_sensitivity": [
+    {
+      "signal": "pm10",
+      "clock_shift_hours_for_sensitivity_only": 0,
+      "minimum_valid_hours": 18,
+      "daily_maxima": [
+        {
+          "ESTACION": "CAMPO_DE_MARTE",
+          "day": "2018-02-04",
+          "mean": 36.02125,
+          "n": 24
+        },
+        {
+          "ESTACION": "CARABAYLLO",
+          "day": "2018-02-24",
+          "mean": 97.25208333333335,
+          "n": 24
+        },
+        {
+          "ESTACION": "SAN_BORJA",
+          "day": "2018-02-03",
+          "mean": 62.02833333333333,
+          "n": 24
+        },
+        {
+          "ESTACION": "SAN_JUAN_DE_LURIGANCHO",
+          "day": "2018-02-24",
+          "mean": 105.85166666666665,
+          "n": 24
+        },
+        {
+          "ESTACION": "SAN_MARTIN_DE_PORRES",
+          "day": "2018-02-13",
+          "mean": 93.07375,
+          "n": 24
+        }
+      ]
+    },
+    {
+      "signal": "pm10",
+      "clock_shift_hours_for_sensitivity_only": -5,
+      "minimum_valid_hours": 18,
+      "daily_maxima": [
+        {
+          "ESTACION": "CAMPO_DE_MARTE",
+          "day": "2018-02-03",
+          "mean": 40.352916666666665,
+          "n": 24
+        },
+        {
+          "ESTACION": "CARABAYLLO",
+          "day": "2018-02-24",
+          "mean": 89.46083333333333,
+          "n": 24
+        },
+        {
+          "ESTACION": "SAN_BORJA",
+          "day": "2018-02-03",
+          "mean": 67.70541666666666,
+          "n": 24
+        },
+        {
+          "ESTACION": "SAN_JUAN_DE_LURIGANCHO",
+          "day": "2018-02-24",
+          "mean": 106.08624999999999,
+          "n": 24
+        },
+        {
+          "ESTACION": "SAN_MARTIN_DE_PORRES",
+          "day": "2018-02-13",
+          "mean": 95.38916666666667,
+          "n": 24
+        }
+      ]
+    },
+    {
+      "signal": "pm25",
+      "clock_shift_hours_for_sensitivity_only": 0,
+      "minimum_valid_hours": 18,
+      "daily_maxima": [
+        {
+          "ESTACION": "CAMPO_DE_MARTE",
+          "day": "2018-02-18",
+          "mean": 18.25,
+          "n": 18
+        },
+        {
+          "ESTACION": "CARABAYLLO",
+          "day": "2018-02-24",
+          "mean": 51.87083333333334,
+          "n": 24
+        },
+        {
+          "ESTACION": "SAN_BORJA",
+          "day": "2018-02-18",
+          "mean": 15.35,
+          "n": 24
+        },
+        {
+          "ESTACION": "SAN_JUAN_DE_LURIGANCHO",
+          "day": "2018-02-24",
+          "mean": 35.84166666666667,
+          "n": 24
+        },
+        {
+          "ESTACION": "SAN_MARTIN_DE_PORRES",
+          "day": "2018-02-23",
+          "mean": 18.875,
+          "n": 24
+        }
+      ]
+    },
+    {
+      "signal": "pm25",
+      "clock_shift_hours_for_sensitivity_only": -5,
+      "minimum_valid_hours": 18,
+      "daily_maxima": [
+        {
+          "ESTACION": "CAMPO_DE_MARTE",
+          "day": "2018-02-01",
+          "mean": 17.420833333333334,
+          "n": 24
+        },
+        {
+          "ESTACION": "CARABAYLLO",
+          "day": "2018-02-23",
+          "mean": 49.475,
+          "n": 24
+        },
+        {
+          "ESTACION": "SAN_BORJA",
+          "day": "2018-02-16",
+          "mean": 17.142857142857142,
+          "n": 21
+        },
+        {
+          "ESTACION": "SAN_JUAN_DE_LURIGANCHO",
+          "day": "2018-02-23",
+          "mean": 34.57083333333333,
+          "n": 24
+        },
+        {
+          "ESTACION": "SAN_MARTIN_DE_PORRES",
+          "day": "2018-02-23",
+          "mean": 19.854166666666668,
+          "n": 24
+        }
+      ]
+    }
+  ],
+  "unfiltered_daily_sensitivity": [
+    {
+      "signal": "pm10",
+      "clock_shift_hours_for_sensitivity_only": 0,
+      "daily_maxima": [
+        {
+          "ESTACION": "CAMPO_DE_MARTE",
+          "day": "2018-02-04",
+          "mean": 36.02125,
+          "n": 24
+        },
+        {
+          "ESTACION": "CARABAYLLO",
+          "day": "2018-02-24",
+          "mean": 97.25208333333332,
+          "n": 24
+        },
+        {
+          "ESTACION": "SAN_BORJA",
+          "day": "2018-02-03",
+          "mean": 62.028333333333336,
+          "n": 24
+        },
+        {
+          "ESTACION": "SAN_JUAN_DE_LURIGANCHO",
+          "day": "2018-02-24",
+          "mean": 105.85166666666667,
+          "n": 24
+        },
+        {
+          "ESTACION": "SAN_MARTIN_DE_PORRES",
+          "day": "2018-02-13",
+          "mean": 93.07375,
+          "n": 24
+        }
+      ]
+    },
+    {
+      "signal": "pm10",
+      "clock_shift_hours_for_sensitivity_only": -5,
+      "daily_maxima": [
+        {
+          "ESTACION": "CAMPO_DE_MARTE",
+          "day": "2018-02-03",
+          "mean": 40.352916666666665,
+          "n": 24
+        },
+        {
+          "ESTACION": "CARABAYLLO",
+          "day": "2018-02-24",
+          "mean": 89.46083333333333,
+          "n": 24
+        },
+        {
+          "ESTACION": "SAN_BORJA",
+          "day": "2018-02-03",
+          "mean": 67.70541666666666,
+          "n": 24
+        },
+        {
+          "ESTACION": "SAN_JUAN_DE_LURIGANCHO",
+          "day": "2018-02-24",
+          "mean": 106.08624999999999,
+          "n": 24
+        },
+        {
+          "ESTACION": "SAN_MARTIN_DE_PORRES",
+          "day": "2018-02-13",
+          "mean": 95.38916666666667,
+          "n": 24
+        }
+      ]
+    },
+    {
+      "signal": "pm25",
+      "clock_shift_hours_for_sensitivity_only": 0,
+      "daily_maxima": [
+        {
+          "ESTACION": "CAMPO_DE_MARTE",
+          "day": "2018-02-18",
+          "mean": 18.25,
+          "n": 18
+        },
+        {
+          "ESTACION": "CARABAYLLO",
+          "day": "2018-02-24",
+          "mean": 51.87083333333334,
+          "n": 24
+        },
+        {
+          "ESTACION": "SAN_BORJA",
+          "day": "2018-02-15",
+          "mean": 16.24285714285714,
+          "n": 14
+        },
+        {
+          "ESTACION": "SAN_JUAN_DE_LURIGANCHO",
+          "day": "2018-02-24",
+          "mean": 35.84166666666666,
+          "n": 24
+        },
+        {
+          "ESTACION": "SAN_MARTIN_DE_PORRES",
+          "day": "2018-02-23",
+          "mean": 18.875,
+          "n": 24
+        }
+      ]
+    },
+    {
+      "signal": "pm25",
+      "clock_shift_hours_for_sensitivity_only": -5,
+      "daily_maxima": [
+        {
+          "ESTACION": "CAMPO_DE_MARTE",
+          "day": "2018-02-18",
+          "mean": 18.146153846153847,
+          "n": 13
+        },
+        {
+          "ESTACION": "CARABAYLLO",
+          "day": "2018-02-23",
+          "mean": 49.475,
+          "n": 24
+        },
+        {
+          "ESTACION": "SAN_BORJA",
+          "day": "2018-02-16",
+          "mean": 17.14285714285714,
+          "n": 21
+        },
+        {
+          "ESTACION": "SAN_JUAN_DE_LURIGANCHO",
+          "day": "2018-02-23",
+          "mean": 34.57083333333333,
+          "n": 24
+        },
+        {
+          "ESTACION": "SAN_MARTIN_DE_PORRES",
+          "day": "2018-02-23",
+          "mean": 19.854166666666668,
+          "n": 24
+        }
+      ]
+    }
+  ],
+  "oefa_parameter_unit_crosscheck": [
+    {
+      "signal": "PM10",
+      "unit": "ug/m3",
+      "analysis": "Concentración de partículas en PM10",
+      "finite_cells": 165520
+    },
+    {
+      "signal": "PM10",
+      "unit": "ug/m3",
+      "analysis": "Material particulado",
+      "finite_cells": 36525
+    },
+    {
+      "signal": "PM10",
+      "unit": "ug/m3",
+      "analysis": "NA",
+      "finite_cells": 12
+    },
+    {
+      "signal": "PM2.5",
+      "unit": "ug/m3",
+      "analysis": "Concentración de partículas en PM2,5",
+      "finite_cells": 94371
+    },
+    {
+      "signal": "TEMPERATURA",
+      "unit": "°c",
+      "analysis": "Datos Meteorológicos",
+      "finite_cells": 223493
+    }
+  ],
+  "review_date_utc": "2026-11-17",
+  "transformation_status": "diagnostic_only_no_production_changes",
+  "bulletin_pdf_sha256": "6d1c82e51d4f4baa2c6689d60c7761a4b9ba5799957bf49ba5d15c6870b489c1",
+  "oefa_dictionary_sha256": "4f2fe50d1166ca23e0447ea5dbe9051a4e4731600b2f5bec007ae5d75017c5bb",
+  "bulletin_controls": {
+    "pm10": {
+      "CAMPO_DE_MARTE": [
+        3,
+        40.4
+      ],
+      "CARABAYLLO": [
+        24,
+        89.5
+      ],
+      "SAN_BORJA": [
+        3,
+        67.7
+      ],
+      "SAN_JUAN_DE_LURIGANCHO": [
+        24,
+        106.1
+      ],
+      "SAN_MARTIN_DE_PORRES": [
+        13,
+        95.4
+      ]
+    },
+    "pm25": {
+      "CAMPO_DE_MARTE": [
+        1,
+        17.4
+      ],
+      "CARABAYLLO": [
+        23,
+        49.5
+      ],
+      "SAN_BORJA": [
+        16,
+        17.1
+      ],
+      "SAN_JUAN_DE_LURIGANCHO": [
+        23,
+        34.6
+      ],
+      "SAN_MARTIN_DE_PORRES": [
+        23,
+        19.9
+      ]
+    }
+  },
+  "oefa_profile_evidence": {
+    "path": "reports/generated/profiling/oefa-csv-ea35801b052142c089362c448a4f3089/signals.parquet",
+    "sha256": "7643f7681e684fdf20d5d734d23e274c82a475bf7c26ae811c1ba6597bbcb699",
+    "input_sha256": "1f09a8064ee0aed0b3a9a0a90b96f63ce226b45a969dace49f73e45134f26d92"
+  }
+}
