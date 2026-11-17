@@ -5,9 +5,9 @@ sources:
   catalog_url: https://www.datosabiertos.gob.pe/dataset/monitoreo-de-los-contaminantes-del-aire-en-lima-metropolitana-servicio-nacional-de
   priority: 0
   status: verified
-  notes: 'Adquisición #8: metadata/senamhi-acquisition-check.json y reports/acquisition/senamhi.md. Originales
-    reutilizados y verificados sin red. Semántica/publicación pendientes en #43; consulta institucional
-    enviada anteriormente, sin nuevo envío.'
+  notes: 'Decisión vigente: metadata/senamhi-normalization-decision.json. ODC-BY-1.0 documentada; normalización
+    #13 autorizada con UTC confirmado por Keneth y unidades inferidas aceptadas. Conservar atribución
+    y originales; no reenviar consulta.'
   description: Recurso documental o candidato revisado; alcance y evidencia en docs/sources/inventory-review.md.
   publisher: SENAMHI
   data_category: ground_measured
@@ -15,15 +15,15 @@ sources:
   historical_coverage: 2015–2024 declarados en metadatos; extremos textuales CSV 20150101–20240531, sin
     continuidad comprobada
   license: ODC-BY-1.0
-  redistribution: unknown
-  last_verified_at: '2026-11-16T20:56:38.675730+00:00'
-  limitations: Unidades de contaminantes, zona horaria, intervalo y controles de exportación pendientes
-    de aclaración; derechos de publicación aún sin aprobar.
+  redistribution: allowed
+  last_verified_at: '2026-11-17T11:39:54.875528+00:00'
+  limitations: Unidades inferidas aceptadas para normalizar, no confirmación institucional global. Calidad
+    individual y posición del intervalo sin resolver; no imputar ni inventar extremos.
   variables:
   - PM10
   - PM2_5
   - NO2
-  temporal_resolution: Horaria, declarada por catálogo y metadatos; intervalo y zona horaria pendientes
+  temporal_resolution: Horaria; exportación UTC confirmada por Keneth; posición inicio/fin no especificada
   update_frequency: Mensual, declarada; no implica disponibilidad mensual comprobada
   resource_urls:
   - https://www.datosabiertos.gob.pe/sites/default/files/Monitoreo%20de%20los%20contaminantes%20del%20aire%20en%20Lima%20Metropolitana%20-%20%5BServicio%20Nacional%20de%20Meteorolog%C3%ADa%20e%20Hidrolog%C3%ADa%20del%20Per%C3%BA%20-%20SENAMHI%5D_1.csv
@@ -32,16 +32,20 @@ sources:
   license_url: https://opendatacommons.org/licenses/by/1-0/
   measurement_methodology: Red automática de SENAMHI; métodos por estación y vigencia histórica pendientes.
     MT-DRD-005 aporta contexto, no prueba de aplicación al CSV.
-  attribution: SENAMHI, Monitoreo de los contaminantes del aire en Lima Metropolitana; incluir URL del
-    conjunto, ODC-BY-1.0 y notas de transformación al publicar tras revisión.
+  attribution: SENAMHI, Monitoreo de los contaminantes del aire en Lima Metropolitana; URL del catálogo,
+    ODC-BY-1.0 y descripción de cambios de AirAware. Ver DATA_ATTRIBUTION.md.
+  units:
+    PM10: ug/m3
+    PM2_5: ug/m3
+    NO2: ug/m3
 - source_id: senamhi-lima-csv
   name: Datos CSV de SENAMHI Lima
   catalog_url: https://www.datosabiertos.gob.pe/dataset/monitoreo-de-los-contaminantes-del-aire-en-lima-metropolitana-servicio-nacional-de-0
   priority: 0
   status: downloaded
-  notes: 'Adquisición #8: metadata/senamhi-acquisition-check.json y reports/acquisition/senamhi.md. Originales
-    reutilizados y verificados sin red. Semántica/publicación pendientes en #43; consulta institucional
-    enviada anteriormente, sin nuevo envío.'
+  notes: 'Decisión vigente: metadata/senamhi-normalization-decision.json. ODC-BY-1.0 documentada; normalización
+    #13 autorizada con UTC confirmado por Keneth y unidades inferidas aceptadas. Conservar atribución
+    y originales; no reenviar consulta.'
   description: Recurso documental o candidato revisado; alcance y evidencia en docs/sources/inventory-review.md.
   publisher: SENAMHI
   data_category: ground_measured
@@ -49,10 +53,10 @@ sources:
   historical_coverage: 2015–2024 declarados en metadatos; extremos textuales CSV 20150101–20240531, sin
     continuidad comprobada
   license: ODC-BY-1.0
-  redistribution: unknown
-  last_verified_at: '2026-11-16T20:56:38.675730+00:00'
-  limitations: Unidades de contaminantes, zona horaria, intervalo y controles de exportación pendientes
-    de aclaración; derechos de publicación aún sin aprobar.
+  redistribution: allowed
+  last_verified_at: '2026-11-17T11:39:54.875528+00:00'
+  limitations: Unidades inferidas aceptadas para normalizar, no confirmación institucional global. Calidad
+    individual y posición del intervalo sin resolver; no imputar ni inventar extremos.
   variables:
   - PM10
   - PM2_5
@@ -63,28 +67,32 @@ sources:
   file_formats:
   - CSV
   license_url: https://opendatacommons.org/licenses/by/1-0/
-  temporal_resolution: Horaria, declarada por catálogo y metadatos; intervalo y zona horaria pendientes
+  temporal_resolution: Horaria; exportación UTC confirmada por Keneth; posición inicio/fin no especificada
   update_frequency: Mensual, declarada; no implica disponibilidad mensual comprobada
   measurement_methodology: Red automática de SENAMHI; métodos por estación y vigencia histórica pendientes.
     MT-DRD-005 aporta contexto, no prueba de aplicación al CSV.
-  attribution: SENAMHI, Monitoreo de los contaminantes del aire en Lima Metropolitana; incluir URL del
-    conjunto, ODC-BY-1.0 y notas de transformación al publicar tras revisión.
+  attribution: SENAMHI, Monitoreo de los contaminantes del aire en Lima Metropolitana; URL del catálogo,
+    ODC-BY-1.0 y descripción de cambios de AirAware. Ver DATA_ATTRIBUTION.md.
+  units:
+    PM10: ug/m3
+    PM2_5: ug/m3
+    NO2: ug/m3
 - source_id: senamhi-data-dictionary
   name: Diccionario de datos de SENAMHI
   catalog_url: https://www.datosabiertos.gob.pe/dataset/monitoreo-de-los-contaminantes-del-aire-en-lima-metropolitana-servicio-nacional-de-1
   priority: 0
   status: downloaded
-  notes: 'Adquisición #8: metadata/senamhi-acquisition-check.json y reports/acquisition/senamhi.md. Originales
-    reutilizados y verificados sin red. Semántica/publicación pendientes en #43; consulta institucional
-    enviada anteriormente, sin nuevo envío.'
+  notes: 'Decisión vigente: metadata/senamhi-normalization-decision.json. ODC-BY-1.0 documentada; normalización
+    #13 autorizada con UTC confirmado por Keneth y unidades inferidas aceptadas. Conservar atribución
+    y originales; no reenviar consulta.'
   description: Recurso documental o candidato revisado; alcance y evidencia en docs/sources/inventory-review.md.
   publisher: SENAMHI
   data_category: context
   geographic_coverage: Documentación del conjunto Lima Metropolitana
   historical_coverage: null
   license: null
-  redistribution: unknown
-  last_verified_at: '2026-11-16T20:56:38.675730+00:00'
+  redistribution: allowed
+  last_verified_at: '2026-11-17T11:39:54.875528+00:00'
   limitations: Unidades de contaminantes, zona horaria, intervalo y controles de exportación pendientes
     de aclaración; derechos de publicación aún sin aprobar.
   variables:
@@ -96,22 +104,24 @@ sources:
   resource_urls:
   - https://www.datosabiertos.gob.pe/sites/default/files/Diccionario_Datos_Monitoreo%20de%20los%20contaminantes%20del%20aire%20en%20Lima%20Metropolitana%20-%20%5BServicio%20Nacional%20de%20Meteorolog%C3%ADa%20e%20Hidrolog%C3%ADa%20del%20Per%C3%BA%20-%20SENAMHI%5D.xlsx
   size_bytes: 10471
+  attribution: SENAMHI, Monitoreo de los contaminantes del aire en Lima Metropolitana; URL del catálogo,
+    ODC-BY-1.0 y descripción de cambios de AirAware. Ver DATA_ATTRIBUTION.md.
 - source_id: senamhi-metadata
   name: Metadatos de SENAMHI
   catalog_url: https://www.datosabiertos.gob.pe/dataset/monitoreo-de-los-contaminantes-del-aire-en-lima-metropolitana-servicio-nacional-de-2
   priority: 0
   status: downloaded
-  notes: 'Adquisición #8: metadata/senamhi-acquisition-check.json y reports/acquisition/senamhi.md. Originales
-    reutilizados y verificados sin red. Semántica/publicación pendientes en #43; consulta institucional
-    enviada anteriormente, sin nuevo envío.'
+  notes: 'Decisión vigente: metadata/senamhi-normalization-decision.json. ODC-BY-1.0 documentada; normalización
+    #13 autorizada con UTC confirmado por Keneth y unidades inferidas aceptadas. Conservar atribución
+    y originales; no reenviar consulta.'
   description: Recurso documental o candidato revisado; alcance y evidencia en docs/sources/inventory-review.md.
   publisher: SENAMHI
   data_category: context
   geographic_coverage: Documentación del conjunto Lima Metropolitana
   historical_coverage: null
   license: null
-  redistribution: unknown
-  last_verified_at: '2026-11-16T20:56:38.675730+00:00'
+  redistribution: allowed
+  last_verified_at: '2026-11-17T11:39:54.875528+00:00'
   limitations: Unidades de contaminantes, zona horaria, intervalo y controles de exportación pendientes
     de aclaración; derechos de publicación aún sin aprobar.
   file_formats:
@@ -119,6 +129,8 @@ sources:
   resource_urls:
   - https://www.datosabiertos.gob.pe/sites/default/files/Metadatos_Monitoreo%20de%20los%20contaminantes%20del%20aire%20en%20Lima%20Metropolitana%20-%20%5BServicio%20Nacional%20de%20Meteorolog%C3%ADa%20e%20Hidrolog%C3%ADa%20del%20Per%C3%BA%20-%20SENAMHI%5D.docx
   size_bytes: 41626
+  attribution: SENAMHI, Monitoreo de los contaminantes del aire en Lima Metropolitana; URL del catálogo,
+    ODC-BY-1.0 y descripción de cambios de AirAware. Ver DATA_ATTRIBUTION.md.
 - source_id: oefa-national
   name: Calidad del aire a nivel nacional — OEFA
   catalog_url: https://www.datosabiertos.gob.pe/dataset/vigilancia-y-seguimiento-ambiental-en-la-calidad-del-aire-organismo-de-evaluaci%C3%B3n-y

@@ -1,5 +1,10 @@
 # Uso exploratorio SENAMHI basado en dos referencias
 
+> Actualización del 17/11/2026: Keneth eliminó el requisito de cuatro estaciones/24 meses.
+> Para SENAMHI se adopta UTC por confirmación del responsable, unidades inferidas aceptadas y
+> ODC-BY-1.0 con atribución. Las afirmaciones de bloqueo anteriores son históricas; ver
+> [decisión vigente](../docs/sources/senamhi-normalization-handoff.md).
+
 Solicitud de Keneth: adaptar métodos de Cristhianbgf y DataGabo para comprender y usar SENAMHI.
 Responsable de esta entrega: Keneth. Ref #11/#43; no sustituye la normalización #13 de Cristopher.
 

@@ -33,7 +33,8 @@ su explicación. Los estados avanzados requieren evidencia con fecha y zona hora
 El núcleo de adquisición #6 y los controles de caché/reanudación/lotes #7 están implementados antes
 de ampliar adquisiciones #8/#9. Consulta docs/acquisition.md y conserva los bloqueos científicos de #43.
 Se inspeccionan los archivos, se miden calidad y cobertura #10/#11 y recién se define el conjunto
-inicial de evaluación. Cuatro estaciones, 24 meses y ventanas de 72/24 horas son metas provisionales.
+inicial de evaluación. Por decisión de Keneth (17/11/2026), no se exige una cohorte fija ni 24 meses continuos.
+Se eligen estaciones/periodos a partir de la cobertura real y ventanas completas, sin imputación.
 
 ## Servicios y credenciales
 

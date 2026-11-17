@@ -1,5 +1,10 @@
 # SENAMHI: exploración y uso reproducible con dos referencias
 
+> Actualización del 17/11/2026: Keneth eliminó el requisito de cuatro estaciones/24 meses.
+> Para SENAMHI se adopta UTC por confirmación del responsable, unidades inferidas aceptadas y
+> ODC-BY-1.0 con atribución. Las afirmaciones de bloqueo anteriores son históricas; ver
+> [decisión vigente](../docs/sources/senamhi-normalization-handoff.md).
+
 Ejecución completa del 17/11/2026: 577 794 filas, siete identidades provisionales, original y hashes
 intactos. [Método y comando](../docs/sources/senamhi-reference-adaptation.md),
 [recibo](../metadata/senamhi-exploration.json). No se ejecutó código externo ni se copiaron licencias.

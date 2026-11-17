@@ -1,5 +1,10 @@
 # Análisis completo de IPASH, EAC, EAF y EAT — aire
 
+> Actualización del 17/11/2026: Keneth eliminó el requisito de cuatro estaciones/24 meses.
+> Para SENAMHI se adopta UTC por confirmación del responsable, unidades inferidas aceptadas y
+> ODC-BY-1.0 con atribución. Las afirmaciones de bloqueo anteriores son históricas; ver
+> [decisión vigente](../docs/sources/senamhi-normalization-handoff.md).
+
 Revisión del 17/11/2026 UTC para #11. Se leyeron completas las cuatro hojas Aire (157 601 filas)
 y se verificaron los hashes antes/después. No se reescribieron los originales, imputaron datos,
 evaluaron fórmulas ni modificaron los límites del importador genérico.

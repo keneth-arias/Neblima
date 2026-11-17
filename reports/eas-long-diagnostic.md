@@ -1,5 +1,10 @@
 # Diagnóstico completo del CSV EAS largo — 17/11/2026
 
+> Actualización del 17/11/2026: Keneth eliminó el requisito de cuatro estaciones/24 meses.
+> Para SENAMHI se adopta UTC por confirmación del responsable, unidades inferidas aceptadas y
+> ODC-BY-1.0 con atribución. Las afirmaciones de bloqueo anteriores son históricas; ver
+> [decisión vigente](../docs/sources/senamhi-normalization-handoff.md).
+
 Se procesaron las **11 407 394 filas** del original aportado por Keneth, sin red y sin modificarlo.
 SHA-256: 81b219665c12cd1f2e72fa5c93deb6ffd3255fd73465bc02e38b087deda66d6a.
 Método y ejecución: [diagnóstico EAS](../docs/methodology/eas-long-diagnostic.md).

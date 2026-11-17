@@ -42,8 +42,8 @@ mención textual, no una homologación administrativa; no sirve para declarar ub
 - manifest.json: SHA de entrada y salidas. Registrar el SHA del código en el recibo de ejecución.
 
 Todas las ventanas son estructurales hipotéticas; scientific_valid_windows es nulo. La ausencia
-de ventanas bajo estas reglas no demuestra ausencia histórica de mediciones. No modificar la meta
-cuatro estaciones/24 meses ni adoptar el piloto EAF sin decisión explícita de Keneth.
+de ventanas bajo estas reglas no demuestra ausencia histórica de mediciones. Keneth retiró la cuota
+de estaciones/meses el 17/11/2026; medir cobertura real sin imputar ni adoptar automáticamente EAF.
 
 ## Evidencia pendiente
 

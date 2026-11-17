@@ -1,5 +1,9 @@
 # SENAMHI Lima: revisión documental y preguntas pendientes
 
+> Decisión vigente del 17/11/2026: [SENAMHI listo para #13](senamhi-normalization-handoff.md).
+> UTC confirmado por Keneth, unidades inferidas aceptadas y ODC-BY-1.0 con atribución.
+> Esta revisión previa se conserva como evidencia histórica, no como bloqueo de normalización.
+
 Revisión: 16/11/2026 UTC, tarea #4, responsable Keneth. Investigación autorizada por Keneth,
 incluida búsqueda adicional y preparación de consulta si persistían vacíos.
 
