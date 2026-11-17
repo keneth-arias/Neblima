@@ -176,10 +176,8 @@ def write_parquet_output(
     return manifest
 
 
-def iter_observations(target: Path, batch_size: int = 1000) -> Iterator[Observation]:
-    """Leer de vuelta las observaciones publicadas, en orden determinista de partición y archivo."""
-    if batch_size < 1:
-        raise ValueError("batch_size debe ser positivo")
+def verify_output(target: Path) -> Manifest:
+    """Verificar los archivos y rechazos listados en el manifiesto publicado."""
     manifest = Manifest.model_validate_json((target / MANIFEST).read_bytes())
     root = target.resolve()
     for entry in [*manifest.files, manifest.rejection_trace]:
@@ -190,6 +188,15 @@ def iter_observations(target: Path, batch_size: int = 1000) -> Iterator[Observat
             or _sha256(artifact) != entry.sha256
         ):
             raise ValueError(f"Artefacto ausente o distinto del manifiesto: {entry.path}")
+    return manifest
+
+
+def iter_observations(target: Path, batch_size: int = 1000) -> Iterator[Observation]:
+    """Leer de vuelta las observaciones publicadas, en orden determinista de partición y archivo."""
+    if batch_size < 1:
+        raise ValueError("batch_size debe ser positivo")
+    root = target.resolve()
+    manifest = verify_output(root)
     for entry in sorted(manifest.files, key=lambda item: item.path):
         parquet = pq.ParquetFile(root / entry.path)
         for batch in parquet.iter_batches(batch_size=batch_size):
