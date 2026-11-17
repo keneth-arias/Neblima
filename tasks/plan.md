@@ -186,3 +186,10 @@ separa conteos estructurales de elegibilidad científica, geografía Lima/Callao
 Plan aprobado e implementado. Consulta OEFA enviada desde Outlook el 16/11/2026, 23:52:57 UTC.
 [Comparación real](../reports/dataset-comparison.md) y [método](../docs/comparison.md) entregan
 conteos estructurales con bloqueos; la selección científica de #11 permanece pendiente.
+
+## Revisión de libros IPASH/EAC/EAF/EAT
+
+Por solicitud de Keneth se analizaron completos los cuatro libros descargados en PR #64.
+[Plan y alcance](oefa-workbook-analysis.md), [resultados](../reports/oefa-workbook-analysis.md)
+y [herramienta reproducible](../tools/oefa-workbook-review/README.md). La revisión conserva originales,
+separa productos/campañas, censura y categorías, y no habilita selección científica de #11.
