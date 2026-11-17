@@ -38,8 +38,10 @@ Si recién empiezas, consulta el [glosario práctico](docs/glossary.md).
 
 ## Qué funciona hoy
 
-La base del proyecto valida 37 recursos candidatos, prepara las carpetas locales y revisa el entorno.
-Los 37 enlaces tienen una revisión documental con Lightpanda y bloqueos registrados. El CSV SENAMHI
+La base del proyecto valida 38 recursos candidatos, prepara las carpetas locales y revisa el entorno.
+Los 37 recursos iniciales tienen revisión documental con Lightpanda y bloqueos registrados.
+El candidato adicional EAS_Aire fue verificado documentalmente con Lightpanda e importado desde una
+copia aportada por Keneth; [adquisición y límites](reports/acquisition/oefa-eas-aire.md). El CSV SENAMHI
 ya se descargó localmente y pasó una comprobación estructural; sus unidades, calidad y derechos
 siguen en revisión. Consulta [el inventario y la evidencia](docs/sources/inventory-review.md).
 El [perfilamiento local](docs/profiling.md) mide cobertura y calidad sin modificar originales.

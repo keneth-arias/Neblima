@@ -3,8 +3,8 @@
 `configs/sources.yaml` es el inventario vigente y `airaware.catalog.Source` define su esquema.
 Valídalo con `uv run --locked airaware catalog validate`.
 Los campos opcionales desconocidos permanecen nulos, vacíos o en `unknown`; no se deducen sin evidencia.
-`metadata/sources.csv` es una plantilla anterior. Los 37 enlaces incluyen datos, diccionarios y
-metadatos: no representan 37 conjuntos de mediciones independientes.
+`metadata/sources.csv` es una plantilla anterior. Los 38 registros incluyen datos, diccionarios y
+metadatos: no representan 38 conjuntos de mediciones independientes.
 
 Prioridad 0: mediciones oficiales; 1: otras observaciones o agregaciones; 2: meteorología;
 3: productos atmosféricos o satelitales; 4: contexto. La categoría permanece en `unknown` hasta
@@ -37,7 +37,9 @@ para incendios. Verifica disponibilidad, derechos y pertinencia antes de integra
 
 ## Revisión vigente
 
-Los 37 candidatos tienen [evidencia de acceso fechada](sources/inventory-review.md).
+Los 37 candidatos iniciales tienen [evidencia de acceso fechada](sources/inventory-review.md).
+El candidato adicional [EAS_Aire](../reports/acquisition/oefa-eas-aire.md) conserva por separado
+la verificación de su ficha y la adquisición local aportada por Keneth.
 La revisión inicial #3 dejó 29 verified, uno downloaded, cuatro discovered con acceso parcial y tres
 blocked. Tras #4, hay 27 verified y tres downloaded (CSV, diccionario y metadatos SENAMHI); los otros
 siete estados se conservan. verified se limita a las afirmaciones de la ficha; no significa calidad

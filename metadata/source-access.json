@@ -445,6 +445,18 @@
       "outcome": "accessible",
       "reason": null,
       "next_action": "#33/#34: verificar versión, términos y pertinencia antes de adquirir datos."
+    },
+    {
+      "source_id": "oefa-eas-aire",
+      "requested_url": "https://www.datosabiertos.gob.pe/dataset/evaluaciones-ambientales-de-seguimiento-eas",
+      "final_url": "https://www.datosabiertos.gob.pe/dataset/evaluaciones-ambientales-de-seguimiento-eas",
+      "checked_at": "2026-11-17T00:47:52.206373+00:00",
+      "method": "Lightpanda markdown (ficha y recurso); adquisición local aportada por usuario",
+      "http_status": null,
+      "title": "Evaluaciones ambientales de seguimiento (EAS)",
+      "outcome": "accessible",
+      "reason": null,
+      "next_action": "#11: definir parser largo/seriales, verificar parámetros y cobertura horaria real. Descargas Lightpanda agotaron plazo; HTTP 418 detenido."
     }
   ]
 }
