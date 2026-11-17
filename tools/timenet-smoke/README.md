@@ -66,3 +66,20 @@ conjuntos; los originales de SENAMHI irán en `data/raw/senamhi` cuando se imple
 Esta prueba no sustituye la validación del futuro conector SENAMHI ni ejecuta la suite de TimeNet.
 
 Referencia: [guía oficial en la revisión fijada](https://github.com/OpenTSLM/TimeNet/blob/9bd1613019ee61fbc52e02106a1a45990ead7a54/docs/get-started.md).
+
+## Ida y vuelta horaria de PM2.5 para #21
+
+Después de instalar el entorno fijado, ejecutar desde la raíz de AirAware:
+
+```bash
+UV_OFFLINE=true uv run --project tools/timenet-smoke --locked \
+  python tools/timenet-smoke/test_senamhi_timef.py
+```
+
+La prueba crea un registro sintético con una identidad provisional, un origen de reloj
+absoluto en tiempo universal coordinado (UTC) y un paso de una hora. Escribe con
+`TimeFDataset.write`, verifica con `TimeFReader.verify()` y compara los cuatro valores
+con Arrow. Conserva un cero, un nulo, valores con doble precisión, la unidad tipada
+en µg/m³ y un ejemplo de procedencia. El registro y el archivo temporal son sintéticos.
+Los metadatos reales, la atribución y la verificación del Parquet se incorporan en la
+segunda entrega de #21.
