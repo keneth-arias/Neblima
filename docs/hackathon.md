@@ -1,6 +1,6 @@
 # Requisitos y evidencia para el hackathon de TimeNet
 
-Fuente principal: [página oficial del reto](https://challenge.timenet.ai/), consultada el 15/11/2026.
+Fuente principal: [página oficial del reto](https://challenge.timenet.ai/), consultada nuevamente el 17/11/2026.
 El equipo usa esta matriz para preparar evidencias, sin afirmar que ya completó la entrega.
 Las responsabilidades internas son acuerdos de AirAware, no reglas del organizador.
 
@@ -27,6 +27,20 @@ Los controles de calidad, las metas de cobertura y los porcentajes de integridad
 proyecto, no requisitos oficiales añadidos al hackathon. La página indica que se evalúan impacto,
 ejecución técnica, datos/TimeNet, resultados y presentación/interacción social; conservar evidencia
 sin prometer premios ni créditos.
+
+## Qué debe poder comprobar el jurado
+
+| Criterio oficial | Pregunta que responde la entrega | Evidencia prevista |
+| --- | --- | --- |
+| Caso de uso e impacto | ¿Puede un analista ambiental anticipar retrospectivamente la concentración horaria de partículas finas (PM2.5) en una estación de Lima? | #11 y #29 explican la decisión de comparar seis horas frente a persistencia. La disponibilidad histórica desconocida limita el uso en tiempo real. |
+| Ejecución técnica | ¿Se puede repetir el recorrido desde una observación hasta una predicción? | #14–#19 y #23 documentan decisiones por señal, cortes, pruebas de fuga y un ejemplo ejecutable sin red. |
+| Datos y TimeNet | ¿Qué recibe otra persona al abrir el conjunto con el lector oficial? | #21–#24 muestran una señal, eje, nulos, procedencia, atribución, tarea de pronóstico y vínculo al aporte externo autorizado. |
+| Resultados y evaluación | ¿Dónde mejora o falla el modelo temporal frente a la referencia? | #25 y #28 entregan métricas en µg/m³, tamaños de muestra y errores por estación y hora futura sobre las mismas observaciones reservadas. |
+| Presentación e interacción social | ¿Se entiende el resultado en una demo y se puede verificar su alcance público? | #29 prepara una figura legible con unidad y fechas, enlaces a la demo y a publicaciones, y capturas fechadas de las métricas disponibles en X y LinkedIn. |
+
+La [ruta por tarea](../tasks/plan.md) mantiene los criterios de aceptación. Para un proyecto
+existente, identificar los cambios hechos durante el hackathon. Revisar los enlaces como visitante
+y acreditar al equipo y al proveedor en el material autorizado para difusión.
 
 ## Revisión antes de entregar
 
