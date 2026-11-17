@@ -209,3 +209,8 @@ Propuesta para revisión de Keneth; no iniciar normalización ni cambiar el obje
 5. **Punto de decisión — #11.** Mantener PM2.5, Lima y meta de cuatro estaciones/24 meses. Si no existe cobertura elegible, presentar alternativas y pedir decisión explícita antes de cambiar alcance. Con selección justificada: #15/#18 → #19 → integración #20 → #21/#22/#23. #20 permanece abierto hasta verificar ventanas reales de #18.
 
 Verificación en cada entrega ejecutable: pruebas sin red, make check/build/audit, SHA antes/después y conciliación de pérdidas. Metadatos desconocidos quedan nulos con motivo; no imputar, convertir censura en cero ni publicar observaciones masivas. El rastreador de tareas es GitHub Issues; esta propuesta amplía #11/#12 y conserva los criterios existentes.
+
+## Implementación aprobada de los siguientes pasos (17/11/2026)
+
+[Contrato común y diagnóstico EAS](data-foundation-next.md): ejecución autorizada por Keneth,
+con trazabilidad en #12/#11, pruebas por incremento y decisiones científicas pendientes explícitas.
