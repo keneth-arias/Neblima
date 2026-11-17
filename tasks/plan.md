@@ -214,3 +214,9 @@ Verificación en cada entrega ejecutable: pruebas sin red, make check/build/audi
 
 [Contrato común y diagnóstico EAS](data-foundation-next.md): ejecución autorizada por Keneth,
 con trazabilidad en #12/#11, pruebas por incremento y decisiones científicas pendientes explícitas.
+
+## SENAMHI: exploración reproducible adaptada de dos referencias
+
+[Plan acotado](senamhi-exploratory-plan.md), solicitado por Keneth: grillas y resúmenes trazables
+sin imputación, evidencia fijada de Cristhianbgf/DataGabo y escenarios de reloj separados.
+No sustituye #13 ni declara elegibilidad de #11.
