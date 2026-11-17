@@ -21,6 +21,7 @@ from airaware.normalization.cli import normalization_app
 from airaware.profiling.cli import profile_app
 from airaware.senamhi_curation import curation_app
 from airaware.senamhi_timeline import alignment_app
+from airaware.senamhi_windows import benchmark_app
 
 app = typer.Typer(
     no_args_is_help=True, help="Herramientas locales de datos y plataforma de AirAware."
@@ -39,6 +40,7 @@ app.add_typer(workspace_app, name="workspace")
 app.add_typer(normalization_app, name="normalize")
 app.add_typer(curation_app, name="curate")
 app.add_typer(alignment_app, name="align")
+app.add_typer(benchmark_app, name="benchmark")
 LAYERS = ("raw", "staging", "normalized", "curated", "benchmarks", "timef")
 DataDirectory = Annotated[Path, typer.Option(envvar="AIRAWARE_DATA_DIR")]
 
