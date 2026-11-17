@@ -1,0 +1,279 @@
+{
+  "algorithm": "eas-long-diagnostic-v1",
+  "rows": 11407394,
+  "sha256": "81b219665c12cd1f2e72fa5c93deb6ffd3255fd73465bc02e38b087deda66d6a",
+  "date_hypothesis": "excel-1900-unconfirmed",
+  "timezone": null,
+  "scientific_valid_windows": null,
+  "value_counts": {
+    "finite": 8535307,
+    "unresolved": 64968,
+    "missing": 2798558,
+    "censored": 8561
+  },
+  "conflict_slots": 476,
+  "temporal_counts": [
+    {
+      "parsed_hypothesis": true,
+      "n": 3512243
+    },
+    {
+      "parsed_hypothesis": false,
+      "n": 7895151
+    }
+  ],
+  "inputs_unchanged": true,
+  "excluded_end_policy": "only_missing_end_in_diagnostic_points",
+  "output_directory": "reports/generated/eas-long/review-20261117-01",
+  "manifest": {
+    "input": "data/raw/oefa-eas-aire-local/EAS_Aire_0.csv",
+    "sha256": "81b219665c12cd1f2e72fa5c93deb6ffd3255fd73465bc02e38b087deda66d6a",
+    "files": {
+      "summary.json": "f69ae3ee87c8fab5f5ef90ff7481ed3585341de9e6127b752ab72122d84cf9fd",
+      "points.parquet": "158b4de37ec7a6963295ebcc63a0fd4e8f5131f52e241878479f9962ce80c3b4",
+      "identities.parquet": "5cd7ff59bb0a3845e46e070c1abd63e19fbbd4feda874feaf39b9dfdfea895d3",
+      "row-diagnostics.parquet": "5101bb9d9d3626dc3982b8f83ea64d1e16ac8b8a2cd009e427e244c739c8fca8"
+    }
+  },
+  "code_sha256": "53ad3759cd229245df713997700c2ec6934c3c3a85bd1d8e2266fbc3f136aa26",
+  "windows": [
+    {
+      "family": "pm10",
+      "history": 24,
+      "horizon": 6,
+      "complete": 139334
+    },
+    {
+      "family": "pm10",
+      "history": 24,
+      "horizon": 12,
+      "complete": 136651
+    },
+    {
+      "family": "pm10",
+      "history": 24,
+      "horizon": 24,
+      "complete": 131453
+    },
+    {
+      "family": "pm10",
+      "history": 24,
+      "horizon": 48,
+      "complete": 121675
+    },
+    {
+      "family": "pm10",
+      "history": 48,
+      "horizon": 6,
+      "complete": 128967
+    },
+    {
+      "family": "pm10",
+      "history": 48,
+      "horizon": 12,
+      "complete": 126502
+    },
+    {
+      "family": "pm10",
+      "history": 48,
+      "horizon": 24,
+      "complete": 121675
+    },
+    {
+      "family": "pm10",
+      "history": 48,
+      "horizon": 48,
+      "complete": 112672
+    },
+    {
+      "family": "pm10",
+      "history": 72,
+      "horizon": 6,
+      "complete": 119350
+    },
+    {
+      "family": "pm10",
+      "history": 72,
+      "horizon": 12,
+      "complete": 117077
+    },
+    {
+      "family": "pm10",
+      "history": 72,
+      "horizon": 24,
+      "complete": 112672
+    },
+    {
+      "family": "pm10",
+      "history": 72,
+      "horizon": 48,
+      "complete": 104227
+    },
+    {
+      "family": "pm10",
+      "history": 168,
+      "horizon": 6,
+      "complete": 87342
+    },
+    {
+      "family": "pm10",
+      "history": 168,
+      "horizon": 12,
+      "complete": 85740
+    },
+    {
+      "family": "pm10",
+      "history": 168,
+      "horizon": 24,
+      "complete": 82581
+    },
+    {
+      "family": "pm10",
+      "history": 168,
+      "horizon": 48,
+      "complete": 76508
+    },
+    {
+      "family": "pm25",
+      "history": 24,
+      "horizon": 6,
+      "complete": 99720
+    },
+    {
+      "family": "pm25",
+      "history": 24,
+      "horizon": 12,
+      "complete": 97553
+    },
+    {
+      "family": "pm25",
+      "history": 24,
+      "horizon": 24,
+      "complete": 93371
+    },
+    {
+      "family": "pm25",
+      "history": 24,
+      "horizon": 48,
+      "complete": 85549
+    },
+    {
+      "family": "pm25",
+      "history": 48,
+      "horizon": 6,
+      "complete": 91374
+    },
+    {
+      "family": "pm25",
+      "history": 48,
+      "horizon": 12,
+      "complete": 89401
+    },
+    {
+      "family": "pm25",
+      "history": 48,
+      "horizon": 24,
+      "complete": 85549
+    },
+    {
+      "family": "pm25",
+      "history": 48,
+      "horizon": 48,
+      "complete": 78400
+    },
+    {
+      "family": "pm25",
+      "history": 72,
+      "horizon": 6,
+      "complete": 83694
+    },
+    {
+      "family": "pm25",
+      "history": 72,
+      "horizon": 12,
+      "complete": 81889
+    },
+    {
+      "family": "pm25",
+      "history": 72,
+      "horizon": 24,
+      "complete": 78400
+    },
+    {
+      "family": "pm25",
+      "history": 72,
+      "horizon": 48,
+      "complete": 71751
+    },
+    {
+      "family": "pm25",
+      "history": 168,
+      "horizon": 6,
+      "complete": 58700
+    },
+    {
+      "family": "pm25",
+      "history": 168,
+      "horizon": 12,
+      "complete": 57518
+    },
+    {
+      "family": "pm25",
+      "history": 168,
+      "horizon": 24,
+      "complete": 55193
+    },
+    {
+      "family": "pm25",
+      "history": 168,
+      "horizon": 48,
+      "complete": 50770
+    }
+  ],
+  "selected_coverage": [
+    {
+      "series_id": "167b21c8587f6c34abf1cb133d0b6753713538b2785c90b450de42af7f4cd3ee",
+      "point": "CA-HU-04",
+      "report": "REAS-002-2024-STEC",
+      "parameter": "Material particulado con diámetro menor a 10 micras (PM10)",
+      "unit": "µg/m³",
+      "family": "pm10",
+      "candidate_lima": false,
+      "longest_run_hours": 357,
+      "distinct_hour_slots": 6871
+    },
+    {
+      "series_id": "35e217ac08cfde8d744a202ccc48eee38dbba92508a07b8666572506cdc9c5d7",
+      "point": "CA-HU-04",
+      "report": "REAS-002-2024-STEC",
+      "parameter": "Material particulado con diámetro menor a 2,5 micras (PM2,5)",
+      "unit": "µg/m³",
+      "family": "pm25",
+      "candidate_lima": false,
+      "longest_run_hours": 357,
+      "distinct_hour_slots": 6871
+    },
+    {
+      "series_id": "caeaae4a4e14e5388712b9e2997bf6f32bf9ae58b1edebbd0b6a949a0cadb73a",
+      "point": "CA-HU-09",
+      "report": "REAS-002-2024-STEC",
+      "parameter": "Material particulado con diámetro menor a 10 micras (PM10)",
+      "unit": "µg/m³",
+      "family": "pm10",
+      "candidate_lima": false,
+      "longest_run_hours": 354,
+      "distinct_hour_slots": 4461
+    },
+    {
+      "series_id": "4517869100bb2a85fd810589da99574af062afa25dd12ee21e939230c4fbcfee",
+      "point": "CA-HU-09",
+      "report": "REAS-002-2024-STEC",
+      "parameter": "Material particulado con diámetro menor a 2,5 micras (PM2,5)",
+      "unit": "µg/m³",
+      "family": "pm25",
+      "candidate_lima": false,
+      "longest_run_hours": 354,
+      "distinct_hour_slots": 4461
+    }
+  ]
+}
