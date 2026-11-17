@@ -156,3 +156,30 @@ def test_policy_rejects_silent_source_eligibility_and_weights_outside_scale():
 
     with pytest.raises(ValidationError):
         Policy(weights=[0.9, 0.9, 0, 0, 0])
+
+
+def test_cli_has_offline_comparison_command_and_rejects_missing_configuration(tmp_path):
+    from typer.testing import CliRunner
+
+    from airaware.cli import app
+
+    r = CliRunner().invoke(app, ["compare", "run", "--policy", str(tmp_path / "absent.yaml")])
+    assert r.exit_code == 1
+    assert "No se pudo" in r.output
+    assert not (tmp_path / "reports").exists()
+
+
+def test_common_coverage_counts_distinct_stations_not_contexts():
+    from airaware.comparison.metrics import common_coverage
+
+    with duckdb.connect() as c:
+        c.execute(
+            """CREATE TABLE base AS SELECT * FROM
+            (VALUES ('a','s1'),('b','s1'),('c','s2')) v(series_id,station_key)"""
+        )
+        c.execute("""CREATE TABLE points AS SELECT series_id,
+          TIMESTAMP '2024-01-01' + hr*INTERVAL '1 hour' ts
+          FROM (VALUES ('a',0),('b',0),('c',0),('a',1),('c',1),('a',3)) v(series_id,hr)""")
+        r = common_coverage(c, 2)
+        assert r["common_hour_slots"] == 2
+        assert r["longest_common_run_hours"] == 2

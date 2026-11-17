@@ -12,7 +12,7 @@ from uuid import uuid4
 import duckdb
 
 from airaware.comparison.inputs import digest, load_source, prepare_points
-from airaware.comparison.metrics import count_windows, records, score
+from airaware.comparison.metrics import common_coverage, count_windows, records, score
 from airaware.comparison.models import Policy
 from airaware.profiling.engine import ProfileSpec
 
@@ -101,6 +101,7 @@ def compare(specs: list[ProfileSpec], policy: Policy, output_root: Path) -> Path
                         else "PM10"
                     )
                     trace = prepare_points(c, field, geography)
+                    common = common_coverage(c, policy.target_stations)
                     total = c.execute("SELECT count(*) FROM base").fetchone()
                     assert total is not None
                     assert (
@@ -201,6 +202,7 @@ def compare(specs: list[ProfileSpec], policy: Policy, output_root: Path) -> Path
                                     ),
                                     blockers=blockers,
                                     rows_trace=trace,
+                                    common_coverage=common,
                                 )
                             )
             if digest(original) != spec.sha256:
@@ -249,7 +251,7 @@ def compare(specs: list[ProfileSpec], policy: Policy, output_root: Path) -> Path
             overlap=overlap,
         )
         (pending / "summary.json").write_text(
-            json.dumps(summary, ensure_ascii=False, indent=2) + "\n"
+            json.dumps(summary, ensure_ascii=False, indent=2, default=str) + "\n"
         )
         manifest = dict(
             algorithm=policy.version,

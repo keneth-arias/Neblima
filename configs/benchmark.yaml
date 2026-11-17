@@ -1,0 +1,23 @@
+# Política aprobada por Keneth antes de ejecutar. Diagnóstico, no benchmark científico aprobado.
+version: comparison-v1
+histories: [24, 48, 72, 168]
+horizons: [6, 12, 24, 48]
+geographies: [lima, callao]
+signals: [pm25, pm10]
+blockers:
+  senamhi-lima-csv:
+    - units_unverified
+    - timezone_and_interval_unverified
+    - quality_flags_unverified
+    - redistribution_review_pending
+  oefa-csv:
+    - lima_timestamps_unresolved
+    - timezone_and_interval_unverified
+    - wide_table_parameter_units_unresolved
+    - quality_flags_unverified
+    - attribution_review_pending
+# Orden: volumen de ventanas, continuidad, estaciones, extensión continua, trazabilidad/validación.
+weights: [0.35, 0.25, 0.15, 0.15, 0.10]
+target_stations: 4
+target_months: 24
+hours_per_month: 720
