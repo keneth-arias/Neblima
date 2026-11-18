@@ -251,11 +251,13 @@ documentación oficial revisada. Los archivos obtenidos por Lightpanda se regist
       pruebas), `make build`, `make audit`, `uv run --locked airaware catalog validate`
       (40 fuentes) y `git diff --check` aprobados con exit 0 al cierre.
 - [x] R8 Entrega: commits pequeños en Conventional Commits en español sobre
-      `feat/issue-16-weather-sample`, sin push ni merge.
+      `feat/issue-16-weather-sample`, actualizada con `origin/main` y preparada para PR interno;
+      sin merge directo en `main`.
 
 ## Estado final
 
-- **Rama**: `feat/issue-16-weather-sample`; sin push, PR ni merge.
+- **Rama**: `feat/issue-16-weather-sample`; entrega mediante PR interno, pendiente de revisión e
+  integración por los responsables.
 - **Entregado**: comparación fechada de 10 candidatos (`docs/sources/weather.md`); catálogo
   actualizado y validado (40 fuentes; `noaa-isd-global-hourly` en estado `downloaded` con la URL
   NODD directa de Lima y la evidencia Lightpanda conservada); plan de adquisición acotado de 15
