@@ -1,0 +1,66 @@
+# Alineación meteorología y contaminación sin información futura (#17).
+# Variante inicial: solo pronóstico archivado GFS `temperature_2m_previous_day1`
+# (Open-Meteo previous-runs, muestra fijada por #16). ERA5, NOAA ISD, OEFA y
+# SENAMHI GBON quedan excluidos de esta variante.
+version: 1
+comparison_policy: configs/benchmark.yaml
+weather_variant:
+  name: pm25_gfs_previous_day1
+  source_id: open-meteo-previous-model-runs
+  variable: temperature_2m_previous_day1
+  excluded_realized_variables: [temperature_2m]
+  unit: "°C"
+  nominal_lead_hours: 24
+  issued_at_rule: previous_day1_nominal_lead
+  available_at_policy: undocumented_null
+  product_class: archived_forecast
+  experiment_class: retrospective_issue_time
+  acquisition_plan: configs/acquisition/weather-lima-sample-plan.json
+  coverage_utc: 2022-03-09T00:00Z/2022-03-15T23:00Z
+# Identidades provisionales de #14 sobre el original SENAMHI verificado
+# (SHA-256 896ae8a106fb128460e81b3f58096f6b9c4d582ef28fffa46e5394c5875c40d4).
+# Coordenadas y altitudes originales del CSV; el sistema de referencia no está
+# declarado en el original y no se convierte (docs/sources/weather.md).
+stations:
+  - station_key: 90b36a172f1790cf2e37ac2063f80fd27439d4ecf871d72a20bf8e9786587a67
+    name: CAMPO_DE_MARTE
+    latitude: -12.0705
+    longitude: -77.0432
+    altitude_m: 117.0
+    coordinate_reference: undeclared
+  - station_key: 8436576ff150fd696edbc1cd625bc97696321bc9c57b24b906d0d4a12b71bfff
+    name: CARABAYLLO
+    latitude: -11.9022
+    longitude: -77.0336
+    altitude_m: 179.0
+    coordinate_reference: undeclared
+  - station_key: 2a0d574b25a5dc8c7f6edda9836225860faaa160763d8bea15d95646794f0bd8
+    name: SANTA_ANITA
+    latitude: -12.043
+    longitude: -76.9714
+    altitude_m: 253.0
+    coordinate_reference: undeclared
+  - station_key: 8e88d45c03f25f49b84c98cc4916bd60b67383961e186497f4d77570c2f75d34
+    name: SAN_BORJA
+    latitude: -12.1086
+    longitude: -77.0077
+    altitude_m: 128.0
+    coordinate_reference: undeclared
+  - station_key: 22c516fbe293a54c1cb5ddc7727d32430200221562cd01af8a40cc4b5de227d4
+    name: SAN_JUAN_DE_LURIGANCHO
+    latitude: -11.9816
+    longitude: -76.9992
+    altitude_m: 240.0
+    coordinate_reference: undeclared
+  - station_key: 35170dbfe2a7135c1cecbae1e367374a284578533740ff5461d40fc764851e07
+    name: SAN_MARTIN_DE_PORRES
+    latitude: -12.0089
+    longitude: -77.0845
+    altitude_m: 56.0
+    coordinate_reference: undeclared
+  - station_key: 1e58bb71f42f67bfedae1bad1e35b0aea5f84078da4f3a6f06c695aac1fb99e4
+    name: VILLA_MARIA_DEL_TRIUNFO
+    latitude: -12.1664
+    longitude: -76.92
+    altitude_m: 272.0
+    coordinate_reference: undeclared
