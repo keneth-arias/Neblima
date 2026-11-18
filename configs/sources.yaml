@@ -438,30 +438,56 @@ sources:
   last_verified_at: '2026-11-16T00:02:05.768Z'
   limitations: Inventario documental; no acredita calidad, continuidad, unidades ni derechos de redistribución.
 - source_id: senamhi-hourly-meteorology
-  name: Meteorología horaria de SENAMHI
+  name: Meteorología horaria de SENAMHI (GBON/RBON)
   catalog_url: https://www.datosabiertos.gob.pe/dataset/variables-meteorologicas-de-las-estaciones-autom%C3%A1ticas-de-intercambio-internacional-servicio
-  priority: 2
-  status: blocked
-  notes: 'Lightpanda: blocked; HTTP no expuesto. Evidencia: metadata/source-access.json (senamhi-hourly-meteorology).
-    Lightpanda: navigation timed out Reintentar enlace con Lightpanda y buscar alternativa oficial; no
-    inferir indisponibilidad general. #16: comprobar estaciones/modelos, términos y muestra pertinente
-    para Perú.'
-  description: Recurso documental o candidato revisado; alcance y evidencia en docs/sources/inventory-review.md.
-  publisher: SENAMHI (candidato del plan)
-  data_category: unknown
-  geographic_coverage: null
-  historical_coverage: null
-  license: null
+  priority: 1
+  status: verified
+  notes: 'Lightpanda 17/11/2026 23:25 UTC: HTTP 200; el timeout del 16/11/2026 quedó resuelto.
+    Ficha y CKAN declaran ODC-BY y datos horarios validados de temperatura, humedad relativa y
+    precipitación de estaciones automáticas GBON/RBON; CSV de 48,14 MB creado el 31/05/2024 y
+    actualizado el 08/09/2025. #16 la difiere como muestra: CSV monolítico nacional sin ruta por
+    estación; ver docs/sources/weather.md.'
+  description: Datos horarios validados de temperatura, humedad relativa y precipitación de las
+    estaciones automáticas de intercambio internacional (GBON/RBON) del SENAMHI.
+  publisher: SENAMHI
+  data_category: ground_measured
+  geographic_coverage: Perú; estaciones GBON y RBON declaradas en la ficha
+  historical_coverage: Recurso actualizado el 08/09/2025; periodo cubierto por el CSV sin verificar
+  license: ODC-BY-1.0 (declarada en ficha y CKAN)
+  license_url: https://opendatacommons.org/licenses/by/1-0/
   redistribution: unknown
-  last_verified_at: '2026-11-16T00:02:06.109Z'
-  limitations: Inventario documental; no acredita calidad, continuidad, unidades ni derechos de redistribución.
+  last_verified_at: '2026-11-17T23:25:46+00:00'
+  limitations: 'CSV monolítico de 48,14 MB sin extracción por estación; redistribución pendiente
+    de decisión del proyecto; unidades de temperatura y
+    humedad no declaradas explícitamente en la ficha revisada; reloj, posición del intervalo y
+    available_at horario sin documentar. La descarga de los recursos binarios (XLSX/DOCX) no pudo
+    preservarse con la CLI de Lightpanda disponible; limitación registrada.'
+  variables:
+  - TEMPERATURA
+  - HUMEDAD_RELATIVA
+  - PRECIPITACION
+  temporal_resolution: Horaria declarada por la ficha; posición del intervalo sin especificar
+  update_frequency: Recurso actualizado el 08/09/2025; frecuencia declarada sin comprobar
+  measurement_methodology: Estaciones automáticas meteorológicas de las redes GBON/RBON; datos
+    validados según la ficha; métodos por estación sin documentar.
+  attribution: SENAMHI, Variables Meteorologicas de las Estaciones automáticas de intercambio
+    internacional; URL del catálogo y ODC-BY.
+  resource_urls:
+  - https://www.datosabiertos.gob.pe/sites/default/files/Variables%20Meteorologicas%20de%20las%20Estaciones%20autom%C3%A1ticas%20de%20intercambio%20internacional%20-%20%5BServicio%20Nacional%20de%20Meteorolog%C3%ADa%20e%20Hidrolog%C3%ADa%20del%20Per%C3%BA%20-%20SENAMHI%5D_0.csv
+  - https://www.datosabiertos.gob.pe/sites/default/files/Diccionario_Datos_Variables%20Meteorologicas%20de%20las%20Estaciones%20autom%C3%A1ticas%20de%20intercambio%20internacional%20-%20%5BServicio%20Nacional%20de%20Meteorolog%C3%ADa%20e%20Hidrolog%C3%ADa%20del%20Per%C3%BA%20-%20SENAMHI%5D.xlsx
+  - https://www.datosabiertos.gob.pe/sites/default/files/Metadatos_Variables%20Meteorologicas%20de%20las%20Estaciones%20autom%C3%A1ticas%20de%20intercambio%20internacional%20-%20%5BServicio%20Nacional%20de%20Meteorolog%C3%ADa%20e%20Hidrolog%C3%ADa%20del%20Per%C3%BA%20-%20SENAMHI%5D.docx
+  file_formats:
+  - CSV
+  - XLSX
+  - DOCX
 - source_id: senamhi-station-network
   name: Red de estaciones de SENAMHI
   catalog_url: https://www.senamhi.gob.pe/servicios/?p=estaciones
   priority: 2
   status: verified
   notes: 'Lightpanda: accessible; HTTP 200. Evidencia: metadata/source-access.json (senamhi-station-network).
-    #16: comprobar estaciones/modelos, términos y muestra pertinente para Perú.'
+    #16: inventario/contexto de la red; no acredita descarga histórica de datos; excluida como
+    fuente de muestra, conservada como contexto de identidad (docs/sources/weather.md).'
   description: Recurso documental o candidato revisado; alcance y evidencia en docs/sources/inventory-review.md.
   publisher: SENAMHI
   data_category: context
@@ -474,91 +500,208 @@ sources:
 - source_id: open-meteo-historical-weather
   name: Meteorología histórica de Open-Meteo
   catalog_url: https://open-meteo.com/en/docs/historical-weather-api
-  priority: 2
+  priority: 1
   status: verified
-  notes: 'Lightpanda: accessible; HTTP 200. Evidencia: metadata/source-access.json (open-meteo-historical-weather).
-    #16: comprobar estaciones/modelos, términos y muestra pertinente para Perú.'
-  description: Recurso documental o candidato revisado; alcance y evidencia en docs/sources/inventory-review.md.
+  notes: 'Lightpanda 17/11/2026: HTTP 200. Reanálisis explícito en la documentación (ERA5 0,25°
+    desde 1940 con ~5 días de latencia; ERA5-Land 0,1° desde 1950; ECMWF IFS 9 km desde 2017).
+    CC-BY-4.0 para la API gratuita no comercial con atribución. #16 selecciona la muestra gridded
+    con models=era5 para las siete coordenadas; NO es medición de estación (docs/sources/weather.md).'
+  description: Serie histórica de reanálisis (ERA5/ERA5-Land/IFS) con formato idéntico a la API de
+    pronóstico; variables horarias meteorológicas por coordenada.
   publisher: Open-Meteo
   data_category: reanalysis
-  geographic_coverage: Global; depende del modelo seleccionado
-  historical_coverage: Desde 1940 ERA5 / 1950 ERA5-Land, declarado; sin muestra local
-  license: null
+  geographic_coverage: Global; según modelo seleccionado
+  historical_coverage: ERA5 desde 1940; ERA5-Land desde 1950; IFS desde 2017 (declarado)
+  license: CC-BY-4.0 (API gratuita no comercial; atribución requerida)
+  license_url: https://creativecommons.org/licenses/by/4.0/
   redistribution: unknown
-  last_verified_at: '2026-11-16T00:02:33.695Z'
-  limitations: Inventario documental; no acredita calidad, continuidad, unidades ni derechos de redistribución.
+  last_verified_at: '2026-11-17T23:25:00+00:00'
+  limitations: 'Reanálisis/modelo, no medición de estación; celdas ~25 km (ERA5) o ~9 km (IFS);
+    precipitación acumulada en la hora precedente y las otras variables de la muestra instantáneas;
+    fuentes upstream con licencias propias
+    (Copernicus C3S para ERA5); no mezclar con best_match sin declarar proveniencia.'
+  variables:
+  - temperature_2m
+  - relative_humidity_2m
+  - dewpoint_2m
+  - precipitation
+  - surface_pressure
+  - pressure_msl
+  - cloud_cover
+  - wind_speed_10m
+  - wind_direction_10m
+  - wind_gusts_10m
+  temporal_resolution: Horaria (marcas ISO-8601; zona por omisión UTC)
+  spatial_resolution: ERA5 0,25°; ERA5-Land 0,1°; IFS 9 km
+  authentication: Sin cuenta para uso gratuito no comercial
+  rate_limits: '<10000 llamadas/día, 5000/h, 600/min (términos no comerciales)'
+  update_frequency: ERA5 diaria con ~5 días de retraso; IFS cada 6 h sin retraso (declarado)
+  file_formats:
+  - JSON
+  - CSV
+  - XLSX
 - source_id: open-meteo-historical-forecasts
   name: Pronósticos históricos de Open-Meteo
   catalog_url: https://open-meteo.com/en/docs/historical-forecast-api
   priority: 2
   status: verified
-  notes: 'Lightpanda: accessible; HTTP 200. Evidencia: metadata/source-access.json (open-meteo-historical-forecasts).
-    #16: comprobar estaciones/modelos, términos y muestra pertinente para Perú.'
-  description: Recurso documental o candidato revisado; alcance y evidencia en docs/sources/inventory-review.md.
+  notes: 'Lightpanda 17/11/2026: HTTP 200. Pronósticos archivados desde ~2022; corridas de 1/3/6 h
+    costuradas en una serie horaria continua sin hora de emisión por valor. CC-BY-4.0 no comercial.
+    #16 difiere la muestra y usa el adelanto nominal de open-meteo-previous-model-runs
+    (docs/sources/weather.md).'
+  description: Archivo de pronósticos del tiempo desde 2022, con los mismos modelos y parámetros
+    que la API de pronóstico vivo.
   publisher: Open-Meteo
   data_category: forecast
   geographic_coverage: Global y regional según modelo
-  historical_coverage: Aproximadamente desde 2022; varía por modelo, según documentación
-  license: null
+  historical_coverage: Desde ~2022 según modelo (declarado)
+  license: CC-BY-4.0 (API gratuita no comercial; atribución requerida)
+  license_url: https://creativecommons.org/licenses/by/4.0/
   redistribution: unknown
-  last_verified_at: '2026-11-16T00:02:34.208Z'
-  limitations: Inventario documental; no acredita calidad, continuidad, unidades ni derechos de redistribución.
+  last_verified_at: '2026-11-17T23:26:00+00:00'
+  limitations: 'Serie costurada: no expone hora de emisión por valor; no cubre 2015; no es
+    reanálisis ni medición; corridas iniciales cada 1/3/6 h según modelo.'
+  temporal_resolution: Horaria (marcas ISO-8601; zona por omisión UTC)
+  authentication: Sin cuenta para uso gratuito no comercial
+  rate_limits: '<10000 llamadas/día, 5000/h, 600/min (términos no comerciales)'
+- source_id: open-meteo-previous-model-runs
+  name: Corridas anteriores de Open-Meteo (Previous Model Runs)
+  catalog_url: https://open-meteo.com/en/docs/previous-runs-api
+  priority: 1
+  status: verified
+  notes: 'Lightpanda 17/11/2026: HTTP 200. Pronóstico archivado con adelanto explícito:
+    previous_dayN indica adelanto nominal N×24 h; emisión exacta desconocida; la mayoría de modelos desde
+    enero de 2024 y GFS 2 m temperatura desde marzo de 2021 (declarado). CC-BY-4.0 no comercial.
+    #16 selecciona muestra GFS (temperature_2m y previous_day1) dentro de train 2022.'
+  description: Pronósticos de corridas anteriores alineados a adelantos fijos de 1 a 7 días para
+    comparar habilidad por adelanto y entrenar corrección de sesgo.
+  publisher: Open-Meteo
+  data_category: forecast
+  geographic_coverage: Global y regional según modelo
+  historical_coverage: 'La mayoría de modelos desde 2024-01; GFS 2 m temperatura desde 2021-03 (declarado)'
+  license: CC-BY-4.0 (API gratuita no comercial; atribución requerida)
+  license_url: https://creativecommons.org/licenses/by/4.0/
+  redistribution: unknown
+  last_verified_at: '2026-11-17T23:26:20+00:00'
+  limitations: 'Cobertura variable por modelo; variables restringidas por archivo (verificar por
+    modelo y periodo); no es reanálisis ni medición; frecuencia de corridas por modelo (GFS 0/6/12/18
+    declarada en la familia de servicios).'
+  variables:
+  - temperature_2m
+  - temperature_2m_previous_day1
+  - relative_humidity_2m
+  - precipitation
+  - pressure_msl
+  - cloud_cover
+  - wind_speed_10m
+  - wind_direction_10m
+  temporal_resolution: Horaria (marcas ISO-8601; zona por omisión UTC)
+  authentication: Sin cuenta para uso gratuito no comercial
+  rate_limits: '<10000 llamadas/día, 5000/h, 600/min (términos no comerciales)'
 - source_id: era5-and-era5-land
   name: ERA5 y ERA5-Land
-  catalog_url: https://cds.climate.copernicus.eu/
+  catalog_url: https://cds.climate.copernicus.eu/datasets/reanalysis-era5-single-levels?tab=overview
   priority: 2
-  status: discovered
-  notes: 'Lightpanda: partial; HTTP 200. Evidencia: metadata/source-access.json (era5-and-era5-land).
-    El enlace es la portada CDS; falta resolver productos ERA5 y ERA5-Land concretos. #16: resolver fichas
-    específicas, cuenta, términos y muestra acotada.'
-  description: Recurso documental o candidato revisado; alcance y evidencia en docs/sources/inventory-review.md.
+  status: verified
+  notes: 'Lightpanda 17/11/2026: HTTP 200 en la ficha reanalysis-era5-single-levels. Reanálisis
+    horario desde 1940; actualización diaria con ~5 días de latencia; ERA5T puede diferir de la
+    versión final 2–3 meses. La descarga por CDS exige cuenta y aceptación de licencia; cuentas
+    nuevas no autorizadas en #16: ruta directa bloqueada este intento; ERA5 se cubre vía
+    Open-Meteo models=era5 (docs/sources/weather.md).'
+  description: Quinta reanálisis global de ECMWF (ERA5) y su versión en tierra (ERA5-Land);
+    datos horarios asimilados desde 1940.
   publisher: Copernicus C3S / ECMWF
-  data_category: context
-  geographic_coverage: null
-  historical_coverage: null
-  license: null
+  data_category: reanalysis
+  geographic_coverage: Global
+  historical_coverage: ERA5 desde 1940; ERA5-Land desde 1950 (declarado en ficha)
+  license: Licence to use Copernicus Products (requiere aceptación con cuenta CDS)
+  license_url: https://object-store.os-api.cci2.ecmwf.int/cci2-prod-catalogue/licenses/licence-to-use-copernicus-products/licence-to-use-copernicus-products_b4b9451f54cffa16ecef5c912c9cebd6979925a956e3fa677976e0cf198c2c18.pdf
   redistribution: unknown
-  last_verified_at: '2026-11-16T00:02:34.525Z'
-  limitations: Inventario documental; no acredita calidad, continuidad, unidades ni derechos de redistribución.
+  last_verified_at: '2026-11-17T23:33:00+00:00'
+  limitations: 'CDS exige registro y aceptación de licencia (bloqueo de ruta para este intento);
+    ERA5T vs versión final; no es medición de estación ni pronóstico archivado.'
+  temporal_resolution: Horaria
+  spatial_resolution: ERA5 ~31 km (0,25°); ERA5-Land ~9 km (0,1°)
+  authentication: Cuenta CDS obligatoria para descarga directa
+  update_frequency: Diaria con ~5 días de retraso (declarado)
 - source_id: nasa-power
   name: NASA POWER
   catalog_url: https://power.larc.nasa.gov/docs/services/api/temporal/hourly/
   priority: 2
   status: verified
-  notes: 'Lightpanda: accessible; HTTP 200. Evidencia: metadata/source-access.json (nasa-power). #16:
-    comprobar estaciones/modelos, términos y muestra pertinente para Perú.'
-  description: Recurso documental o candidato revisado; alcance y evidencia en docs/sources/inventory-review.md.
+  notes: 'Lightpanda 17/11/2026: HTTP 200 en hourly y en methodology/data/sources_meteorology.
+    Meteorología derivada de MERRA-2 (½° lat × ⅝° lon, desde 1981) y GEOS-IT (~2 días de latencia);
+    radiación de productos satelitales; servicio horario desde 2001-01-01; máximo 15 parámetros por
+    solicitud; punto único o caja regional. #16 difiere la muestra: la grilla queda cubierta por
+    ERA5 vía Open-Meteo; exigiría 7 solicitudes puntuales (docs/sources/weather.md).'
+  description: Servicio de análisis de recursos de energía con parámetros meteorológicos
+    (reanálisis MERRA-2/GEOS-IT) y radiación satelital en formatos de datos listos para análisis.
   publisher: NASA POWER
   data_category: mixed
-  geographic_coverage: null
-  historical_coverage: Desde 2001-01-01 hasta casi tiempo real para servicio horario, declarado
+  geographic_coverage: Global
+  historical_coverage: Meteorología MERRA-2 desde 1981; servicio horario desde 2001-01-01 (declarado)
   license: null
   redistribution: unknown
-  last_verified_at: '2026-11-16T00:02:35.097Z'
-  limitations: Inventario documental; no acredita calidad, continuidad, unidades ni derechos de redistribución.
+  last_verified_at: '2026-11-17T23:35:00+00:00'
+  limitations: 'Clasificado por producto subyacente documentado (MERRA-2/GEOS-IT reanálisis; no
+    medición de estación). Sin declaración de licencia de datos en las páginas revisadas;
+    licencia queda nula y redistribución desconocida. La API no acepta listas de puntos.'
+  variables:
+  - temperature_2m
+  - relative_humidity_2m
+  - precipitation
+  - surface_pressure
+  - wind_speed_10m
+  - wind_direction_10m
+  temporal_resolution: Horaria (UTC o LST) y diaria/mensual
+  spatial_resolution: Grilla nativa ½° latitud × ⅝° longitud (MERRA-2)
+  authentication: Sin cuenta
+  update_frequency: GEOS-IT ~2 días de latencia; MERRA-2 reajustes periódicos (declarado)
 - source_id: noaa-integrated-surface-database
   name: Base integrada de datos de superficie de NOAA
   catalog_url: https://www.ncei.noaa.gov/products/land-based-station/integrated-surface-database
   priority: 2
   status: verified
-  notes: 'Lightpanda: accessible; HTTP 200. Evidencia: metadata/source-access.json (noaa-integrated-surface-database).
-    #16: comprobar estaciones/modelos, términos y muestra pertinente para Perú.'
-  description: Recurso documental o candidato revisado; alcance y evidencia en docs/sources/inventory-review.md.
+  notes: 'Lightpanda 17/11/2026: HTTP 200 (también 16/11/2026). Producto Global Hourly ISD:
+    observaciones horarias y sinópticas de superficie de más de 100 fuentes; acceso CSV por
+    estación-año sin autenticación. #16 adquirió la muestra acotada por objetos NODD directos
+    (301 de la ruta NCEI → NODD; techo por recurso autorizado 5 000 000): el primer objeto
+    (84691099999) resultó PISCO INTERNATIONAL, PE desde su propio contenido y quedó rechazado
+    como historia; la estación vigente es Lima/Jorge Chávez 84628099999, verificada desde su
+    propio CSV; ver docs/sources/weather.md y reports/acquisition/weather.md.'
+  description: Global Hourly - Integrated Surface Database; observaciones de superficie en formato
+    ASCII común con parámetros de viento, temperatura, punto de rocío, presión, nubosidad,
+    visibilidad y precipitación.
   publisher: NOAA NCEI
   data_category: ground_measured
-  geographic_coverage: Global; estaciones de Perú pendientes
-  historical_coverage: null
+  geographic_coverage: Global; estaciones peruanas por archivo
+  historical_coverage: Cobertura global declarada desde 1901; por estación se demuestra con el archivo
   license: null
   redistribution: unknown
-  last_verified_at: '2026-11-16T00:02:36.419Z'
-  limitations: Inventario documental; no acredita calidad, continuidad, unidades ni derechos de redistribución.
+  last_verified_at: '2026-11-17T23:27:00+00:00'
+  limitations: 'Sin declaración de licencia verificada en páginas oficiales (data-description 404;
+    noaa.gov/disclaimer 403; recursos /data/ con BadContentEncoding en el cargador de Lightpanda).
+    REPORT_TYPE mezcla fuentes (Synop/METAR); posición del intervalo sin documentar; una estación
+    meteorológica no equivale a una estación de aire.'
+  variables:
+  - WIND_SPEED
+  - WIND_DIRECTION
+  - TEMPERATURE
+  - DEW_POINT
+  - SEA_LEVEL_PRESSURE
+  - STATION_PRESSURE
+  - PRECIPITATION
+  temporal_resolution: Horaria y sinóptica según REPORT_TYPE
+  file_formats:
+  - CSV
 - source_id: noaa-atmospheric-soundings
   name: Sondeos atmosféricos de NOAA
   catalog_url: https://www.ncei.noaa.gov/products/weather-balloon/integrated-global-radiosonde-archive
   priority: 2
   status: verified
   notes: 'Lightpanda: accessible; HTTP 200. Evidencia: metadata/source-access.json (noaa-atmospheric-soundings).
-    #16: comprobar estaciones/modelos, términos y muestra pertinente para Perú.'
+    #16: radiosondeos dos veces al día; no es clima superficial horario; excluida para covariables
+    horarias del benchmark (docs/sources/weather.md). No se demostró estación de sondeo en Lima.'
   description: Recurso documental o candidato revisado; alcance y evidencia en docs/sources/inventory-review.md.
   publisher: NOAA NCEI
   data_category: ground_measured
@@ -568,6 +711,58 @@ sources:
   redistribution: unknown
   last_verified_at: '2026-11-16T00:02:42.748Z'
   limitations: Inventario documental; no acredita calidad, continuidad, unidades ni derechos de redistribución.
+- source_id: noaa-isd-global-hourly
+  name: Datos CSV por estación-año de ISD Global Hourly
+  catalog_url: https://www.ncei.noaa.gov/products/land-based-station/integrated-surface-database
+  priority: 1
+  status: downloaded
+  resource_urls:
+  - https://noaa-global-hourly-pds.s3.amazonaws.com/2015/84628099999.csv
+  notes: 'Lightpanda 17/11/2026: HTTP 200 en la página del producto (evidencia en metadata/source-access.json).
+    Historial: la ruta /data/global-hourly/access/ respondió 301 hacia noaa-global-hourly-pds.s3.amazonaws.com
+    (NODD); attempt-03 transfirió el objeto 2015/84691099999.csv con éxito (HTTP 200, 4 382 554
+    bytes) pero su propio contenido identificó «PISCO INTERNATIONAL, PE», a 191–223 km de Lima:
+    RECHAZADO por identidad desde contenido y preservado sin cambios como historia (16 recursos
+    y 9 114 066 bytes acumulados en todos los intentos, contados por separado de la selección).
+    La corrección de attempt-04 adquirió el objeto oficial de Lima (una única transferencia HTTP
+    200, 4 629 175 bytes, SHA-256 1e5381f2fce145f949456e5749345c38ba6c52db357f1a554448c86c86d9b92b,
+    manifiesto y recibo en metadata/weather-acquisition.json; reutilización sin red 15/15) y la
+    selección procedió solo tras verificar la identidad leyendo el CSV descargado: estación
+    84628099999 «JORGE CHAVEZ INTERNATIONAL, PE» (-12.021889, -77.114319, 34,44 m), aeropuerto
+    internacional Jorge Chávez, Callao; a 3,6–26,5 km (haversine aproximado) de las siete
+    estaciones de aire de Lima. Sin campo size_bytes aquí por convención del inventario.'
+  description: Recurso de datos de Global Hourly ISD; un CSV por estación y año. Columnas reales
+    observadas en el archivo seleccionado de 2015 — STATION, DATE, SOURCE, LATITUDE, LONGITUDE,
+    ELEVATION, NAME, REPORT_TYPE, CALL_SIGN, QUALITY_CONTROL y grupos de parámetros codificados
+    (WND, CIG, VIS, TMP, DEW, SLP, AA1 y otros), con subcampos y marcadores de ausente sin
+    decodificar.
+  publisher: NOAA NCEI
+  data_category: ground_measured
+  geographic_coverage: Global; una estación por archivo
+  historical_coverage: Desde 1901 globalmente (declarado); el archivo seleccionado cubre 2015 completo
+  license: null
+  redistribution: unknown
+  last_verified_at: '2026-11-18T00:14:08+00:00'
+  limitations: 'Sin declaración de licencia verificada; posición del intervalo sin documentar;
+    mezcla de REPORT_TYPE por archivo (2638 instantes duplicados por pares FM-12/FM-15 y
+    FM-15/FM-16; 135 filas del año fuera de hora); la estación seleccionada es el aeropuerto
+    internacional Jorge Chávez (Callao), a 3,6–26,5 km de las estaciones de aire de Lima
+    (aproximación haversine, CRS SENAMHI sin declarar): no es una estación de aire ni equivale
+    a ellas; cobertura horaria de la semana de la muestra no continua (167 instantes en punto
+    de 168 posibles más 12 SPECI fuera de hora); unidades/escalas de subcampos codificados sin
+    decodificar (documentación de formato no cargable); el objeto Pisco rechazado de attempt-03
+    permanece preservado como historia, nunca como muestra de Lima.'
+  variables:
+  - WND
+  - CIG
+  - VIS
+  - TMP
+  - DEW
+  - SLP
+  temporal_resolution: Horaria y sinóptica según REPORT_TYPE
+  file_formats:
+  - CSV
+  authentication: Sin autenticación
 - source_id: cams-eac4-global-reanalysis
   name: Reanálisis global CAMS EAC4
   catalog_url: https://ads.atmosphere.copernicus.eu/datasets/cams-global-reanalysis-eac4

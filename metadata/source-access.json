@@ -269,14 +269,14 @@
     {
       "source_id": "senamhi-hourly-meteorology",
       "requested_url": "https://www.datosabiertos.gob.pe/dataset/variables-meteorologicas-de-las-estaciones-autom%C3%A1ticas-de-intercambio-internacional-servicio",
-      "final_url": null,
-      "checked_at": "2026-11-16T00:02:06.109Z",
-      "method": "Lightpanda run: Page.goto + Page.evaluate",
-      "http_status": null,
-      "title": null,
-      "outcome": "blocked",
-      "reason": "Lightpanda: navigation timed out",
-      "next_action": "Reintentar enlace con Lightpanda y buscar alternativa oficial; no inferir indisponibilidad general. #16: comprobar estaciones/modelos, términos y muestra pertinente para Perú."
+      "final_url": "https://www.datosabiertos.gob.pe/dataset/variables-meteorologicas-de-las-estaciones-autom%C3%A1ticas-de-intercambio-internacional-servicio",
+      "checked_at": "2026-11-17T23:25:46+00:00",
+      "method": "Lightpanda markdown (ficha del conjunto) y Lightpanda markdown (package_show de CKAN)",
+      "http_status": 200,
+      "title": "Variables Meteorologicas de las Estaciones automáticas de intercambio internacional - [SENAMHI]",
+      "outcome": "accessible",
+      "reason": null,
+      "next_action": "#16: muestra diferida por CSV monolítico de 48,14 MB sin ruta por estación; requiere decisión de cobertura o ruta acotada propia antes de transferir."
     },
     {
       "source_id": "senamhi-station-network",
@@ -316,15 +316,15 @@
     },
     {
       "source_id": "era5-and-era5-land",
-      "requested_url": "https://cds.climate.copernicus.eu/",
-      "final_url": "https://cds.climate.copernicus.eu/",
-      "checked_at": "2026-11-16T00:02:34.525Z",
-      "method": "Lightpanda run: Page.goto + Page.evaluate",
+      "requested_url": "https://cds.climate.copernicus.eu/datasets/reanalysis-era5-single-levels?tab=overview",
+      "final_url": "https://cds.climate.copernicus.eu/datasets/reanalysis-era5-single-levels?tab=overview",
+      "checked_at": "2026-11-17T23:33:00+00:00",
+      "method": "Lightpanda markdown (ficha del producto ERA5 hourly data on single levels)",
       "http_status": 200,
-      "title": "Climate Data Store",
-      "outcome": "partial",
-      "reason": "El enlace es la portada CDS; falta resolver productos ERA5 y ERA5-Land concretos.",
-      "next_action": "#16: resolver fichas específicas, cuenta, términos y muestra acotada."
+      "title": "ERA5 hourly data on single levels from 1940 to present",
+      "outcome": "accessible",
+      "reason": null,
+      "next_action": "#16: ruta directa bloqueada por exigir cuenta CDS; ERA5 se cubre vía Open-Meteo models=era5; decisión de cuenta propia queda para el responsable."
     },
     {
       "source_id": "nasa-power",
@@ -457,6 +457,30 @@
       "outcome": "accessible",
       "reason": null,
       "next_action": "#11: definir parser largo/seriales, verificar parámetros y cobertura horaria real. Descargas Lightpanda agotaron plazo; HTTP 418 detenido."
+    },
+    {
+      "source_id": "open-meteo-previous-model-runs",
+      "requested_url": "https://open-meteo.com/en/docs/previous-runs-api",
+      "final_url": "https://open-meteo.com/en/docs/previous-runs-api",
+      "checked_at": "2026-11-17T23:26:20+00:00",
+      "method": "Lightpanda markdown (documentación de la API y tabla de variables Day 0-7)",
+      "http_status": 200,
+      "title": "Previous Model Runs API",
+      "outcome": "accessible",
+      "reason": null,
+      "next_action": "#16: muestra acotada GFS temperature_2m y previous_day1 dentro de train 2022; la integración espera la aprobación de #17."
+    },
+    {
+      "source_id": "noaa-isd-global-hourly",
+      "requested_url": "https://www.ncei.noaa.gov/products/land-based-station/integrated-surface-database",
+      "final_url": "https://www.ncei.noaa.gov/products/land-based-station/integrated-surface-database",
+      "checked_at": "2026-11-17T23:31:40+00:00",
+      "method": "Lightpanda markdown (página del producto Global Hourly ISD)",
+      "http_status": 200,
+      "title": "Global Hourly - Integrated Surface Database (ISD)",
+      "outcome": "accessible",
+      "reason": null,
+      "next_action": "#16: selección vigente = objeto NODD directo de Lima 2015/84628099999.csv (attempt-04: HTTP 200, 4 629 175 bytes, SHA-256 1e5381f2…d9b92b; identidad «JORGE CHAVEZ INTERNATIONAL, PE» verificada leyendo el CSV descargado; 3,6–26,5 km de las siete estaciones de aire). El objeto Pisco 84691099999 de attempt-03 quedó rechazado por identidad desde contenido y preservado como historia. Licencia sigue sin evidencia documental."
     }
   ]
 }
