@@ -14,10 +14,10 @@ La conversión se comprobó con zoneinfo de Python. Volver a consultar la fuente
 
 | Requisito oficial | Evidencia que debemos reunir | Tarea y responsable interno | Estado comprobado |
 | --- | --- | --- | --- |
-| Registro individual y equipo de 2–4 personas | Confirmación de cada integrante, sin publicar datos personales | #29; cada integrante se registra, Keneth coordina | Equipo planificado de tres; inscripciones no verificadas |
-| Preparar datos en TimeNet y entregar el enlace del PR del conjunto | Construcción validada y URL del PR externo | #21–#24; Keneth prepara integración, Jordan apoya documentación | Sin conjunto TimeF de AirAware ni PR externo |
-| Entrenar o ajustar un modelo temporal y evaluar con datos separados | Revisión/configuración del modelo, particiones fijas y resultados | #19, #25–#28; Keneth y Cristopher según su tarea | Pendiente; no hay métricas de entrenamiento |
-| Presentación, demostración, página u otro formato que muestre el proyecto | Enlace al material y explicación de utilidad y límites | #29; Jordan prepara el borrador, Keneth valida afirmaciones | Pendiente de preparar evidencia final |
+| Registro individual y equipo de 2–4 personas | Confirmación de cada integrante, sin publicar datos personales | #29; cada integrante se registra, Keneth coordina | Cuybernautas, equipo de tres; inscripciones por confirmar |
+| Preparar datos en TimeNet y entregar el enlace del PR del conjunto | Construcción validada y URL del PR externo | #21–#24; Keneth preparó la integración | [338 892 tareas verificadas](dataset-cards/lima-pm25-forecast.md) y [PR externo #796 en borrador](https://github.com/OpenTSLM/TimeNet/pull/796) |
+| Entrenar o ajustar un modelo temporal y evaluar con datos separados | Revisión/configuración del modelo, particiones fijas y resultados | #19 y #25–#28 | Particiones y [referencias verificadas](../reports/baselines/lima-pm25.md). Ajuste y métricas del modelo temporal pendientes en #27 y #28 |
+| Presentación, demostración, página u otro formato que muestre el proyecto | Enlace al material y explicación de utilidad y límites | #29; Cristopher y Jordan preparan, Keneth valida afirmaciones | Pendiente de preparar evidencia final |
 | Publicaciones públicas en X y LinkedIn; ambas requeridas | Enlaces y capturas de métricas disponibles | #29; Jordan redacta, Keneth autoriza publicación | No verificadas ni autorizadas por esta investigación |
 | Compartir en Discord del hackathon | Enlace o comprobante del mensaje publicado | #29; coordinación de Keneth | No verificado; no se envió un mensaje aquí |
 | Formulario oficial por equipo y por ronda antes del cierre | Confirmación y enlaces exigidos | #29; coordinación de Keneth | Pendiente de entrega; no se envió el formulario |
@@ -45,8 +45,8 @@ y acreditar al equipo y al proveedor en el material autorizado para difusión.
 ## Revisión antes de entregar
 
 - [ ] Cada integrante confirma su registro y el equipo mantiene el tamaño permitido.
-- [ ] Las fuentes tienen derechos compatibles y el conjunto genera TimeF válido.
-- [ ] El PR externo del conjunto está preparado y su apertura fue autorizada.
+- [x] El conjunto SENAMHI conserva ODC-By-1.0 con atribución y genera TimeF válido.
+- [x] El [PR externo #796](https://github.com/OpenTSLM/TimeNet/pull/796) se abrió como borrador con autorización.
 - [ ] Hay resultados reales con objetivos y particiones comparables; se explican límites.
 - [ ] Presentación, enlaces y capturas corresponden al trabajo efectivamente realizado.
 - [ ] Publicaciones, Discord y formulario cuentan con la autorización prevista en el plan.
