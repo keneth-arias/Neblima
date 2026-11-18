@@ -55,3 +55,5 @@ No se declara cumplimiento legal anual ni se etiqueta concentración como libre 
 Cambiar la referencia de 2017 o relajar suficiencia exige una versión de política revisada.
 La implementación no recibe historias ni crea entradas de modelos: #18 conserva esa responsabilidad.
 Validación con ejemplos sintéticos no reemplaza las dos comprobaciones de integración pendientes.
+
+Para la primera ronda, el horizonte principal de seis horas permite evaluar concentraciones horarias. La etiqueta diaria sigue diferida por ADR-005. Ver la [ruta de evaluación](plan.md).
