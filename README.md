@@ -2,7 +2,7 @@
 
 Proyecto de ingeniería de datos de calidad del aire para Lima, Callao y el Perú. Participamos en el
 [hackathon de TimeNet](https://challenge.timenet.ai/). El primer caso de uso es pronosticar PM2.5
-usando mediciones reales. Keneth Arias (`@keneth-arias`) lidera datos y plataforma.
+usando mediciones reales. Participamos como el equipo **Cuybernautas**. Keneth Arias (`@keneth-arias`) lidera datos y plataforma.
 
 El idioma de trabajo del equipo es el **español del Perú**. La documentación, las tareas y los PR se
 redactan en español claro. Los comandos, identificadores y nombres técnicos conservan su forma original.
@@ -38,17 +38,22 @@ Si recién empiezas, consulta el [glosario práctico](docs/glossary.md).
 
 ## Qué funciona hoy
 
-La base del proyecto valida 38 recursos candidatos, prepara las carpetas locales y revisa el entorno.
-Los 37 recursos iniciales tienen revisión documental con Lightpanda y bloqueos registrados.
-El candidato adicional EAS_Aire fue verificado documentalmente con Lightpanda e importado desde una
-copia aportada por Keneth; [adquisición y límites](reports/acquisition/oefa-eas-aire.md). El CSV SENAMHI
-ya se descargó localmente y pasó una comprobación estructural; sus unidades, calidad y derechos
-siguen en revisión. Consulta [el inventario y la evidencia](docs/sources/inventory-review.md).
-El [perfilamiento local](docs/profiling.md) mide cobertura y calidad sin modificar originales.
-La normalización, la exportación TimeF y el entrenamiento siguen pendientes.
+El [catálogo](configs/sources.yaml) registra 40 recursos candidatos, con evidencia y
+bloqueos por fuente. El flujo local de SENAMHI normaliza, depura, alinea y exporta
+[338 892 tareas TimeF de PM2.5](docs/dataset-cards/lima-pm25-forecast.md) con 24 horas
+de historia, seis horas de horizonte y particiones cronológicas. La integración
+continua reproduce la cadena con datos sintéticos y la red deshabilitada.
 
-La [prueba sintética de TimeNet](tools/timenet-smoke/README.md) ya se ejecutó en un entorno aislado.
-El conjunto hello-world está en data/timef; no contiene observaciones ambientales reales.
+La evaluación ya tiene [tres referencias](reports/baselines/lima-pm25.md) sobre el conjunto
+congelado. Validación seleccionó persistencia. El trabajo del modelo temporal se sigue en
+[#27](https://github.com/keneth-arias/airaware/issues/27) y [#28](https://github.com/keneth-arias/airaware/issues/28).
+El conector de Cuybernautas está en [revisión como borrador de TimeNet](https://github.com/OpenTSLM/TimeNet/pull/796).
+
+La [adquisición meteorológica de #16](reports/acquisition/weather.md) habilita el análisis
+de una semana de pronósticos archivados. Su cobertura queda dentro de entrenamiento,
+por lo que la [alineación en revisión](https://github.com/keneth-arias/airaware/pull/85)
+sirve para comprobar contratos y procedencia. La comparación de modelos de la primera
+ronda usa la versión congelada de PM2.5.
 
 ## Organización y próximos pasos
 

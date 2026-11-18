@@ -7,33 +7,29 @@ distingue evidencia documental, descargas y resultados de modelos.
 
 ## Ruta vigente para la primera ronda (18/11/2026)
 
-La [matriz del jurado](../docs/hackathon.md) organiza la evidencia. Los PR #74, #75 y #76
-cerraron la grilla, las ventanas y las particiones. El [plan de PR de Keneth](keneth-work-queue.md)
-empieza con #21 y #22. Después de #22, #23 y #25 habilitan #27 y #28. Keneth lleva la ficha y
-la contribución #24. Cristopher y Jordan preparan la entrega de #29 con esos resultados.
+La [matriz del jurado](../docs/hackathon.md) registra el conjunto y el enlace del aporte.
+#15, #18, #19 y #21–#25 están cerradas. La [cola vigente de Keneth](keneth-work-queue.md)
+prioriza #27 y #28. La entrega de #29 reúne la ficha, la contribución de TimeNet,
+los resultados temporales y las evidencias de difusión previstas en la guía.
 
-**Fechas internas propuestas (hora del Perú).** El 18–19 de noviembre, priorizar una muestra
-trazable y congelar el protocolo de evaluación. El 20, intentar la lectura TimeF de extremo a
-extremo y las referencias. El 21, reservar tiempo para el ajuste acotado y la revisión de resultados.
-El 22, comprobar que un revisor pueda abrir la demo y los enlaces exigidos. Revisar desde ahora
-registro individual, licencia del aporte externo y disponibilidad de cómputo. Si falta tiempo,
-postergar ampliaciones y usar una muestra reproducible seleccionada antes de evaluar. Si falta
-un requisito oficial, registrarlo como pendiente al decidir el envío.
+**Fechas internas propuestas (hora del Perú).** Priorizar la prueba acotada del modelo
+y el reporte medido. El 22 de noviembre, comprobar que un revisor pueda abrir la demo
+y los enlaces exigidos. La fecha oficial se registra en la guía del hackathon.
 
 | Tarea | Frente | Evidencia o condición para retomarla |
 | --- | --- | --- |
 | [#11](https://github.com/keneth-arias/airaware/issues/11) | Decisión aprobada | Para un analista ambiental de Lima, formular la pregunta retrospectiva: con 24 horas de PM2.5, ¿cuánto mejora el pronóstico de las seis horas siguientes frente a repetir la última medición? ADR-005 admite 339 205 ventanas solapadas en siete identidades provisionales antes de las particiones. Citar comparison-v3 y distinguir cobertura, desempeño medido y utilidad por validar. |
 | [#14](https://github.com/keneth-arias/airaware/issues/14) | Datos | Entregar una tabla auditable por señal con identidad provisional, fila de origen, duplicado exacto o conflicto y decisión. Seguir un caso desde el archivo original hasta la vista depurada y conciliar los conteos. |
 | [#15](https://github.com/keneth-arias/airaware/issues/15) | Datos | Mostrar una serie horaria en tiempo universal coordinado (UTC) con un cero observado, un valor nulo y una hora ausente. Verificar sus máscaras y conciliar horas utilizables y descartadas por estación. |
-| [#16](https://github.com/keneth-arias/airaware/issues/16) | Ampliación | Retomar meteorología cuando una muestra tenga licencia, cobertura y hora de disponibilidad documentadas. Registrar la decisión por producto y mantener el experimento principal con PM2.5. |
-| [#17](https://github.com/keneth-arias/airaware/issues/17) | Ampliación | Con #15 y #16 listos, probar el rechazo de un dato meteorológico publicado después del origen del pronóstico. Comparar la variante con la referencia sobre los mismos objetivos elegibles. |
+| [#16](https://github.com/keneth-arias/airaware/issues/16) | Ampliación | Muestra fijada y verificada con #79. Se conservan las limitaciones de disponibilidad y derechos por producto. |
+| [#17](https://github.com/keneth-arias/airaware/issues/17) | Ampliación | Verificar en #85 la paridad de objetivos, el rechazo de emisiones tardías y las máscaras. El experimento de comparación requiere cobertura verificada en validación y prueba. |
 | [#18](https://github.com/keneth-arias/airaware/issues/18) | Datos | Preparar primero historias completas de 24 h y objetivos completos de 6 h según ADR-005. Conciliar ventanas antes de particionar con comparison-v3 y explicar diferencias por identidad, conflicto, hueco o paso. Los demás horizontes quedan identificados por configuración. |
 | [#19](https://github.com/keneth-arias/airaware/issues/19) | Evaluación | Congelar fechas de corte en UTC y un manifiesto de identificadores antes de seleccionar modelos. Documentar ventanas purgadas y demostrar con una prueba de frontera que ninguna hora de entrada u objetivo se comparte entre particiones para una serie. |
 | [#20](https://github.com/keneth-arias/airaware/issues/20) | Condicional | Mantener abierta hasta comprobar la integración real con #18 y la semántica del intervalo. Registrar qué ventanas admiten la metodología; diferir etiquetas regulatorias diarias y métricas de episodios que carezcan de respaldo. |
 | [#21](https://github.com/keneth-arias/airaware/issues/21) | TimeNet | Con #13 integrado, verificar el manifiesto Parquet antes de convertir una muestra local. Reabrirla con TimeFReader.verify() y Arrow; comprobar eje UTC, identidad, cero, nulo, procedencia, unidad inferida y atribución. Comparar dos conversiones por contenido lógico. |
 | [#22](https://github.com/keneth-arias/airaware/issues/22) | TimeNet | Con #19 y #21, abrir una ForecastingTask con el lector oficial y reconstruir sus 24 entradas y 6 objetivos. Comparar identificadores, límites y conteos de cada partición con el manifiesto congelado; registrar la versión del conjunto base. |
 | [#23](https://github.com/keneth-arias/airaware/issues/23) | Ejecución técnica | Desde un entorno fijado, reproducir sin red el recorrido de una muestra hasta una tarea leída por el kit de desarrollo de TimeNet. Guardar comando, revisión, hashes, tiempo, memoria y resultado de controles; comprobar que un archivo alterado falla. |
-| [#24](https://github.com/keneth-arias/airaware/issues/24) | Contribución | Preparar la ficha con cobertura, huecos, unidades inferidas, atribución y límites de uso. Resolver con Keneth la vía de contribución compatible con ADR-003 antes del cierre; registrar el enlace real del PR externo cuando se autorice abrirlo. Un borrador local deja pendiente ese requisito. |
+| [#24](https://github.com/keneth-arias/airaware/issues/24) | Contribución | Ficha integrada en #83 y contribución autorizada en el borrador externo TimeNet #796. Código MIT y datos ODC-By-1.0 con atribución. |
 | [#25](https://github.com/keneth-arias/airaware/issues/25) | Evaluación | Comparar persistencia y referencia diaria sobre idénticos identificadores. Registrar error absoluto medio (MAE), raíz del error cuadrático medio (RMSE), número de objetivos y unidad por estación y hora futura. Fijar en validación la referencia principal antes de evaluar la prueba. |
 | [#26](https://github.com/keneth-arias/airaware/issues/26) | Condicional | Comparar el modelo tabular en las mismas ventanas de #25. Evaluar episodios únicamente si #20 sustenta la etiqueta; informar positivos, negativos y métricas indefinidas. Priorizar #27–#28 para la primera ronda. |
 | [#27](https://github.com/keneth-arias/airaware/issues/27) | Modelo temporal | Fijar revisión, licencia y presupuesto del modelo. Leer un lote desde #22, verificar dimensiones y objetivos y demostrar un paso de ajuste con pérdida finita dentro del presupuesto aprobado. Registrar memoria, duración y comando. |
@@ -281,9 +277,23 @@ UTC publicadas; aceptación explícita de calidad y posición del intervalo desc
 etiquetas regulatorias diarias. comparison-v3 distingue ventanas aceptadas operativamente de
 validación científica. #13/#14/#18/#19 continúan como entregas propias; #20/#43 no se cierran.
 
-## Próximas entregas de Keneth para la primera ronda
+## Adaptación después de #79
 
-#15, #18 y #19 están cerradas. El [plan vigente de PR](keneth-work-queue.md) reúne las nueve
-tareas abiertas de Keneth al 18/11/2026. La ruta pasa por la conversión real de #21, el
-conjunto de tareas de #22, la reproducción de #23 y las referencias de #25. #27 y #28
-producen la evaluación temporal. #24 tramita la ficha y el aporte a TimeNet para la entrega de #29.
+#16 cerró con la [adquisición meteorológica verificable](../reports/acquisition/weather.md).
+El [PR #85](https://github.com/keneth-arias/airaware/pull/85) propone alinear GFS
+`previous_day1` por `window_id`. La unión real queda como comprobación local
+cuando estén disponibles los siete paquetes y los artefactos congelados.
+
+Se cruzó el intervalo publicado del 09/03/2022 a las 00:00 UTC al 16/03/2022 a
+las 00:00 UTC (extremo superior exclusivo) con la historia y seis objetivos de
+cada ventana de #19. En entrenamiento, 1232 ventanas tocan esa semana y 973 quedan
+completamente contenidas. Validación y prueba tienen cero ventanas con solapamiento.
+Los conteos expresan cobertura por calendario y preceden a la validación del clima
+por estación, emisión y disponibilidad. La muestra permite probar la unión y las
+máscaras en entrenamiento. Una evaluación meteorológica requiere cobertura
+verificada en validación y prueba y una comparación sobre objetivos comunes.
+
+El [PR #86](https://github.com/keneth-arias/airaware/pull/86) verifica el contrato
+estructural de etiquetas para un horizonte de 24 horas. La emisión sigue condicionada
+por la evidencia temporal y de calidad de #20 y #43. El benchmark principal usa el
+horizonte de seis horas y conserva su [ficha](../docs/dataset-cards/lima-pm25-forecast.md).
