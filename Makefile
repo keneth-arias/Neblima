@@ -1,4 +1,4 @@
-.PHONY: setup init check test build audit doctor
+.PHONY: setup init check test test-timef-offline build audit doctor
 
 setup:
 	uv sync --locked
@@ -16,6 +16,11 @@ check:
 
 test:
 	uv run --locked pytest
+
+test-timef-offline:
+	UV_OFFLINE=true uv run --locked ruff check tools/timenet-smoke
+	UV_OFFLINE=true uv run --locked ruff format --check tools/timenet-smoke
+	UV_OFFLINE=true /usr/bin/time -f 'Tiempo=%e s Memoria residente máxima=%M KiB' uv run --project tools/timenet-smoke --locked python -m unittest discover -s tools/timenet-smoke -p 'test_*.py'
 
 build:
 	uv build

@@ -1,0 +1,300 @@
+{
+  "schema_version": 1,
+  "jobs": [
+    {
+      "spec": {
+        "source_id": "open-meteo-historical-weather",
+        "resource_url": "https://archive-api.open-meteo.com/v1/archive?latitude=-11.9022&longitude=-77.0336&start_date=2015-04-16&end_date=2015-04-23&hourly=temperature_2m,relative_humidity_2m,precipitation,surface_pressure,wind_speed_10m,wind_direction_10m&models=era5",
+        "api_documentation_url": "https://open-meteo.com/en/docs/historical-weather-api",
+        "method": "api",
+        "format": "json",
+        "max_bytes": 131072,
+        "json_required_keys": [
+          "latitude",
+          "longitude",
+          "hourly"
+        ],
+        "expected_sha256": "d36fd7e5f324e61ebd8c30458bf8a46add6fdbcd18d08cc8bcb46ebf26e9026c"
+      },
+      "region": "lima",
+      "start": "2015-04-16",
+      "end": "2015-04-23",
+      "expected_size_bytes": 9381
+    },
+    {
+      "spec": {
+        "source_id": "open-meteo-historical-weather",
+        "resource_url": "https://archive-api.open-meteo.com/v1/archive?latitude=-12.0705&longitude=-77.0432&start_date=2015-04-16&end_date=2015-04-23&hourly=temperature_2m,relative_humidity_2m,precipitation,surface_pressure,wind_speed_10m,wind_direction_10m&models=era5",
+        "api_documentation_url": "https://open-meteo.com/en/docs/historical-weather-api",
+        "method": "api",
+        "format": "json",
+        "max_bytes": 131072,
+        "json_required_keys": [
+          "latitude",
+          "longitude",
+          "hourly"
+        ],
+        "expected_sha256": "998524c452d65cd07ddc89e220456a6a04f4923691cd8c93affccdea0afce096"
+      },
+      "region": "lima",
+      "start": "2015-04-16",
+      "end": "2015-04-23",
+      "expected_size_bytes": 9392
+    },
+    {
+      "spec": {
+        "source_id": "open-meteo-historical-weather",
+        "resource_url": "https://archive-api.open-meteo.com/v1/archive?latitude=-12.1086&longitude=-77.0077&start_date=2015-04-16&end_date=2015-04-23&hourly=temperature_2m,relative_humidity_2m,precipitation,surface_pressure,wind_speed_10m,wind_direction_10m&models=era5",
+        "api_documentation_url": "https://open-meteo.com/en/docs/historical-weather-api",
+        "method": "api",
+        "format": "json",
+        "max_bytes": 131072,
+        "json_required_keys": [
+          "latitude",
+          "longitude",
+          "hourly"
+        ],
+        "expected_sha256": "b60e164d5c902322c6bfd720eee9e8c9202842b58ffaa19df1659e9bada4f4f4"
+      },
+      "region": "lima",
+      "start": "2015-04-16",
+      "end": "2015-04-23",
+      "expected_size_bytes": 9380
+    },
+    {
+      "spec": {
+        "source_id": "open-meteo-historical-weather",
+        "resource_url": "https://archive-api.open-meteo.com/v1/archive?latitude=-11.9816&longitude=-76.9992&start_date=2015-04-16&end_date=2015-04-23&hourly=temperature_2m,relative_humidity_2m,precipitation,surface_pressure,wind_speed_10m,wind_direction_10m&models=era5",
+        "api_documentation_url": "https://open-meteo.com/en/docs/historical-weather-api",
+        "method": "api",
+        "format": "json",
+        "max_bytes": 131072,
+        "json_required_keys": [
+          "latitude",
+          "longitude",
+          "hourly"
+        ],
+        "expected_sha256": "76712187ffca0c6890c94f1660c2da047c6cc32836185fc92d87cf9145a4c33f"
+      },
+      "region": "lima",
+      "start": "2015-04-16",
+      "end": "2015-04-23",
+      "expected_size_bytes": 9381
+    },
+    {
+      "spec": {
+        "source_id": "open-meteo-historical-weather",
+        "resource_url": "https://archive-api.open-meteo.com/v1/archive?latitude=-12.0089&longitude=-77.0845&start_date=2015-04-16&end_date=2015-04-23&hourly=temperature_2m,relative_humidity_2m,precipitation,surface_pressure,wind_speed_10m,wind_direction_10m&models=era5",
+        "api_documentation_url": "https://open-meteo.com/en/docs/historical-weather-api",
+        "method": "api",
+        "format": "json",
+        "max_bytes": 131072,
+        "json_required_keys": [
+          "latitude",
+          "longitude",
+          "hourly"
+        ],
+        "expected_sha256": "7d8dfb94764b4299bae12856177cd482c200c48058dfb59e933662c345d5987f"
+      },
+      "region": "lima",
+      "start": "2015-04-16",
+      "end": "2015-04-23",
+      "expected_size_bytes": 9572
+    },
+    {
+      "spec": {
+        "source_id": "open-meteo-historical-weather",
+        "resource_url": "https://archive-api.open-meteo.com/v1/archive?latitude=-12.043&longitude=-76.9714&start_date=2015-04-16&end_date=2015-04-23&hourly=temperature_2m,relative_humidity_2m,precipitation,surface_pressure,wind_speed_10m,wind_direction_10m&models=era5",
+        "api_documentation_url": "https://open-meteo.com/en/docs/historical-weather-api",
+        "method": "api",
+        "format": "json",
+        "max_bytes": 131072,
+        "json_required_keys": [
+          "latitude",
+          "longitude",
+          "hourly"
+        ],
+        "expected_sha256": "4e33f413bb537e707f034c8b2a1c9c8de42ee9b8fd00700fc919378c543ca098"
+      },
+      "region": "lima",
+      "start": "2015-04-16",
+      "end": "2015-04-23",
+      "expected_size_bytes": 9381
+    },
+    {
+      "spec": {
+        "source_id": "open-meteo-historical-weather",
+        "resource_url": "https://archive-api.open-meteo.com/v1/archive?latitude=-12.1664&longitude=-76.92&start_date=2015-04-16&end_date=2015-04-23&hourly=temperature_2m,relative_humidity_2m,precipitation,surface_pressure,wind_speed_10m,wind_direction_10m&models=era5",
+        "api_documentation_url": "https://open-meteo.com/en/docs/historical-weather-api",
+        "method": "api",
+        "format": "json",
+        "max_bytes": 131072,
+        "json_required_keys": [
+          "latitude",
+          "longitude",
+          "hourly"
+        ],
+        "expected_sha256": "5a8baff63f94320be4442e47f5126b38bbead1ad594574ef2e01e8c33b7f9cfc"
+      },
+      "region": "lima",
+      "start": "2015-04-16",
+      "end": "2015-04-23",
+      "expected_size_bytes": 9380
+    },
+    {
+      "spec": {
+        "source_id": "open-meteo-previous-model-runs",
+        "resource_url": "https://previous-runs-api.open-meteo.com/v1/forecast?latitude=-11.9022&longitude=-77.0336&start_date=2022-03-09&end_date=2022-03-15&hourly=temperature_2m,temperature_2m_previous_day1&models=gfs_seamless",
+        "api_documentation_url": "https://open-meteo.com/en/docs/previous-runs-api",
+        "method": "api",
+        "format": "json",
+        "max_bytes": 65536,
+        "json_required_keys": [
+          "latitude",
+          "longitude",
+          "hourly"
+        ],
+        "expected_sha256": "debbacdb895ac356572497c5d2a90ba20bad46d4249ec68a83f554a7c5b8bd6e"
+      },
+      "region": "lima",
+      "start": "2022-03-09",
+      "end": "2022-03-15",
+      "expected_size_bytes": 5211
+    },
+    {
+      "spec": {
+        "source_id": "open-meteo-previous-model-runs",
+        "resource_url": "https://previous-runs-api.open-meteo.com/v1/forecast?latitude=-12.0705&longitude=-77.0432&start_date=2022-03-09&end_date=2022-03-15&hourly=temperature_2m,temperature_2m_previous_day1&models=gfs_seamless",
+        "api_documentation_url": "https://open-meteo.com/en/docs/previous-runs-api",
+        "method": "api",
+        "format": "json",
+        "max_bytes": 65536,
+        "json_required_keys": [
+          "latitude",
+          "longitude",
+          "hourly"
+        ],
+        "expected_sha256": "68e226286d2c09aeb286b104484dbe6cd64afac26aef279cc2b4c3ca5d7ffe34"
+      },
+      "region": "lima",
+      "start": "2022-03-09",
+      "end": "2022-03-15",
+      "expected_size_bytes": 5209
+    },
+    {
+      "spec": {
+        "source_id": "open-meteo-previous-model-runs",
+        "resource_url": "https://previous-runs-api.open-meteo.com/v1/forecast?latitude=-12.1086&longitude=-77.0077&start_date=2022-03-09&end_date=2022-03-15&hourly=temperature_2m,temperature_2m_previous_day1&models=gfs_seamless",
+        "api_documentation_url": "https://open-meteo.com/en/docs/previous-runs-api",
+        "method": "api",
+        "format": "json",
+        "max_bytes": 65536,
+        "json_required_keys": [
+          "latitude",
+          "longitude",
+          "hourly"
+        ],
+        "expected_sha256": "67bbbf7cb59c9b390e9b2c3bf5e6aca1fca2ff737d21ecc7b0faf267e7dd819e"
+      },
+      "region": "lima",
+      "start": "2022-03-09",
+      "end": "2022-03-15",
+      "expected_size_bytes": 5211
+    },
+    {
+      "spec": {
+        "source_id": "open-meteo-previous-model-runs",
+        "resource_url": "https://previous-runs-api.open-meteo.com/v1/forecast?latitude=-11.9816&longitude=-76.9992&start_date=2022-03-09&end_date=2022-03-15&hourly=temperature_2m,temperature_2m_previous_day1&models=gfs_seamless",
+        "api_documentation_url": "https://open-meteo.com/en/docs/previous-runs-api",
+        "method": "api",
+        "format": "json",
+        "max_bytes": 65536,
+        "json_required_keys": [
+          "latitude",
+          "longitude",
+          "hourly"
+        ],
+        "expected_sha256": "71a24374363af6fea66ff6f29c8cb94047367353c9841b6036152793e2c218eb"
+      },
+      "region": "lima",
+      "start": "2022-03-09",
+      "end": "2022-03-15",
+      "expected_size_bytes": 5210
+    },
+    {
+      "spec": {
+        "source_id": "open-meteo-previous-model-runs",
+        "resource_url": "https://previous-runs-api.open-meteo.com/v1/forecast?latitude=-12.0089&longitude=-77.0845&start_date=2022-03-09&end_date=2022-03-15&hourly=temperature_2m,temperature_2m_previous_day1&models=gfs_seamless",
+        "api_documentation_url": "https://open-meteo.com/en/docs/previous-runs-api",
+        "method": "api",
+        "format": "json",
+        "max_bytes": 65536,
+        "json_required_keys": [
+          "latitude",
+          "longitude",
+          "hourly"
+        ],
+        "expected_sha256": "c59ca87211180bece3bdbf181ab6bbf773fe5e57eaf9f741e029d1b19ceb80d3"
+      },
+      "region": "lima",
+      "start": "2022-03-09",
+      "end": "2022-03-15",
+      "expected_size_bytes": 5210
+    },
+    {
+      "spec": {
+        "source_id": "open-meteo-previous-model-runs",
+        "resource_url": "https://previous-runs-api.open-meteo.com/v1/forecast?latitude=-12.043&longitude=-76.9714&start_date=2022-03-09&end_date=2022-03-15&hourly=temperature_2m,temperature_2m_previous_day1&models=gfs_seamless",
+        "api_documentation_url": "https://open-meteo.com/en/docs/previous-runs-api",
+        "method": "api",
+        "format": "json",
+        "max_bytes": 65536,
+        "json_required_keys": [
+          "latitude",
+          "longitude",
+          "hourly"
+        ],
+        "expected_sha256": "1042ce4db0b57a154e2fad618a2c3a427b02b8bef6afc429558133809506529c"
+      },
+      "region": "lima",
+      "start": "2022-03-09",
+      "end": "2022-03-15",
+      "expected_size_bytes": 5210
+    },
+    {
+      "spec": {
+        "source_id": "open-meteo-previous-model-runs",
+        "resource_url": "https://previous-runs-api.open-meteo.com/v1/forecast?latitude=-12.1664&longitude=-76.92&start_date=2022-03-09&end_date=2022-03-15&hourly=temperature_2m,temperature_2m_previous_day1&models=gfs_seamless",
+        "api_documentation_url": "https://open-meteo.com/en/docs/previous-runs-api",
+        "method": "api",
+        "format": "json",
+        "max_bytes": 65536,
+        "json_required_keys": [
+          "latitude",
+          "longitude",
+          "hourly"
+        ],
+        "expected_sha256": "8085551c68513c17b042a2f97940ac94b232f9d52ede135e0a2d6139a16cc281"
+      },
+      "region": "lima",
+      "start": "2022-03-09",
+      "end": "2022-03-15",
+      "expected_size_bytes": 5209
+    },
+    {
+      "spec": {
+        "source_id": "noaa-isd-global-hourly",
+        "resource_url": "https://noaa-global-hourly-pds.s3.amazonaws.com/2015/84628099999.csv",
+        "source_page_url": "https://www.ncei.noaa.gov/products/land-based-station/integrated-surface-database",
+        "method": "http_file",
+        "format": "csv",
+        "max_bytes": 5000000,
+        "expected_sha256": "1e5381f2fce145f949456e5749345c38ba6c52db357f1a554448c86c86d9b92b"
+      },
+      "region": "lima",
+      "start": "2015-01-01",
+      "end": "2015-12-31",
+      "expected_size_bytes": 4629175
+    }
+  ]
+}

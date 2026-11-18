@@ -41,6 +41,14 @@ jobs:
         run: make build
       - name: Verificar el comando del paquete
         run: uv run --locked airaware --help
+      - name: Instalar el entorno fijado de TimeNet
+        if: matrix.python == '3.13.13'
+        run: uv sync --project tools/timenet-smoke --python 3.13.13 --locked
+      - name: Reproducir el flujo TimeF con la red deshabilitada
+        if: matrix.python == '3.13.13'
+        run: |
+          sudo -n --preserve-env=HOME,PATH,UV_CACHE_DIR unshare --net \
+            --setuid "$(id -u)" --setgid "$(id -g)" -- make test-timef-offline
   audit:
     runs-on: ubuntu-latest
     timeout-minutes: 5
