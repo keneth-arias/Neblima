@@ -114,3 +114,30 @@ Las sumas SHA-256 de los manifiestos fueron
 `0c457bc4b7452da794c3980c1681e4d3c0d361d0073babf72a38f40929724371` y
 `dbb6f2c621c4bde20ee571eb2f2db49800ca15783b91a6e96af8e673c16e9d42`.
 La diferencia se limita a la suma del archivo de control DuckDB que escribe TimeNet.
+
+## Reproducción de extremo a extremo de #23
+
+Instalar los entornos desde la raíz. La instalación puede acceder a sus fuentes de
+dependencias. La prueba se ejecuta después en un espacio de red aislado de Linux y
+con los permisos del usuario de trabajo.
+
+```bash
+uv sync --locked
+uv sync --project tools/timenet-smoke --python 3.13.13 --locked
+sudo -n --preserve-env=HOME,PATH,UV_CACHE_DIR unshare --net \
+  --setuid "$(id -u)" --setgid "$(id -g)" -- make test-timef-offline
+```
+
+El objetivo ejecuta las pruebas aisladas del kit de desarrollo de TimeNet y verifica
+estilo y formato de sus scripts. La prueba de extremo a extremo crea un CSV ficticio
+de 73 filas con un cero, un nulo y un conflicto. Importa el original, verifica su
+suma, normaliza, depura, alinea, genera ventanas, purga cruces y escribe TimeF.
+`TimeFReader.verify()` y `LocalRegistry` comprueban la versión. Se comparan valores,
+identificadores, reloj y particiones de todas las tareas ficticias. Una copia de
+particiones alterada se rechaza antes de escribir otra versión.
+
+En un checkout limpio con entornos fijados, el comando aprobó cuatro pruebas
+en 3,03 s y usó hasta 203 920 KiB de memoria residente. El control de integración
+continua registra esos recursos por ejecución. La auditoría de dependencias se
+ejecuta aparte con acceso a su servicio de alertas. La corrida local principal
+también aprobó 345 pruebas, el empaquetado y la auditoría.
