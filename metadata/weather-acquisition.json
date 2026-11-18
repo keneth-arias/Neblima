@@ -1,28 +1,136 @@
 {
   "schema_version": 1,
   "task": "issue-16",
-  "attempt": "attempt-02-20261117T234251Z",
-  "generated_at_utc": "2026-11-17T23:48:39+00:00",
+  "attempt": "attempt-03-20261117T235500Z",
+  "generated_at_utc": "2026-11-18T00:01:50+00:00",
   "plan_file": "configs/acquisition/weather-lima-sample-plan.json",
   "totals": {
-    "resources_published": 14,
-    "published_original_bytes": 102337,
+    "resources_published": 15,
+    "published_original_bytes": 4484891,
     "sha256_all_match": true,
-    "offline_reuse_verified": "attempt-02: batch --offline --budget-bytes 0 per source selection; 14/14 reused; network_bytes=0; exit=0",
+    "offline_reuse_verified": "attempt-03: batch --offline --budget-bytes 0 sobre el plan completo; 15/15 reused; network_bytes=0; exit=0",
     "noaa_isd": {
-      "status": "blocked",
-      "attempted_url": "https://www.ncei.noaa.gov/data/global-hourly/access/2015/84691099999.csv",
-      "exact_error": "Recurso público respondió HTTP 301; transferencia detenida",
-      "network_bytes_consumed": 0,
-      "redirect_target": "https://noaa-global-hourly-pds.s3.amazonaws.com/index.html",
-      "canonical_key_head": {
-        "url": "https://noaa-global-hourly-pds.s3.amazonaws.com/2015/84691099999.csv",
-        "http_status": 200,
-        "content_length_bytes": 4382554,
-        "etag": "\"1776345dd1a99dfe8300e11bdf803a1b\"",
-        "last_modified_utc": "2023-07-30T08:45:24Z"
+      "status": "acquired",
+      "resource_url": "https://noaa-global-hourly-pds.s3.amazonaws.com/2015/84691099999.csv",
+      "final_url": "https://noaa-global-hourly-pds.s3.amazonaws.com/2015/84691099999.csv",
+      "http_status": 200,
+      "attempts": 1,
+      "size_bytes": 4382554,
+      "sha256": "6e6f79a85c70adb7669be1ed6d2f0ae5a1cf2995358b6268fd0867307e37832e",
+      "manifest": "data/raw/noaa-isd-global-hourly/6e6f79a85c70adb7669be1ed6d2f0ae5a1cf2995358b6268fd0867307e37832e/manifest.json",
+      "acquired_at": "2026-11-17T23:59:25.944200Z",
+      "network_bytes_reported_by_batch": 4448090,
+      "network_bytes_note": "El contador del lote reporta 4448090; el original en disco mide exactamente 4382554 (igual al Content-Length del HEAD previo); la diferencia de 65536 no se interpreta.",
+      "station_identity_from_content": {
+        "STATION": "84691099999",
+        "NAME": "PISCO INTERNATIONAL, PE",
+        "LATITUDE": -13.744864,
+        "LONGITUDE": -76.220284,
+        "ELEVATION": 11.88,
+        "SOURCE": "4",
+        "CALL_SIGN": "99999",
+        "QUALITY_CONTROL": "V020",
+        "constant_across_all_rows": true,
+        "identity_note": "La estación real del archivo NO es Jorge Chávez/Callao (candidato conjeturado antes de adquirir): es el aeropuerto internacional de Pisco, a 191–223 km de las siete estaciones de aire de Lima."
       },
-      "blocker": "El original en la ubicación canónica mide 4382554 bytes y supera el techo por recurso autorizado (max_bytes=4194304, fijado por la especificación); una transferencia parcial truncaría filas CSV de forma arbitraria y está prohibida por el contrato de adquisición."
+      "content_profile": {
+        "data_rows": 11408,
+        "columns": 33,
+        "date_first": "2015-01-01T00:00:00",
+        "date_last": "2015-12-31T23:00:00",
+        "date_format": "ISO-8601 sin sufijo Z en las 11408 filas; UTC según documentación oficial del producto (declarado)",
+        "distinct_instants": 8798,
+        "duplicated_instants": 2610,
+        "duplicated_extra_rows": 2610,
+        "duplicates_cause_observed": "cada instante duplicado aparece exactamente dos veces (pares FM-12/FM-15 simultáneos); no se elimina ninguna fila",
+        "report_type_distribution": {
+          "FM-12": 2642,
+          "FM-15": 8480,
+          "FM-16": 286
+        },
+        "coded_field_structure": {
+          "WND": {
+            "subfields_per_row": 5,
+            "all_nines_tokens": 1998,
+            "rows_first_subfield_all_nines": 980
+          },
+          "CIG": {
+            "subfields_per_row": 4,
+            "all_nines_tokens": 21408,
+            "rows_first_subfield_all_nines": 5245
+          },
+          "VIS": {
+            "subfields_per_row": 4,
+            "all_nines_tokens": 28438,
+            "rows_first_subfield_all_nines": 2811
+          },
+          "TMP": {
+            "subfields_per_row": 2,
+            "all_nines_tokens": 22,
+            "rows_first_subfield_all_nines": 11
+          },
+          "DEW": {
+            "subfields_per_row": 2,
+            "all_nines_tokens": 60,
+            "rows_first_subfield_all_nines": 30
+          },
+          "SLP": {
+            "subfields_per_row": 2,
+            "all_nines_tokens": 17576,
+            "rows_first_subfield_all_nines": 8788
+          }
+        },
+        "scientific_decoding": "no realizado: la documentación de formato ISD revisable no pudo cargarse (BadContentEncoding) y la evidencia oficial citada no declara escalas/unidades por subcampo; se reportan solo conteos estructurales y tokens compuestos solo por dígitos 9 (marcadores usuales de ausente), sin afirmar validez ni unidades",
+        "column_names_observed": [
+          "STATION", "DATE", "SOURCE", "LATITUDE", "LONGITUDE", "ELEVATION", "NAME",
+          "REPORT_TYPE", "CALL_SIGN", "QUALITY_CONTROL", "WND", "CIG", "VIS", "TMP",
+          "DEW", "SLP", "AA1", "AY1", "AY2", "ED1", "GA1", "GA2", "GA3", "GE1", "GF1",
+          "KA1", "MA1", "MD1", "MW1", "MW2", "OC1", "REM", "EQD"
+        ]
+      },
+      "window_168h_2015_04_16_18_to_04_23_17": {
+        "rows_in_window": 202,
+        "distinct_hours": 155,
+        "report_type_distribution": {
+          "FM-12": 54,
+          "FM-15": 144,
+          "FM-16": 4
+        },
+        "note": "la cobertura horaria del intervalo de la muestra no es continua: 155 horas distintas con múltiples reportes por hora"
+      },
+      "distances_to_senamhi_km_haversine": {
+        "method": "haversine sobre lat/lon geográficas con R=6371.0088 km; aproximada; CRS de las coordenadas SENAMHI no declarado en el original, equivalencia CRS sin resolver; NO implica equidistancia operativa ni intercambiabilidad de estaciones",
+        "station_pair": {
+          "noaa": {
+            "station": "84691099999",
+            "latitude": -13.744864,
+            "longitude": -76.220284
+          }
+        },
+        "CAMPO_DE_MARTE": 206.4,
+        "CARABAYLLO": 223.1,
+        "SANTA_ANITA": 206.0,
+        "SAN_BORJA": 201.0,
+        "SAN_JUAN_DE_LURIGANCHO": 213.5,
+        "SAN_MARTIN_DE_PORRES": 214.6,
+        "VILLA_MARIA_DEL_TRIUNFO": 191.2
+      },
+      "attempt_history": {
+        "initial_ncei_route": {
+          "attempted_url": "https://www.ncei.noaa.gov/data/global-hourly/access/2015/84691099999.csv",
+          "exact_error": "Recurso público respondió HTTP 301; transferencia detenida",
+          "network_bytes_consumed": 0,
+          "redirect_target": "https://noaa-global-hourly-pds.s3.amazonaws.com/index.html",
+          "blocker_then": "El original en la ubicación canónica mide 4382554 bytes y superaba el techo por recurso de attempt-02 (max_bytes=4194304); el gerente autorizó 5000000 en attempt-03 y la ruta directa NODD se ejecutó con éxito.",
+          "canonical_key_head_kept_as_evidence": {
+            "url": "https://noaa-global-hourly-pds.s3.amazonaws.com/2015/84691099999.csv",
+            "http_status": 200,
+            "content_length_bytes": 4382554,
+            "etag": "\"1776345dd1a99dfe8300e11bdf803a1b\"",
+            "last_modified_utc": "2023-07-30T08:45:24Z"
+          }
+        }
+      }
     }
   },
   "sources": {
@@ -133,6 +241,36 @@
           179.0
         ]
       ]
+    },
+    "noaa-isd-global-hourly": {
+      "resource_count": 1,
+      "published_bytes": 4382554,
+      "all_sha256_match": true,
+      "resource_url": "https://noaa-global-hourly-pds.s3.amazonaws.com/2015/84691099999.csv",
+      "source_page_url": "https://www.ncei.noaa.gov/products/land-based-station/integrated-surface-database",
+      "sha256": "6e6f79a85c70adb7669be1ed6d2f0ae5a1cf2995358b6268fd0867307e37832e",
+      "manifest": "data/raw/noaa-isd-global-hourly/6e6f79a85c70adb7669be1ed6d2f0ae5a1cf2995358b6268fd0867307e37832e/manifest.json",
+      "request_window_utc": [
+        "2015-01-01T00:00:00",
+        "2015-12-31T23:00:00"
+      ],
+      "data_class": "ground_measured (estación de superficie; identidad y contenido conciliados; semántica de subcampos codificados sin decodificar)",
+      "station_identity_from_content": {
+        "STATION": "84691099999",
+        "NAME": "PISCO INTERNATIONAL, PE",
+        "LATITUDE": -13.744864,
+        "LONGITUDE": -76.220284,
+        "ELEVATION": 11.88
+      },
+      "distances_to_senamhi_km_haversine": {
+        "CAMPO_DE_MARTE": 206.4,
+        "CARABAYLLO": 223.1,
+        "SANTA_ANITA": 206.0,
+        "SAN_BORJA": 201.0,
+        "SAN_JUAN_DE_LURIGANCHO": 213.5,
+        "SAN_MARTIN_DE_PORRES": 214.6,
+        "VILLA_MARIA_DEL_TRIUNFO": 191.2
+      }
     }
   },
   "stations": {

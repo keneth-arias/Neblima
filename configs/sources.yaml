@@ -712,31 +712,43 @@ sources:
   name: Datos CSV por estación-año de ISD Global Hourly
   catalog_url: https://www.ncei.noaa.gov/products/land-based-station/integrated-surface-database
   priority: 1
-  status: verified
-  notes: 'Lightpanda 17/11/2026: HTTP 200 en la página del producto; recurso CSV por estación-año
-    bajo /data/global-hourly/access/ sin autenticación. #16 intentó la transferencia acotada del
-    CSV 84691099999.csv (2015) con airaware acquire batch: BLOQUEADA — la URL responde 301 hacia
-    noaa-global-hourly-pds.s3.amazonaws.com y el original canónico mide 4 382 554 bytes, por
-    encima del techo por recurso fijado (4 194 304); ver reports/acquisition/weather.md.'
-  description: Recurso de datos de Global Hourly ISD; un CSV por estación y año con los campos
-    STATION, DATE, LATITUDE, LONGITUDE, ELEVATION, NAME, REPORT_TYPE, SOURCE, CALL_SIGN,
-    QUALITY_CONTROL y grupos de parámetros codificados (WND, TMP, DEWP, SLP y otros).
+  status: downloaded
+  resource_urls:
+  - https://noaa-global-hourly-pds.s3.amazonaws.com/2015/84691099999.csv
+  notes: 'Lightpanda 17/11/2026: HTTP 200 en la página del producto (evidencia en metadata/source-access.json).
+    Historial: la ruta /data/global-hourly/access/ respondió 301 hacia noaa-global-hourly-pds.s3.amazonaws.com
+    (NODD) y el original de 4 382 554 bytes superó el techo local de attempt-02 (4 194 304); el
+    gerente autorizó 5 000 000 y attempt-03 transfirió el objeto NODD directo con éxito (HTTP 200,
+    4 382 554 bytes, SHA-256 6e6f79a85c70adb7669be1ed6d2f0ae5a1cf2995358b6268fd0867307e37832e,
+    manifiesto y recibo en metadata/weather-acquisition.json; reutilización sin red 15/15).
+    Identidad desde contenido: estación 84691099999 «PISCO INTERNATIONAL, PE» (-13.744864,
+    -76.220284, 11,88 m), no Jorge Chávez/Callao; a 191–223 km (haversine aproximado) de las
+    siete estaciones de aire de Lima. Tamaño y hash registrados en el recibo; sin campo size_bytes
+    aquí por convención del inventario.'
+  description: Recurso de datos de Global Hourly ISD; un CSV por estación y año. Columnas reales
+    observadas en el archivo adquirido de 2015 — STATION, DATE, SOURCE, LATITUDE, LONGITUDE,
+    ELEVATION, NAME, REPORT_TYPE, CALL_SIGN, QUALITY_CONTROL y grupos de parámetros codificados
+    (WND, CIG, VIS, TMP, DEW, SLP, AA1 y otros), con subcampos y marcadores de ausente sin
+    decodificar.
   publisher: NOAA NCEI
   data_category: ground_measured
   geographic_coverage: Global; una estación por archivo
-  historical_coverage: Desde 1901 globalmente (declarado); por estación se demuestra con el archivo
+  historical_coverage: Desde 1901 globalmente (declarado); el archivo adquirido cubre 2015 completo
   license: null
   redistribution: unknown
   last_verified_at: '2026-11-17T23:31:40+00:00'
   limitations: 'Sin declaración de licencia verificada; posición del intervalo sin documentar;
-    mezcla de REPORT_TYPE por archivo; estación meteorológica del aeropuerto, no intercambiable
-    con las estaciones de aire sin distancia y método documentados.'
+    mezcla de REPORT_TYPE por archivo (2610 instantes duplicados por pares FM-12/FM-15); la
+    estación del archivo adquirido es Pisco Internacional, a 191–223 km de las estaciones de
+    aire de Lima: no intercambiable ni representativa de Lima; unidades/escalas de subcampos
+    codificados sin decodificar (documentación de formato no cargable).'
   variables:
   - WND
+  - CIG
+  - VIS
   - TMP
-  - DEWP
+  - DEW
   - SLP
-  - PRECIPITATION
   temporal_resolution: Horaria y sinóptica según REPORT_TYPE
   file_formats:
   - CSV

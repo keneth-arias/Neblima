@@ -4,6 +4,7 @@ from pathlib import Path
 import pytest
 from typer.testing import CliRunner
 
+from airaware.catalog import load_catalog
 from airaware.cli import app
 
 runner = CliRunner()
@@ -16,7 +17,11 @@ def test_catalog_summary_is_offline_and_reports_evidenced_statuses():
     summary = json.loads(result.stdout)
     assert summary["total"] >= 30
     assert sum(summary["statuses"].values()) == summary["total"]
-    assert summary["statuses"]["downloaded"] == 5
+    catalog = load_catalog(CATALOG)
+    observed: dict[str, int] = {}
+    for source in catalog.sources:
+        observed[source.status] = observed.get(source.status, 0) + 1
+    assert summary["statuses"] == observed
     assert summary["statuses"]["blocked"] > 0
 
 

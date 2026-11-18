@@ -4,9 +4,11 @@ Revisión oficial con Lightpanda (`/usr/local/bin/lightpanda`, versión
 `1.1.0-nightly.12173+18ff596e6`) el **17/11/2026 UTC**, según [el protocolo](../web-access.md).
 Cada fila registra enlace oficial, fecha de revisión UTC y decisión para la muestra de #16.
 Un acceso público no acredita licencia ni permisos de redistribución; lo desconocido queda
-explícito. Resultado de la muestra de #16: 14 recursos Open-Meteo (reanálisis ERA5 y pronóstico
-archivado GFS) adquiridos, verificados y reconciliados; la ruta de medición de estación (NOAA
-ISD) quedó **bloqueada por techo de bytes**. La adquisición real y su reconciliación están en
+explícito. Resultado de la muestra de #16: 15 recursos adquiridos, verificados y reconciliados —
+14 Open-Meteo (reanálisis ERA5 y pronóstico archivado GFS) y 1 de medición de estación (NOAA ISD
+Global Hourly, objeto NODD directo con techo autorizado de 5 000 000 bytes). La identidad del
+archivo NOAA, leída desde su propio contenido, es **«PISCO INTERNATIONAL, PE» (84691099999)**,
+no una estación de Lima. La adquisición real y su reconciliación están en
 [el informe de ejecución](../../reports/acquisition/weather.md) y en
 [el plan de #16](../../tasks/issue-16-plan.md).
 
@@ -32,7 +34,7 @@ coordenadas: no declarado en el CSV ni en el diccionario; permanece sin converti
 | --- | --- | --- | --- |
 | senamhi-hourly-meteorology (GBON/RBON) | medición de estación | diferida | CSV monolítico de 48,14 MB (nacional); sin ruta por estación; cobertura Lima/2015 dentro del CSV sin verificar; desproporcionado para una muestra acotada |
 | senamhi-station-network | contexto (inventario) | excluida como muestra | portal de inventario de estaciones; no acredita descarga histórica de datos |
-| noaa-integrated-surface-database | medición de estación | seleccionada para intento acotado → **bloqueada por techo de bytes** | CSV por estación-año; la URL planificada responde 301 → distribución NODD en otro host y el original canónico mide 4 382 554 bytes > 4 194 304 autorizados (informe de ejecución); licencia sin declaración oficial verificada |
+| noaa-integrated-surface-database | medición de estación | seleccionada para intento acotado → **adquirida** (objeto NODD directo con techo autorizado 5 000 000) | CSV por estación-año; la ruta NCEI responde 301 → NODD (historia preservada) y el objeto directo se transfirió con éxito (4 382 554 bytes); identidad desde contenido: PISCO INTERNATIONAL, PE, a 191–223 km de las estaciones de Lima; licencia sin declaración oficial verificada |
 | noaa-atmospheric-soundings (IGRA2) | medición de estación (radiosondeo) | excluida | sondeos 12 h; no es clima superficial horario; incompatible con H24/F6 |
 | open-meteo-historical-weather | reanálisis (ERA5/ERA5-Land/IFS) | **seleccionada** (grilla) | una solicitud por estación cubre 2015; sin cuenta; CC-BY-4.0 no comercial; explícitamente no es medición de estación |
 | open-meteo-historical-forecasts | pronóstico archivado (costura de corridas) | diferida | cobertura ~2022+ sin hora de emisión por valor (corridas costuradas); semántica de emisión más débil que previous-runs |
@@ -67,21 +69,30 @@ coordenadas: no declarado en el CSV ni en el diccionario; permanece sin converti
 - Página oficial: https://www.ncei.noaa.gov/products/land-based-station/integrated-surface-database — HTTP 200 el 17/11/2026 (y 16/11/2026 por el catálogo). Producto: «Global Hourly - Integrated Surface Database»; observaciones **horarias y sinópticas** de superficie compiladas de más de 100 fuentes originales en formato ASCII común; parámetros declarados: velocidad y dirección del viento, racha, temperatura, punto de rocío, nubosidad, presión a nivel de la estación y del nivel del mar, tiempo presente, visibilidad, precipitación.
 - Ruta de acceso acotada: archivo CSV por estación y año bajo https://www.ncei.noaa.gov/data/global-hourly/access/&lt;año&gt;/&lt;estación&gt;.csv; sin autenticación. El manifiesto oficial de producto (metadata geoportal gov.noaa.ncdc:C00532) declara distribución CSV; su sección Constraints no renderizó contenido textual en la revisión.
 - Licencia: **sin declaración verificada** en las páginas oficiales revisadas (el intento de data-description devolvió 404; noaa.gov/disclaimer devolvió 403; el PDF de formato y los recursos de `/data/` devuelven `BadContentEncoding` al cargador de Lightpanda y se registró la limitación). `license` queda nula y `redistribution: unknown` en el catálogo; sin afirmación de dominio público sin evidencia.
-- Tiempo: `DATE` ISO-8601 en UTC; `REPORT_TYPE` distingue Synop/METAR etc. (declarado por la
-  documentación oficial); la frecuencia y los campos codificados **no se conciliaron con
-  contenido real porque la transferencia fue bloqueada**: sin datos adquiridos no se reportan
-  frecuencias observadas. Posición del intervalo (inicio/fin) sin documentación revisada:
-  desconocida.
-- Lima: estación WMO 84691 (Jorge Chávez, Callao) como candidato; la identidad del archivo (STATION/NAME/LATITUDE/LONGITUDE/ELEVATION en el propio CSV) sería la evidencia por estación. **No es ninguna de las siete estaciones de aire**: las distancias se documentarían con distancia y método, no como equivalencia. Sin contenido adquirido no se calculan distancias.
-- Resultado de la adquisición del 17/11/2026: la URL planificada respondió **301** hacia
-  `noaa-global-hourly-pds.s3.amazonaws.com` (distribución oficial NODD, otro host); el CSV
-  `2015/84691099999.csv` existe allí (HTTP 200) pero mide **4 382 554 bytes**, por encima del
-  techo por recurso autorizado en esta ejecución (4 194 304). Transferencia parcial truncaría
-  filas y está prohibida. Detalle del error exacto, órdenes y exit codes en
-  [el informe](../../reports/acquisition/weather.md).
-- Decisión: **seleccionada para intento acotado → bloqueada por techo de bytes**; la clase de
-  medición de estación queda sin muestra real en #16 y cualquier extensión del techo requiere
-  autorización propia del responsable.
+- Tiempo: `DATE` ISO-8601 en UTC (declarado); en el archivo adquirido las 11 408 marcas llevan formato `AAAA-MM-DDTHH:MM:SS` sin sufijo Z. `REPORT_TYPE` distingue Synop/METAR etc. (declarado y observado: FM-12 2 642, FM-15 8 480, FM-16 286 filas). Posición del intervalo (inicio/fin) sin documentación revisada: desconocida.
+- Resultado de la adquisición del 17/11/2026 (attempt-03): la ruta `/data/global-hourly/access/`
+  respondió **301** hacia `noaa-global-hourly-pds.s3.amazonaws.com` (distribución oficial NODD,
+  otro host; historia preservada); con el techo por recurso autorizado por el gerente
+  (**5 000 000 bytes**, dentro del presupuesto original del asunto de 128 MiB), el objeto directo
+  `2015/84691099999.csv` se transfirió con éxito: HTTP 200, **4 382 554 bytes**, SHA-256
+  `6e6f79a8…37832e`, sin redirección, verificado y reutilizable sin red (15/15 en el plan).
+- **Identidad desde contenido**: `STATION` 84691099999, `NAME` «PISCO INTERNATIONAL, PE»,
+  `LATITUDE` -13.744864, `LONGITUDE` -76.220284, `ELEVATION` 11.88 — constantes en todas las
+  filas. **No es Jorge Chávez/Callao** (la mención de esa estación como candidato era una
+  conjetura previa a la adquisición y queda corregida por la evidencia del contenido). Es el
+  aeropuerto de Pisco: las distancias haversine aproximadas a las siete estaciones de aire de
+  Lima son **191,2–223,1 km** (CRS SENAMHI no declarado; aproximación geográfica lat/lon, sin
+  equivalencia ni mapeo de estaciones).
+- **Estructura observada sin decodificar**: WND 5 subcampos, CIG/VIS 4, TMP/DEW/SLP 2
+  (valor+calidad); tokens solo con dígitos 9 registrados por campo en el recibo; 8 798
+  instantes distintos y 2 610 duplicados (pares FM-12/FM-15 simultáneos); unidades/escalas y
+  códigos de calidad **sin decodificar** porque la documentación de formato no pudo cargarse en
+  la revisión oficial. Detalle completo en
+  [el informe](../../reports/acquisition/weather.md) y en `metadata/weather-acquisition.json`.
+- Decisión: **seleccionada para intento acotado → adquirida** (ruta NODD directa con techo
+  autorizado). La clase de medición de estación queda demostrada como ruta y como evidencia real,
+  **pero la estación adquirida no está en Lima**: un proxy meteorológico de Lima por ISD exigiría
+  identificar y autorizar otro ID de estación. Licencia y redistribución siguen `unknown`.
 
 ### noaa-atmospheric-soundings (IGRA2) — NOAA NCEI
 
@@ -140,7 +151,7 @@ coordenadas: no declarado en el CSV ni en el diccionario; permanece sin converti
 | Producto | Tiempo observado/válido | Emisión/adelanto | Disponibilidad de publicación |
 | --- | --- | --- | --- |
 | SENAMHI GBON | fecha + hora publicadas; reloj y posición del intervalo por confirmar con diccionario | no aplica | fecha de actualización del recurso (08/09/2025); `available_at` horario no documentado |
-| NOAA ISD | `DATE` ISO-8601 UTC por registro (declarado); posición inicio/fin no documentada; sin contenido adquirido para conciliar | no aplica (observación) | sin declaración revisada |
+| NOAA ISD | `DATE` ISO-8601 UTC por registro (declarado); formato sin sufijo Z observado en las 11 408 filas; posición inicio/fin no documentada; instantes mezclados FM-12/FM-15/FM-16 con 2 610 duplicados simultáneos conciliados | no aplica (observación) | sin declaración revisada |
 | Open-Meteo Historical (ERA5) | marca horaria UTC; posición inicio/fin no declarada | no aplica (reanálisis) | ~5 días según tabla oficial |
 | Open-Meteo Previous Runs | tiempo válido (marca horaria UTC) | emisión = válido − N×24 h (declarado) | archivo declarado por modelo (GFS desde 03/2021); `available_at` horario no documentado |
 | ERA5 CDS | horario; ERA5T vs final 2–3 meses | no aplica | ~5 días |
@@ -165,17 +176,19 @@ integradas tienen su decisión registrada; no se cambian aquí.)
   Fuentes upstream conservan sus licencias (Copernicus C3S para ERA5; NOAA NCEP para GFS). La
   atribución se registrará en DATA_ATTRIBUTION.md al integrarse en #17; esta muestra solo
   verifica la fuente.
-- NOAA NCEI ISD: licencia sin declaración oficial verificada en este intento; sin datos
-  adquiridos (bloqueo por techo de bytes). Atribución del producto («Global Hourly - Integrated
-  Surface Database, NOAA NCEI») quedará registrada en informes solo si se adquiere;
-  redistribución: unknown hasta evidencia documental.
+- NOAA NCEI ISD: licencia sin declaración oficial verificada en este intento; objeto NODD directo
+  adquirido (4 382 554 bytes, estación 84691099999 «PISCO INTERNATIONAL, PE»). Atribución del
+  producto («Global Hourly - Integrated Surface Database, NOAA NCEI») registrada en el informe de
+  ejecución; licencia y redistribución: `unknown` hasta evidencia documental; los valores
+  permanecen bajo `data/raw/` local.
 - SENAMHI GBON: ODC-BY declarada (ficha y CKAN), cuyo texto permite redistribución con
   atribución; diferida, sin datos adquiridos y sin decisión de proyecto registrada.
 
 ## Limitaciones transversales
 
 1. Ningún producto muestreado equivale a una medición en las estaciones de aire; la reanálisis
-   representa celdas de ~25 km (ERA5) o ~½°×⅝° (MERRA-2) y el ISD mide en el aeropuerto.
+   representa celdas de ~25 km (ERA5) o ~½°×⅝° (MERRA-2) y el ISD mide en el aeropuerto de
+   Pisco, a 191–223 km de las estaciones de aire de Lima (identidad desde contenido).
 2. La posición del intervalo horario (inicio/fin) no está documentada por Open-Meteo ni por ISD
    en las páginas revisadas; queda explícita como desconocida.
 3. Las licencias sin evidencia (ISD, NASA POWER, campos OEFA) no se completan por inferencia.
