@@ -453,8 +453,11 @@ def test_join_rejects_issue_after_origin_and_accepts_boundary_equality(tmp_path)
     join_weather(single_station_config(), bundle, windows, timeline, splits, output)
     joined = {row["origin_at"]: row for row in chain_rows(output) if row["valid_at"] == hour(20)}
     assert joined[hour(19)]["alignment_status"] == "rejected_issue_after_origin"
+    assert joined[hour(19)]["value"] is None
     assert joined[hour(20)]["alignment_status"] == "admissible"
+    assert joined[hour(20)]["value"] == 21.5
     assert joined[hour(21)]["alignment_status"] == "admissible"
+    assert joined[hour(21)]["value"] == 21.5
     summary = {row["origin_at"]: row for row in summary_rows(output)}
     assert summary[hour(19)]["weather_hours_rejected"] == 1
     assert summary[hour(20)]["weather_hours_admissible"] >= 1
@@ -478,10 +481,119 @@ def test_join_rejects_late_publication_with_earlier_valid_time(tmp_path):
     join_weather(single_station_config(), bundle, windows, timeline, splits, output)
     joined = {row["origin_at"]: row for row in chain_rows(output) if row["valid_at"] == hour(24)}
     assert joined[hour(23)]["alignment_status"] == "rejected_available_after_origin"
+    assert joined[hour(23)]["value"] is None
     assert joined[hour(24)]["alignment_status"] == "rejected_available_after_origin"
+    assert joined[hour(24)]["value"] is None
     assert joined[hour(25)]["alignment_status"] == "admissible"
+    assert joined[hour(25)]["value"] == 21.5
     assert joined[hour(23)]["issued_at"] <= joined[hour(23)]["origin_at"]
     assert joined[hour(25)]["available_at"] == joined[hour(25)]["origin_at"]
+
+
+def test_join_masks_feature_value_of_late_issue_and_late_publication(tmp_path):
+    timeline, windows, splits = frozen_chain(tmp_path, [STATION_A])
+    rows = synthetic_rows(
+        [
+            {"valid_at": hour(20), "issued_at": hour(21), "value": 21.5},
+            {
+                "valid_at": hour(24),
+                "issued_at": hour(12),
+                "available_at": hour(25),
+                "value": 19.5,
+            },
+            {"valid_at": hour(19), "issued_at": hour(19), "value": 18.0},
+        ]
+    )
+    bundle = write_weather_bundle(tmp_path / "weather", rows)
+    output = tmp_path / "joined"
+    join_weather(single_station_config(), bundle, windows, timeline, splits, output)
+    joined = {(row["origin_at"], row["valid_at"]): row for row in chain_rows(output)}
+    for origin in (hour(19), hour(20)):
+        late_issue = joined[(origin, hour(20))]
+        assert late_issue["alignment_status"] == "rejected_issue_after_origin"
+        assert late_issue["value"] is None
+        assert late_issue["issued_at"] == hour(21)
+    for origin in (hour(23), hour(24)):
+        late_publication = joined[(origin, hour(24))]
+        assert late_publication["alignment_status"] == "rejected_available_after_origin"
+        assert late_publication["value"] is None
+        assert late_publication["available_at"] == hour(25)
+    equal_issue = joined[(hour(21), hour(20))]
+    assert equal_issue["alignment_status"] == "admissible"
+    assert equal_issue["value"] == 21.5
+    equal_publication = joined[(hour(25), hour(24))]
+    assert equal_publication["alignment_status"] == "admissible"
+    assert equal_publication["value"] == 19.5
+    control = joined[(hour(19), hour(19))]
+    assert control["alignment_status"] == "admissible"
+    assert control["value"] == 18.0
+    summary = {row["origin_at"]: row for row in summary_rows(output)}
+    assert summary[hour(19)]["weather_hours_rejected"] == 1
+    assert summary[hour(19)]["weather_hours_admissible"] == 1
+    assert summary[hour(19)]["weather_status"] == "partial"
+
+
+def test_join_classifies_present_rows_without_usable_value_as_missing(tmp_path):
+    timeline, windows, splits = frozen_chain(tmp_path, [STATION_A])
+    rows = synthetic_rows(
+        [
+            {
+                "valid_at": hour(19),
+                "issued_at": hour(19),
+                "value": None,
+                "value_status": "missing",
+            },
+            {"valid_at": hour(20), "issued_at": hour(19), "value": None},
+        ]
+    )
+    bundle = write_weather_bundle(tmp_path / "weather", rows)
+    output = tmp_path / "joined"
+    join_weather(single_station_config(), bundle, windows, timeline, splits, output)
+    joined = {(row["origin_at"], row["valid_at"]): row for row in chain_rows(output)}
+    covered = (
+        (hour(19), hour(19)),
+        (hour(19), hour(20)),
+        (hour(20), hour(19)),
+        (hour(20), hour(20)),
+        (hour(21), hour(20)),
+    )
+    for origin, valid_at in covered:
+        row = joined[(origin, valid_at)]
+        assert row["alignment_status"] == "missing_weather"
+        assert row["value"] is None
+        assert row["issued_at"] == hour(19)
+    summary = {row["origin_at"]: row for row in summary_rows(output)}
+    for origin in (hour(19), hour(20), hour(21)):
+        assert summary[origin]["weather_hours_admissible"] == 0
+        assert summary[origin]["weather_hours_missing"] == 4
+        assert summary[origin]["weather_status"] == "missing"
+
+
+def test_join_fails_closed_when_issue_time_is_unknown(tmp_path):
+    timeline, windows, splits = frozen_chain(tmp_path, [STATION_A])
+    rows = synthetic_rows(
+        [
+            {"valid_at": hour(20), "issued_at": None, "value": 21.5},
+            {"valid_at": hour(19), "issued_at": hour(19), "value": 18.0},
+        ]
+    )
+    bundle = write_weather_bundle(tmp_path / "weather", rows)
+    output = tmp_path / "joined"
+    join_weather(single_station_config(), bundle, windows, timeline, splits, output)
+    joined = {(row["origin_at"], row["valid_at"]): row for row in chain_rows(output)}
+    for origin in (hour(19), hour(20), hour(21)):
+        unknown = joined[(origin, hour(20))]
+        assert unknown["alignment_status"] == "rejected_issue_unknown"
+        assert unknown["value"] is None
+        assert unknown["issued_at"] is None
+        assert unknown["valid_at"] == hour(20)
+    control = joined[(hour(19), hour(19))]
+    assert control["alignment_status"] == "admissible"
+    assert control["value"] == 18.0
+    summary = {row["origin_at"]: row for row in summary_rows(output)}
+    assert summary[hour(19)]["weather_hours_rejected"] == 1
+    assert summary[hour(19)]["weather_hours_admissible"] == 1
+    assert summary[hour(19)]["weather_status"] == "partial"
 
 
 def test_join_allows_future_valid_time_only_as_forecast(tmp_path):
@@ -524,6 +636,9 @@ def test_missing_weather_stays_null_with_explicit_mask(tmp_path):
     missing = [row for row in joined if row["alignment_status"] == "missing_weather"]
     assert missing
     assert all(row["value"] is None and row["issued_at"] is None for row in missing)
+    admissible = [row for row in joined if row["alignment_status"] == "admissible"]
+    assert admissible
+    assert all(row["value"] == 20.0 + row["valid_at"].hour for row in admissible)
     counts: dict[str, int] = {}
     for row in joined:
         counts[row["window_id"]] = counts.get(row["window_id"], 0) + 1

@@ -7,6 +7,9 @@ particiones congeladas por sus manifiestos, evalúa la admisión temporal contra
 cada ventana y publica máscaras explícitas sin descartar ventanas ni reescribir objetivos.
 
 Experimento retrospectivo por tiempo de emisión: no prueba disponibilidad operativa estricta.
+El `value` unido solo se expone en filas admisibles (emisión conocida no posterior al origen,
+publicación conocida no posterior al origen, valor finito presente); toda fila rechazada o
+sin valor utilizable queda con `value` nulo y conserva su estado y metadatos para auditoría.
 """
 
 import json
@@ -91,14 +94,18 @@ WEATHER_ROWS_SCHEMA = pa.schema(
 JOIN_QUERY = """
 SELECT span.window_id, span.series_id, span.station_key, span.origin_at, span.split,
        span.purge_reason, span.valid_at, span.hour_role, rows.variable, rows.unit,
-       rows.value, rows.value_status, rows.issued_at, rows.available_at, rows.lead_hours,
+       rows.value_status, rows.issued_at, rows.available_at, rows.lead_hours,
        rows.original_sha256,
        CASE
            WHEN rows.station_key IS NULL THEN 'missing_weather'
+           WHEN rows.value_status IS DISTINCT FROM 'present'
+               OR rows.value IS NULL OR NOT isfinite(rows.value) THEN 'missing_weather'
+           WHEN rows.issued_at IS NULL THEN 'rejected_issue_unknown'
            WHEN rows.issued_at > span.origin_at THEN 'rejected_issue_after_origin'
            WHEN rows.available_at > span.origin_at THEN 'rejected_available_after_origin'
            ELSE 'admissible'
-       END AS alignment_status
+       END AS alignment_status,
+       CASE WHEN alignment_status = 'admissible' THEN rows.value END AS value
 FROM (
     SELECT w.window_id, w.series_id, w.station_key, w.origin_at, w.split, w.purge_reason,
            hour AS valid_at,
@@ -497,7 +504,8 @@ def _join_rows(
     weather_destination: Path,
     summary_destination: Path,
 ) -> dict:
-    """Unir por window_id con admisión temporal explícita; nunca descarta ventanas."""
+    """Unir por window_id con admisión temporal explícita y `value` nulo fuera de la
+    admisión (fail-closed); nunca descarta ventanas."""
     chain = _validate_chain(windows_dir, timeline_dir, splits_dir)
     splits = str(splits_dir / SPLITS_FILE)
     station_keys = [station.station_key for station in config.stations]

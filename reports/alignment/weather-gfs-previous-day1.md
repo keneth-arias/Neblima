@@ -31,8 +31,10 @@ raíz permanecieron intactos y se re-verificaron después de las corridas.
 - **Valores**: 0 faltantes en `temperature_2m_previous_day1` (unidad °C declarada por el
   proveedor y verificada contra la configuración); rango observado 20,8–29,7 °C.
 - **Razones de rechazo en conversión**: 0 (la política temporal se evalúa en la unión y está
-  probada con sintéticos: rechazo por emisión tardía, por publicación tardía, igualdad
-  admitida en el borde y clima futuro solo como pronóstico).
+  probada con sintéticos: rechazo por emisión tardía, por publicación tardía y por emisión
+  desconocida, igualdad admitida en el borde, clima futuro solo como pronóstico, y `value`
+  expuesto únicamente en filas admisibles; toda fila rechazada o sin valor utilizable queda
+  con `value` nulo).
 - **Semántica temporal**: `issued_at` = `valid_at` − 24 h (2022-03-08T00:00Z a
   2022-03-14T23:00Z); adelanto nominal uniforme de 24 h; `available_at` nulo;
   `acquired_at` (2026-11-17T23:41:45–48Z) registrado solo como procedencia local.
