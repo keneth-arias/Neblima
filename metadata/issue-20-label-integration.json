@@ -1,0 +1,78 @@
+{
+  "issue": 20,
+  "attempt": "attempt-02",
+  "executed_at_utc": "2026-11-18",
+  "adapter": "src/airaware/senamhi_event_labels.py",
+  "cli": "airaware labels senamhi",
+  "policy": "configs/thresholds.yaml",
+  "policy_sha256": "d2931c04249aba99330aa3f1ffc628ce5adb9e6d153dce0813c16e95cd5266a0",
+  "decision_reference": "docs/decisions/005-senamhi-operating-policy.md",
+  "real_execution": {
+    "network_bytes": 0,
+    "original_input": "data/raw/senamhi/senamhi_lima_monitoreo_1.csv",
+    "original_input_read_from": "/home/cristopher/github/airaware/.worktrees/issue-13-senamhi-normalization-plan/data/raw/senamhi/senamhi_lima_monitoreo_1.csv",
+    "original_sha256_before": "896ae8a106fb128460e81b3f58096f6b9c4d582ef28fffa46e5394c5875c40d4",
+    "original_sha256_after": "896ae8a106fb128460e81b3f58096f6b9c4d582ef28fffa46e5394c5875c40d4",
+    "original_size_bytes": 68501558,
+    "local_artifacts": {
+      "normalization": "data/normalized/senamhi/senamhi-normalization-20261118-issue20",
+      "normalization_policy_id": "senamhi-normalization-20261117-v1",
+      "audit_sha256": "86170e033b81bd6b53fdf0b044df3df36243ae2c4819a41821ecb839c13ee661",
+      "timeline": "data/curated/senamhi-lima-hourly",
+      "timeline_sha256": "2e8fa784cea645b8eb97b42f3fe36e6c532b5959cc8ae66da0ea416df513413c",
+      "windows": "data/benchmarks/lima-pm25-h24-f24",
+      "windows_sha256": "39abf1656905144a61c310f6acde356f7f75eb859846dd6164496b5bc24e39d8",
+      "labels_report": "data/benchmarks/lima-pm25-h24-f24-labels"
+    },
+    "windows_24_24_step1": {
+      "candidates": 574868,
+      "complete": 324463,
+      "history_missing": 230437,
+      "future_missing": 19968,
+      "series_total": 7,
+      "repeated_execution_identical": true
+    },
+    "structural_inspection": {
+      "windows_total": 324463,
+      "target_hours_total": 7787112,
+      "target_hours_measured": 7787112,
+      "measured_complete_windows": 324463,
+      "target_quality_values": ["unknown"],
+      "target_quality_missing": false,
+      "timeline_units": ["ug/m3"],
+      "labeling": "blocked",
+      "blocked_reasons": ["labeling_evidence_missing"],
+      "labels_generated": 0,
+      "candidate_counts_reconciled": true
+    },
+    "synthetic_evidence_probe": {
+      "purpose": "Comprobar en datos reales que la elegibilidad sigue cerrada; no es evidencia del proyecto.",
+      "blocked_reasons": ["quality_values_not_admissible"],
+      "labels_generated": 0,
+      "artifacts_removed_after_reading": true
+    },
+    "local_runtime_observation": {
+      "normalization_seconds": 27.94,
+      "normalization_max_rss_kib": 258544,
+      "curation_seconds": 2.97,
+      "curation_max_rss_kib": 2710196,
+      "timeline_seconds": 2.06,
+      "timeline_max_rss_kib": 3202260,
+      "windows_seconds": 1.99,
+      "windows_max_rss_kib": 952740,
+      "labels_seconds": 63.59,
+      "labels_max_rss_kib": 1741404
+    }
+  },
+  "semantic_blockers": [
+    "interval_position_unknown",
+    "quality_unknown",
+    "daily_regulatory_labels_deferred"
+  ],
+  "not_claimed": [
+    "real SENAMHI episode labels",
+    "instrumental or regulatory validation",
+    "legal compliance or health safety",
+    "availability in real time"
+  ]
+}
