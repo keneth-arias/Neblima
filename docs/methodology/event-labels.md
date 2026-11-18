@@ -97,6 +97,47 @@ for kind in ('forecast_24h', 'calendar_day'):
 # calendar_day above_reference 18
 ```
 
+## Adaptador de ventanas #18 y elegibilidad
+
+`airaware.senamhi_event_labels` integra el paquete de #18 sin modificarlo. Ejecuta la CLI:
+
+```bash
+uv run --locked airaware labels senamhi \
+  --timeline data/curated/senamhi-lima-hourly \
+  --windows data/benchmarks/lima-pm25-h24-f24 \
+  --output data/benchmarks/lima-pm25-h24-f24-labels
+```
+
+Antes de leer ventanas verifica versión y SHA-256 de la grilla y del paquete, el vínculo
+`input_sha256`, la zona UTC, la frecuencia de una hora y el horizonte. Reconstruye cada objetivo
+por `series_id` entre `origin_at + 1 h` y `origin_at + 24 h`, ambos inclusive, exige 24 horas
+únicas y medidas, la misma estación y un promedio que coincida con `target_mean`; también
+reconcilia candidatos, ventanas completas y descartes con el manifiesto. Solo `horizon_hours == 24`
+admite `forecast_24h`: un paquete 24/6 u otro horizonte se informa incompatible, nunca se rellena.
+
+La elegibilidad es una comprobación distinta de la estructura. `--evidence` acepta un JSON con
+`source_id`, `timezone`, `method=automatic_hourly`, `interval_position=hour_ending`, cadenas no
+vacías de evidencia de unidades/calidad y `quality_valid_values`. Sin ese archivo el resultado es
+`blocked` con `labeling_evidence_missing`. La posición del intervalo distinta de hora final no se
+puede declarar; la calidad nula bloquea con `quality_missing`; un valor no admitido bloquea con
+`quality_values_not_admissible`. Por ADR-005, `unknown` no puede admitirse como válido: un archivo
+que intente incluirlo se bloquea con `quality_evidence_unknown_not_admissible`. `quality_valid=True`
+solo se asigna a horas cuyo valor de calidad figura en la evidencia admitida.
+
+Si la etiqueta es inadmisible se publican únicamente `compatibility.json` y `manifest.json`, con
+conteos, conciliación y motivos. Si es admisible, se escribe de forma atómica un paquete nuevo con
+`labels.parquet` (`window_id`, serie/estación, `policy_id`, límites, media, etiqueta, horas
+válidas/requeridas, motivo, IDs seleccionados/válidos y de origen) y un manifiesto con hashes de
+entrada y política, evidencia, horizonte/historia/paso, conteos por etiqueta y por motivo, y hash
+de salida. Una falla no publica un paquete parcial.
+
+Ejecución real del 18/11/2026 sobre el original verificado: 324 463 ventanas 24/24 en siete
+series, 7 787 112/7 787 112 horas objetivo medidas y conteos conciliados. No se generaron
+etiquetas: la posición del intervalo y la calidad individual siguen sin evidencia
+(`labeling_evidence_missing`; con una evidencia sintética de prueba, `quality_values_not_admissible`).
+El registro compacto está en `metadata/issue-20-label-integration.json`; los datos masivos quedan
+fuera de Git. El benchmark principal 24/6 no es un conjunto de episodios etiquetables.
+
 ## Límites científicos y regulatorios
 
 Una ventana móvil no se convierte en día calendario por durar 24 h. Una comparación diaria no basta
@@ -112,7 +153,12 @@ Pruebas sin servicios externos: límites 49,999/50/50,001, 17/18/23/24 horas vá
 calidad, valores inválidos, duplicados/alias UTC, linaje, medianoche y días con cambio de hora.
 Comando enfocado: `uv run --locked pytest tests/test_event_labels.py`.
 
-#18 sigue abierta. Se entrega un contrato independiente; falta probar con el constructor real que
-solo entran objetivos medidos, sin imputación ni mezcla de estaciones, y que los rechazos se contabilizan
-junto con los de construcción de ventanas. No se generaron etiquetas de datos reales ni se eligieron
-particiones o estaciones. #20 conserva ese bloqueo por decisión explícita de Keneth: mantener abierta hasta verificar integración.
+El adaptador agrega pruebas de reconstrucción exacta 24/24, exclusión de `origin_at`, cruce de
+medianoche UTC, aislamiento de serie/estación, horizontes distintos de 24, hashes y vínculos,
+calidad nula/desconocida, conteos por motivo, paquete vacío, escritura atómica y repetición
+determinista: `uv run --locked pytest tests/test_senamhi_event_labels.py`.
+
+La integración estructural con #18 está verificada con datos reales y sin modificar el paquete de
+ventanas. #20 sigue abierta por decisión explícita de Keneth: falta acreditar la posición del
+intervalo y la calidad individual para emitir etiquetas reales. Hasta entonces no se generan
+etiquetas, no se eligen particiones por desempeño y #26 no debe usar etiquetas no sustentadas.
