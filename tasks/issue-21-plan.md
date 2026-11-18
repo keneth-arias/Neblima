@@ -26,7 +26,9 @@ rechazos. Verificar integridad antes de convertir. Reutilizar adquisición de Ai
 obtener referencias locales. Mantener convert determinista, sin descargas, leyendo solo la
 muestra seleccionada y preservando procedencia, hash, identificación provisional y versión
 de la política. Probar archivo ausente, hash incorrecto y rechazo trazable de conflictos de
-una misma señal/hora. Confirmar en la muestra real que cero, nulo y valor se conservan, que la
+una misma señal/hora. Confirmar en la muestra real que nulos y valores finitos se conservan. El cero se
+comprueba con la muestra sintética, porque la grilla real de PM2.5 carece de ceros
+observados. Comprobar que la
 unidad tipada representa µg/m³ y que el carácter inferido queda en metadatos. La licencia
 ODC-BY-1.0 y el aviso DATA_ATTRIBUTION.md acompañan la salida local.
 
