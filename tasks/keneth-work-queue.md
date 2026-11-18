@@ -26,10 +26,10 @@ material preparado de los enlaces y autorizaciones pendientes.
   correspondencias sustentadas por identidad, equipo y vigencia.
 - **#43.** Registrar aclaraciones institucionales sobre intervalo, calidad, cambios de equipos
   y unidades. La consulta de seguimiento del 17/11 también se remitió a José Luis Rodríguez.
-- **#17.** Cristopher lleva [la alineación meteorológica](https://github.com/keneth-arias/airaware/pull/85).
+- **#17.** Cristopher integró [la alineación meteorológica](https://github.com/keneth-arias/airaware/pull/85).
   La muestra de #79 solo toca entrenamiento. El [plan de implementación](plan.md) registra
   el alcance del cruce y los requisitos de una evaluación posterior.
-- **#20.** Cristopher lleva [la integración de etiquetas](https://github.com/keneth-arias/airaware/pull/86).
+- **#20.** Cristopher integró [la comprobación estructural de etiquetas](https://github.com/keneth-arias/airaware/pull/86).
   La prueba estructural de ventanas de 24 horas y la emisión de etiquetas tienen criterios propios.
 
 ## Integración de cada PR

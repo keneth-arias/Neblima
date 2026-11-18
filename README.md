@@ -51,7 +51,7 @@ El conector de Cuybernautas está en [revisión como borrador de TimeNet](https:
 
 La [adquisición meteorológica de #16](reports/acquisition/weather.md) habilita el análisis
 de una semana de pronósticos archivados. Su cobertura queda dentro de entrenamiento,
-por lo que la [alineación en revisión](https://github.com/keneth-arias/airaware/pull/85)
+por lo que la [alineación retrospectiva integrada](https://github.com/keneth-arias/airaware/pull/85)
 sirve para comprobar contratos y procedencia. La comparación de modelos de la primera
 ronda usa la versión congelada de PM2.5.
 

@@ -22,7 +22,7 @@ y los enlaces exigidos. La fecha oficial se registra en la guía del hackathon.
 | [#14](https://github.com/keneth-arias/airaware/issues/14) | Datos | Entregar una tabla auditable por señal con identidad provisional, fila de origen, duplicado exacto o conflicto y decisión. Seguir un caso desde el archivo original hasta la vista depurada y conciliar los conteos. |
 | [#15](https://github.com/keneth-arias/airaware/issues/15) | Datos | Mostrar una serie horaria en tiempo universal coordinado (UTC) con un cero observado, un valor nulo y una hora ausente. Verificar sus máscaras y conciliar horas utilizables y descartadas por estación. |
 | [#16](https://github.com/keneth-arias/airaware/issues/16) | Ampliación | Muestra fijada y verificada con #79. Se conservan las limitaciones de disponibilidad y derechos por producto. |
-| [#17](https://github.com/keneth-arias/airaware/issues/17) | Ampliación | Verificar en #85 la paridad de objetivos, el rechazo de emisiones tardías y las máscaras. El experimento de comparación requiere cobertura verificada en validación y prueba. |
+| [#17](https://github.com/keneth-arias/airaware/issues/17) | Ampliación | El PR #85 integró la paridad de objetivos, el rechazo de emisiones tardías y las máscaras en pruebas. Queda por verificar la unión real y la disponibilidad horaria. |
 | [#18](https://github.com/keneth-arias/airaware/issues/18) | Datos | Preparar primero historias completas de 24 h y objetivos completos de 6 h según ADR-005. Conciliar ventanas antes de particionar con comparison-v3 y explicar diferencias por identidad, conflicto, hueco o paso. Los demás horizontes quedan identificados por configuración. |
 | [#19](https://github.com/keneth-arias/airaware/issues/19) | Evaluación | Congelar fechas de corte en UTC y un manifiesto de identificadores antes de seleccionar modelos. Documentar ventanas purgadas y demostrar con una prueba de frontera que ninguna hora de entrada u objetivo se comparte entre particiones para una serie. |
 | [#20](https://github.com/keneth-arias/airaware/issues/20) | Condicional | Integración estructural verificada con 324 463 ventanas 24/24 reales. Mantener abierta hasta acreditar la posición del intervalo y la calidad individual; solo entonces emitir etiquetas. Diferir etiquetas regulatorias diarias y métricas de episodios sin respaldo. |
@@ -283,7 +283,7 @@ validación científica. #13/#14/#18/#19 continúan como entregas propias; #20/#
 ## Adaptación después de #79
 
 #16 cerró con la [adquisición meteorológica verificable](../reports/acquisition/weather.md).
-El [PR #85](https://github.com/keneth-arias/airaware/pull/85) propone alinear GFS
+El [PR #85](https://github.com/keneth-arias/airaware/pull/85) integró la alineación de GFS
 `previous_day1` por `window_id`. La unión real queda como comprobación local
 cuando estén disponibles los siete paquetes y los artefactos congelados.
 
@@ -296,7 +296,7 @@ por estación, emisión y disponibilidad. La muestra permite probar la unión y 
 máscaras en entrenamiento. Una evaluación meteorológica requiere cobertura
 verificada en validación y prueba y una comparación sobre objetivos comunes.
 
-El [PR #86](https://github.com/keneth-arias/airaware/pull/86) verifica el contrato
+El [PR #86](https://github.com/keneth-arias/airaware/pull/86) integró la verificación del contrato
 estructural de etiquetas para un horizonte de 24 horas. La emisión sigue condicionada
 por la evidencia temporal y de calidad de #20 y #43. El benchmark principal usa el
 horizonte de seis horas y conserva su [ficha](../docs/dataset-cards/lima-pm25-forecast.md).
