@@ -82,3 +82,7 @@ Decisiones aprobadas: PM2.5 inicial, PM10 separado, Lima provincia y Callao como
 separados, política estricta sin imputación, pesos propuestos y envío institucional. La selección
 científica sigue condicionada a evidencia de unidades/reloj/calidad y derechos; aprobar el plan
 no confirma esos hechos. No cerrar #11 únicamente por entregar el diagnóstico.
+
+## Uso de la selección en la primera ronda
+
+Para un analista ambiental de Lima, formular la pregunta retrospectiva: con 24 horas de PM2.5, ¿cuánto mejora el pronóstico de las seis horas siguientes frente a repetir la última medición? ADR-005 admite 339 205 ventanas solapadas en siete identidades provisionales antes de las particiones. Citar comparison-v3 y distinguir cobertura, desempeño medido y utilidad por validar. Ver la [ruta de entrega](plan.md).

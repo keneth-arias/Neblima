@@ -1,5 +1,7 @@
 # Contrato común y diagnóstico EAS: implementación aprobada
 
+> Estado de entrega: #11, #12 y #13 cerradas. La [ruta de primera ronda](plan.md) indica las dependencias actuales.
+>
 > Actualización del 17/11/2026: Keneth eliminó el requisito de cuatro estaciones/24 meses.
 > Para SENAMHI se adopta UTC por confirmación del responsable, unidades inferidas aceptadas y
 > ODC-BY-1.0 con atribución. Las afirmaciones de bloqueo anteriores son históricas; ver
