@@ -5,13 +5,12 @@ El estado vigente está en las [tareas de GitHub](https://github.com/keneth-aria
 [tablero](https://github.com/users/keneth-arias/projects/1). Este documento es un índice ordenado;
 distingue evidencia documental, descargas y resultados de modelos.
 
-## Ruta vigente para la primera ronda (17/11/2026)
+## Ruta vigente para la primera ronda (18/11/2026)
 
-La [matriz del jurado](../docs/hackathon.md) organiza la evidencia. El [plan de #21](issue-21-plan.md)
-parte de #13 integrada. El PR #73 entregó la depuración de SENAMHI. Keneth empieza con #15 → #18 → #19 y puede adelantar #21;
-ambas líneas confluyen en #22. Después de #22, #23 y #25 habilitan #27 → #28. Jordan puede
-preparar la ficha y el guion mientras espera las verificaciones de #24 y #28 para cerrar #29.
-Mantener las asignaciones vigentes en GitHub y una tarea activa por persona.
+La [matriz del jurado](../docs/hackathon.md) organiza la evidencia. Los PR #74, #75 y #76
+cerraron la grilla, las ventanas y las particiones. El [plan de PR de Keneth](keneth-work-queue.md)
+empieza con #21 y #22. Después de #22, #23 y #25 habilitan #27 y #28. Keneth lleva la ficha y
+la contribución #24. Cristopher y Jordan preparan la entrega de #29 con esos resultados.
 
 **Fechas internas propuestas (hora del Perú).** El 18–19 de noviembre, priorizar una muestra
 trazable y congelar el protocolo de evaluación. El 20, intentar la lectura TimeF de extremo a
@@ -284,7 +283,7 @@ validación científica. #13/#14/#18/#19 continúan como entregas propias; #20/#
 
 ## Próximas entregas de Keneth para la primera ronda
 
-El [plan de PR de Keneth](keneth-work-queue.md) detalla el alcance, los insumos y el criterio de
-cierre de sus 12 tareas abiertas. La [auditoría de #73](issue-14-plan.md) permite iniciar #15.
-La primera entrega de #21 se puede desarrollar desde la misma versión de main. #19 y #21
-confluyen en #22; #23 y #25 habilitan el ajuste temporal en #27 y la evaluación en #28.
+#15, #18 y #19 están cerradas. El [plan vigente de PR](keneth-work-queue.md) reúne las nueve
+tareas abiertas de Keneth al 18/11/2026. La ruta pasa por la conversión real de #21, el
+conjunto de tareas de #22, la reproducción de #23 y las referencias de #25. #27 y #28
+producen la evaluación temporal. #24 tramita la ficha y el aporte a TimeNet para la entrega de #29.
