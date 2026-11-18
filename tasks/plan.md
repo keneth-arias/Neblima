@@ -25,7 +25,7 @@ y los enlaces exigidos. La fecha oficial se registra en la guía del hackathon.
 | [#17](https://github.com/keneth-arias/airaware/issues/17) | Ampliación | Verificar en #85 la paridad de objetivos, el rechazo de emisiones tardías y las máscaras. El experimento de comparación requiere cobertura verificada en validación y prueba. |
 | [#18](https://github.com/keneth-arias/airaware/issues/18) | Datos | Preparar primero historias completas de 24 h y objetivos completos de 6 h según ADR-005. Conciliar ventanas antes de particionar con comparison-v3 y explicar diferencias por identidad, conflicto, hueco o paso. Los demás horizontes quedan identificados por configuración. |
 | [#19](https://github.com/keneth-arias/airaware/issues/19) | Evaluación | Congelar fechas de corte en UTC y un manifiesto de identificadores antes de seleccionar modelos. Documentar ventanas purgadas y demostrar con una prueba de frontera que ninguna hora de entrada u objetivo se comparte entre particiones para una serie. |
-| [#20](https://github.com/keneth-arias/airaware/issues/20) | Condicional | Mantener abierta hasta comprobar la integración real con #18 y la semántica del intervalo. Registrar qué ventanas admiten la metodología; diferir etiquetas regulatorias diarias y métricas de episodios que carezcan de respaldo. |
+| [#20](https://github.com/keneth-arias/airaware/issues/20) | Condicional | Integración estructural verificada con 324 463 ventanas 24/24 reales. Mantener abierta hasta acreditar la posición del intervalo y la calidad individual; solo entonces emitir etiquetas. Diferir etiquetas regulatorias diarias y métricas de episodios sin respaldo. |
 | [#21](https://github.com/keneth-arias/airaware/issues/21) | TimeNet | Con #13 integrado, verificar el manifiesto Parquet antes de convertir una muestra local. Reabrirla con TimeFReader.verify() y Arrow; comprobar eje UTC, identidad, cero, nulo, procedencia, unidad inferida y atribución. Comparar dos conversiones por contenido lógico. |
 | [#22](https://github.com/keneth-arias/airaware/issues/22) | TimeNet | Con #19 y #21, abrir una ForecastingTask con el lector oficial y reconstruir sus 24 entradas y 6 objetivos. Comparar identificadores, límites y conteos de cada partición con el manifiesto congelado; registrar la versión del conjunto base. |
 | [#23](https://github.com/keneth-arias/airaware/issues/23) | Ejecución técnica | Desde un entorno fijado, reproducir sin red el recorrido de una muestra hasta una tarea leída por el kit de desarrollo de TimeNet. Guardar comando, revisión, hashes, tiempo, memoria y resultado de controles; comprobar que un archivo alterado falla. |
@@ -183,11 +183,14 @@ Comienza [#7](issue-7-plan.md), con límite por archivo de 1000 GiB indicado por
 explícitos por lote y pruebas sin descargas masivas. Los siguientes pasos científicos requieren las
 entregas de Cristopher y las aclaraciones de #43; no se declaran completados por anticipación.
 
-## #20: metodología y etiquetas (16/11/2026)
+## #20: metodología y etiquetas (16/11/2026; integración 18/11/2026)
 
-Plan detallado en [issue-20-plan.md](issue-20-plan.md): verificar normas oficiales, separar ventana
-futura completa de día calendario, implementar módulo puro con pruebas y mantener explícita la
-integración pendiente con #18. No normalizar ni etiquetar todavía datos SENAMHI de semántica incierta.
+Plan detallado en [issue-20-plan.md](issue-20-plan.md): normas oficiales verificadas, ventana
+futura completa separada del día calendario y módulo puro con pruebas. La integración estructural
+con #18 se verificó el 18/11/2026 sobre 324 463 ventanas 24/24 reales, con conteos, límites,
+estación y promedios reconstruidos. No se etiquetaron datos SENAMHI: la posición del intervalo y
+la calidad individual siguen sin evidencia (`labeling_evidence_missing`). Detalle en
+[metadata/issue-20-label-integration.json](../metadata/issue-20-label-integration.json).
 
 ## Planes #8 y #9 para feedback de Keneth
 

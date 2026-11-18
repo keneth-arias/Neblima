@@ -19,3 +19,19 @@ y derivados, incluyendo documentación de exportaciones y avisos accesibles desd
 Mantener los avisos de origen aplicables. No atribuir a SENAMHI cambios realizados por AirAware.
 La licencia AGPL-3.0-only del código es independiente de la licencia de estos datos.
 No extender esta declaración a otros conjuntos OEFA o fuentes ajenas.
+
+# Atribución de la meteorología archivada de Open-Meteo (GFS, #17)
+
+Proveedor del servicio: **Open-Meteo**, API Previous Model Runs
+(https://open-meteo.com/en/docs/previous-runs-api). Modelo aguas arriba: **GFS — NOAA NCEP**,
+que conserva sus propios términos. La API gratuita no comercial se declara bajo
+**CC-BY-4.0 con atribución obligatoria** (https://open-meteo.com/en/licence), revisada el
+17/11/2026 en docs/sources/weather.md. La variante integrada en #17 usa únicamente la variable
+`temperature_2m_previous_day1` de la muestra fijada por #16
+(`configs/acquisition/weather-lima-sample-plan.json`); procedencia por recurso en
+`metadata/weather-acquisition.json` y evidencia en reports/alignment/weather-gfs-previous-day1.md.
+
+Open-Meteo no avala las inferencias ni los resultados de AirAware. La decisión de
+redistribución del proyecto permanece `unknown` en configs/sources.yaml mientras no exista una
+decisión explícita de integración; los valores permanecen bajo almacenamiento local. La
+licencia AGPL-3.0-only del código es independiente de estas licencias de datos.
