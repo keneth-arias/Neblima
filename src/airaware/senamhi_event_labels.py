@@ -550,11 +550,11 @@ def evaluate_windows(
             if sum(counts["labels"].values()) != counts["windows_total"]:
                 raise ValueError("El número de etiquetas no coincide con las ventanas auditadas")
             labeling = "evaluated"
-            if (
-                sha256_file(links.hours) != links.timeline_sha256
-                or sha256_file(links.windows) != links.windows_sha256
-            ):
-                raise ValueError("La grilla o las ventanas cambiaron durante la evaluación")
+        if (
+            sha256_file(links.hours) != links.timeline_sha256
+            or sha256_file(links.windows) != links.windows_sha256
+        ):
+            raise ValueError("La grilla o las ventanas cambiaron durante la evaluación")
         if sha256_file(policy_path) != policy_sha256:
             raise ValueError("La política cambió durante la evaluación")
         manifest = {

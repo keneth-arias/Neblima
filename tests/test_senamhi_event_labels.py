@@ -13,6 +13,7 @@ from airaware.derived_artifacts import sha256_file
 from airaware.senamhi_event_labels import (
     LabelingEvidence,
     evaluate_windows,
+    inspect_structure,
     load_evidence,
 )
 from airaware.senamhi_timeline import HOURS_FILE, TIMELINE_VERSION
@@ -572,6 +573,24 @@ def test_failure_during_label_write_publishes_nothing(tmp_path, monkeypatch):
     monkeypatch.setattr("airaware.senamhi_event_labels._write_labels", explode)
     with pytest.raises(ValueError, match="fallo simulado"):
         evaluate(timeline, windows, output, ev=evidence())
+    assert not output.exists()
+    assert list(tmp_path.glob(".airaware-*")) == []
+
+
+def test_input_change_during_blocked_inspection_publishes_nothing(tmp_path, monkeypatch):
+    timeline, windows, output = full_bundle(tmp_path)
+
+    def change_timeline_after_inspection(links):
+        inspection = inspect_structure(links)
+        with links.hours.open("ab") as stream:
+            stream.write(b"alterado")
+        return inspection
+
+    monkeypatch.setattr(
+        "airaware.senamhi_event_labels.inspect_structure", change_timeline_after_inspection
+    )
+    with pytest.raises(ValueError, match="cambiaron durante la evaluación"):
+        evaluate(timeline, windows, output)
     assert not output.exists()
     assert list(tmp_path.glob(".airaware-*")) == []
 
