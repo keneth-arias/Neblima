@@ -23,6 +23,7 @@ from airaware.senamhi_curation import curation_app
 from airaware.senamhi_splits import split
 from airaware.senamhi_timeline import alignment_app
 from airaware.senamhi_windows import benchmark_app
+from airaware.weather_alignment import weather
 
 app = typer.Typer(
     no_args_is_help=True, help="Herramientas locales de datos y plataforma de AirAware."
@@ -41,6 +42,7 @@ app.add_typer(workspace_app, name="workspace")
 app.add_typer(normalization_app, name="normalize")
 app.add_typer(curation_app, name="curate")
 app.add_typer(alignment_app, name="align")
+alignment_app.command("weather")(weather)
 benchmark_app.command("split")(split)
 app.add_typer(benchmark_app, name="benchmark")
 LAYERS = ("raw", "staging", "normalized", "curated", "benchmarks", "timef")
