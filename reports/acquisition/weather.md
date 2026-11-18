@@ -64,6 +64,20 @@ consola exacta no es recuperable de la interrupción y no se reproduce de memori
 Jorge Chávez, tamaño esperado 4 629 175). Ninguna solicitud Open-Meteo en línea ni nuevas
 consultas del objeto Pisco en attempt-04.
 
+## Verificar la muestra fijada sin red
+
+El plan vigente fija los 15 SHA-256 del recibo. Los comandos históricos de adquisición y caché
+anteriores corresponden a la configuración anterior a esta fijación. Para reutilizar sus
+paquetes existentes bajo `raw/`, indicar la carpeta de datos que los contiene.
+
+```bash
+uv run --locked python -m airaware.acquisition.weather_sample --data-dir data
+```
+
+El verificador lee cada paquete por fuente y hash, comprueba su contrato, procedencia y bytes, y
+sale con error ante una ausencia o discrepancia. El índice de caché incluye el hash esperado en
+su clave y los paquetes originales se pueden verificar directamente con este comando.
+
 ## Verificación de integridad y bytes publicados (R4)
 
 Recalculados ahora desde disco; los Open-Meteo coinciden con la verificación independiente del
@@ -120,11 +134,10 @@ variable: ERA5, 6 variables × 192 valores finitos por estación (0 faltantes); 
 ### Identidad de celda: siete solicitudes NO son siete celdas
 
 - **ERA5: todas las siete respuestas devuelven la misma celda redondeada (-12.0, -77.0)**.
-  Son un único valor de reanálisis compartido, no siete observaciones independientes. La
-  `elevation` distinta por respuesta (54–272 m) es coherente con una consulta de modelo digital
-  de elevación en la coordenada solicitada, no con celdas distintas; NO se interpreta como
-  siete celdas. Resolución ERA5 declarada 0,25° (~25 km), mucho mayor que la extensión urbana
-  de las siete estaciones.
+  Sus series provienen de la misma celda, con elevaciones de ajuste de 54 a 272 m.
+  Open-Meteo aplica ajuste estadístico por elevación de forma predeterminada. Se conserva cada
+  serie por solicitud. Para compartir una serie en #17 se deben comparar las marcas y los
+  valores por variable. La resolución nominal de la celda es 0,25° (~25 km).
 - **GFS: las siete respuestas colapsan en 3 columnas de grilla distintas**:
   (-12.124954, -76.99219) para CAMPO_DE_MARTE/SAN_BORJA/VILLA_MARIA_DEL_TRIUNFO;
   (-12.007805, -76.99219) para SANTA_ANITA/SAN_JUAN_DE_LURIGANCHO/SAN_MARTIN_DE_PORRES;
@@ -146,10 +159,11 @@ reconciliación local; el proveedor nunca recorta filas.
   `utc_offset_seconds: 0`), ventana 2015-04-16T00:00 a 2015-04-23T23:00. No es medición de
   estación ni pronóstico. Latencia de publicación declarada por Open-Meteo: ~5 días para ERA5.
 - **Pronóstico archivado** (`open-meteo-previous-model-runs`/GFS): tiempo válido = marca horaria
-  (2022-03-09T00:00 a 2022-03-15T23:00 UTC); **hora de emisión de `temperature_2m_previous_day1`
-  = tiempo válido − 24 h** (semántica declarada por la documentación de la API; primera emisión
-  de la muestra: 2022-03-08T00:00Z para la primera marca válida). Archivo GFS declarado desde
-  03/2021 para temperatura 2 m. No es reanálisis ni medición.
+  (2022-03-09T00:00 a 2022-03-15T23:00 UTC). `temperature_2m_previous_day1` identifica
+  el adelanto nominal de 24 h. El archivo combina corridas, con varios tiempos válidos por
+  inicialización. La respuesta muestreada no expone el instante exacto de inicialización ni la
+  emisión por valor. Ambos quedan desconocidos junto con `available_at`. Véase la
+  [explicación del proveedor](https://github.com/open-meteo/open-meteo/issues/1750).
 - **Medición de estación** (NOAA ISD): adquirida (objeto NODD directo de Lima/Jorge Chávez,
   attempt-04; el objeto Pisco de attempt-03 quedó rechazado y preservado). `DATE` ISO-8601 sin
   sufijo Z en las 11 441 filas; UTC según la documentación oficial del producto (declarado).
@@ -334,11 +348,12 @@ esta fuente como covariable es de #17 con su propia evidencia de disponibilidad 
 2. Semántica de los subcampos codificados ISD (unidades, escalas, códigos de calidad) sin
    decodificar: la documentación de formato no pudo cargarse durante la revisión oficial; solo
    se reportan conteos estructurales.
-3. Posición del intervalo horario (inicio/fin) no documentada por Open-Meteo ni ISD.
+3. ISD conserva posición del intervalo desconocida. ERA5 conserva la semántica por variable.
+   GFS conserva inicialización y emisión exactas desconocidas.
 4. `available_at` horario no documentado por los proveedores muestreados (tampoco por ISD).
 5. Licencia/redistribución de ISD sin evidencia documental; catálogo mantiene `unknown`.
-6. Un valor de celda de reanálisis (una celda ERA5 para toda la muestra) no representa gradientes
-   urbanos entre las siete estaciones de aire.
+6. Las series ERA5 comparten una celda y conservan ajustes por elevación. Su comparación por
+   variable queda para #17 antes de compartir series entre estaciones.
 7. Contabilidad exacta de bytes de red de la transferencia Open-Meteo del intento previo no
    recuperable (consola no recuperable). La diferencia de 65 536 bytes de los contadores NOAA de
    attempt-03/04 quedó explicada en attempt-04 desde el código del canal `http_file` (prefijo

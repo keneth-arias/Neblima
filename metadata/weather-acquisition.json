@@ -109,10 +109,39 @@
         },
         "scientific_decoding": "no realizado: la documentación de formato ISD revisable no pudo cargarse (BadContentEncoding) y la evidencia oficial citada no declara escalas/unidades por subcampo; se reportan solo conteos estructurales y tokens compuestos solo por dígitos 9 (marcadores usuales de ausente), sin afirmar validez ni unidades",
         "column_names_observed": [
-          "STATION", "DATE", "SOURCE", "LATITUDE", "LONGITUDE", "ELEVATION", "NAME",
-          "REPORT_TYPE", "CALL_SIGN", "QUALITY_CONTROL", "WND", "CIG", "VIS", "TMP",
-          "DEW", "SLP", "AA1", "AY1", "AY2", "ED1", "GA1", "GA2", "GA3", "GE1", "GF1",
-          "KA1", "MA1", "MD1", "MW1", "MW2", "OC1", "REM", "EQD"
+          "STATION",
+          "DATE",
+          "SOURCE",
+          "LATITUDE",
+          "LONGITUDE",
+          "ELEVATION",
+          "NAME",
+          "REPORT_TYPE",
+          "CALL_SIGN",
+          "QUALITY_CONTROL",
+          "WND",
+          "CIG",
+          "VIS",
+          "TMP",
+          "DEW",
+          "SLP",
+          "AA1",
+          "AY1",
+          "AY2",
+          "ED1",
+          "GA1",
+          "GA2",
+          "GA3",
+          "GE1",
+          "GF1",
+          "KA1",
+          "MA1",
+          "MD1",
+          "MW1",
+          "MW2",
+          "OC1",
+          "REM",
+          "EQD"
         ]
       },
       "window_168h_2015_04_16_18_to_04_23_17": {
@@ -214,6 +243,10 @@
           "verification": "Identidad Lima/Jorge Chávez confirmada leyendo el CSV descargado antes de seleccionar; hash y tamaño reconciliados desde disco."
         }
       }
+    },
+    "pinned_replay": {
+      "command": "uv run --locked python -m airaware.acquisition.weather_sample --data-dir data",
+      "verification": "SHA-256 y procedencia del paquete local contra el plan fijado"
     }
   },
   "sources": {
@@ -271,7 +304,12 @@
           -77.0,
           272.0
         ]
-      ]
+      ],
+      "time_semantics": {
+        "precipitation": "preceding_hour_sum",
+        "other_sampled_variables": "instantaneous",
+        "available_at": null
+      }
     },
     "open-meteo-previous-model-runs": {
       "resource_count": 7,
@@ -323,7 +361,13 @@
           -76.99219,
           179.0
         ]
-      ]
+      ],
+      "time_semantics": {
+        "previous_day1_nominal_lead_hours": 24,
+        "run_initialized_at": null,
+        "issued_at": null,
+        "available_at": null
+      }
     },
     "noaa-isd-global-hourly": {
       "resource_count": 1,

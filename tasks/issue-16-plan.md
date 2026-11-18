@@ -108,7 +108,7 @@ las siete originales de las estaciones (sección anterior), sin redondeos.
    `https://previous-runs-api.open-meteo.com/v1/forecast?latitude=<lat>&longitude=<lon>&start_date=2022-03-09&end_date=2022-03-15&hourly=temperature_2m,temperature_2m_previous_day1&models=gfs_seamless`
    — 7 solicitudes. Ventana separada y documentada: 2022-03-09T00:00Z a 2022-03-15T23:00Z,
    dentro de `train` (todas las marcas válidas < 2022-03-16 08:00 UTC); adelanto explícito
-   previous_day1 (emisión = válido − 24 h). `max_bytes` 65 536 por recurso; tamaño esperado 8 000.
+   previous_day1 (adelanto nominal de 24 h, emisión exacta desconocida). `max_bytes` 65 536 por recurso; tamaño esperado 8 000.
 3. Medición de estación — `noaa-isd-global-hourly`:
    `https://noaa-global-hourly-pds.s3.amazonaws.com/2015/84628099999.csv`
    (canal http_file con `source_page_url` = página del producto ISD; la ruta de acceso NCEI
@@ -227,12 +227,12 @@ documentación oficial revisada. Los archivos obtenidos por Lightpanda se regist
       «JORGE CHAVEZ INTERNATIONAL, PE» (84628099999), verificada desde su propio CSV, a
       3,6–26,5 km de las estaciones de aire; el objeto Pisco de attempt-03 quedó rechazado por
       identidad desde contenido y preservado como historia (nunca como selección de Lima).
-- [x] R3 Semántica temporal: observación/validez, emisión = válido − 24 h (previous_day1) y
+- [x] R3 Semántica temporal: observación/validez, adelanto nominal de 24 h (previous_day1), emisión exacta desconocida y
       disponibilidad declarada (~5 días ERA5) documentadas por producto; `DATE` ISD en formato
       ISO-8601 sin sufijo Z (UTC declarado) con 8 803 instantes distintos y 2 638 duplicados
       simultáneos conciliados (más 135 filas del año fuera de hora reportadas sin reasignar);
       `acquired_at` de manifiestos nunca se usa como `available_at`; posición del intervalo
-      horario y `available_at` horario quedan explícitos como desconocidos.
+      ISD y `available_at` exacto quedan desconocidos. Se documenta ERA5 por variable.
 - [x] R4 Procedencia y derechos: originales intactos bajo `data/raw/` (fuera de Git),
       SHA-256 recalculado 15/15 coincidentes, manifiestos con HTTP 200 y `acquired_at`, comandos
       y exit codes registrados; atribución citada de los términos oficiales sin derechos
@@ -272,7 +272,7 @@ documentación oficial revisada. Los archivos obtenidos por Lightpanda se regist
   catálogo sin cotas numéricas duras.
 - **Clasificación para #17**: reanálisis ERA5 vía Open-Meteo — «investigación retrospectiva»
   hasta decidir disponibilidad operativa y derechos de integración; pronóstico archivado GFS
-  `previous_day1` — con emisión explícita, misma condición de decisión; medición de estación —
+  `previous_day1` — con adelanto nominal y emisión exacta desconocida, misma condición de decisión; medición de estación —
   ruta ISD por estación-año demostrada con una estación real de Lima/Callao (aeropuerto Jorge
   Chávez, 3,6–26,5 km de las estaciones de aire), pero **sin equivalencia automática**: su
   cobertura horaria en la semana de la muestra no es continua (167 instantes en punto de 168

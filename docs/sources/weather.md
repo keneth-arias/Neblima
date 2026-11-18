@@ -42,7 +42,7 @@ coordenadas: no declarado en el CSV ni en el diccionario; permanece sin converti
 | noaa-atmospheric-soundings (IGRA2) | medición de estación (radiosondeo) | excluida | sondeos 12 h; no es clima superficial horario; incompatible con H24/F6 |
 | open-meteo-historical-weather | reanálisis (ERA5/ERA5-Land/IFS) | **seleccionada** (grilla) | una solicitud por estación cubre 2015; sin cuenta; CC-BY-4.0 no comercial; explícitamente no es medición de estación |
 | open-meteo-historical-forecasts | pronóstico archivado (costura de corridas) | diferida | cobertura ~2022+ sin hora de emisión por valor (corridas costuradas); semántica de emisión más débil que previous-runs |
-| open-meteo-previous-model-runs | pronóstico archivado (advectado por adelanto) | **seleccionada** (pronóstico) | offsets `previous_dayN` = emitido N×24 h antes del tiempo válido; GFS 2 m desde 03/2021 permite muestra dentro de `train` |
+| open-meteo-previous-model-runs | pronóstico archivado (advectado por adelanto) | **seleccionada** (pronóstico) | offsets `previous_dayN` de adelanto nominal N×24 h; GFS 2 m desde 03/2021 permite muestra dentro de `train` |
 | era5-and-era5-land (CDS directo) | reanálisis | bloqueada esta ruta | CDS exige cuenta y aceptación de licencia; cuentas nuevas no autorizadas; ERA5 se cubre por la ruta Open-Meteo |
 | nasa-power | reanálisis meteorológico (MERRA-2/GEOS-IT) + radiación satelital | diferida | cubre 2015 (2001+) pero exige 7 solicitudes puntuales; no necesaria para la muestra; documentada para decisión futura |
 | oefa-csv (campos meteorológicos ya adquiridos) | medición declarada, sin resolver | bloqueada | reloj, CRS (ESTE/NORTE), unidades y calidad por resolver; sin redescarga |
@@ -126,7 +126,7 @@ coordenadas: no declarado en el CSV ni en el diccionario; permanece sin converti
 - Documentación oficial: https://open-meteo.com/en/docs/historical-weather-api — HTTP 200 el 17/11/2026. Endpoint: https://archive-api.open-meteo.com/v1/archive; sin cuenta para uso gratuito no comercial.
 - Clase: **reanálisis**. La propia documentación: «based on reanalysis datasets … may not have had weather stations nearby». Modelos declarados: ECMWF IFS 9 km horario desde 2017; ERA5 0,25° (~25 km) horario desde 1940, actualización diaria con 5 días de retraso; ERA5-Land 0,1° desde 1950. La recomendación oficial para consistencia plurianual es usar ERA5 o ERA5-Land explícitamente (`models=`), evitando la mezcla por defecto (`best_match`).
 - Variables horarias declaradas con unidades por omisión (página de parámetros, revisada el 17/11/2026): temperature_2m °C; relative_humidity_2m %; dewpoint_2m °C; precipitation mm (lluvia + nieve); surface_pressure y pressure_msl hPa; cloud_cover %; wind_speed_10m km/h (unidades alternativas ms/mph/kn); wind_direction_10m grados; wind_gusts_10m km/h.
-- Tiempo: marca horaria ISO-8601; zona por omisión GMT+0 (UTC). Posición inicio/fin del intervalo horario: **no declarada en las páginas revisadas**; se registra desconocida. `available_at`: para ERA5, ~5 días (latencia declarada); para IFS, «every 6 hours with no delay» (declaración del proveedor de la tabla de fuentes).
+- Tiempo: marca horaria ISO-8601; zona por omisión GMT+0 (UTC). Precipitación acumulada durante la hora precedente. Temperatura, humedad, presión superficial y viento de la muestra son instantáneos según la tabla horaria del proveedor. `available_at`: para ERA5, ~5 días (latencia declarada); para IFS, «every 6 hours with no delay» (declaración del proveedor de la tabla de fuentes).
 - Licencia: CC-BY-4.0 para la API gratuita no comercial (<10 000 llamadas/día, 600/min; https://open-meteo.com/en/terms y /en/licence, HTTP 200 el 17/11/2026); atribución requerida con enlace a Open-Meteo; fuentes upstream con licencias propias (Copernicus C3S: «licence to use Copernicus products»). Los términos declarados permiten redistribuir los valores obtenidos con atribución dentro del uso no comercial; la decisión de redistribución del proyecto sigue pendiente y el catálogo mantiene `redistribution: unknown` (ver «Derechos y atribución» abajo).
 - Identidad espacial: solicitudes por coordenadas decimales (WGS84; sin declaración explícita de EPSG en la página — desconocido formal); la respuesta devuelve latitud/longitud/elevación de la celda usada, lo que permite documentar resolución de celda real por estación.
 - Decisión: **seleccionada** para la muestra gridded: cubre 2015-04 para las siete coordenadas con solicitudes acotadas; se solicita `models=era5` para proveniencia única. **No se etiqueta como medición de estación ni como pronóstico archivado.**
@@ -135,14 +135,14 @@ coordenadas: no declarado en el CSV ni en el diccionario; permanece sin converti
 
 - Documentación oficial: https://open-meteo.com/en/docs/historical-forecast-api — HTTP 200 el 17/11/2026. Endpoint: https://historical-forecast-api.open-meteo.com/v1/forecast.
 - Clase: **pronóstico archivado**: «Archived High-Resolution Weather Forecasts … same models, same parameters». Cobertura declarada «starts around 2022»; los modelos se inicializan cada 1/3/6 h y «Each run's first few hours are stitched into a continuous hourly timeseries».
-- Semántica de emisión: la serie archivada **no expone hora de emisión por valor** (es una costura de corridas); el tiempo válido es la marca horaria. Para el requisito de #16 («archived forecast availability must include issue/run and valid times»), esta propiedad la hace insuficiente como muestra de emisión explícita.
+- Semántica de emisión: la serie archivada **no expone hora de emisión por valor** (es una costura de corridas); el tiempo válido es la marca horaria. Esta propiedad limita su uso en #17 cuando se requiere demostrar el momento de emisión.
 - Licencia: CC-BY-4.0 no comercial, igual que Historical Weather.
 - Decisión: **diferida** — cobertura incompatible con la ventana 2015 y sin emisión por valor; el pronóstico archivado se demuestra con previous-runs, que sí declara adelanto.
 
 ### open-meteo-previous-model-runs — Open-Meteo (corridas anteriores)
 
 - Documentación oficial: https://open-meteo.com/en/docs/previous-runs-api — HTTP 200 el 17/11/2026. Endpoint: https://previous-runs-api.open-meteo.com/v1/forecast.
-- Clase: **pronóstico archivado con adelanto explícito**: «temperature_2m_previous_day1 returns the value predicted 24 hours before valid time … up to day 7». Hora de emisión = tiempo válido − N×24 h, sin ambigüedad de costura.
+- Clase: **pronóstico archivado con adelanto explícito**: «temperature_2m_previous_day1 returns the value predicted 24 hours before valid time … up to day 7». El adelanto es nominal. Una misma corrida aporta varios tiempos válidos según la [explicación del proveedor](https://github.com/open-meteo/open-meteo/issues/1750). La inicialización y emisión exactas quedan desconocidas.
 - Cobertura declarada: «Most models are archived from January 2024. GFS 2 m temperature extends back to March 2021».
 - Variables (Day 0–7): temperatura 2 m, humedad relativa, punto de rocío, precipitación, presión (nivel del mar y superficie), nubosidad, viento (velocidad y dirección 10 m), entre otras; unidades por omisión idénticas a las demás API.
 - Licencia: CC-BY-4.0 no comercial.
@@ -174,8 +174,8 @@ coordenadas: no declarado en el CSV ni en el diccionario; permanece sin converti
 | --- | --- | --- | --- |
 | SENAMHI GBON | fecha + hora publicadas; reloj y posición del intervalo por confirmar con diccionario | no aplica | fecha de actualización del recurso (08/09/2025); `available_at` horario no documentado |
 | NOAA ISD | `DATE` ISO-8601 UTC por registro (declarado); formato sin sufijo Z observado en las 11 441 filas del archivo Lima seleccionado (135 fuera de hora, reportadas sin reasignar); posición inicio/fin no documentada; instantes mezclados FM-12/FM-15/FM-16 con 2 638 duplicados simultáneos conciliados | no aplica (observación) | sin declaración revisada |
-| Open-Meteo Historical (ERA5) | marca horaria UTC; posición inicio/fin no declarada | no aplica (reanálisis) | ~5 días según tabla oficial |
-| Open-Meteo Previous Runs | tiempo válido (marca horaria UTC) | emisión = válido − N×24 h (declarado) | archivo declarado por modelo (GFS desde 03/2021); `available_at` horario no documentado |
+| Open-Meteo Historical (ERA5) | marca UTC; precipitación acumulada en la hora previa y demás variables de la muestra instantáneas | no aplica (reanálisis) | ~5 días según tabla oficial |
+| Open-Meteo Previous Runs | tiempo válido (marca horaria UTC) | adelanto nominal N×24 h; inicialización y emisión exactas desconocidas | archivo declarado por modelo (GFS desde 03/2021); `available_at` horario no documentado |
 | ERA5 CDS | horario; ERA5T vs final 2–3 meses | no aplica | ~5 días |
 | NASA POWER | horario UTC o LST (parámetro) | no aplica | GEOS-IT ~2 días; MERRA-2 reajustes periódicos |
 | OEFA | fechas seriales sin época confirmada | no aplica | pendiente (bloqueos citados) |
@@ -217,7 +217,7 @@ integradas tienen su decisión registrada; no se cambian aquí.)
    aeropuerto no es una estación de aire ni una serie continua garantizada (167 instantes en
    punto de 168 posibles en la semana de la muestra, más SPECI fuera de hora). El objeto Pisco
    rechazado (attempt-03) se conserva solo como historia.
-2. La posición del intervalo horario (inicio/fin) no está documentada por Open-Meteo ni por ISD
+2. La posición del intervalo horario (inicio/fin) de ISD sigue desconocida
    en las páginas revisadas; queda explícita como desconocida.
 3. Las licencias sin evidencia (ISD, NASA POWER, campos OEFA) no se completan por inferencia.
 4. Las decisiones de esta página son para #16 (verificación de fuente y muestra); la selección

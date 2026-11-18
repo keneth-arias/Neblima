@@ -517,7 +517,8 @@ sources:
   redistribution: unknown
   last_verified_at: '2026-11-17T23:25:00+00:00'
   limitations: 'Reanálisis/modelo, no medición de estación; celdas ~25 km (ERA5) o ~9 km (IFS);
-    posición inicio/fin del intervalo horario no declarada; fuentes upstream con licencias propias
+    precipitación acumulada en la hora precedente y las otras variables de la muestra instantáneas;
+    fuentes upstream con licencias propias
     (Copernicus C3S para ERA5); no mezclar con best_match sin declarar proveniencia.'
   variables:
   - temperature_2m
@@ -546,7 +547,7 @@ sources:
   status: verified
   notes: 'Lightpanda 17/11/2026: HTTP 200. Pronósticos archivados desde ~2022; corridas de 1/3/6 h
     costuradas en una serie horaria continua sin hora de emisión por valor. CC-BY-4.0 no comercial.
-    #16 difiere la muestra: la emisión explícita se demuestra con open-meteo-previous-model-runs
+    #16 difiere la muestra y usa el adelanto nominal de open-meteo-previous-model-runs
     (docs/sources/weather.md).'
   description: Archivo de pronósticos del tiempo desde 2022, con los mismos modelos y parámetros
     que la API de pronóstico vivo.
@@ -569,7 +570,7 @@ sources:
   priority: 1
   status: verified
   notes: 'Lightpanda 17/11/2026: HTTP 200. Pronóstico archivado con adelanto explícito:
-    previous_dayN = valor pronosticado N×24 h antes del tiempo válido; la mayoría de modelos desde
+    previous_dayN indica adelanto nominal N×24 h; emisión exacta desconocida; la mayoría de modelos desde
     enero de 2024 y GFS 2 m temperatura desde marzo de 2021 (declarado). CC-BY-4.0 no comercial.
     #16 selecciona muestra GFS (temperature_2m y previous_day1) dentro de train 2022.'
   description: Pronósticos de corridas anteriores alineados a adelantos fijos de 1 a 7 días para
