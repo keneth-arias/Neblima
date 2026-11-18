@@ -1,83 +1,110 @@
 {
   "schema_version": 1,
   "task": "issue-16",
-  "attempt": "attempt-03-20261117T235500Z",
-  "generated_at_utc": "2026-11-18T00:01:50+00:00",
+  "attempt": "attempt-04-20261118T001133Z",
+  "generated_at_utc": "2026-11-18T00:15:54+00:00",
   "plan_file": "configs/acquisition/weather-lima-sample-plan.json",
   "totals": {
     "resources_published": 15,
-    "published_original_bytes": 4484891,
+    "published_original_bytes": 4731512,
     "sha256_all_match": true,
-    "offline_reuse_verified": "attempt-03: batch --offline --budget-bytes 0 sobre el plan completo; 15/15 reused; network_bytes=0; exit=0",
+    "offline_reuse_verified": "attempt-04: batch --offline --budget-bytes 0 sobre el plan completo; 15/15 reused (7 ERA5 + 7 GFS + 1 NOAA Lima); network_bytes=0; exit=0",
+    "selected_totals_note": "La selección vigente es 14 Open-Meteo (65 867 ERA5 + 36 470 GFS = 102 337) + 1 NOAA Lima/Jorge Chávez (4 629 175) = 4 731 512 bytes. El objeto NOAA Pisco de attempt-03 NO forma parte de la selección ni de estos totales.",
+    "all_attempts_artifacts": {
+      "resources": 16,
+      "original_bytes": 9114066,
+      "composition": "14 Open-Meteo (102 337) + NOAA Lima 84628099999 seleccionada (4 629 175) + NOAA Pisco 84691099999 rechazada preservada (4 382 554)",
+      "note": "Contabilidad separada de la selección vigente: el artefacto Pisco se conserva como evidencia histórica rechazada bajo data/raw/ y no se cuenta dos veces."
+    },
     "noaa_isd": {
-      "status": "acquired",
-      "resource_url": "https://noaa-global-hourly-pds.s3.amazonaws.com/2015/84691099999.csv",
-      "final_url": "https://noaa-global-hourly-pds.s3.amazonaws.com/2015/84691099999.csv",
+      "status": "acquired_selected_lima",
+      "resource_url": "https://noaa-global-hourly-pds.s3.amazonaws.com/2015/84628099999.csv",
+      "final_url": "https://noaa-global-hourly-pds.s3.amazonaws.com/2015/84628099999.csv",
       "http_status": 200,
       "attempts": 1,
-      "size_bytes": 4382554,
-      "sha256": "6e6f79a85c70adb7669be1ed6d2f0ae5a1cf2995358b6268fd0867307e37832e",
-      "manifest": "data/raw/noaa-isd-global-hourly/6e6f79a85c70adb7669be1ed6d2f0ae5a1cf2995358b6268fd0867307e37832e/manifest.json",
-      "acquired_at": "2026-11-17T23:59:25.944200Z",
-      "network_bytes_reported_by_batch": 4448090,
-      "network_bytes_note": "El contador del lote reporta 4448090; el original en disco mide exactamente 4382554 (igual al Content-Length del HEAD previo); la diferencia de 65536 no se interpreta.",
+      "size_bytes": 4629175,
+      "sha256": "1e5381f2fce145f949456e5749345c38ba6c52db357f1a554448c86c86d9b92b",
+      "manifest": "data/raw/noaa-isd-global-hourly/1e5381f2fce145f949456e5749345c38ba6c52db357f1a554448c86c86d9b92b/manifest.json",
+      "acquired_at": "2026-11-18T00:14:08.514546Z",
+      "head_evidence_before_transfer": {
+        "verified_by": "manager",
+        "http_status": 200,
+        "content_length_bytes": 4629175,
+        "last_modified_utc": "2023-07-30T08:50:30Z",
+        "note": "HEAD previo registrado en la especificación de attempt-04; este intento no repitió la consulta y ejecutó una única transferencia en vivo."
+      },
+      "network_bytes_reported_by_batch": 4694711,
+      "network_bytes_note": "El contador del lote reporta 4694711 = 4629175 del original en disco (igual al Content-Length del HEAD previo) + 65536 del prefijo de la consulta Range inicial (bytes=0-65535) que el canal http_file consume del mismo presupuesto antes del GET completo; diferencia ahora explicable por el código del canal (probe + transferencia comparten presupuesto) y no por pérdida de datos.",
       "station_identity_from_content": {
-        "STATION": "84691099999",
-        "NAME": "PISCO INTERNATIONAL, PE",
-        "LATITUDE": -13.744864,
-        "LONGITUDE": -76.220284,
-        "ELEVATION": 11.88,
+        "STATION": "84628099999",
+        "NAME": "JORGE CHAVEZ INTERNATIONAL, PE",
+        "LATITUDE": -12.021889,
+        "LONGITUDE": -77.114319,
+        "ELEVATION": 34.44,
         "SOURCE": "4",
         "CALL_SIGN": "99999",
         "QUALITY_CONTROL": "V020",
         "constant_across_all_rows": true,
-        "identity_note": "La estación real del archivo NO es Jorge Chávez/Callao (candidato conjeturado antes de adquirir): es el aeropuerto internacional de Pisco, a 191–223 km de las siete estaciones de aire de Lima."
+        "identity_note": "Identidad leída desde el propio CSV descargado (no inferida del ID): aeropuerto internacional Jorge Chávez, Callao, Lima; coordenadas declaradas por el archivo (-12.021889, -77.114319) plausibles para Lima/Callao; distancias a las siete estaciones de aire de Lima de 3,6 a 26,5 km (haversine aproximado)."
       },
       "content_profile": {
-        "data_rows": 11408,
+        "data_rows": 11441,
         "columns": 33,
         "date_first": "2015-01-01T00:00:00",
         "date_last": "2015-12-31T23:00:00",
-        "date_format": "ISO-8601 sin sufijo Z en las 11408 filas; UTC según documentación oficial del producto (declarado)",
-        "distinct_instants": 8798,
-        "duplicated_instants": 2610,
-        "duplicated_extra_rows": 2610,
-        "duplicates_cause_observed": "cada instante duplicado aparece exactamente dos veces (pares FM-12/FM-15 simultáneos); no se elimina ninguna fila",
+        "date_format": "ISO-8601 sin sufijo Z en las 11441 filas; UTC según documentación oficial del producto (declarado)",
+        "distinct_instants": 8803,
+        "duplicated_instants": 2638,
+        "duplicated_extra_rows": 2638,
+        "duplicates_cause_observed": "cada instante duplicado aparece exactamente dos veces (2622 pares FM-12/FM-15 y 16 pares FM-15/FM-16 simultáneos); no se elimina ninguna fila",
+        "off_hour_instants_whole_year": {
+          "rows": 135,
+          "report_type_distribution": {
+            "FM-15": 20,
+            "FM-16": 115
+          },
+          "note": "instantes con minuto/segundo distinto de cero (reportes SPECI FM-16 y algunos FM-15); se reportan sin reasignarlos a la hora"
+        },
         "report_type_distribution": {
-          "FM-12": 2642,
-          "FM-15": 8480,
-          "FM-16": 286
+          "FM-12": 2652,
+          "FM-15": 8674,
+          "FM-16": 115
         },
         "coded_field_structure": {
+          "counting_rule": "all_nines_tokens cuenta tokens compuestos solo por dígitos 9 (sin signo); los marcadores con signo '+9999' se reportan aparte en TMP/DEW",
           "WND": {
             "subfields_per_row": 5,
-            "all_nines_tokens": 1998,
-            "rows_first_subfield_all_nines": 980
+            "all_nines_tokens": 636,
+            "rows_first_subfield_all_nines": 312
           },
           "CIG": {
             "subfields_per_row": 4,
-            "all_nines_tokens": 21408,
-            "rows_first_subfield_all_nines": 5245
+            "all_nines_tokens": 16483,
+            "rows_first_subfield_all_nines": 2728
           },
           "VIS": {
             "subfields_per_row": 4,
-            "all_nines_tokens": 28438,
-            "rows_first_subfield_all_nines": 2811
+            "all_nines_tokens": 25756,
+            "rows_first_subfield_all_nines": 1437
           },
           "TMP": {
             "subfields_per_row": 2,
-            "all_nines_tokens": 22,
-            "rows_first_subfield_all_nines": 11
+            "all_nines_tokens": 7,
+            "rows_first_subfield_all_nines": 0,
+            "rows_first_subfield_plus_9999": 7,
+            "note": "los 7 tokens estrictamente numéricos son el subcampo de calidad '9' de las mismas 7 filas cuyo primer subcampo es '+9999' (marcador usual de ausente con signo); la regla estricta solo-dígitos no cuenta '+9999'"
           },
           "DEW": {
             "subfields_per_row": 2,
-            "all_nines_tokens": 60,
-            "rows_first_subfield_all_nines": 30
+            "all_nines_tokens": 12,
+            "rows_first_subfield_all_nines": 0,
+            "rows_first_subfield_plus_9999": 12,
+            "note": "los 12 tokens estrictamente numéricos son el subcampo de calidad '9' de las mismas 12 filas con primer subcampo '+9999'"
           },
           "SLP": {
             "subfields_per_row": 2,
-            "all_nines_tokens": 17576,
-            "rows_first_subfield_all_nines": 8788
+            "all_nines_tokens": 17620,
+            "rows_first_subfield_all_nines": 8810
           }
         },
         "scientific_decoding": "no realizado: la documentación de formato ISD revisable no pudo cargarse (BadContentEncoding) y la evidencia oficial citada no declara escalas/unidades por subcampo; se reportan solo conteos estructurales y tokens compuestos solo por dígitos 9 (marcadores usuales de ausente), sin afirmar validez ni unidades",
@@ -89,31 +116,81 @@
         ]
       },
       "window_168h_2015_04_16_18_to_04_23_17": {
-        "rows_in_window": 202,
-        "distinct_hours": 155,
+        "rows_in_window": 234,
+        "distinct_instants": 179,
+        "distinct_on_hour_instants": 167,
+        "distinct_off_hour_instants": 12,
+        "off_hour_note": "los 12 instantes fuera de hora (minuto distinto de cero) son reportes SPECI FM-16; se reportan sin reasignarlos a la hora",
         "report_type_distribution": {
-          "FM-12": 54,
-          "FM-15": 144,
-          "FM-16": 4
+          "FM-12": 55,
+          "FM-15": 167,
+          "FM-16": 12
         },
-        "note": "la cobertura horaria del intervalo de la muestra no es continua: 155 horas distintas con múltiples reportes por hora"
+        "note": "la cobertura horaria del intervalo de la muestra no es continua ni exclusivamente horaria: 167 instantes en punto (de los 168 posibles) más 12 instantes fuera de hora, con múltiples reportes por hora"
       },
       "distances_to_senamhi_km_haversine": {
         "method": "haversine sobre lat/lon geográficas con R=6371.0088 km; aproximada; CRS de las coordenadas SENAMHI no declarado en el original, equivalencia CRS sin resolver; NO implica equidistancia operativa ni intercambiabilidad de estaciones",
         "station_pair": {
           "noaa": {
-            "station": "84691099999",
-            "latitude": -13.744864,
-            "longitude": -76.220284
+            "station": "84628099999",
+            "latitude": -12.021889,
+            "longitude": -77.114319
           }
         },
-        "CAMPO_DE_MARTE": 206.4,
-        "CARABAYLLO": 223.1,
-        "SANTA_ANITA": 206.0,
-        "SAN_BORJA": 201.0,
-        "SAN_JUAN_DE_LURIGANCHO": 213.5,
-        "SAN_MARTIN_DE_PORRES": 214.6,
-        "VILLA_MARIA_DEL_TRIUNFO": 191.2
+        "CAMPO_DE_MARTE": 9.4,
+        "CARABAYLLO": 15.9,
+        "SANTA_ANITA": 15.7,
+        "SAN_BORJA": 15.1,
+        "SAN_JUAN_DE_LURIGANCHO": 13.3,
+        "SAN_MARTIN_DE_PORRES": 3.6,
+        "VILLA_MARIA_DEL_TRIUNFO": 26.5
+      },
+      "rejected_candidates": {
+        "pisco_84691099999_attempt03": {
+          "status": "rejected_wrong_identity",
+          "resource_url": "https://noaa-global-hourly-pds.s3.amazonaws.com/2015/84691099999.csv",
+          "final_url": "https://noaa-global-hourly-pds.s3.amazonaws.com/2015/84691099999.csv",
+          "http_status": 200,
+          "attempts": 1,
+          "size_bytes": 4382554,
+          "sha256": "6e6f79a85c70adb7669be1ed6d2f0ae5a1cf2995358b6268fd0867307e37832e",
+          "manifest": "data/raw/noaa-isd-global-hourly/6e6f79a85c70adb7669be1ed6d2f0ae5a1cf2995358b6268fd0867307e37832e/manifest.json",
+          "acquired_at": "2026-11-17T23:59:25.944200Z",
+          "network_bytes_reported_by_batch": 4448090,
+          "identity_from_content": {
+            "STATION": "84691099999",
+            "NAME": "PISCO INTERNATIONAL, PE",
+            "LATITUDE": -13.744864,
+            "LONGITUDE": -76.220284,
+            "ELEVATION": 11.88
+          },
+          "rejection_reason": "El propio CSV adquirido en attempt-03 identifica PISCO INTERNATIONAL, PE, a 191,2–223,1 km (haversine aproximado) de las siete estaciones de aire de Lima; no puede ser la muestra de medición de Lima ni mantenerse etiquetado region: lima en el plan vigente.",
+          "disposition": "Original y manifiesto preservados sin cambios bajo data/raw/ como evidencia histórica rechazada; excluido de la selección vigente y de los totales publicados; contabilizado por separado en all_attempts_artifacts.",
+          "content_profile": {
+            "data_rows": 11408,
+            "columns": 33,
+            "date_first": "2015-01-01T00:00:00",
+            "date_last": "2015-12-31T23:00:00",
+            "distinct_instants": 8798,
+            "duplicated_extra_rows": 2610,
+            "report_type_distribution": {
+              "FM-12": 2642,
+              "FM-15": 8480,
+              "FM-16": 286
+            },
+            "window_168h_rows": 202,
+            "window_168h_distinct_instants": 155,
+            "distances_to_senamhi_km_haversine": {
+              "CAMPO_DE_MARTE": 206.4,
+              "CARABAYLLO": 223.1,
+              "SANTA_ANITA": 206.0,
+              "SAN_BORJA": 201.0,
+              "SAN_JUAN_DE_LURIGANCHO": 213.5,
+              "SAN_MARTIN_DE_PORRES": 214.6,
+              "VILLA_MARIA_DEL_TRIUNFO": 191.2
+            }
+          }
+        }
       },
       "attempt_history": {
         "initial_ncei_route": {
@@ -129,6 +206,12 @@
             "etag": "\"1776345dd1a99dfe8300e11bdf803a1b\"",
             "last_modified_utc": "2023-07-30T08:45:24Z"
           }
+        },
+        "attempt04_correction": {
+          "scope": "Reemplazo de la selección NOAA Pisco (84691099999, rechazada por identidad desde contenido) por la estación oficial Lima/Jorge Chávez 84628099999; sin solicitudes Open-Meteo ni nuevas consultas Pisco.",
+          "head_before_transfer": "HTTP 200; Content-Length 4629175; Last-Modified 2023-07-30T08:50:30Z (verificado por el gerente; este intento no repitió la consulta).",
+          "transfer": "1 dry-run sin red y 1 batch en vivo (HTTP 200, attempts 1, network_bytes 4694711); reutilización sin red del plan completo 15/15.",
+          "verification": "Identidad Lima/Jorge Chávez confirmada leyendo el CSV descargado antes de seleccionar; hash y tamaño reconciliados desde disco."
         }
       }
     }
@@ -244,32 +327,38 @@
     },
     "noaa-isd-global-hourly": {
       "resource_count": 1,
-      "published_bytes": 4382554,
+      "published_bytes": 4629175,
       "all_sha256_match": true,
-      "resource_url": "https://noaa-global-hourly-pds.s3.amazonaws.com/2015/84691099999.csv",
+      "resource_url": "https://noaa-global-hourly-pds.s3.amazonaws.com/2015/84628099999.csv",
       "source_page_url": "https://www.ncei.noaa.gov/products/land-based-station/integrated-surface-database",
-      "sha256": "6e6f79a85c70adb7669be1ed6d2f0ae5a1cf2995358b6268fd0867307e37832e",
-      "manifest": "data/raw/noaa-isd-global-hourly/6e6f79a85c70adb7669be1ed6d2f0ae5a1cf2995358b6268fd0867307e37832e/manifest.json",
+      "sha256": "1e5381f2fce145f949456e5749345c38ba6c52db357f1a554448c86c86d9b92b",
+      "manifest": "data/raw/noaa-isd-global-hourly/1e5381f2fce145f949456e5749345c38ba6c52db357f1a554448c86c86d9b92b/manifest.json",
       "request_window_utc": [
         "2015-01-01T00:00:00",
         "2015-12-31T23:00:00"
       ],
       "data_class": "ground_measured (estación de superficie; identidad y contenido conciliados; semántica de subcampos codificados sin decodificar)",
       "station_identity_from_content": {
-        "STATION": "84691099999",
-        "NAME": "PISCO INTERNATIONAL, PE",
-        "LATITUDE": -13.744864,
-        "LONGITUDE": -76.220284,
-        "ELEVATION": 11.88
+        "STATION": "84628099999",
+        "NAME": "JORGE CHAVEZ INTERNATIONAL, PE",
+        "LATITUDE": -12.021889,
+        "LONGITUDE": -77.114319,
+        "ELEVATION": 34.44
       },
       "distances_to_senamhi_km_haversine": {
-        "CAMPO_DE_MARTE": 206.4,
-        "CARABAYLLO": 223.1,
-        "SANTA_ANITA": 206.0,
-        "SAN_BORJA": 201.0,
-        "SAN_JUAN_DE_LURIGANCHO": 213.5,
-        "SAN_MARTIN_DE_PORRES": 214.6,
-        "VILLA_MARIA_DEL_TRIUNFO": 191.2
+        "CAMPO_DE_MARTE": 9.4,
+        "CARABAYLLO": 15.9,
+        "SANTA_ANITA": 15.7,
+        "SAN_BORJA": 15.1,
+        "SAN_JUAN_DE_LURIGANCHO": 13.3,
+        "SAN_MARTIN_DE_PORRES": 3.6,
+        "VILLA_MARIA_DEL_TRIUNFO": 26.5
+      },
+      "rejected_artifact_not_counted": {
+        "station": "84691099999 PISCO INTERNATIONAL, PE",
+        "size_bytes": 4382554,
+        "sha256": "6e6f79a85c70adb7669be1ed6d2f0ae5a1cf2995358b6268fd0867307e37832e",
+        "detail": "Preservado como evidencia histórica rechazada; ver totals.noaa_isd.rejected_candidates."
       }
     }
   },

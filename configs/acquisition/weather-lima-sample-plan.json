@@ -270,7 +270,7 @@
     {
       "spec": {
         "source_id": "noaa-isd-global-hourly",
-        "resource_url": "https://noaa-global-hourly-pds.s3.amazonaws.com/2015/84691099999.csv",
+        "resource_url": "https://noaa-global-hourly-pds.s3.amazonaws.com/2015/84628099999.csv",
         "source_page_url": "https://www.ncei.noaa.gov/products/land-based-station/integrated-surface-database",
         "method": "http_file",
         "format": "csv",
@@ -279,7 +279,7 @@
       "region": "lima",
       "start": "2015-01-01",
       "end": "2015-12-31",
-      "expected_size_bytes": 4382554
+      "expected_size_bytes": 4629175
     }
   ]
 }

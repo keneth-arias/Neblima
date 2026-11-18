@@ -480,7 +480,7 @@
       "title": "Global Hourly - Integrated Surface Database (ISD)",
       "outcome": "accessible",
       "reason": null,
-      "next_action": "#16: objeto NODD directo adquirido (attempt-03: HTTP 200, 4 382 554 bytes, SHA-256 verificado) tras el 301/techo inicial; identidad desde contenido: PISCO INTERNATIONAL, PE (191–223 km de las siete estaciones de Lima); licencia sigue sin evidencia documental."
+      "next_action": "#16: selección vigente = objeto NODD directo de Lima 2015/84628099999.csv (attempt-04: HTTP 200, 4 629 175 bytes, SHA-256 1e5381f2…d9b92b; identidad «JORGE CHAVEZ INTERNATIONAL, PE» verificada leyendo el CSV descargado; 3,6–26,5 km de las siete estaciones de aire). El objeto Pisco 84691099999 de attempt-03 quedó rechazado por identidad desde contenido y preservado como historia. Licencia sigue sin evidencia documental."
     }
   ]
 }

@@ -1,10 +1,15 @@
 # #16 · Verificación de fuentes meteorológicas y muestra por estación
 
 Estado: **completada**. Muestra real de reanálisis (ERA5), pronóstico archivado (GFS
-`previous_day1`) y medición de estación (NOAA ISD Global Hourly, objeto NODD directo) adquirida,
-verificada y reconciliada: 15 recursos, 4 484 891 bytes publicados. La identidad de la estación
-NOAA, leída desde su contenido, es «PISCO INTERNATIONAL, PE» (84691099999), a 191–223 km de las
-siete estaciones de aire de Lima: evidencia real de la clase medida, no un proxy de Lima.
+`previous_day1`) y medición de estación en Lima (NOAA ISD Global Hourly,
+**84628099999 «JORGE CHAVEZ INTERNATIONAL, PE»**, objeto NODD directo) adquirida, verificada y
+reconciliada: 15 recursos, 4 731 512 bytes publicados. La identidad de la estación NOAA
+seleccionada se verificó leyendo su propio CSV descargado (no desde su ID): aeropuerto
+internacional Jorge Chávez, Callao, a 3,6–26,5 km de las siete estaciones de aire de Lima
+(haversine aproximado). El objeto adquirido en attempt-03 (`2015/84691099999.csv`) resultó ser,
+desde su propio contenido, «PISCO INTERNATIONAL, PE» (a 191–223 km): quedó **rechazado** como
+muestra de Lima y se conserva sin cambios como evidencia histórica bajo `data/raw/` (16 recursos
+y 9 114 066 bytes acumulados en todos los intentos, contados por separado de la selección).
 Evidencia: [docs/sources/weather.md](../sources/weather.md),
 [reports/acquisition/weather.md](../reports/acquisition/weather.md),
 [metadata/weather-acquisition.json](../metadata/weather-acquisition.json). Este archivo se cierra
@@ -105,21 +110,30 @@ las siete originales de las estaciones (sección anterior), sin redondeos.
    dentro de `train` (todas las marcas válidas < 2022-03-16 08:00 UTC); adelanto explícito
    previous_day1 (emisión = válido − 24 h). `max_bytes` 65 536 por recurso; tamaño esperado 8 000.
 3. Medición de estación — `noaa-isd-global-hourly`:
-   `https://noaa-global-hourly-pds.s3.amazonaws.com/2015/84691099999.csv`
+   `https://noaa-global-hourly-pds.s3.amazonaws.com/2015/84628099999.csv`
    (canal http_file con `source_page_url` = página del producto ISD; la ruta de acceso NCEI
-   `/data/global-hourly/access/` respondía 301 hacia este mismo objeto NODD — historia
-   preservada). Un archivo, un año, una estación. Tras el bloqueo inicial de attempt-02 por
-   techo local (4 194 304), el gerente autorizó **`max_bytes` 5 000 000** (aún muy por debajo
-   del techo del asunto de 128 MiB) con tamaño esperado **4 382 554**.
-   **Resultado (17/11/2026, attempt-03): ADQUIRIDA.** Transferencia única HTTP 200 sin
-   redirección, original de exactamente 4 382 554 bytes, SHA-256
-   `6e6f79a85c70adb7669be1ed6d2f0ae5a1cf2995358b6268fd0867307e37832e` verificado. Identidad
-   desde contenido: estación 84691099999 «PISCO INTERNATIONAL, PE» (-13.744864, -76.220284,
-   11,88 m), **no** una estación de Lima; distancias haversine aproximadas a las siete
-   estaciones de aire: 191,2–223,1 km (CRS SENAMHI no declarado; sin mapeo ni equivalencia).
-   Estructura conciliada (11 408 filas; 8 798 instantes distintos + 2 610 duplicados por pares
-   FM-12/FM-15; REPORT_TYPE FM-12 2 642, FM-15 8 480, FM-16 286; subcampos WND 5, CIG/VIS 4,
-   TMP/DEW/SLP 2) sin decodificar unidades ni escalas. Detalle:
+   `/data/global-hourly/access/` respondía 301 hacia el mismo canal NODD — historia
+   preservada). Un archivo, un año, una estación. Techo autorizado por el gerente:
+   **`max_bytes` 5 000 000** (muy por debajo del techo del asunto de 128 MiB) con tamaño
+   esperado **4 629 175** (Content-Length del HEAD previo del gerente).
+   **Historia (attempt-03, rechazada):** el objeto `2015/84691099999.csv` se transfirió con
+   éxito (HTTP 200, 4 382 554 bytes, SHA-256
+   `6e6f79a85c70adb7669be1ed6d2f0ae5a1cf2995358b6268fd0867307e37832e`), pero la lectura de su
+   propio contenido identificó «PISCO INTERNATIONAL, PE» (-13.744864, -76.220284, 11,88 m),
+   a 191,2–223,1 km de las siete estaciones de aire: **rechazado por identidad desde
+   contenido**, preservado sin cambios bajo `data/raw/` y excluido de la selección y de los
+   totales publicados (contado por separado en la contabilidad de todos los intentos).
+   **Resultado vigente (18/11/2026, attempt-04): SELECCIONADA LIMA.** Transferencia única
+   HTTP 200 sin redirección, original de exactamente 4 629 175 bytes, SHA-256
+   `1e5381f2fce145f949456e5749345c38ba6c52db357f1a554448c86c86d9b92b` verificado; la selección
+   procedió solo tras leer el CSV descargado: estación 84628099999 «JORGE CHAVEZ
+   INTERNATIONAL, PE» (-12.021889, -77.114319, 34,44 m), distancias haversine aproximadas a las
+   siete estaciones de aire: **3,6–26,5 km** (CRS SENAMHI no declarado; sin mapeo ni
+   equivalencia). Estructura conciliada (11 441 filas; 8 803 instantes distintos + 2 638
+   duplicados por pares FM-12/FM-15 y FM-15/FM-16; REPORT_TYPE FM-12 2 652, FM-15 8 674,
+   FM-16 115; subcampos WND 5, CIG/VIS 4, TMP/DEW/SLP 2; 135 filas del año fuera de hora
+   reportadas sin reasignar) sin decodificar unidades ni escalas; en la semana de la muestra la
+   cobertura no es continua (167 instantes en punto de 168 posibles más 12 SPECI). Detalle:
    `reports/acquisition/weather.md`.
 
 Límites de ejecución: 15 recursos ≤ 32 autorizados; presupuesto total del lote
@@ -150,13 +164,26 @@ uv run --locked airaware acquire batch --plan configs/acquisition/weather-lima-s
 uv run --locked airaware acquire batch --plan configs/acquisition/weather-lima-sample-plan.json \
   --source noaa-isd-global-hourly --budget-bytes 5000000 \
   --allow-host noaa-global-hourly-pds.s3.amazonaws.com --workers 1 --deadline-seconds 60
-                                              # EJECUTADO en attempt-03: exit 0; HTTP 200; 4382554 bytes en disco
+                                              # EJECUTADO en attempt-03 (objeto Pisco, luego RECHAZADO por identidad
+                                              # desde contenido): exit 0; HTTP 200; 4382554 bytes en disco
 uv run --locked airaware acquire batch --plan configs/acquisition/weather-lima-sample-plan.json \
   --source open-meteo-historical-weather --offline --budget-bytes 0   # exit 0, 7/7 reused, network 0
 uv run --locked airaware acquire batch --plan configs/acquisition/weather-lima-sample-plan.json \
   --source open-meteo-previous-model-runs --offline --budget-bytes 0  # exit 0, 7/7 reused, network 0
 uv run --locked airaware acquire batch --plan configs/acquisition/weather-lima-sample-plan.json \
   --offline --budget-bytes 0                  # EJECUTADO en attempt-03: exit 0, 15/15 reused, network 0
+                                              # (plan de entonces, con Pisco aún seleccionado)
+uv run --locked airaware acquire batch --plan configs/acquisition/weather-lima-sample-plan.json \
+  --source noaa-isd-global-hourly --dry-run   # EJECUTADO en attempt-04 (URL Lima 84628099999, esperado 4629175): exit 0
+uv run --locked airaware acquire batch --plan configs/acquisition/weather-lima-sample-plan.json \
+  --source noaa-isd-global-hourly --budget-bytes 5000000 \
+  --allow-host noaa-global-hourly-pds.s3.amazonaws.com --workers 1 --deadline-seconds 60
+                                              # EJECUTADO en attempt-04: exit 0; HTTP 200; attempts 1; única
+                                              # transferencia en vivo del intento; network_bytes 4694711
+                                              # (= 4629175 original + 65536 prefijo Range); identidad Lima
+                                              # verificada leyendo el CSV antes de seleccionar
+uv run --locked airaware acquire batch --plan configs/acquisition/weather-lima-sample-plan.json \
+  --offline --budget-bytes 0                  # EJECUTADO en attempt-04 sobre el plan vigente: exit 0, 15/15 reused, network 0
 make check && make build && make audit        # EJECUTADOS al cierre (ver registro de verificación)
 git diff --check                              # EJECUTADO al cierre (sin salidas)
 ```
@@ -195,16 +222,17 @@ documentación oficial revisada. Los archivos obtenidos por Lightpanda se regist
 - [x] R2 Muestra de siete estaciones: contenido real adquirido e inspeccionado para las siete
       coordenadas con tres productos elegibles (ERA5 reanálisis, GFS `previous_day1` y medición
       NOAA ISD), con reconciliación por estación y celda (`reports/acquisition/weather.md`,
-      `metadata/weather-acquisition.json`): 15 recursos, 4 484 891 bytes, SHA-256 15/15, 0
-      faltantes en las variables Open-Meteo muestreadas. La estación NOAA adquirida es Pisco
-      Internacional (identidad desde contenido), a 191–223 km de las estaciones de Lima: se
-      documenta como limitación, no como proxy.
+      `metadata/weather-acquisition.json`): 15 recursos, 4 731 512 bytes, SHA-256 15/15, 0
+      faltantes en las variables Open-Meteo muestreadas. La estación NOAA seleccionada es
+      «JORGE CHAVEZ INTERNATIONAL, PE» (84628099999), verificada desde su propio CSV, a
+      3,6–26,5 km de las estaciones de aire; el objeto Pisco de attempt-03 quedó rechazado por
+      identidad desde contenido y preservado como historia (nunca como selección de Lima).
 - [x] R3 Semántica temporal: observación/validez, emisión = válido − 24 h (previous_day1) y
       disponibilidad declarada (~5 días ERA5) documentadas por producto; `DATE` ISD en formato
-      ISO-8601 sin sufijo Z (UTC declarado) con 8 798 instantes distintos y 2 610 duplicados
-      simultáneos conciliados; `acquired_at` de manifiestos nunca se usa como `available_at`;
-      posición del intervalo horario y `available_at` horario quedan explícitos como
-      desconocidos.
+      ISO-8601 sin sufijo Z (UTC declarado) con 8 803 instantes distintos y 2 638 duplicados
+      simultáneos conciliados (más 135 filas del año fuera de hora reportadas sin reasignar);
+      `acquired_at` de manifiestos nunca se usa como `available_at`; posición del intervalo
+      horario y `available_at` horario quedan explícitos como desconocidos.
 - [x] R4 Procedencia y derechos: originales intactos bajo `data/raw/` (fuera de Git),
       SHA-256 recalculado 15/15 coincidentes, manifiestos con HTTP 200 y `acquired_at`, comandos
       y exit codes registrados; atribución citada de los términos oficiales sin derechos
@@ -230,23 +258,29 @@ documentación oficial revisada. Los archivos obtenidos por Lightpanda se regist
 - **Rama**: `feat/issue-16-weather-sample`; sin push, PR ni merge.
 - **Entregado**: comparación fechada de 10 candidatos (`docs/sources/weather.md`); catálogo
   actualizado y validado (40 fuentes; `noaa-isd-global-hourly` en estado `downloaded` con la URL
-  NODD directa y la evidencia Lightpanda conservada); plan de adquisición acotado de 15 recursos
-  (techo NOAA autorizado 5 000 000 bytes; presupuesto del lote 6 376 256); muestra real
-  verificada de 15 recursos (4 484 891 bytes: 65 867 ERA5 + 36 470 GFS + 4 382 554 NOAA) con
-  reconciliación por estación, celda y corte de 168 h, identidad NOAA desde contenido (Pisco
-  Internacional, no Lima) y distancias haversine aproximadas; bloqueo inicial NOAA (301 + techo
-  local) preservado como historia; recibo `metadata/weather-acquisition.json`; informe
-  `reports/acquisition/weather.md`; prueba de catálogo sin cotas numéricas duras.
+  NODD directa de Lima y la evidencia Lightpanda conservada); plan de adquisición acotado de 15
+  recursos (techo NOAA autorizado 5 000 000 bytes; presupuesto del lote 6 376 256); muestra real
+  verificada de 15 recursos (4 731 512 bytes: 65 867 ERA5 + 36 470 GFS + 4 629 175 NOAA Lima)
+  con reconciliación por estación, celda y corte de 168 h, identidad NOAA desde el propio CSV
+  (Jorge Chávez/Lima) y distancias haversine aproximadas (3,6–26,5 km); corrección attempt-04
+  tras el rechazo por contenido del objeto Pisco de attempt-03 (preservado sin cambios como
+  historia: 16 recursos y 9 114 066 bytes acumulados en todos los intentos, contados por
+  separado); bloqueo inicial NOAA (301 + techo local) preservado como historia; recibo
+  `metadata/weather-acquisition.json`; informe `reports/acquisition/weather.md`; prueba de
+  catálogo sin cotas numéricas duras.
 - **Clasificación para #17**: reanálisis ERA5 vía Open-Meteo — «investigación retrospectiva»
   hasta decidir disponibilidad operativa y derechos de integración; pronóstico archivado GFS
   `previous_day1` — con emisión explícita, misma condición de decisión; medición de estación —
-  ruta ISD por estación-año demostrada y adquirida, pero la estación del objeto muestreado es
-  Pisco Internacional: un proxy meteorológico de Lima requeriría identificar y autorizar otro ID
-  de estación ISD; SENAMHI GBON — diferida (CSV monolítico nacional); OEFA — bloqueada por
-  reloj, unidades y calidad sin resolver.
-- **No entregado (explícito)**: ninguna observación medida **en Lima** (la ISD adquirida está en
-  Pisco); unidades/escalas de los subcampos codificados ISD sin decodificar; contabilidad exacta
-  de bytes de red del intento Open-Meteo previo no recuperable y diferencia de 65 536 bytes del
-  contador NOAA registrada sin interpretar.
+  ruta ISD por estación-año demostrada con una estación real de Lima/Callao (aeropuerto Jorge
+  Chávez, 3,6–26,5 km de las estaciones de aire), pero **sin equivalencia automática**: su
+  cobertura horaria en la semana de la muestra no es continua (167 instantes en punto de 168
+  posibles, más SPECI fuera de hora), no es una estación de aire y la decisión de integrarla
+  requiere evidencia de disponibilidad y derechos en #17; SENAMHI GBON — diferida (CSV
+  monolítico nacional); OEFA — bloqueada por reloj, unidades y calidad sin resolver.
+- **No entregado (explícito)**: unidades/escalas de los subcampos codificados ISD sin
+  decodificar; contabilidad exacta de bytes de red del intento Open-Meteo previo no recuperable
+  (la diferencia de 65 536 bytes de los contadores NOAA quedó explicada en attempt-04 desde el
+  código del canal); correspondencia entre la estación ISD de aeropuerto y las estaciones de
+  aire sin resolver (fuera del alcance de #16).
 - **Rutas protegidas**: `.worktrees/` y `reports/acquisition/senamhi-lima-2026-11-16.md` sin
   agregar, editar, mover ni eliminar.
