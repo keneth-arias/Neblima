@@ -11,7 +11,7 @@ import torch.distributed.checkpoint as dcp
 
 def events(path):
     for line in path.read_text().splitlines():
-        match = re.search(r'(\{".+\})$', line)
+        match = re.search(r'(\{"(?:step|restored_step)".+\})$', line)
         if match:
             yield json.loads(match[1])
 
