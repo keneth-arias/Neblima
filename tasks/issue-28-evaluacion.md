@@ -34,3 +34,5 @@ El [informe de calibración](../reports/models/calibracion-qwen.md) y la [config
 La [comparación de los cabezales en validación](../reports/models/validacion-cabezales-qwen.md) seleccionó el directo para LoRA. Los resultados por estación, horizonte y concentración alta incluyen el número de horas de estación distintas que representan los objetivos solapados.
 
 La [selección final por validación](../configs/training/lima-pm25-finalistas-v1.yaml) fijó LoRA directa, la red convolucional y las tres referencias de #25 antes de abrir prueba. La misma configuración identifica los ejemplos de mejora y error para #29.
+
+La [prueba reservada](../reports/models/prueba-reservada-lima.md) completó una ronda con los finalistas de #95 y entregó la curva por horizonte y dos ejemplos de validación para #29. El estado local conserva las predicciones pareadas y el [informe agregado](../metadata/qwen-heldout-lima.json) permite comprobar sus sumas.

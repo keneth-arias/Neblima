@@ -65,12 +65,7 @@ def pair_predictions(windows, reference, forecasts=None):
     return table.append_column("predicted", pa.array(prediction, type=pa.float64()))
 
 
-def evaluate(inputs, baselines, output, config, forecasts=None, model=None, revision=None):
-    if output.exists():
-        raise FileExistsError(output)
-    if forecasts is not None and not (model and revision):
-        raise ValueError("Indicar el modelo y la revisión de las predicciones")
-    policy = yaml.safe_load(config.read_text())
+def verified_reference(baselines, policy):
     manifest = baselines / "manifest.json"
     if sha256_file(manifest) != policy["baseline_manifest_sha256"]:
         raise ValueError("El manifiesto de #25 difiere del aprobado")
@@ -81,6 +76,16 @@ def evaluate(inputs, baselines, output, config, forecasts=None, model=None, revi
         or sha256_file(source) != baseline["files"][source.name]
     ):
         raise ValueError("La referencia difiere de la versión TimeF aprobada")
+    return baseline, source
+
+
+def evaluate(inputs, baselines, output, config, forecasts=None, model=None, revision=None):
+    if output.exists():
+        raise FileExistsError(output)
+    if forecasts is not None and not (model and revision):
+        raise ValueError("Indicar el modelo y la revisión de las predicciones")
+    policy = yaml.safe_load(config.read_text())
+    baseline, source = verified_reference(baselines, policy)
     split_info = {}
     id_sets = {}
     for split in ("train", "validation"):
