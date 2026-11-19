@@ -1,0 +1,40 @@
+version: lima-pm25-fit-v1
+input_version: lima-pm25-qwen-v1
+input_policy: configs/training.yaml
+trainer_commit: 5b1d45acbf01250c02563d43cfd556092d03e666
+model_revision: 2fc06364715b967f1860aea9cf38778875588b17
+image: ghcr.io/keneth-arias/ml-infra-qwen@sha256:32b27ab5bc82060bde95e565348dd7fd54b004015cc2dddd7df0747653fbe1d9
+training:
+  seed: 27
+  global_batch: 16
+  updates: 14837
+  schedule_steps: 14837
+  windows_seen: 237392
+  incomplete_batch_windows: 5
+  window_order_sha256: 0fd9828e50aa65880e4c2b50ee0598b99d4d6b876acac968c7b21ac78f6e80ec
+  precision: fp32
+  optimizer: AdamW
+  initial_lr: 0.0001
+  weight_decay: 0.0
+  gradient_clip_norm: 1.0
+  scheduler: cosine
+  loss: mse_history_normalized
+  save_seconds: 900
+  validate_at: final
+  max_gpu_hours_per_fit: 4
+comparisons:
+  full_heads: [direct, persistence]
+  full_head_mode: pair
+  lora_mode: single
+  lora_rank: 4
+  lora_alpha: 8
+  cpu_control: cnn
+  reference: persistence
+storage_claim: training/airaware-model-state
+selection:
+  split: validation
+  windows: 50706
+  targets: 304236
+  metric: mae_ug_m3
+  head_tiebreak: direct
+  tuning_tiebreak: lora

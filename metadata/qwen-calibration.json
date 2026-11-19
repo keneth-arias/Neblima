@@ -1,0 +1,372 @@
+{
+  "input_sha256": "945bb4c0fb6fd5490891f0986faf42aa37682f1fe05bf5700ebac3847a86f6fb",
+  "trainer": "5b1d45acbf01250c02563d43cfd556092d03e666",
+  "precision": "fp32",
+  "batch": 16,
+  "warmup": 10,
+  "measured": 50,
+  "seed": 27,
+  "image": "ghcr.io/keneth-arias/ml-infra-qwen@sha256:32b27ab5bc82060bde95e565348dd7fd54b004015cc2dddd7df0747653fbe1d9",
+  "gpu": "NVIDIA GeForce RTX 5070 Ti",
+  "window_order_sha256": "f7133bf120df85dded9edf7e77f7e851cc9fabf4abb88e12ae9672bc4db157ae",
+  "precision_probe": {
+    "batch": 16,
+    "seed": 27,
+    "input_sha256": "945bb4c0fb6fd5490891f0986faf42aa37682f1fe05bf5700ebac3847a86f6fb",
+    "fast_recurrent_kernel_available": false,
+    "fp32_inference_windows_per_second": 234.94364240261655,
+    "bf16_relative_l2": {
+      "predictions": 0.051911965012550354,
+      "loss": 0.0018347218865528703,
+      "head_gradient": 0.029257221147418022,
+      "projector_gradient": 0.08950497955083847,
+      "first_decoder_gradient": 0.10557331144809723,
+      "last_decoder_gradient": 0.025613220408558846
+    },
+    "bf16_accepted": false,
+    "bf16_inference_windows_per_second": 217.3249244576811
+  },
+  "full_tuning": [
+    {
+      "mode": "single",
+      "repetition": 1,
+      "seconds": 25.7304073300038,
+      "runs": [
+        {
+          "head": "direct",
+          "seconds": 25.571011312000337,
+          "measured_windows": 800,
+          "compute_windows_per_second": 70.87781474580046,
+          "peak_bytes_per_rank": [
+            [
+              11200162816,
+              11605639168
+            ]
+          ],
+          "checkpoint_seconds": 6.60855822400481,
+          "checkpoint_bytes": 6997199375
+        }
+      ]
+    },
+    {
+      "mode": "ddp",
+      "repetition": 1,
+      "seconds": 27.471815077995416,
+      "runs": [
+        {
+          "head": "direct",
+          "seconds": 27.314720146998297,
+          "measured_windows": 800,
+          "compute_windows_per_second": 59.06840311904844,
+          "peak_bytes_per_rank": [
+            [
+              11155698688,
+              11993612288
+            ],
+            [
+              11155698688,
+              11993612288
+            ]
+          ],
+          "checkpoint_seconds": 5.123134031004156,
+          "checkpoint_bytes": 6997246266
+        }
+      ]
+    },
+    {
+      "mode": "fsdp",
+      "repetition": 1,
+      "seconds": 38.31582428800175,
+      "runs": [
+        {
+          "head": "direct",
+          "seconds": 38.152813733002404,
+          "measured_windows": 800,
+          "compute_windows_per_second": 35.49115969646009,
+          "peak_bytes_per_rank": [
+            [
+              6940728320,
+              9101639680
+            ],
+            [
+              6940720128,
+              9101639680
+            ]
+          ],
+          "checkpoint_seconds": 5.0385744480008725,
+          "checkpoint_bytes": 6998970586
+        }
+      ]
+    },
+    {
+      "mode": "pair",
+      "repetition": 1,
+      "seconds": 30.916522696003085,
+      "runs": [
+        {
+          "head": "direct",
+          "seconds": 30.34022717399057,
+          "measured_windows": 800,
+          "compute_windows_per_second": 64.28666717682879,
+          "peak_bytes_per_rank": [
+            [
+              11200162816,
+              11605639168
+            ]
+          ],
+          "checkpoint_seconds": 9.272993050006335,
+          "checkpoint_bytes": 6997199375
+        },
+        {
+          "head": "persistence",
+          "seconds": 30.898450095002772,
+          "measured_windows": 800,
+          "compute_windows_per_second": 61.221235463141426,
+          "peak_bytes_per_rank": [
+            [
+              11200162816,
+              11605639168
+            ]
+          ],
+          "checkpoint_seconds": 9.38989905800554,
+          "checkpoint_bytes": 6997199375
+        }
+      ]
+    },
+    {
+      "mode": "ddp",
+      "repetition": 2,
+      "seconds": 28.35636036300275,
+      "runs": [
+        {
+          "head": "direct",
+          "seconds": 28.199496661007288,
+          "measured_windows": 800,
+          "compute_windows_per_second": 56.02697851126756,
+          "peak_bytes_per_rank": [
+            [
+              11155698688,
+              11993612288
+            ],
+            [
+              11155698688,
+              11993612288
+            ]
+          ],
+          "checkpoint_seconds": 5.089400095996098,
+          "checkpoint_bytes": 6997246266
+        }
+      ]
+    },
+    {
+      "mode": "fsdp",
+      "repetition": 2,
+      "seconds": 38.90789640399453,
+      "runs": [
+        {
+          "head": "direct",
+          "seconds": 38.74661872499564,
+          "measured_windows": 800,
+          "compute_windows_per_second": 35.53170173719818,
+          "peak_bytes_per_rank": [
+            [
+              6940728320,
+              9101639680
+            ],
+            [
+              6940720128,
+              9101639680
+            ]
+          ],
+          "checkpoint_seconds": 5.203536285000155,
+          "checkpoint_bytes": 6998970586
+        }
+      ]
+    },
+    {
+      "mode": "pair",
+      "repetition": 2,
+      "seconds": 30.914155090998975,
+      "runs": [
+        {
+          "head": "direct",
+          "seconds": 30.897721799992723,
+          "measured_windows": 800,
+          "compute_windows_per_second": 61.47931733959288,
+          "peak_bytes_per_rank": [
+            [
+              11200162816,
+              11605639168
+            ]
+          ],
+          "checkpoint_seconds": 9.359409725992009,
+          "checkpoint_bytes": 6997199375
+        },
+        {
+          "head": "persistence",
+          "seconds": 30.325954561994877,
+          "measured_windows": 800,
+          "compute_windows_per_second": 62.66951014655023,
+          "peak_bytes_per_rank": [
+            [
+              11200162816,
+              11605639168
+            ]
+          ],
+          "checkpoint_seconds": 9.46762553199369,
+          "checkpoint_bytes": 6997199375
+        }
+      ]
+    },
+    {
+      "mode": "single",
+      "repetition": 2,
+      "seconds": 26.76286780499504,
+      "runs": [
+        {
+          "head": "direct",
+          "seconds": 26.60993031199905,
+          "measured_windows": 800,
+          "compute_windows_per_second": 64.35606972023174,
+          "peak_bytes_per_rank": [
+            [
+              11200162816,
+              11605639168
+            ]
+          ],
+          "checkpoint_seconds": 6.373129733998212,
+          "checkpoint_bytes": 6997199375
+        }
+      ]
+    },
+    {
+      "mode": "fsdp",
+      "repetition": 3,
+      "seconds": 38.39705058999243,
+      "runs": [
+        {
+          "head": "direct",
+          "seconds": 38.2350179849891,
+          "measured_windows": 800,
+          "compute_windows_per_second": 35.59636209258441,
+          "peak_bytes_per_rank": [
+            [
+              6940728320,
+              9101639680
+            ],
+            [
+              6940720128,
+              9101639680
+            ]
+          ],
+          "checkpoint_seconds": 5.167160473996773,
+          "checkpoint_bytes": 6998970586
+        }
+      ]
+    },
+    {
+      "mode": "pair",
+      "repetition": 3,
+      "seconds": 31.2967057210044,
+      "runs": [
+        {
+          "head": "direct",
+          "seconds": 31.281518679999863,
+          "measured_windows": 800,
+          "compute_windows_per_second": 60.221611497053026,
+          "peak_bytes_per_rank": [
+            [
+              11200162816,
+              11605639168
+            ]
+          ],
+          "checkpoint_seconds": 9.823543204998714,
+          "checkpoint_bytes": 6997199375
+        },
+        {
+          "head": "persistence",
+          "seconds": 30.666436280997004,
+          "measured_windows": 800,
+          "compute_windows_per_second": 60.213631077118414,
+          "peak_bytes_per_rank": [
+            [
+              11200162816,
+              11605639168
+            ]
+          ],
+          "checkpoint_seconds": 9.22602452900901,
+          "checkpoint_bytes": 6997199375
+        }
+      ]
+    },
+    {
+      "mode": "single",
+      "repetition": 3,
+      "seconds": 27.26571165600035,
+      "runs": [
+        {
+          "head": "direct",
+          "seconds": 27.10840028199891,
+          "measured_windows": 800,
+          "compute_windows_per_second": 63.375864824783115,
+          "peak_bytes_per_rank": [
+            [
+              11200162816,
+              11605639168
+            ]
+          ],
+          "checkpoint_seconds": 6.372469196008751,
+          "checkpoint_bytes": 6997199375
+        }
+      ]
+    },
+    {
+      "mode": "ddp",
+      "repetition": 3,
+      "seconds": 28.609558547992492,
+      "runs": [
+        {
+          "head": "direct",
+          "seconds": 28.45352736899804,
+          "measured_windows": 800,
+          "compute_windows_per_second": 56.11267245785699,
+          "peak_bytes_per_rank": [
+            [
+              11155698688,
+              11993612288
+            ],
+            [
+              11155698688,
+              11993612288
+            ]
+          ],
+          "checkpoint_seconds": 4.961617977998685,
+          "checkpoint_bytes": 6997246266
+        }
+      ]
+    }
+  ],
+  "lora": [
+    {
+      "mode": "single",
+      "repetition": 1,
+      "seconds": 18.22585114800313,
+      "runs": [
+        {
+          "head": "direct",
+          "seconds": 18.223758656997234,
+          "measured_windows": 800,
+          "compute_windows_per_second": 74.63282815602743,
+          "peak_bytes_per_rank": [
+            [
+              7059513344,
+              7121928192
+            ]
+          ],
+          "checkpoint_seconds": 0.15543527399131563,
+          "checkpoint_bytes": 18606087
+        }
+      ]
+    }
+  ]
+}
