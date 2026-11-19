@@ -310,3 +310,5 @@ con las mismas entradas y una medición independiente del costo de distribuir el
 En #28, comparar primero los cabezales directo y de corrección de persistencia. Medir después LoRA híbrida y los núcleos recurrentes con controles independientes. En #88, comprobar que el escalado y la reconstrucción de PM10 respeten la máscara de cada brazo.
 
 El [plan operativo de MicroK8s y SkyPilot para #28](issue-28-cluster.md) fija el orden de preparación de insumos, uso de ambas RTX 5070 Ti, ensayo de reanudación y dimensionamiento del volumen antes del entrenamiento.
+
+Con el piloto y la imagen por digest verificados, el [plan de evaluación de #28](issue-28-evaluacion.md) ordena los cinco PR restantes. La exportación de entrenamiento y validación puede avanzar junto con la inferencia desde un punto de control. La medición de dos ajustes simultáneos decide el uso de las tarjetas. La selección en validación habilita la prueba reservada y la presentación de #29. La extensión con PM10 queda en #88.

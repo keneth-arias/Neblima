@@ -1,0 +1,26 @@
+{
+  "version": "lima-pm25-qwen-v1",
+  "config_sha256": "1749bfd8dc3c4f00a0c6bb21cf6f69972fe3d040dc383f7adb87a2e6f908eb42",
+  "timef_manifest_sha256": "29135340efb377a59d695e05fb6f8848fd0e56481123f5b54e987da77e9adc97",
+  "baseline_manifest_sha256": "b2e771196529eb2743f05aa6525127b761754317f83723d65cae87ef232baf9d",
+  "inputs": {
+    "train": {
+      "windows": 237397,
+      "npz_sha256": "945bb4c0fb6fd5490891f0986faf42aa37682f1fe05bf5700ebac3847a86f6fb",
+      "ordered_ids_sha256": "bb73b20973bf90f180a8da395714ea7e2a00e2f03abef3cae9e870fedc743369"
+    },
+    "validation": {
+      "windows": 50706,
+      "npz_sha256": "73133233fe4da6be01d65fd59db2888751b0e429c95053e7786f264516d76518",
+      "ordered_ids_sha256": "b6a605288d9333cffd7a536a68e274c4f0031ab0e4be63114d6d5639c2ef03e4"
+    }
+  },
+  "model": "persistence",
+  "revision": "lima-pm25-baselines-v1",
+  "predictions_sha256": null,
+  "split": "validation",
+  "targets": 304236,
+  "mae": 9.529107271986222,
+  "unit": "ug/m3",
+  "paired_sha256": "dca631cf2f61bf9d88fd9529c3fe03edd63a45740c27d09270c31fc2de87cb34"
+}

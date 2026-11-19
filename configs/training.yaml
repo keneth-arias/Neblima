@@ -1,0 +1,20 @@
+version: lima-pm25-qwen-v1
+timef_manifest_sha256: 29135340efb377a59d695e05fb6f8848fd0e56481123f5b54e987da77e9adc97
+baseline_manifest_sha256: b2e771196529eb2743f05aa6525127b761754317f83723d65cae87ef232baf9d
+windows:
+  train: 237397
+  validation: 50706
+npz_sha256:
+  train: 945bb4c0fb6fd5490891f0986faf42aa37682f1fe05bf5700ebac3847a86f6fb
+  validation: 73133233fe4da6be01d65fd59db2888751b0e429c95053e7786f264516d76518
+selection:
+  split: validation
+  metric: mae
+  unit: ug/m3
+  checkpoint: final_scheduled_step
+  head_tiebreak: direct
+  tuning_tiebreak: lora
+budget:
+  seed: 27
+  max_epochs: 1
+  max_gpu_hours_per_qwen_fit: 4
