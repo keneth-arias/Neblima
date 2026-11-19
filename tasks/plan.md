@@ -308,3 +308,5 @@ ordena las entregas de #27, #28 y la extensión opcional #88. Incluye un control
 con las mismas entradas y una medición independiente del costo de distribuir el entrenamiento.
 
 En #28, comparar primero los cabezales directo y de corrección de persistencia. Medir después LoRA híbrida y los núcleos recurrentes con controles independientes. En #88, comprobar que el escalado y la reconstrucción de PM10 respeten la máscara de cada brazo.
+
+El [plan operativo de MicroK8s y SkyPilot para #28](issue-28-cluster.md) fija el orden de preparación de insumos, uso de ambas RTX 5070 Ti, ensayo de reanudación y dimensionamiento del volumen antes del entrenamiento.

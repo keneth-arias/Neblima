@@ -38,6 +38,8 @@ Esta adaptación toma de TeeMoE la inicialización que reproduce una referencia 
 
 ## Distribución y medición en dos RTX 5070 Ti
 
+Ejecutar esta comparación según el [plan operativo de MicroK8s y SkyPilot](issue-28-cluster.md), con recuperación en un pod nuevo antes de programar el ajuste completo.
+
 1. Comprobar CUDA en ambos dispositivos, compatibilidad de PyTorch con `sm_120`, precisión bfloat16 y una reducción NCCL entre dos procesos. Registrar controlador, versiones, topología y memoria libre. Ejecutar una pasada hacia delante y hacia atrás con el modelo real y un microlote de una ventana antes de aumentar el tamaño.
 2. Usar `torchrun --standalone --nproc-per-node=2` con un proceso por GPU y una malla de dos dispositivos. Aplicar [FSDP2 de PyTorch](https://docs.pytorch.org/docs/stable/distributed.fsdp.fully_shard.html) con `fully_shard` a los bloques del decodificador y luego al módulo raíz. Inicializar AdamW después de envolver el modelo. Probar cómputo en bfloat16 y reducción en float32. Verificar en ambos procesos el tamaño local de los fragmentos de parámetros, gradientes y estado de AdamW tras el primer paso.
 3. Particionar los ejemplos entre procesos. Verificar por identificador que evaluación cuenta cada ventana una vez y combinar sumas de errores y conteos entre procesos. Guardar con puntos de control distribuidos los pesos y el optimizador, además del planificador de tasa de aprendizaje, paso, estado aleatorio y posición del muestreador. Comparar la siguiente actualización de una ejecución continua con otra reanudada.
