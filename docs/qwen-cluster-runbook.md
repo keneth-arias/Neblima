@@ -58,3 +58,22 @@ El estado completo de FSDP2 ocupó 6,52 GiB y tardó entre 6,1 y 7,4 s en las ej
 La evidencia mide el funcionamiento y la reanudación con un presupuesto de cuatro pasos. La comparación con calentamiento y repeticiones, la evaluación completa de #28 y la restauración desde una copia fuera de `bm` siguen pendientes.
 
 LoRA híbrida verificó 114 proyecciones en las 24 capas del decodificador. En dos GPU con DDP reanudó desde el paso 2, completó el paso 4 y guardó 18,65 MB de estado. El modelo base congelado se reconstruye desde la revisión verificada de los insumos.
+
+## Preparar la validación completa de #28
+
+La versión `qwen-pm25-v1` contiene todas las ventanas de entrenamiento y validación. Desde la raíz de AirAware, usar una carpeta nueva para conservar el piloto y verificar la referencia antes del ajuste.
+
+```bash
+inputs=data/benchmarks/qwen-pm25-v1
+release=data/timef/airaware/lima-pm25-forecast/0.1.0
+mkdir -p "$inputs"
+for split in train validation; do
+  UV_OFFLINE=true uv run --project tools/timenet-smoke --locked python \
+    tools/timenet-smoke/export_qwen_windows.py "$release" "$inputs/$split.npz" --split "$split"
+done
+UV_OFFLINE=true uv run --project tools/timenet-smoke --locked python \
+  tools/timenet-smoke/paired_forecasts.py "$inputs" data/benchmarks/lima-pm25-h24-f6-baselines \
+  "$inputs/persistence"
+```
+
+El comparador comprueba los SHA-256 fijados en [la configuración](../configs/training.yaml) y verifica identificadores, estación, origen UTC, objetivo y valor al origen por cada horizonte. Para comparar un modelo, usar otra carpeta de salida y agregar `--forecasts <archivo.npz> --model <nombre> --revision <revision>`. El NPZ requiere `window_id` (texto), `forecast_hour` (vector de 1 a 6) y `predicted` (una fila con seis valores en µg/m³ por ventana). El resultado conserva las filas emparejadas en `paired.parquet` y las sumas y el MAE en `manifest.json`. El [control de persistencia](../metadata/qwen-validation-inputs.json) registra la comprobación con datos completos.
