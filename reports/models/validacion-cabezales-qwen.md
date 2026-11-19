@@ -36,3 +36,13 @@ UV_OFFLINE=true uv run --project tools/timenet-smoke --locked python \
 ```
 
 La comparación con LoRA emplea el mismo cabezal, semilla, exposición y precisión. Su resultado en validación decidirá qué revisión de Qwen pasará a la ronda de prueba junto con la red convolucional y las referencias.
+
+## Selección final antes de la prueba
+
+La adaptación de bajo rango del cabezal directo alcanzó un MAE de **7,6424 µg/m³**, frente a **7,6839 µg/m³** con ajuste completo y **9,5291 µg/m³** con persistencia. La mejora de LoRA frente al ajuste completo fue de 0,0415 µg/m³. En las 48 013 predicciones de concentración alta, el ajuste completo obtuvo 15,6252 µg/m³ y LoRA obtuvo 15,6779 µg/m³. Se aplicó la regla de selección por MAE global fijada en #93. [Resultados de LoRA por horizonte, estación y concentración](../../metadata/qwen-validation-lora.json).
+
+Los dos ajustes del cabezal directo tuvieron el mismo lote, semilla, precisión, revisión base y SHA-256 del orden de las 237 392 ventanas. LoRA procesó 77,60 ventanas/s de cálculo y usó un máximo de 6,57 GiB en una RTX 5070 Ti. SkyPilot registró 58 min 12 s desde el inicio del trabajo hasta la exportación. Su punto de control ocupó 18,61 MB y requiere los pesos base fijados para restaurar el modelo. El ajuste completo guardó 6997,20 MB, incluidos los estados del optimizador.
+
+La [configuración de finalistas](../../configs/training/lima-pm25-finalistas-v1.yaml) identifica por SHA-256 el punto de control de LoRA, los pesos de la red convolucional y el manifiesto de las tres referencias de #25. Se fijaron 50 789 ventanas de prueba y seis objetivos por ventana. El resultado principal será el MAE frente a persistencia en µg/m³. Los desgloses por estación, horizonte y percentil 95 de entrenamiento conservarán sus denominadores y el número de horas de estación distintas.
+
+Para la demo de #29 se eligieron dos ventanas de **validación**. Se promedió en cada ventana la diferencia de error absoluto entre LoRA y persistencia a lo largo de las seis horas. Se separaron las mejoras y los empeoramientos, se ordenó cada grupo por diferencia y por identificador y se tomó su mediana inferior. La ventana de Carabayllo del 11/02/2023 a las 15:00 UTC representa 32 157 mejoras y reduce el MAE en 3,04 µg/m³. La de San Juan de Lurigancho del 31/05/2022 a la 01:00 UTC representa 18 549 empeoramientos y aumenta el MAE en 2,03 µg/m³.

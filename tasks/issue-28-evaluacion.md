@@ -32,3 +32,5 @@ AirAware agrega a cada predicción estación provisional, partición, origen UTC
 El [informe de calibración](../reports/models/calibracion-qwen.md) y la [configuración de la pasada completa](../configs/training/lima-pm25-fit-v1.yaml) fijan los recursos, la exposición y la selección para la entrega 4.
 
 La [comparación de los cabezales en validación](../reports/models/validacion-cabezales-qwen.md) seleccionó el directo para LoRA. Los resultados por estación, horizonte y concentración alta incluyen el número de horas de estación distintas que representan los objetivos solapados.
+
+La [selección final por validación](../configs/training/lima-pm25-finalistas-v1.yaml) fijó LoRA directa, la red convolucional y las tres referencias de #25 antes de abrir prueba. La misma configuración identifica los ejemplos de mejora y error para #29.

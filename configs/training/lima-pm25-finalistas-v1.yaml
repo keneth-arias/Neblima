@@ -1,0 +1,45 @@
+version: lima-pm25-finalistas-v1
+split_used_for_selection: validation
+fit_config_sha256: 68ef842fe8eb57068c886e05f1b87e4c4d80a9e1d85947e0d89c5ec999c199b1
+timef_manifest_sha256: 29135340efb377a59d695e05fb6f8848fd0e56481123f5b54e987da77e9adc97
+baseline_manifest_sha256: b2e771196529eb2743f05aa6525127b761754317f83723d65cae87ef232baf9d
+baseline_models:
+- persistence
+- daily
+- seasonal
+cnn_weights_sha256: 9ceb6dcd793f661720fd58606992581857993f66109dc3024480e164316b7315
+qwen:
+  model: qwen-direct-lora
+  checkpoint_manifest_sha256: 65e2025e8358276b9b73e82e2c93cd2c4f5bab717d5f959ca38dd748ec0087bb
+  base_model_revision: 2fc06364715b967f1860aea9cf38778875588b17
+  base_weights_sha256: 1d76cc3cfd4c15f9c749372611e5ca6e0b6f910b1fcf0551ce9157e9bfef29c1
+  trainer_commit: 5b1d45acbf01250c02563d43cfd556092d03e666
+  inference_image: ghcr.io/keneth-arias/ml-infra-qwen@sha256:32b27ab5bc82060bde95e565348dd7fd54b004015cc2dddd7df0747653fbe1d9
+  precision: fp32
+  inference_batch: 16
+test:
+  windows: 50789
+  targets: 304734
+  primary_metric: mae_ug_m3
+  reference: persistence
+  groups:
+  - forecast_hour
+  - station_key
+  - high_concentration
+  high_threshold: training_series_p95
+  overlap_count:
+  - station_key
+  - target_at
+validation_examples:
+  improvement:
+    window_id: e1508b58edc47f912847b7485f0eadfa50f065172b9a0312ca23638f9c35ba13
+    station_key: 8436576ff150fd696edbc1cd625bc97696321bc9c57b24b906d0d4a12b71bfff
+    origin_at: '2023-02-11T15:00:00+00:00'
+    delta_mae: -3.0425515747070313
+    eligible_windows: 32157
+  error:
+    window_id: 68eb339db3878f21116dac04cad27f2fbda05d90ee16970ad3afb393a055cbe5
+    station_key: 22c516fbe293a54c1cb5ddc7727d32430200221562cd01af8a40cc4b5de227d4
+    origin_at: '2022-05-31T01:00:00+00:00'
+    delta_mae: 2.0250470479329414
+    eligible_windows: 18549

@@ -1,0 +1,133 @@
+{
+  "selected_model": "qwen-direct-lora",
+  "validation_windows": 50706,
+  "predictions_sha256": "61eac5a6aaa6374e44ec366be367615e550edad8bccd98584b23781ef3250fa0",
+  "paired_sha256": "e7a78ef660d588a2582a5f5c17497a72553c3bb19e1c78c38150c5ea6a3dd7b8",
+  "checkpoint_manifest_sha256": "65e2025e8358276b9b73e82e2c93cd2c4f5bab717d5f959ca38dd748ec0087bb",
+  "full_direct_mae": 7.683894727462271,
+  "training": {
+    "window_order_sha256": "0fd9828e50aa65880e4c2b50ee0598b99d4d6b876acac968c7b21ac78f6e80ec",
+    "measured_windows": 237392,
+    "compute_windows_per_second": 77.59842656403609,
+    "peak_bytes_per_rank": [
+      [
+        7059513344,
+        7121928192
+      ]
+    ],
+    "checkpoint_seconds": 0.13479115099471528,
+    "checkpoint_bytes": 18606111
+  },
+  "gpu_job_seconds": 3491.75963640213,
+  "validation": {
+    "by_horizon": {
+      "1": {
+        "targets": 50706,
+        "station_hours": 50706,
+        "mae": 4.292024003248062,
+        "persistence_mae": 4.628862264820719,
+        "delta_mae": -0.33683826157267177
+      },
+      "2": {
+        "targets": 50706,
+        "station_hours": 50706,
+        "mae": 6.584026762121005,
+        "persistence_mae": 7.439754269711669,
+        "delta_mae": -0.8557275075906413
+      },
+      "3": {
+        "targets": 50706,
+        "station_hours": 50706,
+        "mae": 7.844859439853377,
+        "persistence_mae": 9.426874926044148,
+        "delta_mae": -1.5820154861908748
+      },
+      "4": {
+        "targets": 50706,
+        "station_hours": 50706,
+        "mae": 8.622243857242493,
+        "persistence_mae": 10.911914960754212,
+        "delta_mae": -2.2896711035116715
+      },
+      "5": {
+        "targets": 50706,
+        "station_hours": 50706,
+        "mae": 9.103418891685717,
+        "persistence_mae": 12.007137814065365,
+        "delta_mae": -2.903718922379641
+      },
+      "6": {
+        "targets": 50706,
+        "station_hours": 50706,
+        "mae": 9.408053568988047,
+        "persistence_mae": 12.760099396521172,
+        "delta_mae": -3.3520458275331864
+      }
+    },
+    "by_station": {
+      "1e58bb71f42f67bfedae1bad1e35b0aea5f84078da4f3a6f06c695aac1fb99e4": {
+        "targets": 46380,
+        "station_hours": 7785,
+        "mae": 8.95354461647791,
+        "persistence_mae": 10.657975420439943,
+        "delta_mae": -1.7044308039620852
+      },
+      "22c516fbe293a54c1cb5ddc7727d32430200221562cd01af8a40cc4b5de227d4": {
+        "targets": 46290,
+        "station_hours": 7755,
+        "mae": 9.007381024929064,
+        "persistence_mae": 11.944871462518831,
+        "delta_mae": -2.937490437589827
+      },
+      "2a0d574b25a5dc8c7f6edda9836225860faaa160763d8bea15d95646794f0bd8": {
+        "targets": 43338,
+        "station_hours": 7333,
+        "mae": 9.152112115433308,
+        "persistence_mae": 11.968892426969425,
+        "delta_mae": -2.816780311536154
+      },
+      "35170dbfe2a7135c1cecbae1e367374a284578533740ff5461d40fc764851e07": {
+        "targets": 46698,
+        "station_hours": 7838,
+        "mae": 5.840471605074714,
+        "persistence_mae": 6.827643368024393,
+        "delta_mae": -0.9871717629495311
+      },
+      "8436576ff150fd696edbc1cd625bc97696321bc9c57b24b906d0d4a12b71bfff": {
+        "targets": 44712,
+        "station_hours": 7492,
+        "mae": 8.20562172535557,
+        "persistence_mae": 11.016427804616244,
+        "delta_mae": -2.8108060792606366
+      },
+      "8e88d45c03f25f49b84c98cc4916bd60b67383961e186497f4d77570c2f75d34": {
+        "targets": 44766,
+        "station_hours": 7526,
+        "mae": 6.687383446845428,
+        "persistence_mae": 7.532498101237536,
+        "delta_mae": -0.8451146543922342
+      },
+      "90b36a172f1790cf2e37ac2063f80fd27439d4ecf871d72a20bf8e9786587a67": {
+        "targets": 32052,
+        "station_hours": 5502,
+        "mae": 4.906336006740973,
+        "persistence_mae": 5.757550230874799,
+        "delta_mae": -0.8512142241338738
+      }
+    },
+    "high_concentration": {
+      "targets": 48013,
+      "station_hours": 8066,
+      "mae": 15.677949411538712,
+      "persistence_mae": 17.50210005623484,
+      "delta_mae": -1.824150644696093
+    },
+    "overall": {
+      "targets": 304236,
+      "station_hours": 51231,
+      "mae": 7.642437753856574,
+      "persistence_mae": 9.52910727198609,
+      "delta_mae": -1.8866695181298023
+    }
+  }
+}
