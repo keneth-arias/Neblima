@@ -45,3 +45,28 @@ class QwenWindowTest(TestCase):
             self.assertEqual(a["history"], b["history"])
             self.assertEqual(a["observed"], b["observed"])
             self.assertNotEqual(a["targets"], b["targets"])
+
+    def test_export_keeps_the_requested_split(self):
+        from unittest.mock import patch
+
+        import numpy as np
+        from export_qwen_windows import export_windows
+        from export_senamhi import sha256_file
+
+        with TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            release = self.write_release(root / "dataset", [2.0] * 6)
+            output = root / "train.npz"
+            with self.assertRaisesRegex(ValueError, "manifiesto"):
+                export_windows(release, output, "train", sample=1)
+            with patch(
+                "export_qwen_windows.MANIFEST_SHA256", sha256_file(release / "manifest.json")
+            ):
+                result = export_windows(release, output, "train", sample=1)
+                with self.assertRaises(FileExistsError):
+                    export_windows(release, output, "train", sample=1)
+            self.assertEqual(result["windows"], 1)
+            with np.load(output, allow_pickle=False) as data:
+                self.assertEqual(data["window_id"].tolist(), ["train"])
+                self.assertEqual(data["history"].tolist(), [list(range(24))])
+                self.assertEqual(data["targets"].tolist(), [[2.0] * 6])

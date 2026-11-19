@@ -1,0 +1,304 @@
+{
+  "gpu": "NVIDIA GeForce RTX 5070 Ti",
+  "setup": {
+    "seed": 27,
+    "global_batch": 4,
+    "precision": "fp32",
+    "updates": 4
+  },
+  "inputs": {
+    "train": {
+      "split": "train",
+      "windows": 512,
+      "manifest_sha256": "29135340efb377a59d695e05fb6f8848fd0e56481123f5b54e987da77e9adc97",
+      "output_sha256": "e55c142256d7125deb0ed0a03540a09407d746d5b2cb4c3d39f592369ea4b62e"
+    },
+    "validation": {
+      "split": "validation",
+      "windows": 128,
+      "manifest_sha256": "29135340efb377a59d695e05fb6f8848fd0e56481123f5b54e987da77e9adc97",
+      "output_sha256": "99dac597e7121b60db14adeabcc11ed650be7c6ef13a659b8e8cdb9124a11457"
+    }
+  },
+  "full_tune_image": "sha256:e52b42dcd4b157403f5cca21ca63d545695dc943cbb6c6191cb8cd9e1833d7c4",
+  "runs": {
+    "single": {
+      "training_window_order": "6ec3b6f21e90500d8de439e2a36d05533d0a1ddbf6ff16f244932cb57cc33e2f",
+      "steps": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "losses": [
+        5.8802409172058105,
+        56.31801986694336,
+        24.188085556030273,
+        2.3083701133728027
+      ],
+      "median_windows_per_second_after_first_step": 18.65603885503469,
+      "peak_bytes_per_rank": [
+        [
+          9064076800,
+          10242490368
+        ]
+      ],
+      "validation": {
+        "step": 4,
+        "validation_windows": 128,
+        "mae": 13.558982924868662,
+        "mae_by_horizon": [
+          13.012209817767143,
+          14.52603643387556,
+          11.670403972268105,
+          18.99639430642128,
+          12.728827148675919,
+          10.420025870203972
+        ],
+        "persistence_mae": 10.010690063238144
+      },
+      "checkpoint": {
+        "checkpoint": "step-00000004",
+        "checkpoint_bytes": 6997199382,
+        "checkpoint_seconds": 8.536569405012415,
+        "manifest_sha256": "efa0cd9b01e0bd5884efd7261d19242aea97d46fe98ed69466c40a904b656e1e"
+      }
+    },
+    "ddp": {
+      "training_window_order": "6ec3b6f21e90500d8de439e2a36d05533d0a1ddbf6ff16f244932cb57cc33e2f",
+      "steps": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "losses": [
+        5.880245685577393,
+        56.318016052246094,
+        24.188426971435547,
+        2.308323383331299
+      ],
+      "median_windows_per_second_after_first_step": 15.3887047150863,
+      "peak_bytes_per_rank": [
+        [
+          11056603648,
+          11811160064
+        ],
+        [
+          11056603648,
+          11811160064
+        ]
+      ],
+      "validation": {
+        "step": 4,
+        "validation_windows": 128,
+        "mae": 13.558873873824874,
+        "mae_by_horizon": [
+          13.012545645236969,
+          14.52561740577221,
+          11.670100636780262,
+          18.996379986405373,
+          12.728583578020334,
+          10.4200159907341
+        ],
+        "persistence_mae": 10.010690088073412
+      },
+      "checkpoint": {
+        "checkpoint": "step-00000004",
+        "checkpoint_bytes": 6997246270,
+        "checkpoint_seconds": 7.078815350003424,
+        "manifest_sha256": "2617d4a55d91d48a5b7d8bce711479cfce267987296b1763192ebb1b8af30eba"
+      }
+    },
+    "fsdp2_direct": {
+      "training_window_order": "6ec3b6f21e90500d8de439e2a36d05533d0a1ddbf6ff16f244932cb57cc33e2f",
+      "steps": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "losses": [
+        5.880245685577393,
+        56.318016052246094,
+        24.188426971435547,
+        2.308323383331299
+      ],
+      "median_windows_per_second_after_first_step": 9.302528518845632,
+      "peak_bytes_per_rank": [
+        [
+          5857267712,
+          7639924736
+        ],
+        [
+          5857259520,
+          7639924736
+        ]
+      ],
+      "validation": {
+        "step": 4,
+        "validation_windows": 128,
+        "mae": 13.558871469770867,
+        "mae_by_horizon": [
+          13.012541320174932,
+          14.52561417222023,
+          11.670096896588802,
+          18.996378503739834,
+          12.728581853210926,
+          10.420016072690487
+        ],
+        "persistence_mae": 10.010690088073412
+      },
+      "checkpoint": {
+        "checkpoint": "step-00000004",
+        "checkpoint_bytes": 6998970591,
+        "checkpoint_seconds": 6.1442689600080485,
+        "manifest_sha256": "916c79cd5159e74fbbf1b2d05c2a94e056ac4d0debd38b4616cdca3f389016d1"
+      }
+    },
+    "fsdp2_persistence": {
+      "training_window_order": "6ec3b6f21e90500d8de439e2a36d05533d0a1ddbf6ff16f244932cb57cc33e2f",
+      "steps": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "losses": [
+        0.4257173240184784,
+        1.3083889484405518,
+        1.1358047723770142,
+        0.5272042155265808
+      ],
+      "median_windows_per_second_after_first_step": 9.292916195129617,
+      "peak_bytes_per_rank": [
+        [
+          5857267712,
+          7639924736
+        ],
+        [
+          5857259520,
+          7639924736
+        ]
+      ],
+      "validation": {
+        "step": 4,
+        "validation_windows": 128,
+        "mae": 9.82247085062166,
+        "mae_by_horizon": [
+          4.857666105031967,
+          7.461294855922461,
+          9.718641322106123,
+          11.851724192500114,
+          12.193802159279585,
+          12.851696468889713
+        ],
+        "persistence_mae": 10.010690088073412
+      },
+      "checkpoint": {
+        "checkpoint": "step-00000004",
+        "checkpoint_bytes": 6998970596,
+        "checkpoint_seconds": 5.653696633002255,
+        "manifest_sha256": "c379d84c5a4fd9543baf267b9139ab930f9a9257a16075eaee76b46274fe4cd4"
+      }
+    }
+  },
+  "cnn": {
+    "validation_windows": 128,
+    "mae": 10.478236198425293,
+    "mae_by_horizon": [
+      11.156784057617188,
+      10.861998558044434,
+      10.704891204833984,
+      10.297320365905762,
+      9.975711822509766,
+      9.872713088989258
+    ]
+  },
+  "recovery": {
+    "restored_step": 2,
+    "matched_steps": [
+      3,
+      4
+    ],
+    "max_absolute_parameter_difference": {
+      "model.head.weight": 0.0,
+      "model.decoder.layers.0.mlp.down_proj.weight": 0.0
+    },
+    "continuous_validation_mae": 13.558871469770867,
+    "resumed_validation_mae": 13.558871469770867
+  },
+  "lora": {
+    "training_window_order": "48a4dee1c517c85bc6d14b63326f6cde1e0ec3748acf2016f866984bd2daefa4",
+    "steps": [
+      3,
+      4
+    ],
+    "losses": [
+      0.8387072086334229,
+      0.5467846393585205
+    ],
+    "median_windows_per_second_after_first_step": 20.78649582795639,
+    "peak_bytes_per_rank": [
+      [
+        4309126656,
+        4840226816
+      ],
+      [
+        4309126656,
+        4840226816
+      ]
+    ],
+    "validation": {
+      "step": 4,
+      "validation_windows": 128,
+      "mae": 9.860545047248403,
+      "mae_by_horizon": [
+        5.142373874783516,
+        8.008780304342508,
+        9.6947739161551,
+        11.71319355815649,
+        11.825094435364008,
+        12.779054194688797
+      ],
+      "persistence_mae": 10.010690088073412
+    },
+    "checkpoint": {
+      "checkpoint": "step-00000004",
+      "checkpoint_bytes": 18650174,
+      "checkpoint_seconds": 0.2112395279982593,
+      "manifest_sha256": "2691561ce58bb25ca3a9fde152359b512d86d9af7a23f1189b2d8557bb4ce97c"
+    },
+    "restored_step": 2,
+    "image": "sha256:658fc4858dfe3a8d9d3d396fba01c76f502b63ce43222c36ef457c8ee1c9a00d"
+  },
+  "cross_mode_max_absolute_parameter_difference": {
+    "single": {
+      "model.head.weight": 4.883855581283569e-06,
+      "model.decoder.layers.0.mlp.down_proj.weight": 9.894371032714844e-06
+    },
+    "ddp": {
+      "model.head.weight": 1.862645149230957e-09,
+      "model.decoder.layers.0.mlp.down_proj.weight": 3.725290298461914e-09
+    }
+  },
+  "storage_migration": {
+    "claim": "training/airaware-checkpoints",
+    "size_gib": 64,
+    "pv_reclaim_policy": "Retain",
+    "verified_copied_generations": 8,
+    "restore": {
+      "restored_step": 2,
+      "matched_steps": [
+        3,
+        4
+      ],
+      "max_absolute_parameter_difference": {
+        "model.head.weight": 0.0,
+        "model.decoder.layers.0.mlp.down_proj.weight": 0.0
+      },
+      "continuous_validation_mae": 13.558871469770867,
+      "resumed_validation_mae": 13.558871469770867
+    }
+  }
+}

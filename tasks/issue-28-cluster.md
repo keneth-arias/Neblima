@@ -19,6 +19,10 @@ La [tarea SkyPilot existente](https://github.com/keneth-arias/ml-infra/blob/0db1
 
 Para la primera ejecución usar el kubeconfig de envío indicado en el [procedimiento de ml-infra](https://github.com/keneth-arias/ml-infra/blob/0db10dd80c27c52ec9c399178691331ea65f81f9/README.md). El comando de lanzamiento del nuevo perfil se documentará en su PR con `sky launch`; después de liberar el pod, un nuevo lanzamiento deberá aceptar el mismo identificador lógico de experimento y otro identificador de intento. La prueba existente de #27 termina después de un paso y descarta los pesos; el primer ensayo distribuido parte del modelo fijado.
 
+## Entrega piloto
+
+El [procedimiento y la evidencia del piloto](../docs/qwen-cluster-runbook.md) registran el ajuste con ambas RTX 5070 Ti, la verificación de FSDP2 y LoRA, y los controles DDP y de una GPU. La entrega de #28 continúa con las mediciones repetidas y el entrenamiento y validación completos.
+
 ## Qué guardar y dónde
 
 | Ubicación | Contenido y ciclo de vida |
