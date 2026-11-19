@@ -1,11 +1,13 @@
 """Comprobar que la red convolucional conserva el orden y la escala al restaurarla."""
 
-from contextlib import redirect_stdout
-from io import StringIO
+import json
+import subprocess
+import sys
+from pathlib import Path
 
 import numpy as np
 import pytest
-from compare_cnn import benchmark, predict_from_checkpoint
+from compare_cnn import predict_from_checkpoint
 
 
 def test_checkpoint_predictions_match_validation_rows_and_targets_are_optional(tmp_path):
@@ -21,8 +23,21 @@ def test_checkpoint_predictions_match_validation_rows_and_targets_are_optional(t
         )
     train, valid = (tmp_path / f"{s}.npz" for s in ("train", "validation"))
     result = tmp_path / "resultado"
-    with redirect_stdout(StringIO()):
-        metrics = benchmark(train, valid, 3, 4, 27, output=result)
+    command = [
+        sys.executable,
+        str(Path(__file__).with_name("compare_cnn.py")),
+        str(train),
+        str(valid),
+        "--steps",
+        "3",
+        "--batch",
+        "4",
+        "--seed",
+        "27",
+        "--output",
+        str(result),
+    ]
+    metrics = json.loads(subprocess.check_output(command, text=True).splitlines()[-1])
     with np.load(valid) as windows, np.load(result / "validation.npz") as rows:
         np.testing.assert_array_equal(rows["window_id"], windows["window_id"])
         np.testing.assert_array_equal(rows["forecast_hour"], np.arange(1, 7))

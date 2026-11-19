@@ -175,4 +175,5 @@ if __name__ == "__main__":
     parser.add_argument("--steps", type=int, default=4)
     parser.add_argument("--batch", type=int, default=4)
     parser.add_argument("--seed", type=int, default=27)
+    parser.add_argument("--output", type=Path)
     print(json.dumps(benchmark(**vars(parser.parse_args()))))
