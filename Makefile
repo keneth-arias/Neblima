@@ -8,8 +8,8 @@ init:
 
 check:
 	uv lock --check
-	uv run --locked ruff format --check src tests
-	uv run --locked ruff check src tests
+	uv run --locked ruff format --check src tests tools/training
+	uv run --locked ruff check src tests tools/training
 	uv run --locked ty check src tests
 	uv run --locked airaware catalog validate
 	uv run --locked pytest

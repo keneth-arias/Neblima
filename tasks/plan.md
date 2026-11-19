@@ -300,3 +300,13 @@ El [PR #86](https://github.com/keneth-arias/airaware/pull/86) integró la verifi
 estructural de etiquetas para un horizonte de 24 horas. La emisión sigue condicionada
 por la evidencia temporal y de calidad de #20 y #43. El benchmark principal usa el
 horizonte de seis horas y conserva su [ficha](../docs/dataset-cards/lima-pm25-forecast.md).
+
+## Entrenamiento con Qwen3.5 en dos GPU
+
+El [plan de la bifurcación de OpenTSLM y del experimento con entradas comparables](issue-27-qwen-plan.md)
+ordena las entregas de #27, #28 y la extensión opcional #88. Incluye un control de pronóstico
+con las mismas entradas y una medición independiente del costo de distribuir el entrenamiento.
+
+En #28, comparar primero los cabezales directo y de corrección de persistencia. Medir después LoRA híbrida y los núcleos recurrentes con controles independientes. En #88, comprobar que el escalado y la reconstrucción de PM10 respeten la máscara de cada brazo.
+
+El [plan operativo de MicroK8s y SkyPilot para #28](issue-28-cluster.md) fija el orden de preparación de insumos, uso de ambas RTX 5070 Ti, ensayo de reanudación y dimensionamiento del volumen antes del entrenamiento.
