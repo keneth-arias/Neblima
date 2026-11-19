@@ -29,6 +29,10 @@
   "opentslm": {
     "repository": "https://github.com/OpenTSLM/OpenTSLM",
     "commit": "2968f4b891baab4307f7e9d0043e87677b593a30",
-    "verification": "Solo se registró HEAD remoto; las interfaces de adaptación y entrenamiento están pendientes de revisión."
+    "verification": "Se verificaron el adaptador de regresión de la bifurcación y un paso de entrenamiento con el decodificador de texto Qwen3.5.",
+    "forecast_fork": {
+      "repository": "https://github.com/keneth-arias/OpenTSLM",
+      "commit": "20573a0f67f0f53bcd7d06a28869379e80d2d652"
+    }
   }
 }
