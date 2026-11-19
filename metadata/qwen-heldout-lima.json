@@ -1,0 +1,599 @@
+{
+  "selection": "lima-pm25-finalistas-v1",
+  "selection_sha256": "6301bbb6711739ecefe63860695e6e53fa7975c53ba803f5d79e0908151d5b61",
+  "baseline_manifest_sha256": "b2e771196529eb2743f05aa6525127b761754317f83723d65cae87ef232baf9d",
+  "test": {
+    "split": "test",
+    "windows": 50789,
+    "manifest_sha256": "29135340efb377a59d695e05fb6f8848fd0e56481123f5b54e987da77e9adc97",
+    "output_sha256": "ef6c5245b1c35b681d1450f1e8376aa5e0b8e055442c513b85f5d110ae79bb30"
+  },
+  "unit": "ug/m3",
+  "models": {
+    "persistence": {
+      "model": "persistence",
+      "revision": "lima-pm25-baselines-v1",
+      "predictions_sha256": null,
+      "paired_sha256": "d4833b904161b1e1e2f608ab22c12e0e30fd1ad7728fce228441397d3d63d02f",
+      "targets": 304734,
+      "split": "test",
+      "by_horizon": {
+        "1": {
+          "targets": 50789,
+          "station_hours": 50789,
+          "mae": 3.214893604738805,
+          "persistence_mae": 3.214893604738805,
+          "delta_mae": 0.0
+        },
+        "2": {
+          "targets": 50789,
+          "station_hours": 50789,
+          "mae": 5.085175429095661,
+          "persistence_mae": 5.085175429095661,
+          "delta_mae": 0.0
+        },
+        "3": {
+          "targets": 50789,
+          "station_hours": 50789,
+          "mae": 6.38271052618326,
+          "persistence_mae": 6.38271052618326,
+          "delta_mae": 0.0
+        },
+        "4": {
+          "targets": 50789,
+          "station_hours": 50789,
+          "mae": 7.352344954711636,
+          "persistence_mae": 7.352344954711636,
+          "delta_mae": 0.0
+        },
+        "5": {
+          "targets": 50789,
+          "station_hours": 50789,
+          "mae": 8.070947089668348,
+          "persistence_mae": 8.070947089668348,
+          "delta_mae": 0.0
+        },
+        "6": {
+          "targets": 50789,
+          "station_hours": 50789,
+          "mae": 8.569579832696697,
+          "persistence_mae": 8.569579832696697,
+          "delta_mae": 0.0
+        }
+      },
+      "by_station": {
+        "1e58bb71f42f67bfedae1bad1e35b0aea5f84078da4f3a6f06c695aac1fb99e4": {
+          "targets": 49686,
+          "station_hours": 8371,
+          "mae": 5.86008141629435,
+          "persistence_mae": 5.86008141629435,
+          "delta_mae": 0.0
+        },
+        "22c516fbe293a54c1cb5ddc7727d32430200221562cd01af8a40cc4b5de227d4": {
+          "targets": 29994,
+          "station_hours": 5064,
+          "mae": 7.391582136593948,
+          "persistence_mae": 7.391582136593948,
+          "delta_mae": 0.0
+        },
+        "2a0d574b25a5dc8c7f6edda9836225860faaa160763d8bea15d95646794f0bd8": {
+          "targets": 59928,
+          "station_hours": 10078,
+          "mae": 6.735332180908767,
+          "persistence_mae": 6.735332180908767,
+          "delta_mae": 0.0
+        },
+        "35170dbfe2a7135c1cecbae1e367374a284578533740ff5461d40fc764851e07": {
+          "targets": 37866,
+          "station_hours": 6371,
+          "mae": 6.017206933976109,
+          "persistence_mae": 6.017206933976109,
+          "delta_mae": 0.0
+        },
+        "8436576ff150fd696edbc1cd625bc97696321bc9c57b24b906d0d4a12b71bfff": {
+          "targets": 49548,
+          "station_hours": 8318,
+          "mae": 9.181275596391371,
+          "persistence_mae": 9.181275596391371,
+          "delta_mae": 0.0
+        },
+        "8e88d45c03f25f49b84c98cc4916bd60b67383961e186497f4d77570c2f75d34": {
+          "targets": 48366,
+          "station_hours": 8166,
+          "mae": 4.594420698424546,
+          "persistence_mae": 4.594420698424546,
+          "delta_mae": 0.0
+        },
+        "90b36a172f1790cf2e37ac2063f80fd27439d4ecf871d72a20bf8e9786587a67": {
+          "targets": 29346,
+          "station_hours": 4951,
+          "mae": 4.866775762766295,
+          "persistence_mae": 4.866775762766295,
+          "delta_mae": 0.0
+        }
+      },
+      "high_concentration": {
+        "targets": 10574,
+        "station_hours": 1772,
+        "mae": 19.615616025321454,
+        "persistence_mae": 19.615616025321454,
+        "delta_mae": 0.0
+      },
+      "overall": {
+        "targets": 304734,
+        "station_hours": 51319,
+        "mae": 6.445941906182501,
+        "persistence_mae": 6.445941906182501,
+        "delta_mae": 0.0
+      }
+    },
+    "daily": {
+      "model": "daily",
+      "revision": "lima-pm25-baselines-v1",
+      "predictions_sha256": null,
+      "paired_sha256": "52c897418c093f6836894a0bed42f8ab442d037897012f1c7f6d788e0ba0b21a",
+      "targets": 304734,
+      "split": "test",
+      "by_horizon": {
+        "1": {
+          "targets": 50789,
+          "station_hours": 50789,
+          "mae": 7.0350245867532575,
+          "persistence_mae": 3.214893604738805,
+          "delta_mae": 3.8201309820144957
+        },
+        "2": {
+          "targets": 50789,
+          "station_hours": 50789,
+          "mae": 7.03730730425122,
+          "persistence_mae": 5.085175429095661,
+          "delta_mae": 1.9521318751554975
+        },
+        "3": {
+          "targets": 50789,
+          "station_hours": 50789,
+          "mae": 7.038305390569101,
+          "persistence_mae": 6.38271052618326,
+          "delta_mae": 0.6555948643858419
+        },
+        "4": {
+          "targets": 50789,
+          "station_hours": 50789,
+          "mae": 7.038449330083511,
+          "persistence_mae": 7.352344954711636,
+          "delta_mae": -0.3138956246280679
+        },
+        "5": {
+          "targets": 50789,
+          "station_hours": 50789,
+          "mae": 7.039037600082929,
+          "persistence_mae": 8.070947089668348,
+          "delta_mae": -1.0319094895854355
+        },
+        "6": {
+          "targets": 50789,
+          "station_hours": 50789,
+          "mae": 7.0424197491703575,
+          "persistence_mae": 8.569579832696697,
+          "delta_mae": -1.5271600835262589
+        }
+      },
+      "by_station": {
+        "1e58bb71f42f67bfedae1bad1e35b0aea5f84078da4f3a6f06c695aac1fb99e4": {
+          "targets": 49686,
+          "station_hours": 8371,
+          "mae": 6.8316305096003065,
+          "persistence_mae": 5.86008141629435,
+          "delta_mae": 0.97154909330596
+        },
+        "22c516fbe293a54c1cb5ddc7727d32430200221562cd01af8a40cc4b5de227d4": {
+          "targets": 29994,
+          "station_hours": 5064,
+          "mae": 8.104931660965457,
+          "persistence_mae": 7.391582136593948,
+          "delta_mae": 0.7133495243715388
+        },
+        "2a0d574b25a5dc8c7f6edda9836225860faaa160763d8bea15d95646794f0bd8": {
+          "targets": 59928,
+          "station_hours": 10078,
+          "mae": 7.072094868008338,
+          "persistence_mae": 6.735332180908767,
+          "delta_mae": 0.3367626870995175
+        },
+        "35170dbfe2a7135c1cecbae1e367374a284578533740ff5461d40fc764851e07": {
+          "targets": 37866,
+          "station_hours": 6371,
+          "mae": 6.989542695377173,
+          "persistence_mae": 6.017206933976109,
+          "delta_mae": 0.9723357614010616
+        },
+        "8436576ff150fd696edbc1cd625bc97696321bc9c57b24b906d0d4a12b71bfff": {
+          "targets": 49548,
+          "station_hours": 8318,
+          "mae": 8.963513572697233,
+          "persistence_mae": 9.181275596391371,
+          "delta_mae": -0.2177620236941948
+        },
+        "8e88d45c03f25f49b84c98cc4916bd60b67383961e186497f4d77570c2f75d34": {
+          "targets": 48366,
+          "station_hours": 8166,
+          "mae": 5.43510693462351,
+          "persistence_mae": 4.594420698424546,
+          "delta_mae": 0.8406862361989744
+        },
+        "90b36a172f1790cf2e37ac2063f80fd27439d4ecf871d72a20bf8e9786587a67": {
+          "targets": 29346,
+          "station_hours": 4951,
+          "mae": 5.684941935477425,
+          "persistence_mae": 4.866775762766295,
+          "delta_mae": 0.8181661727111084
+        }
+      },
+      "high_concentration": {
+        "targets": 10574,
+        "station_hours": 1772,
+        "mae": 23.0858003182333,
+        "persistence_mae": 19.615616025321454,
+        "delta_mae": 3.4701842929118594
+      },
+      "overall": {
+        "targets": 304734,
+        "station_hours": 51319,
+        "mae": 7.0384239934850426,
+        "persistence_mae": 6.445941906182501,
+        "delta_mae": 0.5924820873026775
+      }
+    },
+    "seasonal": {
+      "model": "seasonal",
+      "revision": "lima-pm25-baselines-v1",
+      "predictions_sha256": null,
+      "paired_sha256": "fc41b4cc84f2b05c195f82869b66697d44f5fd858a50288395098e58f5ad68d7",
+      "targets": 304734,
+      "split": "test",
+      "by_horizon": {
+        "1": {
+          "targets": 50789,
+          "station_hours": 50789,
+          "mae": 8.260379567010295,
+          "persistence_mae": 3.214893604738805,
+          "delta_mae": 5.045485962271579
+        },
+        "2": {
+          "targets": 50789,
+          "station_hours": 50789,
+          "mae": 8.264101685888676,
+          "persistence_mae": 5.085175429095661,
+          "delta_mae": 3.1789262567930034
+        },
+        "3": {
+          "targets": 50789,
+          "station_hours": 50789,
+          "mae": 8.268119217633888,
+          "persistence_mae": 6.38271052618326,
+          "delta_mae": 1.8854086914506865
+        },
+        "4": {
+          "targets": 50789,
+          "station_hours": 50789,
+          "mae": 8.271294896178915,
+          "persistence_mae": 7.352344954711636,
+          "delta_mae": 0.9189499414673115
+        },
+        "5": {
+          "targets": 50789,
+          "station_hours": 50789,
+          "mae": 8.274180369624132,
+          "persistence_mae": 8.070947089668348,
+          "delta_mae": 0.2032332799556451
+        },
+        "6": {
+          "targets": 50789,
+          "station_hours": 50789,
+          "mae": 8.278441495098964,
+          "persistence_mae": 8.569579832696697,
+          "delta_mae": -0.2911383375976362
+        }
+      },
+      "by_station": {
+        "1e58bb71f42f67bfedae1bad1e35b0aea5f84078da4f3a6f06c695aac1fb99e4": {
+          "targets": 49686,
+          "station_hours": 8371,
+          "mae": 8.616671870012757,
+          "persistence_mae": 5.86008141629435,
+          "delta_mae": 2.756590453718452
+        },
+        "22c516fbe293a54c1cb5ddc7727d32430200221562cd01af8a40cc4b5de227d4": {
+          "targets": 29994,
+          "station_hours": 5064,
+          "mae": 9.893479490447708,
+          "persistence_mae": 7.391582136593948,
+          "delta_mae": 2.5018973538536997
+        },
+        "2a0d574b25a5dc8c7f6edda9836225860faaa160763d8bea15d95646794f0bd8": {
+          "targets": 59928,
+          "station_hours": 10078,
+          "mae": 10.267369205714802,
+          "persistence_mae": 6.735332180908767,
+          "delta_mae": 3.5320370248059687
+        },
+        "35170dbfe2a7135c1cecbae1e367374a284578533740ff5461d40fc764851e07": {
+          "targets": 37866,
+          "station_hours": 6371,
+          "mae": 7.927799748592875,
+          "persistence_mae": 6.017206933976109,
+          "delta_mae": 1.9105928146166826
+        },
+        "8436576ff150fd696edbc1cd625bc97696321bc9c57b24b906d0d4a12b71bfff": {
+          "targets": 49548,
+          "station_hours": 8318,
+          "mae": 8.922716234108094,
+          "persistence_mae": 9.181275596391371,
+          "delta_mae": -0.25855936228316667
+        },
+        "8e88d45c03f25f49b84c98cc4916bd60b67383961e186497f4d77570c2f75d34": {
+          "targets": 48366,
+          "station_hours": 8166,
+          "mae": 5.22715399151685,
+          "persistence_mae": 4.594420698424546,
+          "delta_mae": 0.6327332930923162
+        },
+        "90b36a172f1790cf2e37ac2063f80fd27439d4ecf871d72a20bf8e9786587a67": {
+          "targets": 29346,
+          "station_hours": 4951,
+          "mae": 6.293330277919108,
+          "persistence_mae": 4.866775762766295,
+          "delta_mae": 1.4265545151527503
+        }
+      },
+      "high_concentration": {
+        "targets": 10574,
+        "station_hours": 1772,
+        "mae": 34.14403339879384,
+        "persistence_mae": 19.615616025321454,
+        "delta_mae": 14.528417373472454
+      },
+      "overall": {
+        "targets": 304734,
+        "station_hours": 51319,
+        "mae": 8.269419538572171,
+        "persistence_mae": 6.445941906182501,
+        "delta_mae": 1.8234776323900848
+      }
+    },
+    "cnn": {
+      "model": "cnn",
+      "revision": "9ceb6dcd793f661720fd58606992581857993f66109dc3024480e164316b7315",
+      "predictions_sha256": "70b226024df4456f67ec29cab440bf730e713da7988d44a65590705153ad44be",
+      "paired_sha256": "d9175735cdd3ba5290ab1eea2bcdc301d53b5a10301370a01b7688880ebd65ad",
+      "targets": 304734,
+      "split": "test",
+      "by_horizon": {
+        "1": {
+          "targets": 50789,
+          "station_hours": 50789,
+          "mae": 3.054217014006876,
+          "persistence_mae": 3.214893604738805,
+          "delta_mae": -0.16067659073198437
+        },
+        "2": {
+          "targets": 50789,
+          "station_hours": 50789,
+          "mae": 4.542907368830019,
+          "persistence_mae": 5.085175429095661,
+          "delta_mae": -0.5422680602656683
+        },
+        "3": {
+          "targets": 50789,
+          "station_hours": 50789,
+          "mae": 5.325011956148455,
+          "persistence_mae": 6.38271052618326,
+          "delta_mae": -1.0576985700348114
+        },
+        "4": {
+          "targets": 50789,
+          "station_hours": 50789,
+          "mae": 5.781266658793257,
+          "persistence_mae": 7.352344954711636,
+          "delta_mae": -1.5710782959183427
+        },
+        "5": {
+          "targets": 50789,
+          "station_hours": 50789,
+          "mae": 6.0406295949754405,
+          "persistence_mae": 8.070947089668348,
+          "delta_mae": -2.030317494692937
+        },
+        "6": {
+          "targets": 50789,
+          "station_hours": 50789,
+          "mae": 6.20562680958401,
+          "persistence_mae": 8.569579832696697,
+          "delta_mae": -2.36395302311258
+        }
+      },
+      "by_station": {
+        "1e58bb71f42f67bfedae1bad1e35b0aea5f84078da4f3a6f06c695aac1fb99e4": {
+          "targets": 49686,
+          "station_hours": 8371,
+          "mae": 4.875560554290395,
+          "persistence_mae": 5.86008141629435,
+          "delta_mae": -0.9845208620040008
+        },
+        "22c516fbe293a54c1cb5ddc7727d32430200221562cd01af8a40cc4b5de227d4": {
+          "targets": 29994,
+          "station_hours": 5064,
+          "mae": 5.854704437471498,
+          "persistence_mae": 7.391582136593948,
+          "delta_mae": -1.5368776991225324
+        },
+        "2a0d574b25a5dc8c7f6edda9836225860faaa160763d8bea15d95646794f0bd8": {
+          "targets": 59928,
+          "station_hours": 10078,
+          "mae": 5.234883562779309,
+          "persistence_mae": 6.735332180908767,
+          "delta_mae": -1.5004486181294472
+        },
+        "35170dbfe2a7135c1cecbae1e367374a284578533740ff5461d40fc764851e07": {
+          "targets": 37866,
+          "station_hours": 6371,
+          "mae": 5.056839369557023,
+          "persistence_mae": 6.017206933976109,
+          "delta_mae": -0.9603675644191922
+        },
+        "8436576ff150fd696edbc1cd625bc97696321bc9c57b24b906d0d4a12b71bfff": {
+          "targets": 49548,
+          "station_hours": 8318,
+          "mae": 6.885171266339097,
+          "persistence_mae": 9.181275596391371,
+          "delta_mae": -2.2961043300522412
+        },
+        "8e88d45c03f25f49b84c98cc4916bd60b67383961e186497f4d77570c2f75d34": {
+          "targets": 48366,
+          "station_hours": 8166,
+          "mae": 3.8890085374942633,
+          "persistence_mae": 4.594420698424546,
+          "delta_mae": -0.7054121609302668
+        },
+        "90b36a172f1790cf2e37ac2063f80fd27439d4ecf871d72a20bf8e9786587a67": {
+          "targets": 29346,
+          "station_hours": 4951,
+          "mae": 4.075802843333127,
+          "persistence_mae": 4.866775762766295,
+          "delta_mae": -0.7909729194331946
+        }
+      },
+      "high_concentration": {
+        "targets": 10574,
+        "station_hours": 1772,
+        "mae": 18.433745753731195,
+        "persistence_mae": 19.615616025321454,
+        "delta_mae": -1.181870271590388
+      },
+      "overall": {
+        "targets": 304734,
+        "station_hours": 51319,
+        "mae": 5.158276567056355,
+        "persistence_mae": 6.445941906182501,
+        "delta_mae": -1.2876653391260484
+      }
+    },
+    "qwen-direct-lora": {
+      "model": "qwen-direct-lora",
+      "revision": "65e2025e8358276b9b73e82e2c93cd2c4f5bab717d5f959ca38dd748ec0087bb",
+      "predictions_sha256": "22a6c350567f13bdc7a13b741a405b91a24372ec434fea581294ddb5086f8ce1",
+      "paired_sha256": "194befb3adbdcd3e289e81ad44cf35267a9ee41e2fd049786d4118290010b28d",
+      "targets": 304734,
+      "split": "test",
+      "by_horizon": {
+        "1": {
+          "targets": 50789,
+          "station_hours": 50789,
+          "mae": 2.94305947812376,
+          "persistence_mae": 3.214893604738805,
+          "delta_mae": -0.27183412661508644
+        },
+        "2": {
+          "targets": 50789,
+          "station_hours": 50789,
+          "mae": 4.389629447486071,
+          "persistence_mae": 5.085175429095661,
+          "delta_mae": -0.6955459816096073
+        },
+        "3": {
+          "targets": 50789,
+          "station_hours": 50789,
+          "mae": 5.147813572827248,
+          "persistence_mae": 6.38271052618326,
+          "delta_mae": -1.2348969533559855
+        },
+        "4": {
+          "targets": 50789,
+          "station_hours": 50789,
+          "mae": 5.593288225052614,
+          "persistence_mae": 7.352344954711636,
+          "delta_mae": -1.7590567296589874
+        },
+        "5": {
+          "targets": 50789,
+          "station_hours": 50789,
+          "mae": 5.863899022613335,
+          "persistence_mae": 8.070947089668348,
+          "delta_mae": -2.207048067055085
+        },
+        "6": {
+          "targets": 50789,
+          "station_hours": 50789,
+          "mae": 6.027922296896498,
+          "persistence_mae": 8.569579832696697,
+          "delta_mae": -2.5416575358000713
+        }
+      },
+      "by_station": {
+        "1e58bb71f42f67bfedae1bad1e35b0aea5f84078da4f3a6f06c695aac1fb99e4": {
+          "targets": 49686,
+          "station_hours": 8371,
+          "mae": 4.821310754550792,
+          "persistence_mae": 5.86008141629435,
+          "delta_mae": -1.0387706617436032
+        },
+        "22c516fbe293a54c1cb5ddc7727d32430200221562cd01af8a40cc4b5de227d4": {
+          "targets": 29994,
+          "station_hours": 5064,
+          "mae": 5.641455153428485,
+          "persistence_mae": 7.391582136593948,
+          "delta_mae": -1.7501269831655326
+        },
+        "2a0d574b25a5dc8c7f6edda9836225860faaa160763d8bea15d95646794f0bd8": {
+          "targets": 59928,
+          "station_hours": 10078,
+          "mae": 5.033899740107907,
+          "persistence_mae": 6.735332180908767,
+          "delta_mae": -1.7014324408008572
+        },
+        "35170dbfe2a7135c1cecbae1e367374a284578533740ff5461d40fc764851e07": {
+          "targets": 37866,
+          "station_hours": 6371,
+          "mae": 4.829999134229686,
+          "persistence_mae": 6.017206933976109,
+          "delta_mae": -1.1872077997465245
+        },
+        "8436576ff150fd696edbc1cd625bc97696321bc9c57b24b906d0d4a12b71bfff": {
+          "targets": 49548,
+          "station_hours": 8318,
+          "mae": 6.577968314981265,
+          "persistence_mae": 9.181275596391371,
+          "delta_mae": -2.603307281410056
+        },
+        "8e88d45c03f25f49b84c98cc4916bd60b67383961e186497f4d77570c2f75d34": {
+          "targets": 48366,
+          "station_hours": 8166,
+          "mae": 3.826043227527792,
+          "persistence_mae": 4.594420698424546,
+          "delta_mae": -0.7683774708967566
+        },
+        "90b36a172f1790cf2e37ac2063f80fd27439d4ecf871d72a20bf8e9786587a67": {
+          "targets": 29346,
+          "station_hours": 4951,
+          "mae": 4.008115122133567,
+          "persistence_mae": 4.866775762766295,
+          "delta_mae": -0.8586606406327583
+        }
+      },
+      "high_concentration": {
+        "targets": 10574,
+        "station_hours": 1772,
+        "mae": 18.37128189406902,
+        "persistence_mae": 19.615616025321454,
+        "delta_mae": -1.2443341312525673
+      },
+      "overall": {
+        "targets": 304734,
+        "station_hours": 51319,
+        "mae": 4.994268673833287,
+        "persistence_mae": 6.445941906182501,
+        "delta_mae": -1.4516732323491506
+      }
+    }
+  }
+}
