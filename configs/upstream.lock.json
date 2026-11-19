@@ -35,8 +35,8 @@
       "commit": "20573a0f67f0f53bcd7d06a28869379e80d2d652"
     },
     "cluster_trainer": {
-      "commit": "7835d32fb478d00b8b9a442400de083b9c6ce238",
-      "review": "https://github.com/keneth-arias/OpenTSLM/pull/3"
+      "commit": "5b1d45acbf01250c02563d43cfd556092d03e666",
+      "review": "https://github.com/keneth-arias/OpenTSLM/pull/4"
     }
   }
 }
