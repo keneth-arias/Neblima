@@ -306,3 +306,5 @@ horizonte de seis horas y conserva su [ficha](../docs/dataset-cards/lima-pm25-fo
 El [plan de la bifurcación de OpenTSLM y del experimento con entradas comparables](issue-27-qwen-plan.md)
 ordena las entregas de #27, #28 y la extensión opcional #88. Incluye un control de pronóstico
 con las mismas entradas y una medición independiente del costo de distribuir el entrenamiento.
+
+En #28, comparar primero los cabezales directo y de corrección de persistencia. Medir después LoRA híbrida y los núcleos recurrentes con controles independientes. En #88, comprobar que el escalado y la reconstrucción de PM10 respeten la máscara de cada brazo.
