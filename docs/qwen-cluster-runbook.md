@@ -77,3 +77,14 @@ UV_OFFLINE=true uv run --project tools/timenet-smoke --locked python \
 ```
 
 El comparador comprueba los SHA-256 fijados en [la configuración](../configs/training.yaml) y verifica identificadores, estación, origen UTC, objetivo y valor al origen por cada horizonte. Para comparar un modelo, usar otra carpeta de salida y agregar `--forecasts <archivo.npz> --model <nombre> --revision <revision>`. El NPZ requiere `window_id` (texto), `forecast_hour` (vector de 1 a 6) y `predicted` (una fila con seis valores en µg/m³ por ventana). El resultado conserva las filas emparejadas en `paired.parquet` y las sumas y el MAE en `manifest.json`. El [control de persistencia](../metadata/qwen-validation-inputs.json) registra la comprobación con datos completos.
+
+### Conservar la red convolucional en la comparación
+
+En el entorno PyTorch fijado, ejecutar desde la raíz con los valores de `steps` y `batch` registrados para ambos cabezales. Usar una carpeta nueva en almacenamiento local.
+
+```bash
+python tools/training/compare_cnn.py "$inputs/train.npz" "$inputs/validation.npz" \
+  --steps "$steps" --batch "$batch" --seed 27 --output "$outputs/cnn"
+```
+
+El manifiesto de la red conserva la exposición ordenada, la revisión de PyTorch y los SHA-256 de pesos, insumos y predicciones. Usar `validation.npz` de esa carpeta como `--forecasts` y el SHA-256 de `model.pt` como `--revision` en el comparador de #25. Para reproducir las predicciones con el estado guardado, ejecutar `python tools/training/predict_cnn.py "$outputs/cnn/model.pt" "$inputs/validation.npz" "$outputs/replica.npz" --batch "$batch"`. La inferencia lee solo identificadores e historia.
