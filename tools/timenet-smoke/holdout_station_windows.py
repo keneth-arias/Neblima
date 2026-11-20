@@ -73,6 +73,8 @@ def prepare(protocol_path, protocol_sha, seal_path, seal_sha, root, output, now)
         or seal["scope"] != protocol["scope"]
         or seal["protocol_sha256"] != protocol_sha
         or seal["image"] != protocol["image"]
+        or seal["seed"] != 27
+        or seal["thresholds_sha256"] != protocol["thresholds_sha256"]
         or seal["head"] not in ("direct", "quantile")
         or datetime.fromisoformat(seal["sealed_at_utc"])
         >= datetime.fromisoformat(protocol["seal_before_utc"])
