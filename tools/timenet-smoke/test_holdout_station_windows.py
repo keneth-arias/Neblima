@@ -25,6 +25,7 @@ class HoldoutTest(TestCase):
         protocol = {
             "origin_start_inclusive": "2026-11-24T00:00:00",
             "origin_stop_exclusive": "2026-12-01T00:00:00",
+            "station_code": "112194",
             "history_hours": 24,
             "forecast_hours": 6,
             "schedule_hours": 168,
@@ -55,6 +56,8 @@ class HoldoutTest(TestCase):
                         "checkpoint_sha256": "c" * 64,
                         "base_weights_sha256": "b" * 64,
                         "image": config["image"],
+                        "seed": 27,
+                        "thresholds_sha256": config["thresholds_sha256"],
                         "sealed_at_utc": "2026-11-21T10:00:00+00:00",
                     }
                 )
@@ -70,6 +73,20 @@ class HoldoutTest(TestCase):
             with self.assertRaisesRegex(ValueError, "apertura"):
                 run(vintage - timedelta(seconds=1))
             self.assertFalse(output.exists())
+            original = json.loads(seal.read_bytes())
+            wrong = root / "sello-ajeno.json"
+            for item in ({"seed": 28}, {"thresholds_sha256": "0" * 64}):
+                wrong.write_text(json.dumps({**original, **item}))
+                with self.assertRaisesRegex(ValueError, "incompatibles"):
+                    prepare(
+                        protocol,
+                        protocol_sha,
+                        wrong,
+                        hashlib.sha256(wrong.read_bytes()).hexdigest(),
+                        receipts,
+                        output,
+                        vintage,
+                    )
             receipts.mkdir()
             empty = prepare(
                 protocol, protocol_sha, seal, seal_sha, receipts, root / "empty", vintage

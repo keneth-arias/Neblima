@@ -34,7 +34,7 @@ def cohort(protocol, observations):
     origins, histories, targets, ids = [], [], [], []
     for i in range(168):
         origin = start + i * HOUR
-        key = f"112194/{origin.isoformat()}"
+        key = f"{protocol['station_code']}/{origin.isoformat()}"
         h = [hours.get(origin - j * HOUR) for j in range(23, -1, -1)]
         missing = h.count(None)
         invalid = sum(v is not None and abs(v) > float(np.finfo(np.float32).max) for v in h)
@@ -73,6 +73,8 @@ def prepare(protocol_path, protocol_sha, seal_path, seal_sha, root, output, now)
         or seal["scope"] != protocol["scope"]
         or seal["protocol_sha256"] != protocol_sha
         or seal["image"] != protocol["image"]
+        or seal["seed"] != 27
+        or seal["thresholds_sha256"] != protocol["thresholds_sha256"]
         or seal["head"] not in ("direct", "quantile")
         or datetime.fromisoformat(seal["sealed_at_utc"])
         >= datetime.fromisoformat(protocol["seal_before_utc"])
