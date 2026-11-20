@@ -104,8 +104,10 @@ LABEL_DERIVED_FIELDS = frozenset(
 
 LEAKAGE_BOUNDARY_QUERY = """
 SELECT count(*) FROM read_parquet(?) AS w
-WHERE w.history_start > w.origin_at OR w.target_start <= w.origin_at
-   OR date_diff('hour', w.origin_at, w.target_end) != ?
+WHERE w.origin_at IS NULL OR w.origin_at != date_trunc('hour', w.origin_at)
+   OR w.history_start IS DISTINCT FROM w.origin_at - ? * INTERVAL '1 hour'
+   OR w.target_start IS DISTINCT FROM w.origin_at + INTERVAL '1 hour'
+   OR w.target_end IS DISTINCT FROM w.origin_at + ? * INTERVAL '1 hour'
 """
 
 LEAKAGE_OVERLAP_QUERY = """
@@ -118,31 +120,37 @@ JOIN read_parquet(?) AS t
  AND t.observed_at <= w.target_end AND t.observation_id = h.observation_id
 """
 
+LEAKAGE_LABEL_WINDOWS_QUERY = """
+WITH labels AS (
+    SELECT *, count(*) OVER (PARTITION BY series_id, window_id) AS copies
+    FROM read_parquet(?)
+)
+SELECT count(*) FROM labels AS l
+FULL JOIN read_parquet(?) AS w USING (series_id, window_id)
+WHERE w.window_id IS NULL OR l.window_id IS NULL OR l.copies != 1
+   OR l.station_key IS DISTINCT FROM w.station_key
+   OR l.origin_at IS DISTINCT FROM w.origin_at OR l.target_start IS DISTINCT FROM w.target_start
+   OR l.target_end IS DISTINCT FROM w.target_end OR len(l.observation_ids) IS DISTINCT FROM ?
+"""
+
 LEAKAGE_LABEL_HOURS_QUERY = """
 WITH refs AS (
-    SELECT l.series_id, l.origin_at, unnest(l.observation_ids) AS observation_id
-    FROM read_parquet(?) AS l
+    SELECT series_id, unnest(observation_ids) AS observation_id,
+           origin_at + generate_subscripts(observation_ids, 1) * INTERVAL '1 hour' AS observed_at
+    FROM read_parquet(?)
 )
 SELECT count(*) FROM refs
-LEFT JOIN read_parquet(?) AS g
-  ON g.series_id = refs.series_id AND g.observation_id = refs.observation_id
-WHERE g.observed_at IS NULL OR g.observed_at <= refs.origin_at
+LEFT JOIN read_parquet(?) AS g USING (series_id, observed_at)
+WHERE g.observation_id IS NULL OR g.observation_id IS DISTINCT FROM refs.observation_id
 """
 
 LEAKAGE_LABEL_MEAN_QUERY = """
-WITH expanded AS (
-    SELECT l.window_id, l.mean_ug_m3, unnest(w.target_values) AS value
-    FROM read_parquet(?) AS l
-    JOIN read_parquet(?) AS w
-      ON w.window_id = l.window_id AND w.series_id = l.series_id
-    WHERE l.reason = 'evaluated' AND l.valid_hours = ?
-)
-SELECT count(*) FROM (
-    SELECT window_id, mean_ug_m3, count(*) AS hours, avg(value) AS future_mean
-    FROM expanded GROUP BY window_id, mean_ug_m3
-)
-WHERE hours != ? OR mean_ug_m3 IS NULL OR NOT isfinite(mean_ug_m3)
-   OR abs(mean_ug_m3 - future_mean) > 1e-9
+SELECT count(*) FROM read_parquet(?) AS l
+JOIN read_parquet(?) AS w USING (series_id, window_id)
+WHERE l.reason = 'evaluated'
+  AND (l.valid_hours IS DISTINCT FROM ? OR len(w.target_values) IS DISTINCT FROM ?
+       OR l.mean_ug_m3 IS NULL OR NOT isfinite(l.mean_ug_m3)
+       OR abs(l.mean_ug_m3 - list_avg(w.target_values)) > 1e-9)
 """
 
 
@@ -269,7 +277,8 @@ def verify_no_label_leakage(links: BundleLinks, labels: Path | None = None) -> d
             "SELECT count(*) FROM read_parquet(?)", [str(links.windows)]
         ).fetchone()
         boundary = db.execute(
-            LEAKAGE_BOUNDARY_QUERY, [str(links.windows), links.horizon_hours]
+            LEAKAGE_BOUNDARY_QUERY,
+            [str(links.windows), links.history_hours - 1, links.horizon_hours],
         ).fetchone()
         overlaps = db.execute(
             LEAKAGE_OVERLAP_QUERY,
@@ -292,6 +301,11 @@ def verify_no_label_leakage(links: BundleLinks, labels: Path | None = None) -> d
         }
         if labels is None:
             return summary
+        correspondence = db.execute(
+            LEAKAGE_LABEL_WINDOWS_QUERY, [str(labels), str(links.windows), links.horizon_hours]
+        ).fetchone()
+        if correspondence is None or correspondence[0]:
+            raise ValueError("Las etiquetas publicadas no corresponden a sus ventanas y horizontes")
         hours_before = db.execute(
             LEAKAGE_LABEL_HOURS_QUERY, [str(labels), str(links.hours)]
         ).fetchone()
@@ -590,14 +604,7 @@ def _write_labels(
                 valid_observation_ids VARCHAR[], source_observation_ids VARCHAR[]
             )
         """)
-        series = [
-            row[0]
-            for row in db.execute(
-                "SELECT DISTINCT series_id FROM read_parquet(?) ORDER BY series_id",
-                [str(links.windows)],
-            ).fetchall()
-        ]
-        for series_id in series:
+        for series_id, entry in sorted(constructor.items()):
             labeled = [
                 _label_row(
                     _audit_window(group, horizon=links.horizon_hours),
@@ -607,9 +614,8 @@ def _write_labels(
                 )
                 for group in _iter_window_groups(db, links, series_id)
             ]
-            entry = constructor.get(series_id, {})
             candidates = {
-                key: entry.get(key, 0)
+                key: entry[key]
                 for key in ("candidates", "complete", "history_missing", "future_missing")
             }
             evaluated = sum(1 for row in labeled if row["reason"] == "evaluated")

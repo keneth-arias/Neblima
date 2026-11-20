@@ -144,10 +144,11 @@ fuera de Git. El benchmark principal 24/6 no es un conjunto de episodios etiquet
 ningún campo derivado de etiquetas (`label`, `mean_ug_m3`, `valid_hours`, `required_hours`,
 `policy_id`, `kind`, `reason`, `observation_ids`, `valid_observation_ids`,
 `source_observation_ids`) aparece en el esquema de las entradas (`windows.parquet`); que la
-historia declarada termina en `origin_at` y el objetivo empieza después (`history_start <=
-origin_at < target_start`, objetivo de exactamente `horizon_hours`); que ningún identificador de
+historia abarca las `history_hours` declaradas hasta `origin_at` y el objetivo abarca desde
+la hora siguiente hasta `origin_at + horizon_hours`; que ningún identificador de
 observación del bloque futuro repite uno de la historia; y, si se pasa un archivo de etiquetas,
-que cada `observation_ids` publicado refiere horas estrictamente posteriores a `origin_at` y que
+que hay una etiqueta por ventana, que cada identificador de `observation_ids` corresponde
+a su hora exacta en el objetivo de esa ventana y que
 la media de cada etiqueta `evaluated` con todas las horas válidas se reconstruye con el promedio
 del bloque futuro. Cualquier violación detiene la evaluación sin publicar nada. El manifiesto
 registra el resumen en `leakage`.
@@ -156,7 +157,8 @@ La emisión de etiquetas reconcilia los descartes por serie con el constructor d
 `complete == labels_evaluated + labels_discarded` y
 `candidates == complete + history_missing + future_missing` para cada serie; una discrepancia
 detiene el proceso antes de escribir. El manifiesto publicado incluye `labels_reconciliation`
-con los conteos del constructor y de la emisión por serie; los candidatos descartados por el
+con los conteos del constructor y de la emisión, incluso para series con cero ventanas completas.
+Los candidatos descartados por el
 constructor (sin historia o sin objetivo completo) no pueden originar etiquetas.
 
 ## Matriz de verificación (#20)

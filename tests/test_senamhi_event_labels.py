@@ -847,3 +847,67 @@ def test_missing_window_group_stops_label_publication(tmp_path, monkeypatch):
         evaluate(timeline, windows, output, ev=evidence())
     assert not output.exists()
     assert list(tmp_path.glob(".airaware-*")) == []
+
+
+@pytest.mark.parametrize(
+    ("field", "offset"),
+    [
+        ("history_start", None),
+        ("history_start", timedelta(hours=1)),
+        ("target_end", timedelta(minutes=1)),
+    ],
+)
+def test_leakage_requires_exact_window_bounds(tmp_path, field, offset):
+    timeline, windows, _ = full_bundle(tmp_path)
+    rewrite_windows(windows, lambda row: {**row, field: row[field] + offset if offset else None})
+    with pytest.raises(ValueError, match="límites"):
+        verify_no_label_leakage(verify_bundle(timeline, windows))
+
+
+@pytest.mark.parametrize(
+    "change", ["orphan", "origin", "outside", "empty_ids", "missing", "duplicate"]
+)
+def test_leakage_checks_published_labels_against_their_own_window(tmp_path, change):
+    timeline = write_timeline(tmp_path, make_rows(hours=range(49)))
+    windows = build_windows(timeline, tmp_path / "windows")
+    output = tmp_path / "labels"
+    evaluate(timeline, windows, output, ev=evidence())
+    path = output / "labels.parquet"
+    table = pq.read_table(path)
+    rows = table.to_pylist()
+    if change == "orphan":
+        rows[0]["window_id"] = "ventana-desconocida"
+    elif change == "origin":
+        rows[0]["origin_at"] -= timedelta(hours=1)
+    elif change == "outside":
+        rows[0]["observation_ids"][-1] = "obs-48"
+    elif change == "empty_ids":
+        rows[0]["observation_ids"] = []
+    elif change == "missing":
+        rows.pop()
+    else:
+        rows[1] = rows[0]
+    pq.write_table(pa.Table.from_pylist(rows, schema=table.schema), path)
+    with pytest.raises(ValueError):
+        verify_no_label_leakage(verify_bundle(timeline, windows), labels=path)
+
+
+def test_reconciliation_includes_series_with_only_discarded_candidates(tmp_path):
+    rows = make_rows() + make_rows(
+        series="serie-b",
+        station="estacion-b",
+        prefix="b",
+        value=lambda h: None if h == 30 else 10.0,
+    )
+    timeline = write_timeline(tmp_path, rows)
+    windows = build_windows(timeline, tmp_path / "windows")
+    output = tmp_path / "labels"
+    evaluate(timeline, windows, output, ev=evidence())
+    assert read_manifest(output)["labels_reconciliation"]["serie-b"] == {
+        "candidates": 1,
+        "complete": 0,
+        "history_missing": 0,
+        "future_missing": 1,
+        "labels_evaluated": 0,
+        "labels_discarded": 0,
+    }
