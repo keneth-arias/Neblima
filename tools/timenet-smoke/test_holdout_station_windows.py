@@ -25,6 +25,7 @@ class HoldoutTest(TestCase):
         protocol = {
             "origin_start_inclusive": "2026-11-24T00:00:00",
             "origin_stop_exclusive": "2026-12-01T00:00:00",
+            "station_code": "112194",
             "history_hours": 24,
             "forecast_hours": 6,
             "schedule_hours": 168,

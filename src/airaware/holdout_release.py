@@ -37,7 +37,9 @@ def bind(protocol_path, protocol_sha, rule_path, decision_path, decision_sha, pa
     i = next(i for i, row in enumerate(evidence) if row["seed"] == choice["seed"])
     row = evidence[i]
     report = json.loads(checked(pairs[i][0], row["report_sha256"]))
-    cal_sha = report["reference_calibrator_sha256"]
+    cal_sha = report.get("reference_calibrator_sha256")
+    if not isinstance(cal_sha, str) or len(cal_sha) != 64:
+        raise ValueError("El informe pareado debe identificar el calibrador directo por su huella")
     cal = json.loads(checked(calibrator, cal_sha))
     residuals = cal["residual_q10_q90"]
     if (

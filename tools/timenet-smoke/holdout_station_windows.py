@@ -34,7 +34,7 @@ def cohort(protocol, observations):
     origins, histories, targets, ids = [], [], [], []
     for i in range(168):
         origin = start + i * HOUR
-        key = f"112194/{origin.isoformat()}"
+        key = f"{protocol['station_code']}/{origin.isoformat()}"
         h = [hours.get(origin - j * HOUR) for j in range(23, -1, -1)]
         missing = h.count(None)
         invalid = sum(v is not None and abs(v) > float(np.finfo(np.float32).max) for v in h)
