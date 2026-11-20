@@ -349,3 +349,38 @@ def test_lightgbm_ajusta_con_seleccion_en_validacion():
     assert episodes.status == "defined"
     assert episodes.positives > 0
     assert episodes.average_precision is not None
+
+
+def test_episodios_con_positivos_pero_sin_alertas():
+    preds = [Prediction("a", "s1", 1, 20, 12, True), Prediction("b", "s1", 1, 9, 10, False)]
+    report = episode_metrics(preds, {"s1": 15})
+    assert report.precision is None
+    assert report.status == "no_predicted_positives"
+    assert report.recall == report.f1 == 0.0
+    assert report.average_precision == 1.0
+
+
+def test_precision_media_agrupa_puntuaciones_empatadas():
+    first = Prediction("a", "s1", 1, 20, 16, True)
+    second = Prediction("b", "s1", 1, 9, 16, False)
+    for ids in (("a", "b"), ("b", "a")):
+        preds = [replace(first, window_id=ids[0]), replace(second, window_id=ids[1])]
+        assert episode_metrics(preds, {"s1": 15}).average_precision == 0.5
+
+
+@pytest.mark.parametrize("lado_incompleto", ["izquierdo", "derecho"])
+def test_comparacion_rechaza_coberturas_distintas(lado_incompleto):
+    first = Prediction("a", "s1", 1, 20, 19)
+    second = replace(first, forecast_hour=2)
+    full, partial = [first, second], [first]
+    with pytest.raises(ValueError, match="cobertura"):
+        if lado_incompleto == "izquierdo":
+            paired_evaluation(partial, full)
+        else:
+            paired_evaluation(full, partial)
+
+
+def test_comparacion_rechaza_estaciones_discordantes():
+    first = Prediction("a", "s1", 1, 20, 19)
+    with pytest.raises(ValueError, match="estaci"):
+        paired_evaluation([first], [replace(first, station="s2")])

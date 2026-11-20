@@ -2,9 +2,9 @@
 
 Estado al 20/11/2026: módulo entregado y verificado con datos sintéticos deterministas
 (`tests/test_tabular_benchmark.py`). La **ejecución real sigue pendiente** porque los datos del
-servidor de [#22](issue-22-plan.md) no están accesibles desde este entorno; este documento no
+servidor de [#22](../../tasks/issue-22-plan.md) no están accesibles desde este entorno; este documento no
 reporta ninguna cifra del modelo tabular. No hay resultados propios: todo número citado proviene
-de [las referencias de #25](lima-pm25.md) o de [las particiones de #19](issue-19-plan.md).
+de [las referencias de #25](lima-pm25.md) o de [las particiones de #19](../../tasks/issue-19-plan.md).
 
 ## Método
 
@@ -31,15 +31,17 @@ de [las referencias de #25](lima-pm25.md) o de [las particiones de #19](issue-19
 - **Métricas honestas** (`airaware.benchmarks.metrics`): MAE y RMSE globales, por estación y por
   horizonte con sus conteos. Precisión, exhaustividad, F1 y PR-AUC (precisión media) en Python
   puro, con la predicción puntual como puntuación contra el umbral p95 por estación de
-  entrenamiento (agrupación exploratoria, igual criterio que #25). Sin etiquetas o sin positivos,
-  el resultado queda indefinido explícito con estado `no_labels` o `no_positives` y métricas
-  `None`; nunca 0 fingido. La calibración usa intervalos de ancho igual en Python puro y los bins
-  sin casos reportan media y tasa indefinidas.
+  entrenamiento (agrupación exploratoria calculada sobre pares ventana-hora). Sin etiquetas
+  o sin positivos, el informe registra `no_labels` o `no_positives` y métricas `None`.
+  Si hay positivos y ninguna alerta, la precisión queda indefinida y tanto la exhaustividad
+  como F1 valen cero. La precisión media agrupa los empates en un mismo umbral.
+  La calibración usa intervalos de ancho igual. En los intervalos vacíos, la media y la tasa
+  quedan indefinidas.
 
 ## Contrato de entradas
 
 1. Ventanas completas de #18 con historia de 24 horas y seis objetivos, congeladas en el Parquet
-   de [TimeF](issue-22-plan.md) y verificadas contra su manifiesto (en #25 el manifiesto TimeF
+   de [TimeF](../../tasks/issue-22-plan.md) y verificadas contra su manifiesto (en #25 el manifiesto TimeF
    de entrada tuvo SHA-256 `29135340efb377a59d695e05fb6f8848fd0e56481123f5b54e987da77e9adc97`).
 2. Particiones de #19 (`splits.parquet` + `manifest.json` de
    `data/benchmarks/lima-pm25-h24-f6-splits`): cada ventana lleva `window_id`, `station_key`,
@@ -56,8 +58,8 @@ de [las referencias de #25](lima-pm25.md) o de [las particiones de #19](issue-19
   criterio que seleccionó persistencia en #25.
 - La comparación se hace sobre objetivos idénticos: unión uno a uno por `window_id` y
   `forecast_hour` contra las predicciones de persistencia de #25 (`predictions.parquet`), con
-  verificación exacta del objetivo de cada par. Objetivos discordantes o claves duplicadas
-  rompen la comparación con error; una prueba lo demuestra.
+  verificación exacta del objetivo de cada par. La comparación exige la misma cobertura y estación en
+  ambos lados y rechaza objetivos discordantes o claves duplicadas.
 - El reporte de la ejecución real incluirá MAE y RMSE globales, por estación y por horizonte, y
   el conteo de pares comunes por partición, citando los MAE publicados de #25 como referencia
   (persistencia: 9,5291 en validación y 6,4459 en prueba).
@@ -78,7 +80,7 @@ de [las referencias de #25](lima-pm25.md) o de [las particiones de #19](issue-19
 
 ```bash
 uv sync --locked --extra tabular
-uv run --locked --extra tabular pytest tests/test_tabular_benchmark.py  # 10 passed con lightgbm
+uv run --locked --extra tabular pytest tests/test_tabular_benchmark.py
 ```
 
 El módulo se usa desde Python: `design_rows` por ventana, `ProcessingStats.fit` con las filas de

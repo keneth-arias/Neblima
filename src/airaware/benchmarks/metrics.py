@@ -3,10 +3,12 @@
 import math
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
+from itertools import groupby
+from operator import attrgetter
 from statistics import fmean
 from typing import Literal
 
-EpisodeStatus = Literal["defined", "no_labels", "no_positives"]
+EpisodeStatus = Literal["defined", "no_labels", "no_positives", "no_predicted_positives"]
 
 
 @dataclass(frozen=True, slots=True)
@@ -107,11 +109,12 @@ def episode_metrics(
             true_positive += 1
         elif called:
             false_positive += 1
-    precision = true_positive / (true_positive + false_positive)
+    alerts = true_positive + false_positive
+    precision = true_positive / alerts if alerts else None
     recall = true_positive / positives
-    f1 = 2 * precision * recall / (precision + recall) if precision + recall else 0.0
+    f1 = 2 * true_positive / (alerts + positives)
     return EpisodeReport(
-        "defined",
+        "defined" if alerts else "no_predicted_positives",
         len(labeled),
         positives,
         precision,
@@ -122,15 +125,18 @@ def episode_metrics(
 
 
 def _average_precision(labeled: Sequence[Prediction], positives: int) -> float:
-    ordered = sorted(labeled, key=lambda row: (-row.prediction, row.window_id, row.forecast_hour))
+    score = attrgetter("prediction")
+    ordered = sorted(labeled, key=score, reverse=True)
     hits = 0
     seen = 0
     total = 0.0
-    for row in ordered:
-        seen += 1
-        if row.label:
-            hits += 1
-            total += hits / seen
+    for _, group in groupby(ordered, key=score):
+        new_hits = 0
+        for row in group:
+            seen += 1
+            new_hits += int(row.label is True)
+        hits += new_hits
+        total += new_hits * (hits / seen)
     return total / positives
 
 

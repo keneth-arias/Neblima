@@ -48,9 +48,13 @@ def paired_join(
     """Unión uno a uno por window_id/forecast_hour; exige objetivos exactamente iguales."""
     left_index = _index(left)
     right_index = _index(right)
+    if left_index.keys() != right_index.keys():
+        raise ValueError("La cobertura difiere: cada objetivo requiere una clave común")
     joined = []
-    for key in sorted(set(left_index) & set(right_index)):
+    for key in sorted(left_index):
         first, second = left_index[key], right_index[key]
+        if first.station != second.station:
+            raise ValueError(f"La estación difiere para {key}: {first.station} != {second.station}")
         if first.target != second.target:
             raise ValueError(
                 f"Objetivos discordantes para {key}: {first.target} != {second.target}"
@@ -68,7 +72,7 @@ class PairedEvaluation:
 
 
 def paired_evaluation(left: Sequence[Prediction], right: Sequence[Prediction]) -> PairedEvaluation:
-    """Compara dos modelos solo sobre claves comunes con objetivos idénticos."""
+    """Compara dos modelos sobre las mismas claves, estaciones y objetivos."""
     joined = paired_join(left, right)
     if not joined:
         raise ValueError("La comparación exige al menos una clave común")
