@@ -141,3 +141,14 @@ en 3,03 s y usó hasta 203 920 KiB de memoria residente. El control de integraci
 continua registra esos recursos por ejecución. La auditoría de dependencias se
 ejecuta aparte con acceso a su servicio de alertas. La corrida local principal
 también aprobó 345 pruebas, el empaquetado y la auditoría.
+
+## Exportación histórica de PM2.5 y PM10
+
+Desde la raíz, indicar el directorio de la versión histórica y un destino nuevo en disco local.
+
+```bash
+UV_OFFLINE=true uv run --project tools/timenet-smoke --locked python \
+  tools/timenet-smoke/export_qwen_windows.py "$release" "$salida" --joint
+```
+
+El manifiesto fija las huellas de las matrices de entrenamiento y validación, de sus identificadores y de `scaler.json`. El orden de los canales de historia y objetivos es `pm25, pm10`. `origin_hour` cuenta horas desde 1970-01-01 00:00 UTC. El escalador y los percentiles 95 por estación usan las 268 567 horas de estación distintas presentes en las historias de entrenamiento. Las matrices mantienen las concentraciones publicadas, incluido el cero. [Evidencia de la exportación](../../metadata/ventanas-pm25-pm10-entrenamiento.json)

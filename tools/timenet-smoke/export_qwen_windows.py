@@ -61,7 +61,19 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("release", type=Path)
     parser.add_argument("output", type=Path)
-    parser.add_argument("--split", choices=("train", "validation", "test"), required=True)
+    parser.add_argument("--split", choices=("train", "validation", "test"))
     parser.add_argument("--sample", type=int)
+    parser.add_argument(
+        "--joint", action="store_true", help="Exportar el histórico bivariado y su escalador"
+    )
     args = parser.parse_args()
-    print(json.dumps(export_windows(args.release, args.output, args.split, args.sample)))
+    if args.joint:
+        if args.split or args.sample is not None:
+            parser.error("--joint requiere ambas particiones completas")
+        from joint_windows import export
+
+        print(json.dumps(export(args.release, args.output)))
+    else:
+        if args.split is None:
+            parser.error("Indicar --split para la versión de un solo canal")
+        print(json.dumps(export_windows(args.release, args.output, args.split, args.sample)))
