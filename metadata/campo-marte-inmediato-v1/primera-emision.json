@@ -1,0 +1,13 @@
+{
+  "bundle_sha256": "c2d79c0134127422ebf3d35fc9a35c37c148b697904b45dc4091e441c307d211",
+  "checkpoint_sha256": "d42dc1d91dce1abc6284f9cff68df3d0ff7ccbc08ede744865cde1762e53658e",
+  "input_cutoff_utc": "2026-11-20T20:32:57.552493+00:00",
+  "issue_sha256": "75e2b3321e04d1849c98d54445da27605c1673b303df2130e913a615031505a4",
+  "issued_at_utc": "2026-11-20T20:33:38.120845+00:00",
+  "mode": "private_live_shadow",
+  "origin": "2026-11-20T15:00:00",
+  "output_sha256": "1517a1637b6c76866b6818dc25d0615e87010a4556f23c4a3268a8c5870a3602",
+  "primary_at_issue": "persistence",
+  "receipt_sha256": "22c5d7bc055cb00a379dc3ef4494bf51879a009b41c2cf47f3ef71bf59abc965",
+  "station": "Campo de Marte / 112194"
+}

@@ -1,0 +1,18 @@
+{
+  "observed_high": {
+    "lower_above_target": 86,
+    "pairs": 1998,
+    "upper_below_target": 989
+  },
+  "observed_high_from_high_origin": {
+    "lower_above_target": 76,
+    "pairs": 1003,
+    "upper_below_target": 427
+  },
+  "observed_high_from_origin_below_threshold": {
+    "lower_above_target": 10,
+    "pairs": 995,
+    "upper_below_target": 562
+  },
+  "shared_station_hours": 0
+}
