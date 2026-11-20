@@ -1,10 +1,13 @@
-"""Preguntas temporales con respuestas calculables sobre una serie SINTÉTICA identificada.
+"""Preguntas temporales con respuestas calculables sobre series identificadas.
 
 Primera entrega de la issue #35: generación determinista de preguntas de tendencia, máximo,
-momento y comparación sobre una serie horaria sintética (generador congruencial propio, sin
-datos reales ni red). Cada respuesta la calcula una función pura y se verifica de ida y
-vuelta (pregunta → respuesta → verificación): el texto de respuesta es solo el valor
-calculado con su unidad, sin explicaciones causales.
+momento y comparación. La vía sintética usa una serie horaria generada de forma
+determinista (generador congruencial propio, sin datos reales ni red); la vía observada
+(`ObservedSeries`) recibe registros reales con atribución obligatoria y se apoya en
+`build_temporal_question` y `generate_questions_for_windows`, que también sostienen la vía
+sintética. Cada respuesta la calcula una función pura y se verifica de ida y vuelta
+(pregunta → respuesta → verificación): el texto de respuesta es solo el valor calculado con
+su unidad, sin explicaciones causales.
 
 Alineación con la interfaz de preguntas temporales de TimeNet (revisión fijada
 9bd1613019ee61fbc52e02106a1a45990ead7a54, consultada el 2026-11-20 UTC):
@@ -40,7 +43,7 @@ from collections.abc import Mapping, Sequence
 from dataclasses import dataclass, fields
 from datetime import UTC, datetime, timedelta
 from statistics import fmean
-from typing import Literal
+from typing import Literal, Protocol
 
 PM25_UNIT = "ug/m3"
 
@@ -96,6 +99,17 @@ def _check_aligned(instant: datetime) -> None:
         raise ValueError("El instante debe coincidir con una hora exacta")
 
 
+def _check_values(values: Sequence[float]) -> None:
+    for value in values:
+        if (
+            isinstance(value, bool)
+            or not isinstance(value, (int, float))
+            or not math.isfinite(value)
+            or value < 0
+        ):
+            raise ValueError("Los valores deben ser números finitos y no negativos")
+
+
 @dataclass(frozen=True)
 class SyntheticSeries:
     """Serie horaria sintética identificada como tal; no contiene observaciones reales."""
@@ -105,23 +119,19 @@ class SyntheticSeries:
     values: tuple[float, ...]
     block_hour: int
     synthetic: bool
+    pollutant: str = "PM2.5"
 
     def __post_init__(self) -> None:
         if self.synthetic is not True:
             raise ValueError("La serie debe quedar identificada como sintética (synthetic=True)")
         if not self.series_id.strip():
             raise ValueError("La serie requiere identificador no vacío")
+        if not self.pollutant.strip():
+            raise ValueError("La serie requiere etiqueta de contaminante no vacía")
         _check_aligned(self.start)
         if not self.values:
             raise ValueError("La serie requiere al menos un valor")
-        for value in self.values:
-            if (
-                isinstance(value, bool)
-                or not isinstance(value, (int, float))
-                or not math.isfinite(value)
-                or value < 0
-            ):
-                raise ValueError("Los valores deben ser números finitos y no negativos")
+        _check_values(self.values)
         if not 0 < self.block_hour < len(self.values):
             raise ValueError("El cambio de bloque debe quedar dentro de la serie")
 
@@ -129,6 +139,63 @@ class SyntheticSeries:
     def observation_ids(self) -> tuple[str, ...]:
         """Identificador trazable de cada casilla horaria de origen."""
         return tuple(f"obs:{self.series_id}:{index:04d}" for index in range(len(self.values)))
+
+
+class HourlySeries(Protocol):
+    """Contrato mínimo de una serie horaria para las preguntas de QA."""
+
+    @property
+    def series_id(self) -> str: ...
+
+    @property
+    def start(self) -> datetime: ...
+
+    @property
+    def pollutant(self) -> str: ...
+
+    @property
+    def values(self) -> tuple[float, ...]: ...
+
+    @property
+    def observation_ids(self) -> tuple[str, ...]: ...
+
+
+@dataclass(frozen=True)
+class ObservedSeries:
+    """Serie horaria observada en registros reales, con atribución obligatoria.
+
+    Los valores provienen de una fuente trazable (por ejemplo, el paquete TimeF verificado
+    de la issue #35); la atribución identifica a la fuente y su licencia. Los identificadores
+    de observación fijan la hora UTC exacta de cada casilla, que junto al identificador de
+    serie permite recuperar la fila original en los insumos.
+    """
+
+    series_id: str
+    start: datetime
+    values: tuple[float, ...]
+    attribution: str
+    pollutant: str = "PM2.5"
+
+    def __post_init__(self) -> None:
+        if not self.series_id.strip():
+            raise ValueError("La serie requiere identificador no vacío")
+        if not self.attribution.strip():
+            raise ValueError("La serie observada requiere atribución de su fuente")
+        if not self.pollutant.strip():
+            raise ValueError("La serie requiere etiqueta de contaminante no vacía")
+        _check_aligned(self.start)
+        if not self.values:
+            raise ValueError("La serie requiere al menos un valor")
+        _check_values(self.values)
+
+    @property
+    def observation_ids(self) -> tuple[str, ...]:
+        """Hora UTC exacta de cada casilla: clave de recuperación del registro original."""
+        origin = self.start.astimezone(UTC)
+        return tuple(
+            f"obs:{self.series_id}:{(origin + index * HOUR).isoformat()}"
+            for index in range(len(self.values))
+        )
 
 
 def build_synthetic_series(
@@ -238,7 +305,7 @@ class TemporalQuestion:
 
 
 def _window_range(
-    series: SyntheticSeries, start: datetime, end_exclusive: datetime
+    series: HourlySeries, start: datetime, end_exclusive: datetime
 ) -> tuple[int, int]:
     """Índices [first, last) de una ventana alineada dentro de la serie."""
     _check_aligned(start)
@@ -256,15 +323,13 @@ def _window_range(
 
 
 def _window_values(
-    series: SyntheticSeries, start: datetime, end_exclusive: datetime
+    series: HourlySeries, start: datetime, end_exclusive: datetime
 ) -> tuple[float, ...]:
     first, last = _window_range(series, start, end_exclusive)
     return series.values[first:last]
 
 
-def _window_ids(
-    series: SyntheticSeries, start: datetime, end_exclusive: datetime
-) -> tuple[str, ...]:
+def _window_ids(series: HourlySeries, start: datetime, end_exclusive: datetime) -> tuple[str, ...]:
     first, last = _window_range(series, start, end_exclusive)
     return series.observation_ids[first:last]
 
@@ -280,9 +345,7 @@ def _require_series_count(question: TemporalQuestion, expected: int) -> None:
         raise ValueError(f"La familia {question.family} requiere {expected} serie(s)")
 
 
-def recompute_answer(
-    question: TemporalQuestion, series_by_id: Mapping[str, SyntheticSeries]
-) -> str:
+def recompute_answer(question: TemporalQuestion, series_by_id: Mapping[str, HourlySeries]) -> str:
     """Recalcular la respuesta desde las series y la ventana; función pura de ida y vuelta."""
     missing = [series_id for series_id in question.series_ids if series_id not in series_by_id]
     if missing:
@@ -316,13 +379,13 @@ def recompute_answer(
     )
 
 
-def verify_answer(question: TemporalQuestion, series_by_id: Mapping[str, SyntheticSeries]) -> bool:
+def verify_answer(question: TemporalQuestion, series_by_id: Mapping[str, HourlySeries]) -> bool:
     """Verificación de ida y vuelta: la respuesta guardada coincide con la recalculada."""
     return recompute_answer(question, series_by_id) == question.answer
 
 
 def generate_questions(
-    series: SyntheticSeries, comparison_series: SyntheticSeries
+    series: HourlySeries, comparison_series: HourlySeries
 ) -> tuple[TemporalQuestion, ...]:
     """Generar las cuatro familias deterministas: tendencia, máximo, momento y comparación."""
     if series.series_id == comparison_series.series_id:
@@ -335,85 +398,172 @@ def generate_questions(
                 f"Las series requieren al menos {_MINIMUM_HOURS} horas para las cuatro familias"
             )
     origin = series.start.astimezone(UTC)
-    trend_start = origin + _TREND_START_HOUR * HOUR
-    trend_end = trend_start + _TREND_HOURS * HOUR
-    maximum_start = origin + _MAXIMUM_START_HOUR * HOUR
-    maximum_end = maximum_start + _MAXIMUM_HOURS * HOUR
-    moment_start = origin + _MOMENT_START_HOUR * HOUR
-    moment_end = moment_start + _MOMENT_HOURS * HOUR
-    comparison_start = origin + _COMPARISON_START_HOUR * HOUR
-    comparison_end = comparison_start + _COMPARISON_HOURS * HOUR
+    windows: dict[QAFamily, tuple[datetime, datetime]] = {
+        "trend": (
+            origin + _TREND_START_HOUR * HOUR,
+            origin + (_TREND_START_HOUR + _TREND_HOURS) * HOUR,
+        ),
+        "maximum": (
+            origin + _MAXIMUM_START_HOUR * HOUR,
+            origin + (_MAXIMUM_START_HOUR + _MAXIMUM_HOURS) * HOUR,
+        ),
+        "moment": (
+            origin + _MOMENT_START_HOUR * HOUR,
+            origin + (_MOMENT_START_HOUR + _MOMENT_HOURS) * HOUR,
+        ),
+        "comparison": (
+            origin + _COMPARISON_START_HOUR * HOUR,
+            origin + (_COMPARISON_START_HOUR + _COMPARISON_HOURS) * HOUR,
+        ),
+    }
+    return generate_questions_for_windows(series, comparison_series, windows)
+
+
+def generate_questions_for_windows(
+    series: HourlySeries,
+    comparison_series: HourlySeries,
+    windows: Mapping[QAFamily, tuple[datetime, datetime]],
+) -> tuple[TemporalQuestion, ...]:
+    """Generar las familias indicadas sobre ventanas explícitas dentro de las series.
+
+    Cada familia usa su ventana declarada; la familia de comparación exige la segunda serie.
+    Las ventanas resultantes deben quedar disjuntas por serie. La vía sintética llama a
+    `generate_questions` con el diseño canónico consecutivo; la vía observada pasa ventanas
+    tomadas de tramos reales con datos completos.
+    """
+    if series.series_id == comparison_series.series_id:
+        raise ValueError("Las series comparadas deben tener identificadores distintos")
+    desconocidas = sorted(set(windows) - set(QA_FAMILIES))
+    if desconocidas:
+        raise ValueError(f"Familias no admitidas: {', '.join(desconocidas)}")
+    if not windows:
+        raise ValueError("Se requiere al menos una familia de preguntas")
     questions = [
-        TemporalQuestion(
-            question_id=f"tqa-v1-{series.series_id}-trend",
-            family="trend",
-            series_ids=(series.series_id,),
-            observation_ids=_window_ids(series, trend_start, trend_end),
-            window_start=trend_start,
-            window_end_exclusive=trend_end,
-            prompt=(
-                f"Para la serie {series.series_id}, entre {_window_text(trend_start, trend_end)}, "
-                "¿cómo cambió la media de PM2.5 de la primera mitad de la ventana a la segunda? "
-                "Responde solo: aumento, disminución o sin cambio."
-            ),
-            answer=answer_trend(_window_values(series, trend_start, trend_end)),
-        ),
-        TemporalQuestion(
-            question_id=f"tqa-v1-{series.series_id}-maximum",
-            family="maximum",
-            series_ids=(series.series_id,),
-            observation_ids=_window_ids(series, maximum_start, maximum_end),
-            window_start=maximum_start,
-            window_end_exclusive=maximum_end,
-            prompt=(
-                f"Para la serie {series.series_id}, ¿cuál es el valor máximo de PM2.5 "
-                f"entre {_window_text(maximum_start, maximum_end)}? "
-                "Responde solo el valor con su unidad."
-            ),
-            answer=answer_maximum(_window_values(series, maximum_start, maximum_end)),
-        ),
-        TemporalQuestion(
-            question_id=f"tqa-v1-{series.series_id}-moment",
-            family="moment",
-            series_ids=(series.series_id,),
-            observation_ids=_window_ids(series, moment_start, moment_end),
-            window_start=moment_start,
-            window_end_exclusive=moment_end,
-            prompt=(
-                f"Para la serie {series.series_id}, ¿en qué instante ocurre el primer máximo "
-                f"de PM2.5 entre {_window_text(moment_start, moment_end)}? "
-                "Responde solo el instante en formato ISO 8601 con zona UTC."
-            ),
-            answer=answer_moment(
-                _window_values(series, moment_start, moment_end), start=moment_start
-            ),
-        ),
-        TemporalQuestion(
-            question_id=(f"tqa-v1-comparison-{series.series_id}-vs-{comparison_series.series_id}"),
-            family="comparison",
-            series_ids=(series.series_id, comparison_series.series_id),
-            observation_ids=(
-                _window_ids(series, comparison_start, comparison_end)
-                + _window_ids(comparison_series, comparison_start, comparison_end)
-            ),
-            window_start=comparison_start,
-            window_end_exclusive=comparison_end,
-            prompt=(
-                f"Entre {_window_text(comparison_start, comparison_end)}, ¿cuál de las dos "
-                f"series tiene la media de PM2.5 mayor: {series.series_id} o "
-                f"{comparison_series.series_id}? Responde solo el identificador de la serie "
-                "o empate."
-            ),
-            answer=answer_comparison(
-                _window_values(series, comparison_start, comparison_end),
-                _window_values(comparison_series, comparison_start, comparison_end),
-                series_id_a=series.series_id,
-                series_id_b=comparison_series.series_id,
-            ),
-        ),
+        build_temporal_question(
+            family,
+            segments=_segments_for(series, comparison_series, family),
+            window_start=start,
+            window_end_exclusive=end,
+        )
+        for family, (start, end) in sorted(
+            windows.items(), key=lambda item: QA_FAMILIES.index(item[0])
+        )
     ]
     _ensure_disjoint_windows(questions)
     return tuple(questions)
+
+
+def _segments_for(
+    series: HourlySeries, comparison_series: HourlySeries, family: QAFamily
+) -> dict[str, HourlySeries]:
+    if family == "comparison":
+        return {series.series_id: series, comparison_series.series_id: comparison_series}
+    return {series.series_id: series}
+
+
+def build_temporal_question(
+    family: QAFamily,
+    *,
+    segments: Mapping[str, HourlySeries],
+    window_start: datetime,
+    window_end_exclusive: datetime,
+) -> TemporalQuestion:
+    """Construir una pregunta de QA temporal sobre segmentos de serie reales o sintéticos.
+
+    Los segmentos deben cubrir la ventana declarada; las familias de una sola serie exigen
+    un segmento y la comparación exactamente dos. La respuesta la calcula la función pura de
+    la familia y los identificadores de observación salen de los segmentos en su orden.
+    """
+    if family not in QA_FAMILIES:
+        raise ValueError("Familia de pregunta no admitida")
+    esperados = 2 if family == "comparison" else 1
+    if len(segments) != esperados:
+        raise ValueError(f"La familia {family} requiere {esperados} serie(s)")
+    for series_id, segment in segments.items():
+        if segment.series_id != series_id:
+            raise ValueError(f"El identificador de la serie no coincide con {series_id}")
+    series_ids = tuple(segments)
+    values = [
+        _window_values(segments[series_id], window_start, window_end_exclusive)
+        for series_id in series_ids
+    ]
+    observation_ids = tuple(
+        oid
+        for series_id in series_ids
+        for oid in _window_ids(segments[series_id], window_start, window_end_exclusive)
+    )
+    if family == "comparison":
+        first, second = values
+        answer = answer_comparison(
+            first, second, series_id_a=series_ids[0], series_id_b=series_ids[1]
+        )
+    elif family == "trend":
+        answer = answer_trend(values[0])
+    elif family == "maximum":
+        answer = answer_maximum(values[0])
+    else:
+        answer = answer_moment(values[0], start=window_start)
+    question = TemporalQuestion(
+        question_id=_question_id(family, series_ids),
+        family=family,
+        series_ids=series_ids,
+        observation_ids=observation_ids,
+        window_start=window_start,
+        window_end_exclusive=window_end_exclusive,
+        prompt=_prompt(
+            family,
+            series_ids,
+            [segments[series_id].pollutant for series_id in series_ids],
+            window_start,
+            window_end_exclusive,
+        ),
+        answer=answer,
+    )
+    return question
+
+
+def _question_id(family: QAFamily, series_ids: tuple[str, ...]) -> str:
+    if family == "comparison":
+        return f"tqa-v1-comparison-{series_ids[0]}-vs-{series_ids[1]}"
+    return f"tqa-v1-{series_ids[0]}-{family}"
+
+
+def _prompt(
+    family: QAFamily,
+    series_ids: tuple[str, ...],
+    pollutants: Sequence[str],
+    window_start: datetime,
+    window_end_exclusive: datetime,
+) -> str:
+    window = _window_text(window_start, window_end_exclusive)
+    if family == "trend":
+        return (
+            f"Para la serie {series_ids[0]}, entre {window}, "
+            f"¿cómo cambió la media de {pollutants[0]} de la primera mitad de la ventana a la "
+            "segunda? Responde solo: aumento, disminución o sin cambio."
+        )
+    if family == "maximum":
+        return (
+            f"Para la serie {series_ids[0]}, ¿cuál es el valor máximo de {pollutants[0]} "
+            f"entre {window}? Responde solo el valor con su unidad."
+        )
+    if family == "moment":
+        return (
+            f"Para la serie {series_ids[0]}, ¿en qué instante ocurre el primer máximo "
+            f"de {pollutants[0]} entre {window}? "
+            "Responde solo el instante en formato ISO 8601 con zona UTC."
+        )
+    if pollutants[0] == pollutants[1]:
+        return (
+            f"Entre {window}, ¿cuál de las dos series tiene la media de {pollutants[0]} mayor: "
+            f"{series_ids[0]} o {series_ids[1]}? Responde solo el identificador de la serie "
+            "o empate."
+        )
+    return (
+        f"Entre {window}, ¿cuál de las dos series tiene la media mayor: {series_ids[0]} "
+        f"({pollutants[0]}) o {series_ids[1]} ({pollutants[1]})? Responde solo el "
+        "identificador de la serie o empate."
+    )
 
 
 def _ensure_disjoint_windows(questions: Sequence[TemporalQuestion]) -> None:

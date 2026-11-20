@@ -1,0 +1,155 @@
+{
+  "version": "preguntas-temporales-reales-20261120",
+  "issue": 35,
+  "fecha_utc": "2026-11-20T23:06:26Z",
+  "responsable": "qriqs",
+  "paquete": {
+    "dataset_id": "airaware/lima-pm25-pm10-forecast",
+    "dataset_version": "0.1.0",
+    "fuente": "historico",
+    "ruta_shared": "/home/shared/github/keneth-arias/airaware/data/processed/pm-bivariado-20261120/timef/historico/airaware/lima-pm25-pm10-forecast/0.1.0",
+    "manifest_sha256": "d0aeb64d8414ca30547037eca439b1acdb00212b67040c5d7930699edb4c76a5",
+    "insumo": "historico.parquet",
+    "insumo_sha256": "6e5274eb93572d7188c3c5118efca8107db0af8eaac3b0e14470fb5688e13c4d",
+    "lectura": "solo lectura del árbol compartido de keneth-arias; sin escrituras ni git"
+  },
+  "verificacion_integridad": {
+    "verificador_oficial": {
+      "comando": "UV_OFFLINE=true uv run --project tools/timenet-smoke --locked python tools/timenet-smoke/verify_external_pm.py /home/shared/github/keneth-arias/airaware/data/processed/pm-bivariado-20261120/timef/historico",
+      "fecha_utc": "2026-11-20T21:58:00Z",
+      "codigo_salida": 0,
+      "resultado": {
+        "tasks": 296373,
+        "history_values": 14225904,
+        "target_values": 3556476,
+        "split_ids_sha256": {
+          "train": "26e8123b3f244ebf6497c854c36a7c896c2766f669a3c30b70e8d73aadf9eb45",
+          "validation": "a171429ddce5b72212f212dad130d87ca5407a85b2332d9d15f11033c57ed01e"
+        }
+      },
+      "coincide_con_evidencia_del_paquete": true
+    },
+    "cotejo_del_generador": "antes de leer, el módulo coteja insumo, manifiesto y archivos del release contra las sumas declaradas en resumen.json y contrasta la identidad de serie y el conteo de ventanas con control.duckdb en solo lectura"
+  },
+  "serie": {
+    "sitio": "CAMPO_DE_MARTE",
+    "codigo_estacion": "90b36a172f1790cf2e37ac2063f80fd27439d4ecf871d72a20bf8e9786587a67",
+    "sensores": [
+      null,
+      null
+    ],
+    "series_ids": {
+      "pm25": "ae2485b1585f200b3d55be0ff285dedcb8f454b003433eb9ce6e7b948554ee80",
+      "pm10": "0773c46665a6e396b8acabd72faf708c2b1b332109417186fb50626cc2cea8c3"
+    },
+    "atribucion": "SENAMHI, Lima; licencia de datos ODC-BY-1.0; unidad inferida según ADR-005",
+    "unidad": "ug/m3",
+    "reloj": "UTC",
+    "horas_finitas_bivariadas": 57898,
+    "ventanas_congeladas_de_la_serie": 51275
+  },
+  "regla_tramos": "Tramos contiguos de 24 horas con ambos canales finitos que ningún intervalo objetivo congelado cubre; se eligen los cuatro más recientes y se asignan a las familias en orden canónico (tendencia, máximo, momento, comparación). Ningún tramo libre mayor o igual a 48 horas existe en la serie, por lo que la ventana de tendencia usa 24 horas (dos mitades de 12).",
+  "conteos_por_familia": {
+    "trend": {
+      "preguntas": 1,
+      "observaciones": 24,
+      "ventana_utc": [
+        "2024-03-04T14:00:00+00:00",
+        "2024-03-05T14:00:00+00:00"
+      ]
+    },
+    "maximum": {
+      "preguntas": 1,
+      "observaciones": 24,
+      "ventana_utc": [
+        "2024-03-11T02:00:00+00:00",
+        "2024-03-12T02:00:00+00:00"
+      ]
+    },
+    "moment": {
+      "preguntas": 1,
+      "observaciones": 24,
+      "ventana_utc": [
+        "2024-05-01T05:00:00+00:00",
+        "2024-05-02T05:00:00+00:00"
+      ]
+    },
+    "comparison": {
+      "preguntas": 1,
+      "observaciones": 48,
+      "ventana_utc": [
+        "2024-05-18T18:00:00+00:00",
+        "2024-05-19T18:00:00+00:00"
+      ]
+    }
+  },
+  "preguntas": [
+    {
+      "question_id": "tqa-v1-ae2485b1585f200b3d55be0ff285dedcb8f454b003433eb9ce6e7b948554ee80-trend",
+      "family": "trend",
+      "answer": "aumento",
+      "ejemplo_obs": "obs:ae2485b1585f200b3d55be0ff285dedcb8f454b003433eb9ce6e7b948554ee80:2024-03-04T14:00:00+00:00"
+    },
+    {
+      "question_id": "tqa-v1-ae2485b1585f200b3d55be0ff285dedcb8f454b003433eb9ce6e7b948554ee80-maximum",
+      "family": "maximum",
+      "answer": "28.83 ug/m3",
+      "ejemplo_obs": "obs:ae2485b1585f200b3d55be0ff285dedcb8f454b003433eb9ce6e7b948554ee80:2024-03-11T02:00:00+00:00"
+    },
+    {
+      "question_id": "tqa-v1-ae2485b1585f200b3d55be0ff285dedcb8f454b003433eb9ce6e7b948554ee80-moment",
+      "family": "moment",
+      "answer": "2024-05-02T04:00:00+00:00",
+      "ejemplo_obs": "obs:ae2485b1585f200b3d55be0ff285dedcb8f454b003433eb9ce6e7b948554ee80:2024-05-01T05:00:00+00:00"
+    },
+    {
+      "question_id": "tqa-v1-comparison-ae2485b1585f200b3d55be0ff285dedcb8f454b003433eb9ce6e7b948554ee80-vs-0773c46665a6e396b8acabd72faf708c2b1b332109417186fb50626cc2cea8c3",
+      "family": "comparison",
+      "answer": "0773c46665a6e396b8acabd72faf708c2b1b332109417186fb50626cc2cea8c3",
+      "nota": "compara la media de PM2.5 de la estación con la media de PM10 de la misma estación; el prompt nombra cada serie con su contaminante",
+      "ejemplo_obs": "obs:0773c46665a6e396b8acabd72faf708c2b1b332109417186fb50626cc2cea8c3:2024-05-18T18:00:00+00:00"
+    }
+  ],
+  "verificacion_ida_y_vuelta": {
+    "resultado": "las cuatro respuestas recalculadas coinciden con la guardada",
+    "por_pregunta": true,
+    "control_negativo_detecta_alteracion": true,
+    "cotejo_independiente": {
+      "descripcion": "consulta directa a la grilla del insumo, fuera del módulo",
+      "maximo_pm25_ventana_maximum": 28.83,
+      "media_pm25_ventana_comparison": 30.1671,
+      "media_pm10_ventana_comparison": 39.6521
+    }
+  },
+  "separacion": {
+    "intervalos_objetivo_congelados": 102550,
+    "particiones_de_los_intervalos": "train y validation de la misma serie en el release (51275 ventanas por canal); la partición test del historico está vacía",
+    "cobertura_objetivos_utc": [
+      "2015-01-15T05:00:00+00:00",
+      "2024-05-29T23:00:00+00:00"
+    ],
+    "resultado": "sin solape entre ventanas de QA y objetivos congelados de la misma serie",
+    "prueba_externa": "las ventanas de QA terminan el 2024-05-19T18:00 UTC, antes del inicio de los objetivos de prueba de openaq y senamhi_horario (ambas desde el 2024-06-02), y sus series tienen identificadores distintos",
+    "distincion_demo_prueba": "el conjunto QA es material de demostración y evaluación; los casos de prueba del pronóstico (matrices congeladas de #28 y objetivos de openaq y senamhi_horario) y el ejemplo de demostración de #88 con métricas públicas de horizonte permanecen fuera de este conjunto"
+  },
+  "conjunto_completo": {
+    "ruta_local": "data/qa/preguntas-temporales-reales-campo-de-marte.json",
+    "sha256": "30d8bdd39332ad14685a68a5a2a01a4e5e9e6b80b2e10fe5403ad61e3f9ce2cd",
+    "bytes": 18101,
+    "excluido_de_git": true
+  },
+  "determinismo": {
+    "ejecuciones": 2,
+    "sha256_coincidente": true
+  },
+  "comando": "nice -n 10 env UV_OFFLINE=true uv run --locked python -m airaware.temporal_qa_real --insumo /home/shared/github/keneth-arias/airaware/data/processed/pm-bivariado-20261120/insumos/historico.parquet --release /home/shared/github/keneth-arias/airaware/data/processed/pm-bivariado-20261120/timef/historico/airaware/lima-pm25-pm10-forecast/0.1.0 --resumen /home/shared/github/keneth-arias/airaware/data/processed/pm-bivariado-20261120/timef/historico/resumen.json --salida data/qa/preguntas-temporales-reales-campo-de-marte.json",
+  "ajuste_del_modulo": {
+    "descripcion": "ObservedSeries, HourlySeries, build_temporal_question y generate_questions_for_windows en src/airaware/temporal_qa.py; src/airaware/temporal_qa_real.py para la lectura del paquete y la elección de tramos; la vía sintética queda intacta y el módulo de QA no importa duckdb ni módulos de pronóstico",
+    "pruebas": "43 en tests/test_temporal_qa.py y 9 en tests/test_temporal_qa_real.py"
+  },
+  "pendientes": [
+    "Exportar el conjunto QA como paquete TimeF versionado (entrega posterior de #35).",
+    "Validar el conjunto con el runtime de TimeNet (AnswerTask) y decidir particiones.",
+    "Ampliar la cobertura a más estaciones y a las fuentes openaq y senamhi_horario cuando se resuelva su reloj y sus derechos."
+  ]
+}
