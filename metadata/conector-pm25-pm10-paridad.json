@@ -1,0 +1,80 @@
+{
+  "joint_counts": {
+    "train": 251915,
+    "validation": 44458
+  },
+  "pm25_counts": {
+    "train": 237397,
+    "validation": 50706,
+    "test": 50789
+  },
+  "windows_sha256": [
+    {
+      "split": "train",
+      "side": "future",
+      "channel": "pm10",
+      "rows": 251915,
+      "unique_ids": 251915,
+      "sha256": "8cf1f7fe4dda56518832bc07d30f36c842aa0f340e030d8b7a8f09669ac77902"
+    },
+    {
+      "split": "train",
+      "side": "future",
+      "channel": "pm25",
+      "rows": 251915,
+      "unique_ids": 251915,
+      "sha256": "658786cfd47a77b39476b1c9723af27fa3b9692cda59bce57a2fc7e5f6404c11"
+    },
+    {
+      "split": "train",
+      "side": "history",
+      "channel": "pm10",
+      "rows": 251915,
+      "unique_ids": 251915,
+      "sha256": "24556c23d21974cf57b245a023c47e437be8ae032414b3399608ef5c642edb97"
+    },
+    {
+      "split": "train",
+      "side": "history",
+      "channel": "pm25",
+      "rows": 251915,
+      "unique_ids": 251915,
+      "sha256": "91c38d0b63d03bfe805a92e7b983c80b491fae6c7f20d61a19118014177e02db"
+    },
+    {
+      "split": "validation",
+      "side": "future",
+      "channel": "pm10",
+      "rows": 44458,
+      "unique_ids": 44458,
+      "sha256": "cc20c51c856494f5900fc7c2e69c699184e93535f89581dbca2ec92a843e21d2"
+    },
+    {
+      "split": "validation",
+      "side": "future",
+      "channel": "pm25",
+      "rows": 44458,
+      "unique_ids": 44458,
+      "sha256": "dbaf764b13980e09063fcb8639cc93197dfe69586b0d2f297ce4ce999c83a257"
+    },
+    {
+      "split": "validation",
+      "side": "history",
+      "channel": "pm10",
+      "rows": 44458,
+      "unique_ids": 44458,
+      "sha256": "bee3bd9566568006b5b5b7792ada84a94a08ebd58be5959b838cb1a583c93a07"
+    },
+    {
+      "split": "validation",
+      "side": "history",
+      "channel": "pm25",
+      "rows": 44458,
+      "unique_ids": 44458,
+      "sha256": "1432bdbfe4f198cf1a8c2323dcb6a5d019381a9696b07d51f9843faf82820625"
+    }
+  ],
+  "internal_manifest_sha256": "d0aeb64d8414ca30547037eca439b1acdb00212b67040c5d7930699edb4c76a5",
+  "connector_manifest_sha256": "9601286d4c80e0649a7df3a8715a432f34353a1b0d29dddc6a11b785c1ba1639",
+  "pm25_manifest_sha256": "5e8d963b2b2b6384774a299b3e0d38fd1868f7f96b0f4ed242e4497c054b8f75"
+}

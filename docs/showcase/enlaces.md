@@ -15,6 +15,7 @@ dejar aquí su fecha y comprobante. Requisitos oficiales y plazo: [docs/hackatho
 | PR interno de evaluación reservada | <https://github.com/keneth-arias/airaware/pull/97> | Fusionado | Soporte técnico de los resultados que muestra la presentación |
 | Ficha del conjunto `airaware/lima-pm25-forecast@0.1.0` | [docs/dataset-cards/lima-pm25-forecast.md](../dataset-cards/lima-pm25-forecast.md) | Listo | Fuente de cobertura, particiones, licencia y límites del conjunto |
 | Informe de la prueba cronológica reservada | [reports/models/prueba-reservada-lima.md](../../reports/models/prueba-reservada-lima.md) | Listo | Métricas de la presentación (MAE 4,994 frente a 6,446 µg/m³; mejoras 22,52 % y 6,34 %) |
+| Evaluación externa de PM2.5 y PM10 | [Informe por fuente, contaminante y horizonte](../../reports/models/prueba-externa-pm25-pm10.md) | Listo | Evidencia complementaria sobre el aporte del historial de PM10 en Lima |
 | Figura para la demo | [reports/models/lima-pm25-prueba.png](../../reports/models/lima-pm25-prueba.png) | Listo | Base visual de la diapositiva de resultados y de la demo |
 | Referencias (baselines) | [reports/baselines/lima-pm25.md](../../reports/baselines/lima-pm25.md) | Listo | Comparación contra persistencia y detalles de particiones |
 | Selección inicial y política de la fuente | [reports/benchmark-selection.md](../../reports/benchmark-selection.md) · [docs/decisions/005-senamhi-operating-policy.md](../decisions/005-senamhi-operating-policy.md) | Listo | Justificar la elección de SENAMHI/Lima/PM2.5 y el alcance retrospectivo |

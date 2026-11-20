@@ -80,6 +80,10 @@ class ExternalPMTest(unittest.TestCase):
                 registry = root / source
                 result = build(source, [data], registry, begin, begin + timedelta(days=3))
                 (registry / "resumen.json").write_text(json.dumps(result))
+                from joint_coverage import count_pm25
+
+                counts = count_pm25(result, [data])
+                self.assertEqual(counts, {("Lima", "001", "test"): 32})
                 checked = verify(registry)
                 self.assertEqual(set(checked.pop("split_ids_sha256")), {"test"})
                 self.assertEqual(checked, {"tasks": 2, "history_values": 96, "target_values": 24})
