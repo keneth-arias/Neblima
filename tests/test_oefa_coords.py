@@ -1,21 +1,21 @@
 """Conversión UTM verificada de OEFA (#30): valores dorados, rechazos tipados y extra geo.
 
-El valor dorado usa la muestra registrada en docs/sources/oefa.md (revisión del 2026-11-16):
-CA-HUA-01 con ESTE=504395, NORTE=9456762, ZONA=17, DATUM=WGS84. La referencia independiente
-(Snyder/OGP) contrasta pyproj sin circularidad: ambas deben coincidir a menos de 1e-7 grados
-(alrededor de 1 cm en superficie).
+El ejemplo usa los números publicados para CA-HUA-01. La prueba supone EPSG:32717
+como condición sintética para contrastar el cálculo con las fórmulas de Snyder.
+La referencia del sistema de coordenadas de la estación real sigue pendiente.
 """
 
 import math
 
+import pyproj
 import pytest
 
 from airaware.normalization.oefa_coords import (
     CRS_DESTINO,
     CRS_ORIGEN,
-    DATUM_VERIFICADO,
+    DATUM_ADMITIDO,
     METODO,
-    ZONA_VERIFICADA,
+    ZONA_ADMITIDA,
     ConversionCoordenada,
     RechazoConversion,
     convertir_utm17_sur,
@@ -25,6 +25,7 @@ MUESTRA_ESTE = "504395"
 MUESTRA_NORTE = "9456762"
 DORADO_LATITUD = -4.9147225518
 DORADO_LONGITUD = -80.9603584686
+EVIDENCIA_PRUEBA = "Caso sintético definido en EPSG:32717 para la prueba"
 TOLERANCIA_GRADOS = 1e-7
 
 _A = 6378137.0
@@ -69,11 +70,13 @@ def _snyder_inversa(este: float, norte: float) -> tuple[float, float]:
 
 
 def test_conversion_verificada_coincide_con_el_valor_dorado():
-    pytest.importorskip(
-        "pyproj",
-        reason="CI instala sin extras; la conversión UTM exige el extra opcional 'geo'",
+    resultado = convertir_utm17_sur(
+        MUESTRA_ESTE,
+        MUESTRA_NORTE,
+        ZONA_ADMITIDA,
+        DATUM_ADMITIDO,
+        evidencia_epsg_32717=EVIDENCIA_PRUEBA,
     )
-    resultado = convertir_utm17_sur(MUESTRA_ESTE, MUESTRA_NORTE, ZONA_VERIFICADA, DATUM_VERIFICADO)
     assert isinstance(resultado, ConversionCoordenada)
     assert resultado.latitud == pytest.approx(DORADO_LATITUD, abs=TOLERANCIA_GRADOS)
     assert resultado.longitud == pytest.approx(DORADO_LONGITUD, abs=TOLERANCIA_GRADOS)
@@ -82,18 +85,16 @@ def test_conversion_verificada_coincide_con_el_valor_dorado():
     assert resultado.metodo == METODO
     assert resultado.este_original == MUESTRA_ESTE
     assert resultado.norte_original == MUESTRA_NORTE
-    assert resultado.zona == ZONA_VERIFICADA
-    assert resultado.datum == DATUM_VERIFICADO
+    assert resultado.zona == ZONA_ADMITIDA
+    assert resultado.datum == DATUM_ADMITIDO
 
 
 def test_pyproj_coincide_con_la_implementacion_independiente():
-    pytest.importorskip(
-        "pyproj",
-        reason="CI instala sin extras; la conversión UTM exige el extra opcional 'geo'",
-    )
     casos = ((504395.0, 9456762.0), (530000.0, 9012345.0))
     for este, norte in casos:
-        resultado = convertir_utm17_sur(f"{este:.0f}", f"{norte:.0f}", "17", "WGS84")
+        resultado = convertir_utm17_sur(
+            f"{este:.0f}", f"{norte:.0f}", "17", "WGS84", evidencia_epsg_32717=EVIDENCIA_PRUEBA
+        )
         assert isinstance(resultado, ConversionCoordenada)
         lat_referencia, lon_referencia = _snyder_inversa(este, norte)
         assert resultado.latitud == pytest.approx(lat_referencia, abs=TOLERANCIA_GRADOS)
@@ -101,15 +102,13 @@ def test_pyproj_coincide_con_la_implementacion_independiente():
 
 
 def test_la_conversion_es_coherente_en_ida_y_vuelta():
-    pytest.importorskip(
-        "pyproj",
-        reason="CI instala sin extras; la conversión UTM exige el extra opcional 'geo'",
+    resultado = convertir_utm17_sur(
+        MUESTRA_ESTE,
+        MUESTRA_NORTE,
+        ZONA_ADMITIDA,
+        DATUM_ADMITIDO,
+        evidencia_epsg_32717=EVIDENCIA_PRUEBA,
     )
-    pyproj = pytest.importorskip(
-        "pyproj",
-        reason="La ida lat/lon a UTM también exige el extra opcional 'geo'",
-    )
-    resultado = convertir_utm17_sur(MUESTRA_ESTE, MUESTRA_NORTE, ZONA_VERIFICADA, DATUM_VERIFICADO)
     assert isinstance(resultado, ConversionCoordenada)
     ida = pyproj.Transformer.from_crs(CRS_DESTINO, CRS_ORIGEN, always_xy=True)
     este, norte = ida.transform(resultado.longitud, resultado.latitud)
@@ -118,45 +117,45 @@ def test_la_conversion_es_coherente_en_ida_y_vuelta():
 
 
 def test_zona_distinta_a_la_verificada_se_rechaza_sin_convertir():
-    resultado = convertir_utm17_sur(MUESTRA_ESTE, MUESTRA_NORTE, "18", DATUM_VERIFICADO)
+    resultado = convertir_utm17_sur(MUESTRA_ESTE, MUESTRA_NORTE, "18", DATUM_ADMITIDO)
     assert isinstance(resultado, RechazoConversion)
     assert resultado.motivo == "zona_no_verificada"
     assert resultado.zona == "18"
-    assert resultado.datum == DATUM_VERIFICADO
+    assert resultado.datum == DATUM_ADMITIDO
     assert resultado.este_original == MUESTRA_ESTE
     assert resultado.norte_original == MUESTRA_NORTE
     assert resultado.error
 
 
 def test_la_zona_con_letra_no_verificada_en_la_muestra_se_rechaza():
-    resultado = convertir_utm17_sur(MUESTRA_ESTE, MUESTRA_NORTE, "18L", DATUM_VERIFICADO)
+    resultado = convertir_utm17_sur(MUESTRA_ESTE, MUESTRA_NORTE, "18L", DATUM_ADMITIDO)
     assert isinstance(resultado, RechazoConversion)
     assert resultado.motivo == "zona_no_verificada"
 
 
 def test_datum_distinto_al_verificado_se_rechaza():
-    resultado = convertir_utm17_sur(MUESTRA_ESTE, MUESTRA_NORTE, ZONA_VERIFICADA, "SIRGAS")
+    resultado = convertir_utm17_sur(MUESTRA_ESTE, MUESTRA_NORTE, ZONA_ADMITIDA, "SIRGAS")
     assert isinstance(resultado, RechazoConversion)
     assert resultado.motivo == "datum_no_verificado"
     assert resultado.datum == "SIRGAS"
-    assert resultado.zona == ZONA_VERIFICADA
+    assert resultado.zona == ZONA_ADMITIDA
 
 
 def test_el_datum_en_minusculas_no_se_acepta_como_verificado():
-    resultado = convertir_utm17_sur(MUESTRA_ESTE, MUESTRA_NORTE, ZONA_VERIFICADA, "wgs84")
+    resultado = convertir_utm17_sur(MUESTRA_ESTE, MUESTRA_NORTE, ZONA_ADMITIDA, "wgs84")
     assert isinstance(resultado, RechazoConversion)
     assert resultado.motivo == "datum_no_verificado"
 
 
 def test_campos_ausentes_o_vacios_se_rechazan_sin_convertir():
     for este, norte, zona, datum in (
-        (MUESTRA_ESTE, MUESTRA_NORTE, "", DATUM_VERIFICADO),
-        (MUESTRA_ESTE, MUESTRA_NORTE, "  ", DATUM_VERIFICADO),
-        (MUESTRA_ESTE, MUESTRA_NORTE, None, DATUM_VERIFICADO),
-        (MUESTRA_ESTE, MUESTRA_NORTE, ZONA_VERIFICADA, None),
-        (MUESTRA_ESTE, MUESTRA_NORTE, ZONA_VERIFICADA, ""),
-        (None, MUESTRA_NORTE, ZONA_VERIFICADA, DATUM_VERIFICADO),
-        (MUESTRA_ESTE, None, ZONA_VERIFICADA, DATUM_VERIFICADO),
+        (MUESTRA_ESTE, MUESTRA_NORTE, "", DATUM_ADMITIDO),
+        (MUESTRA_ESTE, MUESTRA_NORTE, "  ", DATUM_ADMITIDO),
+        (MUESTRA_ESTE, MUESTRA_NORTE, None, DATUM_ADMITIDO),
+        (MUESTRA_ESTE, MUESTRA_NORTE, ZONA_ADMITIDA, None),
+        (MUESTRA_ESTE, MUESTRA_NORTE, ZONA_ADMITIDA, ""),
+        (None, MUESTRA_NORTE, ZONA_ADMITIDA, DATUM_ADMITIDO),
+        (MUESTRA_ESTE, None, ZONA_ADMITIDA, DATUM_ADMITIDO),
     ):
         resultado = convertir_utm17_sur(este, norte, zona, datum)
         assert isinstance(resultado, RechazoConversion), (este, norte, zona, datum)
@@ -171,10 +170,10 @@ def test_campos_ausentes_o_vacios_se_rechazan_sin_convertir():
 
 def test_este_y_norte_no_numericos_o_no_finitos_se_rechazan():
     for crudo in ("CA-HUA-01", "50.439,5", "nan", "inf", "-inf", "1e400"):
-        este = convertir_utm17_sur(crudo, MUESTRA_NORTE, ZONA_VERIFICADA, DATUM_VERIFICADO)
+        este = convertir_utm17_sur(crudo, MUESTRA_NORTE, ZONA_ADMITIDA, DATUM_ADMITIDO)
         assert isinstance(este, RechazoConversion), crudo
         assert este.motivo == "este_invalido"
-        norte = convertir_utm17_sur(MUESTRA_ESTE, crudo, ZONA_VERIFICADA, DATUM_VERIFICADO)
+        norte = convertir_utm17_sur(MUESTRA_ESTE, crudo, ZONA_ADMITIDA, DATUM_ADMITIDO)
         assert isinstance(norte, RechazoConversion), crudo
         assert norte.motivo == "norte_invalido"
 
@@ -183,16 +182,41 @@ def test_el_orden_de_validacion_es_determinista():
     resultado = convertir_utm17_sur("x", "y", "19", "PSAD56")
     assert isinstance(resultado, RechazoConversion)
     assert resultado.motivo == "zona_no_verificada"
-    resultado = convertir_utm17_sur("x", "y", ZONA_VERIFICADA, "PSAD56")
+    resultado = convertir_utm17_sur("x", "y", ZONA_ADMITIDA, "PSAD56")
     assert isinstance(resultado, RechazoConversion)
     assert resultado.motivo == "datum_no_verificado"
 
 
 def test_los_espacios_de_borde_no_impiden_la_conversion():
-    pytest.importorskip(
-        "pyproj",
-        reason="CI instala sin extras; la conversión UTM exige el extra opcional 'geo'",
+    con_bordes = convertir_utm17_sur(
+        f" {MUESTRA_ESTE} ",
+        f" {MUESTRA_NORTE} ",
+        " 17 ",
+        " WGS84 ",
+        evidencia_epsg_32717=EVIDENCIA_PRUEBA,
     )
-    con_bordes = convertir_utm17_sur(f" {MUESTRA_ESTE} ", f" {MUESTRA_NORTE} ", " 17 ", " WGS84 ")
     assert isinstance(con_bordes, ConversionCoordenada)
     assert con_bordes.latitud == pytest.approx(DORADO_LATITUD, abs=TOLERANCIA_GRADOS)
+    assert con_bordes.este_original == f" {MUESTRA_ESTE} "
+    assert con_bordes.norte_original == f" {MUESTRA_NORTE} "
+    assert con_bordes.zona == " 17 "
+    assert con_bordes.datum == " WGS84 "
+    assert con_bordes.evidencia_epsg_32717 == EVIDENCIA_PRUEBA
+
+
+def test_zona_y_datum_sin_respaldo_del_crs_no_bastan():
+    resultado = convertir_utm17_sur(MUESTRA_ESTE, MUESTRA_NORTE, "17", "WGS84")
+    assert isinstance(resultado, RechazoConversion)
+    assert resultado.motivo == "crs_sin_evidencia"
+
+
+@pytest.mark.parametrize(
+    "este,norte", [("1e308", MUESTRA_NORTE), ("0", "0"), (MUESTRA_ESTE, "10000001")]
+)
+def test_punto_fuera_del_dominio_se_rechaza_con_sus_originales(este, norte):
+    resultado = convertir_utm17_sur(
+        este, norte, "17", "WGS84", evidencia_epsg_32717=EVIDENCIA_PRUEBA
+    )
+    assert isinstance(resultado, RechazoConversion)
+    assert resultado.motivo == "fuera_del_dominio"
+    assert (resultado.este_original, resultado.norte_original) == (este, norte)

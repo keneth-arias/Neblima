@@ -256,55 +256,35 @@ generalizar fuera de Lima.
 
 | Producto | Frecuencia observada | Significado de la medición | Derechos | Cobertura | Decisión |
 | --- | --- | --- | --- | --- | --- |
-| EAS (CSV) | 333 combinaciones parámetro/unidad/periodo; PM2.5/PM10 horarios en µg/m³; el reloj solo se construyó bajo la hipótesis Excel 1900 sin confirmar (3 512 243 filas con reloj hipotético) | Concentración de material particulado, objetivo ambiental del proyecto | ODC-By declarado en catálogo y metadatos (revisión 16/11); atribución y derechos pendientes de Keneth | 34 estaciones declaradas a nivel nacional; la muestra completa está en una sola estación con ZONA=17/DATUM=WGS84; informes citan zonas 18L y 19K en otras estaciones | **No mezclar aún**: `scientific_valid_windows` sigue nulo porque faltan época y convención temporal, calidad, identidad geográfica y derechos. Es el candidato prioritario para el objetivo horario (diagnóstico del 17/11). |
+| EAS ancho (`oefa-csv`) | Mediciones declaradas horarias. La hora de inicio falta en gran parte del archivo | Columnas de PM2.5/PM10 con unidad ug/m3 en las celdas finitas revisadas | ODC-By declarada en catálogo y metadatos. Revisar atribución antes de publicar | 34 estaciones declaradas. Los primeros 123 registros completos corresponden a CA-HUA-01 | Excluir de la mezcla horaria de Lima según el [perfil del archivo ancho](oefa-consultation-research.md). Identidad, reloj y calidad siguen pendientes. |
+| EAS largo (`oefa-eas-aire`) | 333 combinaciones de parámetro, unidad y periodo. Reloj interpretable en 3 512 243 filas bajo la hipótesis de época Excel 1900 | PM2.5 y PM10 con unidad y periodo compatibles en el subconjunto del diagnóstico | ODC-By declarada en la [ficha de esta exportación](../../reports/acquisition/oefa-eas-aire.md). Publicación pendiente de revisión | 151 nombres de puntos y 171 combinaciones de nombre y coordenadas en el archivo | Mantener separado del CSV ancho. `scientific_valid_windows` sigue nulo por época, convención temporal, calidad, geografía y derechos pendientes. |
 | EAC | Periodos horarios, 24 h, 8 h, mensuales o ausentes; racha horaria PM más larga: 542 h | Meteorología, gases, partículas y análisis de metales/minerales; un metal medido en PM10 y el peso de un filtro no son concentración total de PM10 | Discrepancia sin resolver: la página dice `License Not Specified` y la API devuelve ODC-By; el recurso XLSX está etiquetado `format: csv` | 184 nombres de puntos; los tres contextos horarios PM no incluyeron candidatos Lima con el criterio textual del 17/11 | **Excluir del objetivo horario PM de Lima**: sin candidatos Lima identificados textualmente y con calidad sin revisar (13 549 inicios sin resolver, 126 celdas de fórmula en fecha fin, 18 intervalos negativos, valores atípicos conservados). |
-| EAF | Campañas focales y emergencias; rachas PM2.5 en contextos Lima textuales de 20 a 204 h | Concentraciones de campañas específicas; no es una red de observación rutinaria | «Licencia Creative Commons» general en el repositorio, variante sin precisar (revisión 16/11) | Menciones textuales de San Juan de Lurigancho, La Victoria y Lurigancho-Chosica; 13 ventanas 168→24 h con mención Lima; sin homologación espacial | **Excluir de la mezcla horaria; reservar como piloto de eventos** con objetivos separados y validación temporal propia: las ventanas superpuestas no se tratan como ejemplos independientes. |
-| EAT | Muestras de 24 horas (2 940 filas) | Química de campaña: partículas, metales y otros parámetros de laboratorio; 1 328 valores censurados (45,2 %) como `<L.C.` | «Licencia Creative Commons» general, variante sin precisar | 22 nombres de puntos de evaluación; sin asociación con Lima evidenciada en el 17/11 | **Excluir del objetivo horario**: no se fabrican series horarias desde muestras de 24 h ni se sustituyen censura por cero o límite; producto especializado de campañas. |
-| IPASH | Sin periodo declarado: `Periodo='-'` en las 1 330 filas | Mínimos/máximos/promedios de gases y propiedades de pozos (O2, H2S, COV, límite inferior de explosividad); no son concentraciones ambientales | «Licencia Creative Commons» general, variante sin precisar | 133 puntos o aberturas de pozos; sin series PM10/PM2.5 | **Excluir del objetivo horario PM**: sin series horarias de particulado ni significado compatible con el pronóstico ambiental; caracterización específica de sitio. |
+| EAF | Campañas focales y emergencias; rachas PM2.5 en contextos Lima textuales de 20 a 204 h | Concentraciones de campañas específicas; no es una red de observación rutinaria | Pendiente por archivo según el [informe de adquisición](../../reports/acquisition/oefa-air-workbooks.md) | Menciones textuales de San Juan de Lurigancho, La Victoria y Lurigancho-Chosica; 13 ventanas 168→24 h con mención Lima; sin homologación espacial | **Excluir de la mezcla horaria; reservar como piloto de eventos** con objetivos separados y validación temporal propia: las ventanas superpuestas no se tratan como ejemplos independientes. |
+| EAT | Muestras de 24 horas (2 940 filas) | Química de campaña: partículas, metales y otros parámetros de laboratorio; 1 328 valores censurados (45,2 %) como `<L.C.` | Pendiente por archivo (informe de adquisición) | 22 nombres de puntos de evaluación; sin asociación con Lima evidenciada en el 17/11 | **Excluir del objetivo horario**: no se fabrican series horarias desde muestras de 24 h ni se sustituyen censura por cero o límite; producto especializado de campañas. |
+| IPASH | Sin periodo declarado: `Periodo='-'` en las 1 330 filas | Mínimos/máximos/promedios de gases y propiedades de pozos (O2, H2S, COV, límite inferior de explosividad); no son concentraciones ambientales | Pendiente por archivo (informe de adquisición) | 133 puntos o aberturas de pozos; sin series PM10/PM2.5 | **Excluir del objetivo horario PM**: sin series horarias de particulado ni significado compatible con el pronóstico ambiental; caracterización específica de sitio. |
 
 Las exclusiones de EAC, EAF, EAT e IPASH citan el análisis del 17/11/2026; la decisión de no mezclar
 EAS cita el diagnóstico del 17/11/2026. Los conteos de «ventanas estructurales» (EAC 1 645 ventanas
-24→6 h sin mención Lima; EAF 647/951 con 491 contextos textuales Lima y 13 semanales) son
+24→6 h sin mención Lima; EAF 647/951 con 491 ventanas con mención de Lima y 13 ventanas de 168→24 h por contaminante) son
 estructura en el reloj de origen, no elegibilidad científica. La ausencia de menciones Lima en un
 archivo no prueba ausencia de mediciones de Lima en otras etiquetas o representaciones.
 
-## Conversión verificada de coordenadas UTM de OEFA (#30)
+## Condiciones para convertir coordenadas de OEFA (#30)
 
-Lo único verificado en la fuente es la muestra inicial del CSV de EAS (revisión del 16/11, más
-arriba): `ZONA=17` y `DATUM=WGS84` en los 123 registros completos de `CA-HUA-01`. La conversión se
-implementa en `src/airaware/normalization/oefa_coords.py` con estas reglas:
+El diccionario del CSV ancho y las 123 filas de la muestra de CA-HUA-01 documentan
+`ZONA=17` y `DATUM=WGS84`. Falta una referencia que acredite la proyección y el hemisferio
+para ese punto. Los informes de estaciones en otras zonas tampoco resuelven ese dato.
 
-1. **Solo el par verificado convierte.** `ZONA=17` con `DATUM=WGS84` se interpreta como UTM zona 17
-   sur (EPSG:32717) hacia EPSG:4326, porque la cobertura declarada es Perú —hemisferio sur, según
-   los metadatos revisados— y el NORTE de la muestra (9 456 762) solo es coherente con ese
-   hemisferio. Otro valor de zona o datum, ausente o vacío, produce un rechazo tipado
-   (`zona_ausente`, `zona_no_verificada`, `datum_ausente`, `datum_no_verificado`, `este_invalido`,
-   `norte_invalido`); nunca se convierte bajo una interpretación asumida.
-2. **Los originales se conservan verbatim** en la salida, junto con los valores convertidos y el
-   registro de la operación (`crs_origen`, `crs_destino`, `metodo`). El valor dorado registrado es
-   el punto de la muestra: ESTE=504395, NORTE=9456762 → latitud −4,9147225518, longitud
-   −80,9603584686, contrastado con una implementación independiente de las fórmulas de Snyder con
-   acuerdo mejor que 1e−7 grados. Ese punto no pertenece a Lima y no se le atribuye pertenencia.
-3. **pyproj es el extra opcional `geo`** (`pyproject.toml`), sin entrar a las dependencias base. La
-   validación y los rechazos no importan pyproj; solo la conversión verificada lo importa de forma
-   perezosa, siguiendo el patrón del extra `tabular` (#26). En CI, que instala sin extras, las
-   pruebas de conversión se omiten con `pytest.importorskip("pyproj", reason=...)` y las pruebas de
-   rechazo se ejecutan igual.
-4. **La definición del CRS del catálogo sigue pendiente de Keneth** (pendiente 3 de la sección
-   «Pendientes», más arriba): esta entrega no modifica `configs/sources.yaml` ni
-   `tasks/plan.md`; la propuesta se registra en el cuerpo del PR. El adaptador hacia `Station` del
-   contrato de observaciones (`coordinate_evidence`) queda para la integración siguiente.
+El conversor de `src/airaware/normalization/oefa_coords.py` admite coordenadas en la
+proyección universal transversa de Mercator (UTM) de la zona 17 sur, con datum WGS84.
+Quien lo llama debe aportar en `evidencia_epsg_32717` la referencia que documenta ese
+sistema para el registro. Sin ella devuelve `crs_sin_evidencia` y conserva los campos
+originales. También rechaza zona o datum incompatibles, campos inválidos y puntos fuera
+del dominio. Al convertir guarda los cuatro campos originales, la referencia, los códigos
+de origen y destino y el método.
 
-Verificación local de esta entrega, ejecutada el 2026-11-20 desde la raíz del repositorio:
-
-```text
-uv sync --locked --extra geo
-uv run --locked --extra geo pytest tests/test_oefa_coords.py
-  → 11 passed (exit 0): 4 de conversión y dorado, 7 de rechazos y conservación de originales
-uv sync --locked && make check   (modo CI, sin extras)
-  → exit 0: uv lock --check, ruff format, ruff check, ty, catálogo y
-    pytest 413 passed, 4 skipped (las conversiones omitidas con importorskip)
-make build → exit 0 (dist/airaware-0.1.0.tar.gz y wheel generados)
-make audit → exit 0 (pip-audit: No known vulnerabilities found)
-```
-
+Bajo la condición explícita EPSG:32717, el par numérico (504395, 9456762) se transforma
+a latitud −4,9147225518 y longitud −80,9603584686 en EPSG:4326. Es un control numérico
+contrastado con las fórmulas de Snyder. La asignación geográfica de CA-HUA-01 queda
+pendiente. El extra `geo` instala pyproj para la conversión. El entorno de desarrollo
+también lo incluye para que `make check` ejecute el control numérico y los rechazos.

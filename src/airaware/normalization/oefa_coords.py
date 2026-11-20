@@ -1,38 +1,25 @@
-"""Conversión UTM verificada para coordenadas OEFA (#30); rechazo tipado, sin supuestos.
+"""Conversión de coordenadas OEFA con respaldo del sistema de referencia de origen.
 
-Lo único verificado en la fuente registrada (docs/sources/oefa.md, revisión del 2026-11-16)
-es la muestra inicial del CSV de EAS: los 123 registros completos de CA-HUA-01 llevan
-ZONA=17 y DATUM=WGS84, con ESTE=504395 y NORTE=9456762. Esa muestra no demuestra que toda
-la fuente comparta zona y datum: los informes citados en el mismo documento usan otras
-bandas (WGS-84 Zona 18L en CA-CC-01 y CA-SB-01; WGS-84 Zona 19K en CA-SOC-01). Por eso
-este módulo convierte únicamente cuando ZONA y DATUM coinciden con lo verificado, y en
-cualquier otro caso produce un rechazo tipado; nunca convierte bajo una interpretación
-asumida.
-
-Interpretación documentada del par verificado: ZONA=17 con DATUM=WGS84 corresponde a UTM
-zona 17 sur (EPSG:32717) porque la cobertura declarada del conjunto es Perú —hemisferio
-sur, según los metadatos revisados— y el NORTE de la muestra (9 456 762) solo es coherente
-con ese hemisferio. La confirmación sobre el conjunto completo sigue pendiente del
-perfilamiento científico; la definición del CRS con el responsable queda en la matriz de
-compatibilidad de docs/sources/oefa.md.
-
-pyproj es un extra opcional (geo): la validación y los rechazos no lo requieren, y solo
-las conversiones verificadas importan la librería, siguiendo el patrón documentado del
-extra tabular. En CI, que instala sin extras, las pruebas de conversión se omiten con
-pytest.importorskip.
+La muestra de CA-HUA-01 declara ZONA=17 y DATUM=WGS84. El diccionario de EAS no
+confirma su proyección ni su hemisferio (docs/sources/oefa.md). Para convertir, quien
+llama debe aportar la referencia que acredita EPSG:32717 para el punto de origen.
 """
 
+from __future__ import annotations
+
 import functools
-import importlib
 import math
-from typing import Any, Final, Literal
+from typing import TYPE_CHECKING, Final, Literal
 
 from pydantic import Field
 
-from airaware.schemas import Record
+from airaware.schemas import Identifier, Record
 
-ZONA_VERIFICADA: Final[str] = "17"
-DATUM_VERIFICADO: Final[str] = "WGS84"
+if TYPE_CHECKING:
+    from pyproj import Transformer
+
+ZONA_ADMITIDA: Final[str] = "17"
+DATUM_ADMITIDO: Final[str] = "WGS84"
 CRS_ORIGEN: Final[str] = "EPSG:32717"  # WGS 84 / UTM zona 17S
 CRS_DESTINO: Final[str] = "EPSG:4326"  # WGS 84 (latitud, longitud)
 METODO: Final[str] = "pyproj.Transformer.from_crs('EPSG:32717', 'EPSG:4326', always_xy=True)"
@@ -44,6 +31,8 @@ MotivoRechazo = Literal[
     "datum_no_verificado",
     "este_invalido",
     "norte_invalido",
+    "crs_sin_evidencia",
+    "fuera_del_dominio",
 ]
 
 
@@ -58,6 +47,7 @@ class ConversionCoordenada(Record):
     datum: str
     latitud: float = Field(ge=-90, le=90)
     longitud: float = Field(ge=-180, le=180)
+    evidencia_epsg_32717: Identifier
     crs_origen: str
     crs_destino: str
     metodo: str
@@ -100,15 +90,15 @@ def _decimal(crudo: str | None) -> float:
 
 
 @functools.lru_cache(maxsize=1)
-def _transformador() -> Any:
+def _transformador() -> Transformer:
     """Transformer perezoso: solo exige el extra geo cuando hay una conversión verificada."""
     try:
-        pyproj: Any = importlib.import_module("pyproj")
+        from pyproj import Transformer
     except ModuleNotFoundError as error:
         raise RuntimeError(
             "La conversión UTM exige el extra opcional 'geo': uv sync --locked --extra geo"
         ) from error
-    return pyproj.Transformer.from_crs(CRS_ORIGEN, CRS_DESTINO, always_xy=True)
+    return Transformer.from_crs(CRS_ORIGEN, CRS_DESTINO, always_xy=True)
 
 
 def convertir_utm17_sur(
@@ -116,6 +106,8 @@ def convertir_utm17_sur(
     norte: str | None,
     zona: str | None,
     datum: str | None,
+    *,
+    evidencia_epsg_32717: str | None = None,
 ) -> Resultado:
     """Convertir ESTE/NORTE de UTM zona 17 sur WGS84 a latitud/longitud verificados.
 
@@ -133,7 +125,7 @@ def convertir_utm17_sur(
             motivo="zona_ausente",
             error="ZONA ausente o vacía; la conversión exige la zona verificada '17'",
         )
-    if zona_limpia != ZONA_VERIFICADA:
+    if zona_limpia != ZONA_ADMITIDA:
         return RechazoConversion(
             este_original=este,
             norte_original=norte,
@@ -141,8 +133,8 @@ def convertir_utm17_sur(
             datum=datum,
             motivo="zona_no_verificada",
             error=(
-                f"ZONA={zona_limpia!r} no coincide con la única zona verificada en la "
-                f"muestra registrada ({ZONA_VERIFICADA!r}); los informes citados usan otras zonas"
+                f"ZONA={zona_limpia!r} no coincide con la zona admitida para la "
+                f"muestra registrada ({ZONA_ADMITIDA!r}); los informes citados usan otras zonas"
             ),
         )
     if datum_limpio is None:
@@ -154,7 +146,7 @@ def convertir_utm17_sur(
             motivo="datum_ausente",
             error="DATUM ausente o vacío; la conversión exige el datum verificado 'WGS84'",
         )
-    if datum_limpio != DATUM_VERIFICADO:
+    if datum_limpio != DATUM_ADMITIDO:
         return RechazoConversion(
             este_original=este,
             norte_original=norte,
@@ -162,8 +154,8 @@ def convertir_utm17_sur(
             datum=datum,
             motivo="datum_no_verificado",
             error=(
-                f"DATUM={datum_limpio!r} no coincide con el único verificado en la muestra "
-                f"registrada ({DATUM_VERIFICADO!r})"
+                f"DATUM={datum_limpio!r} no coincide con el datum admitido para la muestra "
+                f"registrada ({DATUM_ADMITIDO!r})"
             ),
         )
     try:
@@ -188,19 +180,40 @@ def convertir_utm17_sur(
             motivo="norte_invalido",
             error=f"NORTE inválido: {error}",
         )
-    longitud, latitud = _transformador().transform(este_valor, norte_valor)
-    if not (math.isfinite(latitud) and math.isfinite(longitud)):
-        raise ValueError("La conversión no produjo coordenadas finitas")
-    return ConversionCoordenada(
-        este_original=este or "",
-        norte_original=norte or "",
-        este=este_valor,
-        norte=norte_valor,
-        zona=zona_limpia,
-        datum=datum_limpio,
-        latitud=latitud,
-        longitud=longitud,
-        crs_origen=CRS_ORIGEN,
-        crs_destino=CRS_DESTINO,
-        metodo=METODO,
+    if evidencia_epsg_32717 is None or not evidencia_epsg_32717.strip():
+        return RechazoConversion(
+            este_original=este,
+            norte_original=norte,
+            zona=zona,
+            datum=datum,
+            motivo="crs_sin_evidencia",
+            error="Falta la referencia que acredita EPSG:32717 para este punto.",
+        )
+
+    # Evitar que la proyección inversa envuelva coordenadas proyectadas imposibles.
+    if 0 < este_valor < 1_000_000 and 0 < norte_valor <= 10_000_000:
+        longitud, latitud = _transformador().transform(este_valor, norte_valor)
+        # Área de uso de WGS 84 / UTM zona 17S, incluidos el ecuador y los meridianos límite.
+        if -84 <= longitud <= -78 and -80 <= latitud <= 0:
+            return ConversionCoordenada(
+                este_original=este or "",
+                norte_original=norte or "",
+                este=este_valor,
+                norte=norte_valor,
+                zona=zona or "",
+                datum=datum or "",
+                latitud=latitud,
+                longitud=longitud,
+                evidencia_epsg_32717=evidencia_epsg_32717,
+                crs_origen=CRS_ORIGEN,
+                crs_destino=CRS_DESTINO,
+                metodo=METODO,
+            )
+    return RechazoConversion(
+        este_original=este,
+        norte_original=norte,
+        zona=zona,
+        datum=datum,
+        motivo="fuera_del_dominio",
+        error="El punto queda fuera del dominio de UTM zona 17 sur.",
     )
