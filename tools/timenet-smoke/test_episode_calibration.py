@@ -106,3 +106,21 @@ class EpisodeCalibrationTest(TestCase):
             with self.assertRaisesRegex(ValueError, "huella"):
                 run(args)
             self.assertFalse(args.output.exists())
+
+    def test_reject_invalid_probability_artifacts(self):
+        for model in (
+            {"status": "single_class", "frequency": 2},
+            {"status": "unknown"},
+            {"status": "fitted", "scale": 0.0, "center": 0, "intercept": 0, "slope": 1, "l2": 1},
+            {"status": "fitted", "scale": 1.0, "center": 0, "intercept": 0, "slope": -1, "l2": 1},
+        ):
+            with self.subTest(model=model), self.assertRaises(ValueError):
+                probability(np.array([1.0, 2.0]), model)
+
+    def test_replay_test_block_cannot_be_opened_with_self_asserted_selection(self):
+        from argparse import Namespace
+
+        from episode_calibration import run
+
+        with self.assertRaisesRegex(ValueError, "repetición"):
+            run(Namespace(command="apply", block="test"))

@@ -23,11 +23,12 @@ def fit_residuals(predicted, observed):
         or predicted.ndim != 2
         or predicted.shape[1] != 6
         or not len(observed)
-        or not np.isfinite(observed).all()
+        or np.isinf(observed).any()
+        or np.isnan(observed).all(axis=0).any()
         or not np.isfinite(predicted).all()
     ):
         raise ValueError("Se requieren seis pronósticos y seis mediciones finitas por ventana")
-    return np.quantile(observed.astype(np.float64) - predicted, [0.1, 0.9], axis=0)
+    return np.nanquantile(observed.astype(np.float64) - predicted, [0.1, 0.9], axis=0)
 
 
 def fit_logistic(scores, labels):
@@ -76,8 +77,29 @@ def fit_logistic(scores, labels):
 
 
 def probability(scores, model):
-    if model["status"] in ("single_class", "constant_score"):
-        return np.full(scores.shape, model["frequency"])
+    if not isinstance(model, dict) or not np.isfinite(scores).all():
+        raise ValueError("Puntajes o modelo de probabilidad inválidos")
+    status = model.get("status")
+    if status in ("single_class", "constant_score"):
+        freq = model.get("frequency")
+        if (
+            not isinstance(freq, (float, int))
+            or not 0 <= freq <= 1
+            or (status == "single_class" and freq not in (0, 1))
+        ):
+            raise ValueError("Frecuencia de calibración inválida")
+        return np.full(scores.shape, freq, dtype=float)
+    fields = ("center", "scale", "intercept", "slope")
+    if (
+        status != "fitted"
+        or any(
+            not isinstance(model.get(k), (int, float)) or not np.isfinite(model[k]) for k in fields
+        )
+        or model["scale"] <= 0
+        or model["slope"] < 0
+        or model.get("l2") != 1
+    ):
+        raise ValueError("Coeficientes de calibración inválidos")
     return expit(
         model["intercept"] + model["slope"] * ((scores - model["center"]) / model["scale"])
     )
@@ -99,24 +121,16 @@ def align(archive, ids, field):
 def run(args):
     fitting = args.command == "fit"
     phase = "calibration" if fitting else args.block
+    if phase not in ("calibration", "selection"):
+        raise ValueError("La repetición histórica solo permite calibración y selección")
     manifest = json.loads(
         check_file(args.blocks / "manifest.json", args.manifest_sha256).read_text()
     )
     if manifest["version"] != VERSION or manifest["unit"] != "ug/m3":
         raise ValueError("Versión de bloques o unidad incompatible")
-    if phase == "test":
-        if not args.selection or not args.selection_sha256:
-            raise ValueError("La prueba requiere una selección congelada")
-        release = json.loads(check_file(args.selection, args.selection_sha256).read_text())
-        if (
-            release.get("selected_in") != "selection"
-            or release.get("manifest_sha256") != args.manifest_sha256
-            or release.get("calibrator_sha256") != args.calibrator_sha256
-        ):
-            raise ValueError("La selección congelada difiere del calibrador o de los bloques")
     folder = args.blocks / phase
     files = manifest["blocks"][phase]["files"]
-    with np.load(check_file(folder / "index.npz", files["index.npz"])) as index:
+    with np.load(check_file(folder / "index.npz", files["index.npz"]), allow_pickle=False) as index:
         ids, order = ordered_ids(index["window_id"])
         stations = index["station_key"][order]
     threshold_hash = manifest["thresholds_sha256"]
@@ -142,7 +156,9 @@ def run(args):
     }
     scores = predicted.max(axis=1) - limits
     if fitting:
-        with np.load(check_file(folder / "observed.npz", files["observed.npz"])) as observations:
+        with np.load(
+            check_file(folder / "observed.npz", files["observed.npz"]), allow_pickle=False
+        ) as observations:
             observed = align(observations, ids, "targets")
         artifact = {
             **identity,
@@ -165,6 +181,8 @@ def run(args):
                 or not np.isin(y, [-1, 0, 1]).all()
             ):
                 raise ValueError("Etiquetas de episodio inválidas")
+            if np.any((y != -1) & ~np.isfinite(observed).all(axis=1)):
+                raise ValueError("La elegibilidad requiere seis objetivos medidos")
             valid = (y != -1) & np.isfinite(scores)
             if not valid.any() or not np.array_equal(
                 y[valid], observed[valid].max(axis=1) >= limits[valid]
@@ -187,9 +205,12 @@ def run(args):
             "window_id": ids,
             "forecast_hour": np.arange(1, 7),
             "predicted": predicted,
-            "lower": predicted + q[0],
-            "upper": predicted + q[1],
+            "lower": np.maximum(0.0, predicted + q[0]),
+            "upper": np.maximum(0.0, predicted + q[1]),
             "calibrator_sha256": args.calibrator_sha256,
+            "manifest_sha256": args.manifest_sha256,
+            "checkpoint_sha256": checkpoint,
+            "block": phase,
         }
         if artifact["probability"] is not None:
             eligible = np.isfinite(scores)
@@ -211,9 +232,7 @@ if __name__ == "__main__":
     fit = commands.add_parser("fit")
     fit.add_argument("--eligible-labels", type=Path)
     apply = commands.add_parser("apply")
-    apply.add_argument("--block", choices=("selection", "test"), required=True)
-    apply.add_argument("--selection", type=Path)
-    apply.add_argument("--selection-sha256")
+    apply.add_argument("--block", choices=("selection",), required=True)
     apply.add_argument("--calibrator", type=Path, required=True)
     apply.add_argument("--calibrator-sha256", required=True)
     for command in (fit, apply):

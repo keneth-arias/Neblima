@@ -55,3 +55,22 @@ class EpisodeBlocksTest(TestCase):
             with self.assertRaisesRegex(ValueError, "huella"):
                 export_blocks([(data, "0" * 64)], cuts, root / "bad")
             self.assertFalse((root / "bad").exists())
+
+    def test_preserves_source_clock_and_nullable_follow_up(self):
+        from episode_blocks import load_windows
+
+        with TemporaryDirectory() as tmp:
+            path = Path(tmp) / "measurements.npz"
+            stamp = "2022-04-09T17:00:00-05:00"
+            np.savez(
+                path,
+                window_id=["a"],
+                station_key=["s"],
+                origin_at=[stamp],
+                history=np.zeros((1, 24)),
+                targets=[[0.0, 1.0, 2.0, 3.0, 4.0, np.nan]],
+            )
+            rows = load_windows([(path, sha256_file(path))])
+            self.assertEqual(rows["origin_at"][0], stamp)
+            self.assertEqual(rows["source_index"][0], 0)
+            self.assertTrue(np.isnan(rows["targets"][0, -1]))

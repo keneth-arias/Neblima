@@ -29,18 +29,20 @@ def utc_hour(text):
 def load_windows(sources):
     fields = ("window_id", "station_key", "origin_at", "history", "targets")
     chunks = {key: [] for key in fields}
-    for path, digest in sources:
+    source_indexes = []
+    for source_index, (path, digest) in enumerate(sources):
         if sha256_file(path) != digest:
             raise ValueError(f"La huella difiere para {path}")
         with np.load(path, allow_pickle=False) as data:
             count = len(data["window_id"])
+            source_indexes.append(np.full(count, source_index, dtype=np.int32))
             for key in fields:
                 values = data[key]
                 if key in ("history", "targets"):
                     width = 24 if key == "history" else 6
                     if values.shape != (count, width) or values.dtype.kind not in "iuf":
                         raise ValueError(f"Dimensiones o tipo inválidos en {key}")
-                    if not np.isfinite(values).all():
+                    if np.isinf(values).any() or (key == "history" and np.isnan(values).any()):
                         raise ValueError(f"Hay lecturas no finitas en {key}")
                 elif values.shape != (count,) or values.dtype.kind != "U" or (values == "").any():
                     raise ValueError(f"Campo de texto inválido en {key}")
@@ -48,7 +50,8 @@ def load_windows(sources):
     data = {key: np.concatenate(values) for key, values in chunks.items()}
     if len(np.unique(data["window_id"])) != len(data["window_id"]):
         raise ValueError("Identificadores duplicados entre insumos")
-    data["origin_hour"] = np.array([utc_hour(t) for t in data.pop("origin_at")], dtype=np.int64)
+    data["origin_hour"] = np.array([utc_hour(t) for t in data["origin_at"]], dtype=np.int64)
+    data["source_index"] = np.concatenate(source_indexes)
     return data
 
 
@@ -78,6 +81,7 @@ def export_blocks(sources, cuts, output):
     last = np.searchsorted(bounds, origins + 6, side="right")
     manifest = {
         "version": VERSION,
+        "purpose": "retrospective_replay",
         "unit": "ug/m3",
         "cuts": cuts,
         "source_sha256": [s for _, s in sources],
@@ -93,6 +97,8 @@ def export_blocks(sources, cuts, output):
             window_id=data["window_id"][dropped],
             station_key=data["station_key"][dropped],
             origin_hour=origins[dropped],
+            origin_at=data["origin_at"][dropped],
+            source_index=data["source_index"][dropped],
             first_block=first[dropped],
             last_block=last[dropped],
         )
@@ -120,12 +126,25 @@ def export_blocks(sources, cuts, output):
                         "stations": training_thresholds(stations, hours, history),
                     },
                 )
-            np.savez(folder / "index.npz", window_id=ids, station_key=stations, origin_hour=hours)
+            np.savez(
+                folder / "index.npz",
+                window_id=ids,
+                station_key=stations,
+                origin_hour=hours,
+                origin_at=data["origin_at"][ix],
+                source_index=data["source_index"][ix],
+            )
             np.savez(folder / "history.npz", window_id=ids, history=history)
             np.savez(folder / "observed.npz", window_id=ids, targets=data["targets"][ix])
             if name == "train":
+                complete = np.isfinite(data["targets"][ix]).all(axis=1)
+                if not complete.any():
+                    raise ValueError("El entrenamiento requiere objetivos completos")
                 np.savez(
-                    folder / "fit.npz", window_id=ids, history=history, targets=data["targets"][ix]
+                    folder / "fit.npz",
+                    window_id=ids[complete],
+                    history=history[complete],
+                    targets=data["targets"][ix][complete],
                 )
             manifest["blocks"][name] = {
                 "windows": len(ix),
