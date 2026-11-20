@@ -13,7 +13,7 @@ La variante A recibió el historial de PM2.5. La variante B recibió los histori
 | PM2.5 | 266 748 | 4,99 | 4,97 | 6,45 | -0,02 |
 | PM10 | 266 748 | 19,62 | 9,65 | 12,61 | -9,97 |
 
-Las 44 458 ventanas abarcan siete estaciones. Sus horizontes se solapan y reúnen 44 948 horas de estación distintas. La comparación describe este corte histórico y una semilla de entrenamiento. La prueba externa de SENAMHI y OpenAQ queda pendiente.
+Las 44 458 ventanas abarcan siete estaciones. Sus horizontes se solapan y reúnen 44 948 horas de estación distintas. La comparación describe este corte histórico y una semilla de entrenamiento. La evaluación posterior de estos mismos estados se documenta en el [informe de pruebas externas](prueba-externa-pm25-pm10.md).
 
 ## Error por horizonte
 

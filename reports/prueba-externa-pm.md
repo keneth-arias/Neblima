@@ -55,4 +55,4 @@ Cada registro tiene `resumen.json` y una versión `0.1.0` bajo `airaware/<nombre
 
 Dos construcciones completas reprodujeron los mismos conteos, identificadores y valores en los tres registros. Los SHA-256 físicos de sus manifiestos difieren y se conservan ambos en la evidencia. Los controles locales aprobaron 406 pruebas de AirAware y 17 del entorno TimeF, la construcción de paquetes y la auditoría de dependencias.
 
-El siguiente PR del conector debe reproducir el histórico por contenido. En el entrenador, ajustar escaladores, referencias que necesiten calibración y umbrales solo con entrenamiento. Fijar configuración, presupuesto y puntos de control en validación antes de evaluar sobre los dos conjuntos externos. [Plan de #88](../tasks/issue-88-pm10.md)
+El [informe de las pruebas externas](models/prueba-externa-pm25-pm10.md) enlaza la verificación del conector hermano y compara los dos modelos congelados en cada proveedor. [Plan de #88](../tasks/issue-88-pm10.md)
