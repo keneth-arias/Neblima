@@ -4,7 +4,7 @@ El 20 de noviembre de 2026 comenzó la emisión privada de seis pronósticos hor
 
 ## Comparación retrospectiva
 
-Se eligió la semana del 13 al 19 de noviembre antes de consultar sus valores para esta comparación. Tres consultas al gráfico de SENAMHI cubrieron las fechas del 12 al 20, con última recepción a las 20:25:58 UTC del día 20. Para el archivo se tomaron todas las ventanas completas del gráfico horario con historia y objetivos dentro del periodo del 1 de junio de 2024 al 11 de noviembre de 2026 inclusive. Ambas cohortes usaron la misma generación del modelo y los residuos de calibración congelados. Persistencia repite la última lectura de la historia. Los errores son errores absolutos medios (MAE) en µg/m³. La cobertura es la fracción de mediciones que quedan dentro del intervalo nominal de 80 %.
+El diagnóstico cubre la semana del 13 al 19 de noviembre. El inventario documenta los recibos y el corte usados para reconstruirla. Tres consultas al gráfico de SENAMHI cubrieron las fechas del 12 al 20, con última recepción a las 20:25:58 UTC del día 20. Para el archivo se tomaron todas las ventanas completas del gráfico horario con historia y objetivos dentro del periodo del 1 de junio de 2024 al 11 de noviembre de 2026 inclusive. Ambas cohortes usaron la misma generación del modelo y los residuos de calibración congelados. Persistencia repite la última lectura de la historia. Los errores son errores absolutos medios (MAE) en µg/m³. La cobertura es la fracción de mediciones que quedan dentro del intervalo nominal de 80 %.
 
 | Cohorte | Orígenes | Pares origen–horizonte | Horas objetivo distintas | MAE de Qwen | MAE de persistencia | Cobertura |
 |---|---:|---:|---:|---:|---:|---:|
@@ -26,7 +26,7 @@ Persistencia queda como referencia principal. Qwen se emite en paralelo para obs
 
 ## Reproducción en bm
 
-Desde la raíz de esta revisión, con los archivos de adquisición y predicción ya guardados en bm, se pueden reconstruir las cohortes y comprobar los resultados globales y de horas altas, la intersección con #88, el ajuste de cuantiles, la decisión del candidato y el recibo de la primera emisión. La comprobación usa CPU y archivos locales. Los resúmenes bajo `metadata/campo-marte-inmediato-v1/` permiten comprobar los vínculos de huellas en otra máquina.
+Desde la raíz de esta revisión, con los archivos de adquisición y predicción ya guardados en bm, se pueden reconstruir las cohortes y comprobar los resultados por horizonte y estrato, las horas distintas, la intersección con #88, los cuartiles, las diferencias pareadas de cobertura y amplitud y la decisión del candidato. Para la primera emisión se cotejan el recibo de SENAMHI, la identidad de la corrida y las seis predicciones con sus intervalos contra el archivo privado de bm. La comprobación usa CPU y archivos locales. Los resúmenes bajo `metadata/campo-marte-inmediato-v1/` permiten comprobar los vínculos de huellas en otra máquina.
 
 ```bash
 D=/home/shared/github/keneth-arias/airaware/data
