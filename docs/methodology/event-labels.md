@@ -180,7 +180,7 @@ reales ni a afirmaciones de cumplimiento legal o ausencia de riesgo.
 | Reconciliación de conteos del constructor vs manifiesto (candidatos y descartes por serie) | Probado estructuralmente | `inspect_structure` en `test_structural_inconsistencies_are_rejected[missing_hour]` y conciliación por serie del manifiesto |
 | Suma exacta por serie: `complete == elegidas + descartadas(reason)`; discrepancia detiene el proceso (fail closed) | Probado estructuralmente | `test_discard_counts_reconcile_per_series`; `test_missing_window_group_stops_label_publication` |
 | Sin evidencia no se emiten etiquetas; fallas no publican paquetes parciales; repetición determinista | Probado estructuralmente | `test_structurally_complete_window_stays_scientifically_inadmissible`; `test_failed_write_publishes_no_partial_bundle`; `test_failure_during_label_write_publishes_nothing`; `test_repeated_execution_is_logically_and_binarily_identical` |
-| Conciliación antifuga y por serie sobre el paquete real de #13/#18 con esta versión del código | Exige paquete real (fuera de Git; servidor inaccesible hoy) | Corrida del 18/11/2026 registrada en `metadata/issue-20-label-integration.json` con el código previo; falta re-ejecutar con `leakage` y `labels_reconciliation` |
+| Conciliación antifuga y por serie sobre el paquete real de #13/#18 con esta versión del código | Verificado sobre 324 463 ventanas reales el 20/11/2026 | [Recibo con los límites, los identificadores y la conciliación por serie](../../metadata/issue-20-verificacion-antifuga.json) |
 | Decisión de emitir etiquetas reales sobre datos SENAMHI | Exige evidencia institucional (#43) | Posición del intervalo (`hour_ending`), calidad individual y unidades acreditadas por la fuente; sin ello solo se publica `compatibility.json` |
 
 La verificación estructural no sustituye la evidencia de #43 ni la ejecución sobre el paquete
@@ -211,9 +211,11 @@ disjuntos, media publicada reconstruible con el futuro) y la reconciliación exa
 entre los descartes del constructor y las etiquetas emitidas:
 `uv run --locked pytest tests/test_senamhi_event_labels.py`.
 
-La integración estructural con #18 está verificada con datos reales y sin modificar el paquete de
-ventanas. #20 sigue abierta por decisión explícita de Keneth: los criterios de conteos comunes y
-antifuga quedan probados de forma estructural (matriz anterior), pero falta acreditar la posición
-del intervalo y la calidad individual para emitir etiquetas reales, y re-ejecutar la conciliación
-sobre el paquete real con esta versión. Hasta entonces no se generan
-etiquetas, no se eligen particiones por desempeño y #26 no debe usar etiquetas no sustentadas.
+El 20/11/2026 se repitieron la conciliación por serie y los controles antifuga de #113 sobre el
+paquete real H24/F24. De 574 868 ventanas candidatas, 324 463 estaban completas, 230 437 tenían
+historia insuficiente y 19 968 tenían objetivos incompletos tras una historia completa. Las siete
+series conciliaron. Hubo cero infracciones de límites y cero identificadores compartidos entre
+historia y objetivo dentro de una ventana. La calidad publicada de los objetivos sigue siendo
+`unknown`. #20 continúa abierta por la calidad individual y la posición del intervalo.
+[Recibo de compatibilidad](../../metadata/issue-20-verificacion-antifuga.json) ·
+[Reproducción desde el CSV](../../reports/models/procedencia-episodios-lima.md)

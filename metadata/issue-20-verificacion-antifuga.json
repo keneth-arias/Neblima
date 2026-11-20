@@ -1,0 +1,103 @@
+{
+  "blocked_reasons": [
+    "labeling_evidence_missing"
+  ],
+  "candidate_reconciliation": {
+    "1976b93c60ad5310fd6c61542930f7f6f1d9797b160309f556e8d26a46bd2ada": {
+      "candidates": 80276,
+      "complete": 41284,
+      "future_missing": 2230,
+      "history_missing": 36762,
+      "windows_in_bundle": 41284
+    },
+    "5cff99d2b26a9c55ad204380ea56fb650a85bab0a28a92d948dda332df9f8e16": {
+      "candidates": 82484,
+      "complete": 40415,
+      "future_missing": 2298,
+      "history_missing": 39771,
+      "windows_in_bundle": 40415
+    },
+    "769147bd6d8cc92d1773c9b842811309b1a30e3140cbdf4321715468ef37e60a": {
+      "candidates": 82484,
+      "complete": 47486,
+      "future_missing": 3730,
+      "history_missing": 31268,
+      "windows_in_bundle": 47486
+    },
+    "7f6d01086a8bb510ee588c866828d8e955876bd416b46bf8b452554e8f8e3a63": {
+      "candidates": 82484,
+      "complete": 41164,
+      "future_missing": 2992,
+      "history_missing": 38328,
+      "windows_in_bundle": 41164
+    },
+    "828df8886a518b28fae58a5662937bee430181e4ea89bfa1c7cf5c78262618ec": {
+      "candidates": 82484,
+      "complete": 45751,
+      "future_missing": 2350,
+      "history_missing": 34383,
+      "windows_in_bundle": 45751
+    },
+    "956cc6f978a4be9afa426550a8dbbbf38691846887b281145ddfe3a792fdbb57": {
+      "candidates": 82484,
+      "complete": 58217,
+      "future_missing": 2134,
+      "history_missing": 22133,
+      "windows_in_bundle": 58217
+    },
+    "ae2485b1585f200b3d55be0ff285dedcb8f454b003433eb9ce6e7b948554ee80": {
+      "candidates": 82172,
+      "complete": 50146,
+      "future_missing": 4234,
+      "history_missing": 27792,
+      "windows_in_bundle": 50146
+    }
+  },
+  "counts": {
+    "label_reasons": {
+      "evaluated": 0,
+      "insufficient_valid_hours": 0
+    },
+    "labels": {
+      "above_reference": 0,
+      "not_above_reference": 0,
+      "not_evaluable": 0
+    },
+    "measured_complete_windows": 324463,
+    "series_total": 7,
+    "target_hours_measured": 7787112,
+    "target_hours_total": 7787112,
+    "windows_total": 324463
+  },
+  "data": {
+    "target_quality_missing": false,
+    "target_quality_values": [
+      "unknown"
+    ],
+    "timeline_units": [
+      "ug/m3"
+    ]
+  },
+  "evidence": null,
+  "history_hours": 24,
+  "horizon_hours": 24,
+  "labeling": "inadmissible",
+  "leakage": {
+    "boundary_violations": 0,
+    "history_future_id_overlaps": 0,
+    "label_derived_columns": [],
+    "label_hours_at_or_before_origin": 0,
+    "label_mean_not_future_only": 0,
+    "labels_checked": 0,
+    "windows_checked": 324463
+  },
+  "nota": "Informe de compatibilidad. La completitud estructural no valida unidades, sem\u00e1ntica temporal ni calidad de las mediciones; no se generaron etiquetas ni afirmaciones de seguridad o cumplimiento.",
+  "policy_id": "pe-pm25-reference-2017-v1",
+  "policy_sha256": "d2931c04249aba99330aa3f1ffc628ce5adb9e6d153dce0813c16e95cd5266a0",
+  "step_hours": 1,
+  "timeline_sha256": "2e8fa784cea645b8eb97b42f3fe36e6c532b5959cc8ae66da0ea416df513413c",
+  "timeline_version": "senamhi-hourly-v1",
+  "version": "senamhi-pm25-label-compatibility-v1",
+  "windows_sha256": "39abf1656905144a61c310f6acde356f7f75eb859846dd6164496b5bc24e39d8",
+  "windows_version": "senamhi-pm25-windows-v1"
+}

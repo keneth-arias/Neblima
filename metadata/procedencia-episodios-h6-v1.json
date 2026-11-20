@@ -1,0 +1,93 @@
+{
+  "blocks_sha256": "42181b3ff858029a3982d2f408c954ff14b51f6afb7f068130caed4a294274e1",
+  "matched_windows_including_purged": 338892,
+  "series": [
+    {
+      "blocks": {
+        "calibration": 3655,
+        "purged": 29,
+        "selection": 4046,
+        "test": 8281,
+        "train": 27344
+      },
+      "sensor_id": null,
+      "series_id": "7f6d01086a8bb510ee588c866828d8e955876bd416b46bf8b452554e8f8e3a63",
+      "station_key": "1e58bb71f42f67bfedae1bad1e35b0aea5f84078da4f3a6f06c695aac1fb99e4"
+    },
+    {
+      "blocks": {
+        "calibration": 3896,
+        "purged": 29,
+        "selection": 3790,
+        "test": 4999,
+        "train": 47058
+      },
+      "sensor_id": null,
+      "series_id": "956cc6f978a4be9afa426550a8dbbbf38691846887b281145ddfe3a792fdbb57",
+      "station_key": "22c516fbe293a54c1cb5ddc7727d32430200221562cd01af8a40cc4b5de227d4"
+    },
+    {
+      "blocks": {
+        "calibration": 3537,
+        "purged": 26,
+        "selection": 3660,
+        "test": 9988,
+        "train": 30219
+      },
+      "sensor_id": null,
+      "series_id": "828df8886a518b28fae58a5662937bee430181e4ea89bfa1c7cf5c78262618ec",
+      "station_key": "2a0d574b25a5dc8c7f6edda9836225860faaa160763d8bea15d95646794f0bd8"
+    },
+    {
+      "blocks": {
+        "calibration": 3796,
+        "purged": 29,
+        "selection": 3958,
+        "test": 6311,
+        "train": 27956
+      },
+      "sensor_id": null,
+      "series_id": "5cff99d2b26a9c55ad204380ea56fb650a85bab0a28a92d948dda332df9f8e16",
+      "station_key": "35170dbfe2a7135c1cecbae1e367374a284578533740ff5461d40fc764851e07"
+    },
+    {
+      "blocks": {
+        "calibration": 3813,
+        "purged": 29,
+        "selection": 3610,
+        "test": 8258,
+        "train": 27189
+      },
+      "sensor_id": null,
+      "series_id": "1976b93c60ad5310fd6c61542930f7f6f1d9797b160309f556e8d26a46bd2ada",
+      "station_key": "8436576ff150fd696edbc1cd625bc97696321bc9c57b24b906d0d4a12b71bfff"
+    },
+    {
+      "blocks": {
+        "calibration": 3617,
+        "purged": 29,
+        "selection": 3815,
+        "test": 8061,
+        "train": 34643
+      },
+      "sensor_id": null,
+      "series_id": "769147bd6d8cc92d1773c9b842811309b1a30e3140cbdf4321715468ef37e60a",
+      "station_key": "8e88d45c03f25f49b84c98cc4916bd60b67383961e186497f4d77570c2f75d34"
+    },
+    {
+      "blocks": {
+        "calibration": 2887,
+        "purged": 29,
+        "selection": 2426,
+        "test": 4891,
+        "train": 42988
+      },
+      "sensor_id": null,
+      "series_id": "ae2485b1585f200b3d55be0ff285dedcb8f454b003433eb9ce6e7b948554ee80",
+      "station_key": "90b36a172f1790cf2e37ac2063f80fd27439d4ecf871d72a20bf8e9786587a67"
+    }
+  ],
+  "splits_sha256": "a02e001795bf84985c087766ee46ea7acc53d86e5d2ed96b0974a5c6fd62502d",
+  "timeline_sha256": "2e8fa784cea645b8eb97b42f3fe36e6c532b5959cc8ae66da0ea416df513413c",
+  "version": "lima-h24-f6-procedencia-v1"
+}
