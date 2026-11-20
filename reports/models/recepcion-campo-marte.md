@@ -24,3 +24,32 @@ uv run --project tools/timenet-smoke --locked python tools/timenet-smoke/station
 ```
 
 Los recibos sirven para caracterizar la fuente antes del piloto. La calibración de episodios y el puntaje de la prueba futura usan una cohorte con su elegibilidad y periodo fijados por separado.
+
+## Puntaje provisional durante la emisión privada
+
+Para cada pronóstico de +1 a +6 horas, el puntaje empareja Qwen y persistencia con la misma medición de Campo de Marte. Presenta dos vistas al corte elegido. La primera conserva la primera lectura recibida estrictamente después de emitir. La última incorpora las correcciones disponibles y excluye del denominador una lectura retirada. Si ya se conocía el objetivo al emitir, ninguna de las vistas lo usa. Un campo de error o cobertura vacío indica que todavía faltan pares para calcularlo.
+
+El informe muestra pares y horas objetivo distintas, error absoluto medio en µg/m³, cobertura y amplitud del intervalo del 80 %, tanto globalmente como por horizonte. El tiempo hasta la primera recepción se mide entre las marcas UTC de emisión y llegada. La etiqueta horaria del gráfico identifica el objetivo. La interpretación de anticipación respecto de la exposición sigue pendiente de la correspondencia entre el reloj del gráfico y UTC.
+
+En bm, el comando usa las emisiones privadas y los recibos operativos guardados. El corte incluye las observaciones recibidas y las emisiones publicadas hasta ese instante. El puntaje coteja la última lectura del origen con la versión que ya estaba disponible al corte de insumos de cada emisión. Las huellas de ambos conjuntos permiten reproducir el informe. El servicio publica cada JSON de emisión de forma atómica y conserva sus bytes. Un archivo ilegible en esa carpeta interrumpe la verificación. Para repetir un corte anterior también deben conservarse los archivos de emisión legibles. Una carpeta vacía de emisiones da cero pronósticos. Si las emisiones al corte corresponden a dos generaciones del modelo, el comando interrumpe el cálculo para evitar mezclar sus resultados. Los datos conservarán su carácter provisional mientras se evalúa la maduración de la fuente.
+
+```bash
+D="${AIRAWARE_DATA_DIR:-/home/shared/github/keneth-arias/airaware/data}"
+uv run --project tools/timenet-smoke --locked python tools/timenet-smoke/live_concentration_scores.py \
+  "$D/processed/evaluacion-inmediata-campo-marte-20261120/en-vivo/issuances" \
+  "$D/raw/campo-marte-operativo-20261120" --through 2026-11-20T21:00:00+00:00
+```
+
+El servicio horario de bm actualiza `en-vivo/puntaje-por-horizonte.json` después de procesar la consulta. La etiqueta `latest_live_horizon_report` de la primera corrida de emisión en MLflow identifica el archivo privado correspondiente al último corte procesado. Cada archivo conserva su huella en el nombre. Las horas sin medición quedan pendientes.
+
+En bm se puede inspeccionar el comando instalado con `systemctl --user show lima-pm25-pronostico-privado-20261120.service -p ExecStartPost`. El publicador local `operacion/publicar_puntaje.py` toma como corte el instante UTC más reciente entre la última consulta procesada y la última emisión. Para reproducir una versión concreta, descargar el archivo identificado por la etiqueta de MLflow en una ruta privada y usar su propio corte. El comando siguiente compara todos los bytes con esa copia guardada.
+
+```bash
+D="${AIRAWARE_DATA_DIR:-/home/shared/github/keneth-arias/airaware/data}"
+F=/ruta/privada/al/puntaje-horario-descargado.json
+CORTE=$(jq -er .through_utc "$F")
+set -o pipefail
+uv run --project tools/timenet-smoke --locked python tools/timenet-smoke/live_concentration_scores.py \
+  "$D/processed/evaluacion-inmediata-campo-marte-20261120/en-vivo/issuances" \
+  "$D/raw/campo-marte-operativo-20261120" --through "$CORTE" | cmp - "$F"
+```
