@@ -1,0 +1,119 @@
+{
+  "all": {
+    "coverage": 0.9990079365079365,
+    "distinct_station_hours": 173,
+    "mae": 2.202385190176585,
+    "mae_persistence": 3.171329380595495,
+    "targets": 1008,
+    "width": 28.261407832266794
+  },
+  "bundle_sha256": "b6bf0b504392acf6f4da61347c7c8ebdebd4f0793561d3580886c82569954721",
+  "by_horizon": [
+    {
+      "coverage": 0.9940476190476191,
+      "mae": 1.4658937806174868,
+      "mae_persistence": 1.6619048118591309,
+      "targets": 168,
+      "width": 15.389741897583004
+    },
+    {
+      "coverage": 1.0,
+      "mae": 2.069890829495021,
+      "mae_persistence": 2.617261941092355,
+      "targets": 168,
+      "width": 24.205537361871638
+    },
+    {
+      "coverage": 1.0,
+      "mae": 2.2623004606791906,
+      "mae_persistence": 3.1922619161151706,
+      "targets": 168,
+      "width": 29.23097503798349
+    },
+    {
+      "coverage": 1.0,
+      "mae": 2.423592190515427,
+      "mae_persistence": 3.628571449007307,
+      "targets": 168,
+      "width": 32.097133128983636
+    },
+    {
+      "coverage": 1.0,
+      "mae": 2.4999122540156047,
+      "mae_persistence": 3.9452380770728697,
+      "targets": 168,
+      "width": 33.792997730118884
+    },
+    {
+      "coverage": 1.0,
+      "mae": 2.4927216257367815,
+      "mae_persistence": 3.9827380884261365,
+      "targets": 168,
+      "width": 34.85206183706011
+    }
+  ],
+  "checkpoint_sha256": "d42dc1d91dce1abc6284f9cff68df3d0ff7ccbc08ede744865cde1762e53658e",
+  "evidence": {
+    "as_of_utc": "2026-11-20T20:25:58.557535+00:00",
+    "availability_sha256": "1e9c015a762b56722d2cbefa415b9df7b9c1632234d071748227a97fb5b5a44b"
+  },
+  "high": {
+    "coverage": null,
+    "distinct_station_hours": 0,
+    "mae": null,
+    "mae_persistence": null,
+    "targets": 0,
+    "width": null
+  },
+  "high_by_horizon": [
+    {
+      "coverage": null,
+      "mae": null,
+      "mae_persistence": null,
+      "targets": 0,
+      "width": null
+    },
+    {
+      "coverage": null,
+      "mae": null,
+      "mae_persistence": null,
+      "targets": 0,
+      "width": null
+    },
+    {
+      "coverage": null,
+      "mae": null,
+      "mae_persistence": null,
+      "targets": 0,
+      "width": null
+    },
+    {
+      "coverage": null,
+      "mae": null,
+      "mae_persistence": null,
+      "targets": 0,
+      "width": null
+    },
+    {
+      "coverage": null,
+      "mae": null,
+      "mae_persistence": null,
+      "targets": 0,
+      "width": null
+    },
+    {
+      "coverage": null,
+      "mae": null,
+      "mae_persistence": null,
+      "targets": 0,
+      "width": null
+    }
+  ],
+  "image": "ghcr.io/keneth-arias/ml-infra-qwen@sha256:5ca73291e6064ae8483286e2857cdffa627a30d8badaf4b34f9616fa110d0d84",
+  "output_sha256": "4d10b0434dc57fb4fe631f79751368118522faebb51a19787bbeec5c3036141f",
+  "passes": false,
+  "purpose": "retrospective_diagnostic",
+  "run_id": "953d326df6444accaaa96ebe48bfd389",
+  "station": "112194",
+  "windows": 168
+}

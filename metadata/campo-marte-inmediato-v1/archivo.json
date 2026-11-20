@@ -1,0 +1,136 @@
+{
+  "all": {
+    "coverage": 0.9328015470147449,
+    "distinct_station_hours": 18307,
+    "mae": 5.38225365010994,
+    "mae_persistence": 6.424484477027459,
+    "paired_mae_difference": {
+      "blocks": 128,
+      "ci95": [
+        -1.2696096054792605,
+        -0.7818053648346099
+      ],
+      "difference": -1.042230826917519
+    },
+    "targets": 107562,
+    "width": 27.995484054470886
+  },
+  "bundle_sha256": "31694c1462d610511696d73e5e3ceec11f03bde348f18f4c0fca262b566c1b4a",
+  "by_horizon": [
+    {
+      "coverage": 0.9231327048585932,
+      "mae": 3.049387466465961,
+      "mae_persistence": 3.1947509324244074,
+      "targets": 17927,
+      "width": 15.372498790443247
+    },
+    {
+      "coverage": 0.9289897919339544,
+      "mae": 4.641349014822556,
+      "mae_persistence": 5.063864557154042,
+      "targets": 17927,
+      "width": 24.028838137792206
+    },
+    {
+      "coverage": 0.9342332794109444,
+      "mae": 5.515605486454711,
+      "mae_persistence": 6.344017395809889,
+      "targets": 17927,
+      "width": 28.84445674220152
+    },
+    {
+      "coverage": 0.934567970100965,
+      "mae": 6.0622452371669855,
+      "mae_persistence": 7.316126505215555,
+      "targets": 17927,
+      "width": 31.62541233004254
+    },
+    {
+      "coverage": 0.9364645506777487,
+      "mae": 6.408206940392825,
+      "mae_persistence": 8.050845086031272,
+      "targets": 17927,
+      "width": 33.44303882621513
+    },
+    {
+      "coverage": 0.9394209851062643,
+      "mae": 6.616727755356601,
+      "mae_persistence": 8.577302385529586,
+      "targets": 17927,
+      "width": 34.65865950013069
+    }
+  ],
+  "checkpoint_sha256": "d42dc1d91dce1abc6284f9cff68df3d0ff7ccbc08ede744865cde1762e53658e",
+  "evidence": {
+    "parquet_sha256": "0623be0b25cd0bd108065ae35257ef0c3d38cb6e8cfa072c29cd6b9b74071f1d",
+    "query_sha256": "2894060b220af0b76e2438cb29d23b92989ecbd930b4097d451ecbe4145e02d4",
+    "source": "senamhi_horario"
+  },
+  "high": {
+    "coverage": 0.6045049272641952,
+    "distinct_station_hours": 1817,
+    "mae": 15.278039200083294,
+    "mae_persistence": 15.752670084533976,
+    "paired_mae_difference": {
+      "blocks": 100,
+      "ci95": [
+        -1.557067335470719,
+        0.9119100890385193
+      ],
+      "difference": -0.4746308844506819
+    },
+    "targets": 10655,
+    "width": 28.627325809144015
+  },
+  "high_by_horizon": [
+    {
+      "coverage": 0.6308040770101925,
+      "mae": 7.964643666752333,
+      "mae_persistence": 7.907870873292468,
+      "targets": 1766,
+      "width": 15.389741897583008
+    },
+    {
+      "coverage": 0.6080316742081447,
+      "mae": 12.716150863893432,
+      "mae_persistence": 12.514253392694222,
+      "targets": 1768,
+      "width": 24.20678787231446
+    },
+    {
+      "coverage": 0.6064370412196499,
+      "mae": 15.556138563667698,
+      "mae_persistence": 15.462168238406663,
+      "targets": 1771,
+      "width": 29.29525448577813
+    },
+    {
+      "coverage": 0.5891952729319077,
+      "mae": 17.411117559292375,
+      "mae_persistence": 17.80433311194064,
+      "targets": 1777,
+      "width": 32.37806784319087
+    },
+    {
+      "coverage": 0.5915966386554622,
+      "mae": 18.632177929384035,
+      "mae_persistence": 19.725154023905095,
+      "targets": 1785,
+      "width": 34.46583358446224
+    },
+    {
+      "coverage": 0.6012304250559284,
+      "mae": 19.29075913365255,
+      "mae_persistence": 20.986017878850298,
+      "targets": 1788,
+      "width": 35.855165630379
+    }
+  ],
+  "image": "ghcr.io/keneth-arias/ml-infra-qwen@sha256:5ca73291e6064ae8483286e2857cdffa627a30d8badaf4b34f9616fa110d0d84",
+  "output_sha256": "a846d662994e9db4a5d055ff30b7ea65ad8e0d327530bcbb876c81f324e0ac14",
+  "passes": false,
+  "purpose": "retrospective_diagnostic",
+  "run_id": "9d20f6e6c7fd44e6822809e6438799e2",
+  "station": "112194",
+  "windows": 17927
+}

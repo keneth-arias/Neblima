@@ -44,6 +44,8 @@ Empezar con una fuente y estación identificadas. Guardar lectura, revisión, pr
 
 Fijar por fuente una espera de maduración a partir del registro de demoras previo al piloto. Cerrar la evaluación del origen después de +6 h y esa espera. Conservar versión de observación y corte de puntuación; las correcciones posteriores se auditan por separado. Comparar prevalencia y presupuesto de falsos realizados por estación y fuente en selección, prueba y piloto. Revisar las alertas falsas y los episodios omitidos con usuarios cerca de la estación. Si ningún candidato cumple el presupuesto, mantener el piloto de concentraciones y registrar la decisión. El piloto público depende de la utilidad observada, la cobertura y la revisión del mensaje sanitario.
 
+El 20/11/2026 empezó el pronóstico privado de concentración en Campo de Marte. Qwen redujo el error en la comparación retrospectiva y la cobertura quedó fuera del rango registrado. Persistencia sigue como referencia principal. [Resultados inmediatos, recalibración y primera emisión](../reports/models/pronostico-inmediato-campo-marte.md)
+
 ## Cierre de cada PR
 
 Al terminar cada PR de este plan, revisar el cambio completo frente a sus criterios de aceptación. Entregar a cada uno de los siguientes revisores los mismos commits de base y de cabecera, el diff y los resultados de las pruebas. Pedir a cada uno por separado hallazgos concretos, su impacto y una forma de comprobar la corrección.
