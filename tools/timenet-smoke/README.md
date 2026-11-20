@@ -152,3 +152,15 @@ UV_OFFLINE=true uv run --project tools/timenet-smoke --locked python \
 ```
 
 El manifiesto fija las huellas de las matrices de entrenamiento y validación, de sus identificadores y de `scaler.json`. El orden de los canales de historia y objetivos es `pm25, pm10`. `origin_hour` cuenta horas desde 1970-01-01 00:00 UTC. El escalador y los percentiles 95 por estación usan las 268 567 horas de estación distintas presentes en las historias de entrenamiento. Las matrices mantienen las concentraciones publicadas, incluido el cero. [Evidencia de la exportación](../../metadata/ventanas-pm25-pm10-entrenamiento.json)
+
+## Verificar el ajuste pareado de #88
+
+`joint_validation.py` recibe las matrices históricas, las carpetas de los dos ajustes (A y B), dos exportaciones independientes de inferencia desde los estados restaurados y una carpeta nueva de salida. La reconstrucción de A puede recibir toda la historia de PM10 enmascarada. Ambas exportaciones deben contener exactamente las mismas predicciones por ventana que en la primera restauración.
+
+```bash
+UV_OFFLINE=true uv run --project tools/timenet-smoke --locked python \
+  tools/timenet-smoke/joint_validation.py "$matrices" "$ajuste_a" "$ajuste_b" \
+  "$ajuste_a/replay-validation.npz" "$ajuste_b/replay-validation.npz" "$salida"
+```
+
+El verificador coteja el último paso, las sumas de los archivos del estado, el registro efectivo de lotes, el escalador y las concentraciones del conjunto congelado. `paired.parquet` permite revisar cada par de errores. `metrics.json` desglosa por contaminante, estación, horizonte y concentración alta. `freeze.json` identifica ambos modelos y los archivos verificados. La entrada de evaluación es exclusivamente la partición histórica de validación.
