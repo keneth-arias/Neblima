@@ -85,18 +85,25 @@ class EpisodeCalibrationTest(TestCase):
                 manifest_sha256=manifest_hash,
                 eligible_labels=root / "eligible.npz",
             )
+            args.forecasts_sha256 = "0" * 64
+            with self.assertRaisesRegex(ValueError, "Huella"):
+                run(args)
+            self.assertFalse(args.output.exists())
+            args.forecasts_sha256 = sha256_file(args.forecasts)
             run(args)
             args.command = "apply"
             args.calibrator = args.output
             args.calibrator_sha256 = sha256_file(args.output)
             args.block = "selection"
             args.forecasts = root / "selection.npz"
+            args.forecasts_sha256 = sha256_file(args.forecasts)
             args.output = root / "scored.npz"
             (
                 blocks / "selection" / "observed.npz"
             ).unlink()  # el pod de inferencia carece de objetivos
             run(args)
             with np.load(args.output) as z:
+                self.assertEqual(z["forecasts_sha256"].item(), args.forecasts_sha256)
                 self.assertTrue(np.all(z["lower"] <= z["upper"]))
                 self.assertTrue(
                     np.all((z["episode_probability"] >= 0) & (z["episode_probability"] <= 1))
@@ -124,3 +131,33 @@ class EpisodeCalibrationTest(TestCase):
 
         with self.assertRaisesRegex(ValueError, "repetición"):
             run(Namespace(command="apply", block="test"))
+
+    def test_candidate_logits_require_frozen_context_and_align_ids(self):
+        from pathlib import Path
+        from tempfile import TemporaryDirectory
+
+        from episode_calibration import candidate_logits
+        from export_senamhi import sha256_file
+
+        with TemporaryDirectory() as tmp:
+            path = Path(tmp) / "pred.npz"
+            np.savez(
+                path,
+                window_id=["b", "a"],
+                episode_logit=[3.0, -1.0],
+                task="episode",
+                unit="logit",
+                schema_version=2,
+                thresholds_sha256="a" * 64,
+                checkpoint_sha256="b" * 64,
+                input_manifest_sha256="d" * 64,
+                input_sha256="e" * 64,
+                model_revision="rev",
+            )
+            values, checkpoint = candidate_logits(
+                path, sha256_file(path), np.array(["a", "b"]), "a" * 64, "d" * 64
+            )
+            np.testing.assert_array_equal(values, [-1.0, 3.0])
+            self.assertEqual(checkpoint, "b" * 64)
+            with self.assertRaises(ValueError):
+                candidate_logits(path, sha256_file(path), np.array(["a", "b"]), "c" * 64, "d" * 64)

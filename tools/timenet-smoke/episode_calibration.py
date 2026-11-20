@@ -118,6 +118,82 @@ def align(archive, ids, field):
     return archive[field][order]
 
 
+def verify_candidate_bundle(
+    blocks, block, split_sha, manifest, bundle_manifest, bundle_sha, head, ids
+):
+    spec = json.loads(check_file(bundle_manifest, bundle_sha).read_text())
+    expected = {
+        "block": block,
+        "split_sha256": split_sha,
+        "schema": "forecast-input-v1",
+        "phase": "infer",
+        "unit": "ug/m3",
+        "head": head,
+    }
+    if any(spec.get(k) != v for k, v in expected.items()):
+        raise ValueError("El insumo no corresponde al bloque de inferencia")
+    role = blocks / block
+    frozen = manifest["blocks"][block]["files"]
+    fields = {"window_id", "history"}
+    if head == "episode":
+        fields.update(("station_key", "threshold_ug_m3", "thresholds_sha256"))
+    data_sha = spec["files"]["data.npz"]
+    with (
+        np.load(
+            check_file(bundle_manifest.parent / "data.npz", data_sha), allow_pickle=False
+        ) as data,
+        np.load(
+            check_file(role / "history.npz", frozen["history.npz"]), allow_pickle=False
+        ) as history,
+    ):
+        if set(data.files) != fields or not np.array_equal(
+            align(data, ids, "history"), align(history, ids, "history")
+        ):
+            raise ValueError("Las historias del candidato difieren del bloque congelado")
+        if head == "episode":
+            threshold_sha = manifest["thresholds_sha256"]
+            if (
+                data["thresholds_sha256"].item() != threshold_sha
+                or spec.get("thresholds_sha256") != threshold_sha
+            ):
+                raise ValueError("El umbral del insumo difiere del bloque")
+            table = json.loads(check_file(blocks / "thresholds.json", threshold_sha).read_text())[
+                "stations"
+            ]
+            with np.load(
+                check_file(role / "index.npz", frozen["index.npz"]), allow_pickle=False
+            ) as index:
+                stations = align(index, ids, "station_key")
+            if not np.array_equal(align(data, ids, "station_key"), stations) or not np.array_equal(
+                align(data, ids, "threshold_ug_m3"), [table.get(k, np.nan) for k in stations]
+            ):
+                raise ValueError("La estación y el umbral no corresponden a la ventana")
+    return data_sha
+
+
+def candidate_logits(path, digest, ids, threshold_digest, input_manifest_digest):
+    with np.load(check_file(path, digest), allow_pickle=False) as archive:
+        contract = {
+            "task": "episode",
+            "unit": "logit",
+            "schema_version": 2,
+            "thresholds_sha256": threshold_digest,
+            "input_manifest_sha256": input_manifest_digest,
+        }
+        if any(archive[k].item() != v for k, v in contract.items()):
+            raise ValueError("Exportación del clasificador incompatible")
+        logits = align(archive, ids, "episode_logit")
+        checkpoint = archive["checkpoint_sha256"].item()
+        if (
+            logits.shape != (len(ids),)
+            or not np.isfinite(logits).all()
+            or not isinstance(checkpoint, str)
+            or not re.fullmatch("[0-9a-f]{64}", checkpoint)
+        ):
+            raise ValueError("Puntaje o punto de control inválidos")
+        return logits, checkpoint
+
+
 def run(args):
     fitting = args.command == "fit"
     phase = "calibration" if fitting else args.block
@@ -136,6 +212,10 @@ def run(args):
     threshold_hash = manifest["thresholds_sha256"]
     thresholds = json.loads(check_file(args.blocks / "thresholds.json", threshold_hash).read_text())
     limits = np.array([thresholds["stations"].get(s, np.nan) for s in stations])
+    forecast_sha = sha256_file(args.forecasts)
+    expected_forecasts = getattr(args, "forecasts_sha256", None)
+    if expected_forecasts is not None and forecast_sha != expected_forecasts:
+        raise ValueError("Huella incompatible de los pronósticos directos")
     with np.load(args.forecasts, allow_pickle=False) as forecasts:
         predicted = align(forecasts, ids, "predicted")
         checkpoint = str(forecasts["checkpoint_sha256"].item())
@@ -155,6 +235,28 @@ def run(args):
         "checkpoint_sha256": checkpoint,
     }
     scores = predicted.max(axis=1) - limits
+    logits = getattr(args, "episode_logits", None)
+    if logits:
+        path, digest, input_manifest, input_digest = logits
+        input_sha = verify_candidate_bundle(
+            args.blocks,
+            phase,
+            args.manifest_sha256,
+            manifest,
+            Path(input_manifest),
+            input_digest,
+            "episode",
+            ids,
+        )
+        with np.load(Path(path), allow_pickle=False) as raw:
+            if raw["input_sha256"].item() != input_sha:
+                raise ValueError("La exportación no corresponde al archivo de historias")
+        scores, episode_checkpoint = candidate_logits(
+            Path(path), digest, ids, threshold_hash, input_digest
+        )
+        identity["episode_checkpoint_sha256"] = episode_checkpoint
+        if fitting and args.eligible_labels is None:
+            raise ValueError("El calibrador del clasificador requiere etiquetas elegibles")
     if fitting:
         with np.load(
             check_file(folder / "observed.npz", files["observed.npz"]), allow_pickle=False
@@ -162,11 +264,13 @@ def run(args):
             observed = align(observations, ids, "targets")
         artifact = {
             **identity,
-            "calibration_forecasts_sha256": sha256_file(args.forecasts),
+            "calibration_forecasts_sha256": forecast_sha,
             "calibration_windows": len(ids),
             "residual_q10_q90": fit_residuals(predicted, observed).tolist(),
             "probability": None,
         }
+        if logits:
+            artifact["calibration_logits_sha256"] = logits[1]
         if args.eligible_labels is not None:
             with np.load(args.eligible_labels, allow_pickle=False) as labels:
                 if (
@@ -183,7 +287,7 @@ def run(args):
                 raise ValueError("Etiquetas de episodio inválidas")
             if np.any((y != -1) & ~np.isfinite(observed).all(axis=1)):
                 raise ValueError("La elegibilidad requiere seis objetivos medidos")
-            valid = (y != -1) & np.isfinite(scores)
+            valid = (y != -1) & np.isfinite(scores) & np.isfinite(limits)
             if not valid.any() or not np.array_equal(
                 y[valid], observed[valid].max(axis=1) >= limits[valid]
             ):
@@ -196,7 +300,9 @@ def run(args):
         payload = (json.dumps(artifact, sort_keys=True, indent=2, allow_nan=False) + "\n").encode()
     else:
         artifact = json.loads(check_file(args.calibrator, args.calibrator_sha256).read_text())
-        if any(artifact.get(k) != v for k, v in identity.items()):
+        if any(artifact.get(k) != v for k, v in identity.items()) or bool(logits) != (
+            "episode_checkpoint_sha256" in artifact
+        ):
             raise ValueError("El calibrador corresponde a otro modelo, bloque o umbral")
         q = np.asarray(artifact["residual_q10_q90"])
         if q.shape != (2, 6) or not np.isfinite(q).all() or (q[0] > q[1]).any():
@@ -212,8 +318,16 @@ def run(args):
             "checkpoint_sha256": checkpoint,
             "block": phase,
         }
+        if expected_forecasts is not None:
+            values["forecasts_sha256"] = forecast_sha
+        if logits:
+            values.update(
+                episode_checkpoint_sha256=identity["episode_checkpoint_sha256"],
+                episode_logits_sha256=digest,
+                input_manifest_sha256=input_digest,
+            )
         if artifact["probability"] is not None:
-            eligible = np.isfinite(scores)
+            eligible = np.isfinite(scores) & np.isfinite(limits)
             probs = np.full(len(ids), np.nan)
             probs[eligible] = probability(scores[eligible], artifact["probability"])
             values.update(episode_probability=probs, threshold_available=eligible)
@@ -236,6 +350,12 @@ if __name__ == "__main__":
     apply.add_argument("--calibrator", type=Path, required=True)
     apply.add_argument("--calibrator-sha256", required=True)
     for command in (fit, apply):
+        command.add_argument(
+            "--episode-logits",
+            nargs=4,
+            metavar=("NPZ", "SHA256", "MANIFIESTO", "MANIFIESTO_SHA256"),
+        )
+        command.add_argument("--forecasts-sha256", help="Huella fijada en el recibo del exportador")
         command.add_argument("blocks", type=Path)
         command.add_argument("forecasts", type=Path)
         command.add_argument("output", type=Path)
