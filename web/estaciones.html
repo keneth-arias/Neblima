@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="es-PE">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <base target="_blank">
+  <title>Estaciones de calidad del aire en Lima | AirAware Perú</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="anonymous">
+  <style>
+    :root { color: #193c40; font: 16px/1.45 "Source Sans 3", system-ui, sans-serif; }
+    body { margin: 0; }
+    header { display: flex; align-items: baseline; flex-wrap: wrap; gap: .25rem 1rem; margin-bottom: .75rem; }
+    h1 { font-size: clamp(1.25rem, 3vw, 1.75rem); line-height: 1.2; margin: 0; }
+    header span, footer { color: #485c60; }
+    #map { height: 400px; background: #e8edeb; border-radius: .5rem; }
+    .pin, li::before {
+      display: grid; place-items: center; box-sizing: border-box; border-radius: 50%;
+      background: #005a56; color: white; font: 700 14px/1 system-ui, sans-serif;
+    }
+    .pin { border: 2px solid white; box-shadow: 0 1px 4px #27464399; }
+    .leaflet-container a:focus-visible, a:focus-visible, button:focus-visible {
+      outline: 3px solid #af4200; outline-offset: 2px;
+    }
+    ol {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(min(14rem, 100%), 1fr));
+      list-style: none; gap: .25rem 1rem; margin: .75rem 0; padding: 0; counter-reset: station;
+    }
+    li { display: flex; align-items: center; gap: .5rem; counter-increment: station; }
+    li::before { content: counter(station); width: 1.4rem; height: 1.4rem; flex: none; }
+    a { color: #005a56; }
+    li a { padding: .3rem 0; text-underline-offset: .18em; }
+    button { font: inherit; color: #005a56; background: white; border: 1px solid #899b99;
+      border-radius: .25rem; padding: .35rem .75rem; cursor: pointer; }
+    footer { border-top: 1px solid #ced9d7; padding-top: .55rem; font-size: .84rem; }
+    footer p { margin: .15rem 0; }
+    #status { font-size: .9rem; }
+    #status:empty { display: none; }
+  </style>
+</head>
+<body>
+  <main>
+    <header><h1>Estaciones de calidad del aire</h1><span>Lima Metropolitana, Perú</span></header>
+    <div id="map" aria-label="Mapa de las estaciones de Lima" role="region" hidden></div>
+    <p role="status" id="status">Puedes abrir cada estación en OpenStreetMap desde la lista.</p>
+    <ol aria-label="Estaciones del conjunto histórico">
+      <li><a data-station="CAMPO_DE_MARTE" href="https://www.openstreetmap.org/?mlat=-12.0705&amp;mlon=-77.0432#map=16/-12.0705/-77.0432">Campo de Marte</a></li>
+      <li><a data-station="CARABAYLLO" href="https://www.openstreetmap.org/?mlat=-11.9022&amp;mlon=-77.0336#map=16/-11.9022/-77.0336">Carabayllo</a></li>
+      <li><a data-station="SAN_BORJA" href="https://www.openstreetmap.org/?mlat=-12.1086&amp;mlon=-77.0077#map=16/-12.1086/-77.0077">San Borja</a></li>
+      <li><a data-station="SAN_JUAN_DE_LURIGANCHO" href="https://www.openstreetmap.org/?mlat=-11.9816&amp;mlon=-76.9992#map=16/-11.9816/-76.9992">San Juan de Lurigancho</a></li>
+      <li><a data-station="SAN_MARTIN_DE_PORRES" href="https://www.openstreetmap.org/?mlat=-12.0089&amp;mlon=-77.0845#map=16/-12.0089/-77.0845">San Martín de Porres</a></li>
+      <li><a data-station="SANTA_ANITA" href="https://www.openstreetmap.org/?mlat=-12.043&amp;mlon=-76.9714#map=16/-12.043/-76.9714">Santa Anita</a></li>
+      <li><a data-station="VILLA_MARIA_DEL_TRIUNFO" href="https://www.openstreetmap.org/?mlat=-12.1664&amp;mlon=-76.92#map=16/-12.1664/-76.92">Villa María del Triunfo</a></li>
+    </ol>
+    <button id="reset" type="button" hidden>Ver las siete estaciones</button>
+    <footer>
+      <p>Ubicaciones referenciales. El archivo original no declara el sistema de referencia de las coordenadas.</p>
+      <p>Fuente: Servicio Nacional de Meteorología e Hidrología del Perú (SENAMHI),
+        <a href="https://www.datosabiertos.gob.pe/dataset/monitoreo-de-los-contaminantes-del-aire-en-lima-metropolitana-servicio-nacional-de">Monitoreo de los contaminantes del aire en Lima Metropolitana</a>
+        · <a href="https://opendatacommons.org/licenses/by/1-0/">Open Data Commons Attribution 1.0</a>.</p>
+    </footer>
+  </main>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="anonymous"></script>
+  <script>
+    if (window.L) {
+      const container = document.getElementById("map");
+      const status = document.getElementById("status");
+      const reset = document.getElementById("reset");
+      container.hidden = false;
+      reset.hidden = false;
+      status.textContent = "";
+      const map = L.map(container, {scrollWheelZoom: false, zoomControl: false, zoomSnap: 0.25});
+      L.control.zoom({zoomInTitle: "Acercar", zoomOutTitle: "Alejar"}).addTo(map);
+      L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 19,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+      }).on("tileerror", () => {
+        status.textContent = "Algunas partes del mapa base no se pudieron cargar.";
+      }).addTo(map);
+
+      const bounds = L.latLngBounds([]);
+      document.querySelectorAll("a[data-station]").forEach((link, index) => {
+        const params = new URL(link.href).searchParams;
+        const location = L.latLng(Number(params.get("mlat")), Number(params.get("mlon")));
+        bounds.extend(location);
+        const marker = L.marker(location, {
+          title: link.textContent,
+          icon: L.divIcon({className: "pin", html: String(index + 1), iconSize: [28, 28]})
+        }).on("add", event => {
+          event.target.getElement().setAttribute("aria-label", link.textContent);
+        }).addTo(map);
+        const popup = document.createElement("div");
+        const name = document.createElement("strong");
+        name.textContent = link.textContent;
+        const osmLink = link.cloneNode(false);
+        osmLink.removeAttribute("data-station");
+        osmLink.textContent = "Abrir en OpenStreetMap";
+        osmLink.target = "_blank";
+        osmLink.rel = "noopener";
+        popup.append(name, document.createElement("br"),
+          location.lat + ", " + location.lng, document.createElement("br"), osmLink);
+        marker.bindPopup(popup, {closeButton: false});
+        link.addEventListener("click", event => {
+          if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+          event.preventDefault();
+          map.setView(location, 14, {animate: false});
+          marker.openPopup();
+          osmLink.focus();
+        });
+      });
+      function showAll() {
+        map.closePopup();
+        map.fitBounds(bounds, {padding: [24, 24], animate: false});
+      }
+      reset.addEventListener("click", showAll);
+      showAll();
+    }
+  </script>
+</body>
+</html>

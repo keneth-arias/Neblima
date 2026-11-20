@@ -7,6 +7,44 @@ usando mediciones reales. Participamos como el equipo **Cuybernautas**. Keneth A
 El idioma de trabajo del equipo es el **español del Perú**. La documentación, las tareas y los PR se
 redactan en español claro. Los comandos, identificadores y nombres técnicos conservan su forma original.
 
+## Mapa de las siete estaciones de Lima
+
+Selecciona un marcador para ver el nombre de la estación. Las ubicaciones históricas son
+referenciales porque el archivo original no declara el sistema de referencia de las coordenadas.
+[Fuente y licencia del Servicio Nacional de Meteorología e Hidrología del Perú](DATA_ATTRIBUTION.md).
+
+```geojson
+{
+  "type": "FeatureCollection",
+  "features": [
+    {"type": "Feature", "id": "CAMPO_DE_MARTE", "properties": {"Estación": "Campo de Marte"}, "geometry": {"type": "Point", "coordinates": [-77.0432, -12.0705]}},
+    {"type": "Feature", "id": "CARABAYLLO", "properties": {"Estación": "Carabayllo"}, "geometry": {"type": "Point", "coordinates": [-77.0336, -11.9022]}},
+    {"type": "Feature", "id": "SANTA_ANITA", "properties": {"Estación": "Santa Anita"}, "geometry": {"type": "Point", "coordinates": [-76.9714, -12.043]}},
+    {"type": "Feature", "id": "SAN_BORJA", "properties": {"Estación": "San Borja"}, "geometry": {"type": "Point", "coordinates": [-77.0077, -12.1086]}},
+    {"type": "Feature", "id": "SAN_JUAN_DE_LURIGANCHO", "properties": {"Estación": "San Juan de Lurigancho"}, "geometry": {"type": "Point", "coordinates": [-76.9992, -11.9816]}},
+    {"type": "Feature", "id": "SAN_MARTIN_DE_PORRES", "properties": {"Estación": "San Martín de Porres"}, "geometry": {"type": "Point", "coordinates": [-77.0845, -12.0089]}},
+    {"type": "Feature", "id": "VILLA_MARIA_DEL_TRIUNFO", "properties": {"Estación": "Villa María del Triunfo"}, "geometry": {"type": "Point", "coordinates": [-76.92, -12.1664]}}
+  ]
+}
+```
+
+### Insertar el mapa en tu sitio
+
+Crea una carpeta `mapas/` junto a la página que mostrará el mapa y copia allí
+[estaciones.html](web/estaciones.html). Inserta este bloque en esa página. La ruta relativa
+también funciona si el sitio se publica en una subcarpeta.
+
+```html
+<iframe src="./mapas/estaciones.html" title="Siete estaciones de calidad del aire en Lima"
+  height="720" loading="lazy" style="display: block; width: 100%; border: 0"></iframe>
+```
+
+El navegador carga Leaflet desde `unpkg.com` y el fondo de OpenStreetMap desde
+`tile.openstreetmap.org`. La integración funciona sin compilación ni claves. Los enlaces de las estaciones
+también funcionan sin JavaScript. Las ubicaciones provienen de la sección `stations` de
+[la configuración de alineación](configs/weather-alignment.yaml). Conserva los créditos del mapa
+y el [aviso de atribución de los datos](DATA_ATTRIBUTION.md) al integrarlo.
+
 ## Empieza en tu equipo
 
 Instala Git, Make y [uv](https://docs.astral.sh/uv/getting-started/installation/). Desde la carpeta raíz:
