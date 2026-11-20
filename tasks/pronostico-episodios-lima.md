@@ -35,3 +35,13 @@ Para la selección se propone un presupuesto de hasta un aviso falso por estaci�
 Empezar con una fuente y estación identificadas. Guardar lectura, revisión, primera hora de recepción, corte de insumos y emisión efectiva. Reproducir la vista disponible en cada corte. Una corrección recibida después solo puede entrar en emisiones posteriores. Una ventana con historia insuficiente o demasiado antigua da lugar a una abstención registrada. Simular una demora y un reintento, y medir anticipación desde la primera emisión efectiva hasta el inicio observado. La evidencia retrospectiva carece de hora de llegada; distinguir en el informe la anticipación histórica nominal de la anticipación operativa.
 
 Fijar por fuente una espera de maduración a partir del registro de demoras previo al piloto. Cerrar la evaluación del origen después de +6 h y esa espera. Conservar versión de observación y corte de puntuación; las correcciones posteriores se auditan por separado. Comparar prevalencia y presupuesto de falsos realizados por estación y fuente en selección, prueba y piloto. Revisar las alertas falsas y los episodios omitidos con usuarios cerca de la estación. Si ningún candidato cumple el presupuesto, mantener el piloto de concentraciones y registrar la decisión. El piloto público depende de la utilidad observada, la cobertura y la revisión del mensaje sanitario.
+
+## Cierre de cada PR
+
+Al terminar cada PR de este plan, revisar el cambio completo frente a sus criterios de aceptación. Entregar a cada uno de los siguientes revisores los mismos commits de base y de cabecera, el diff y los resultados de las pruebas. Pedir a cada uno por separado hallazgos concretos, su impacto y una forma de comprobar la corrección.
+
+- `model:opencode/zai-coding-plan/glm-5.3-flash`
+- `model:acpRegistry_qwen_code/qwen4-max-preview(openai)`
+- `model:codex/gpt-6.2-sol`
+
+Recoger las tres respuestas antes de integrar el PR. Contrastar cada hallazgo con el código, aplicar las correcciones pertinentes en el mismo PR y registrar cómo se resolvió cada observación. Explicar brevemente las sugerencias descartadas. Revisar el diff resultante, repetir los controles afectados y registrar en el PR el commit final y los resultados. Si falta una revisión, indicar qué revisor queda pendiente y mantener abierto el PR.
