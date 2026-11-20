@@ -39,3 +39,17 @@ Cada fila es un escenario independiente en una estación. Las horas son relativa
 | Seguimiento incompleto | Un aviso en 0, falta la lectura en +3 | Un aviso indeterminado. |
 | Ningún inicio | Un aviso en 0, seis objetivos bajo el umbral | Un aviso falso. |
 | Demora | Cálculo nominal en 0, inicio en +2 y emisión efectiva en +3 | Cero aciertos anticipados para ese inicio. Consignar la demora. |
+
+## Repetición del aviso y puntuación
+
+El siguiente comando aplica a las cinco historias sintéticas una regla que siempre propone un aviso cuando la última lectura está por debajo del umbral. Cada inicio puede acreditarse una sola vez. Se obtienen dos aciertos, un falso y un aviso de seguimiento incompleto. La estación con episodio en curso produce un estado. Los resultados comprueban la contabilidad de la regla.
+
+```sh
+uv run --locked python -m airaware.episode_warnings \
+  docs/methodology/episodios-v1/inferencia/ventanas.json \
+  docs/methodology/episodios-v1/evaluacion/objetivos.json
+```
+
+`Pilot` en `airaware.pilot_issue` registra las revisiones horarias de una serie en SQLite. Una clave de fuente debe identificar inequívocamente proveedor, sensor, estación y escala temporal. La primera transacción por fuente, estación y origen fija el insumo y el modelo. La publicación posterior conserva la hora efectiva y el resultado. La maduración cierra la cohorte en origen + seis horas + demora declarada. La prueba de integración incluye una lectura tardía, reinicio de proceso, corte sin datos, conflicto de modelo y corrección posterior al cierre. El responsable de la fuente debe fijar la demora según llegadas observadas antes de usarla en el piloto.
+
+En el entorno bloqueado de TimeF, `episode_quantiles.py` compara en selección la mediana y los intervalos del candidato con el directo congelado. Verifica IDs, niveles y huellas. El desglose por estación y las diferencias de MAE, cobertura y amplitud incluyen el estrato alto. El remuestreo empareja ambos métodos por bloques calendario de 84, 168 y 336 horas. Para puntuar el clasificador, `episode_calibration.py` admite `--episode-logits NPZ SHA256 MANIFIESTO_SHA256` en ajuste y aplicación. La revisión de #20 y #43 sigue siendo necesaria para usar etiquetas de episodios reales.

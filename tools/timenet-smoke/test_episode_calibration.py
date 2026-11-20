@@ -124,3 +124,33 @@ class EpisodeCalibrationTest(TestCase):
 
         with self.assertRaisesRegex(ValueError, "repetición"):
             run(Namespace(command="apply", block="test"))
+
+    def test_candidate_logits_require_frozen_context_and_align_ids(self):
+        from pathlib import Path
+        from tempfile import TemporaryDirectory
+
+        from episode_calibration import candidate_logits
+        from export_senamhi import sha256_file
+
+        with TemporaryDirectory() as tmp:
+            path = Path(tmp) / "pred.npz"
+            np.savez(
+                path,
+                window_id=["b", "a"],
+                episode_logit=[3.0, -1.0],
+                task="episode",
+                unit="logit",
+                schema_version=2,
+                thresholds_sha256="a" * 64,
+                checkpoint_sha256="b" * 64,
+                input_manifest_sha256="d" * 64,
+                input_sha256="e" * 64,
+                model_revision="rev",
+            )
+            values, checkpoint = candidate_logits(
+                path, sha256_file(path), np.array(["a", "b"]), "a" * 64, "d" * 64
+            )
+            np.testing.assert_array_equal(values, [-1.0, 3.0])
+            self.assertEqual(checkpoint, "b" * 64)
+            with self.assertRaises(ValueError):
+                candidate_logits(path, sha256_file(path), np.array(["a", "b"]), "c" * 64, "d" * 64)
