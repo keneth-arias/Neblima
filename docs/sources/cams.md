@@ -17,7 +17,7 @@ estación ni un producto satelital en sí mismo.
 Este entorno de ejecución no tenía Lightpanda disponible (no existe el binario ni una sesión
 compartida). La regla de [web-access](../web-access.md) exige no cambiar de herramienta en
 silencio: se usó `curl` HTTP puntual y documentado como alternativa explícita, con URL, fecha
-UTC, código HTTP y resultado registrados abajo. Fueron 10 intentos HTTP en total (8 con
+UTC, código HTTP y resultado registrados abajo. Fueron 10 intentos HTTP en total (7 con
 contenido, 1 error 404 corregido con la ruta oficial y 2 fallos de DNS en la misma URL de
 licencias); ninguno descargó datos ni muestras. No hubo más reintentos que los registrados.
 La evidencia de esta página es una captura fechada; los proveedores pueden cambiar enlaces y
@@ -26,7 +26,7 @@ contenidos después de la fecha de cada fila.
 | # | URL consultada | Fecha UTC | HTTP | Resultado para esta revisión |
 | --- | --- | --- | --- | --- |
 | 1 | https://atmosphere.copernicus.eu/about-cams | 2026-11-20T11:31:57Z | 200 | Portal oficial de CAMS: «consistent and quality-controlled information related to air pollution and health … everywhere in the world»; implementado por ECMWF dentro de Copernicus. |
-| 2 | https://confluence.ecmwf.int/display/CKB/CAMS+Global+Reanalysis+%28EAC4%29 | 2026-11-20T11:31:58Z | 404 | Ruta supuesta de Confluence inexistente; la página oficial válida se resolvió desde el enlace de documentación del ADS (fila 7). |
+| 2 | https://confluence.ecmwf.int/display/CKB/CAMS+Global+Reanalysis+%28EAC4%29 | 2026-11-20T11:31:58Z | 404 | Ruta supuesta de Confluence inexistente; la página oficial válida se resolvió desde el enlace de documentación del ADS (fila 8). |
 | 3 | https://ads.atmosphere.copernicus.eu/datasets/cams-global-reanalysis-eac4?tab=overview | 2026-11-20T11:31:59Z | 200 | Ficha ADS de EAC4: grilla global 0,75°×0,75°; 60 niveles modelo; cobertura 2003–2025 declarada; 3-hourly; GRIB con conversión opcional a NetCDF; DOI 10.24381/d58bbf47; licencia CC-BY; variables PM2.5 y AOD 550 nm. |
 | 4 | https://ads.atmosphere.copernicus.eu/datasets/cams-global-reanalysis-eac4?tab=documentation | 2026-11-20T11:33:08Z | 200 | Pestaña de documentación: enlaza «CAMS Reanalysis data documentation» (Confluence), «Known issues», informes EQA y la cita de datos (Inness et al. 2019). |
 | 5 | https://licences.copernicus.eu/licence-to-use-copernicus-products | 2026-11-20T11:33:09Z | 000 | Error de DNS («Could not resolve host»): el host de licencias Copernicus no resolvió; primer intento. |
@@ -104,9 +104,8 @@ descarga y esta entrega no afirma disponibilidad operativa.
 | DOI / fechas | 10.24381/d58bbf47; publicación 2020-02-06; última actualización declarada 2026-08-24 |
 
 Escala en la práctica de Lima: una celda de 0,75° equivale a unas decenas de kilómetros
-(~83 km en latitud); una sola celda abarca Lima metropolitana completa, sin distinguir
-distritos ni gradientes urbano-costeros. Esta escala es de grilla global y no puede
-interpretarse de otra forma.
+(~83 km en latitud). Para identificar qué celdas corresponden a las estaciones de Lima
+hace falta cruzar sus coordenadas con la grilla. El producto no resuelve variaciones por distrito.
 
 Dataset derivado revisado en la misma sesión: «CAMS global reanalysis (EAC4) monthly averaged
 fields» (DOI 10.24381/fd75fff2), misma grilla 0,75°×0,75°, tipos `monthly_mean` y
@@ -198,14 +197,16 @@ TROPOMI (satelital; columnas, no PM2.5 superficial) y AOD de MODIS (satelital).
 ## (h) Límites explícitos
 
 1. **Resolución baja**: EAC4 es reanálisis global de ~80 km nativo / 0,75°×0,75° público.
-   **Nunca atribuir «resolución de barrio»**: una celda cubre Lima metropolitana entera y no
-   distingue distritos, ni corredores viales, ni gradientes urbano-costeros.
+   **Nunca atribuir «resolución de barrio»**: la grilla no resuelve diferencias a escala de
+   distritos, corredores viales o gradientes urbano-costeros.
 2. **No sustituye estaciones**: el PM2.5 de EAC4 es modelado con asimilación; no es medición
    de estación y no reemplaza las series SENAMHI/OEFA ni la identidad por estación documentada
    en #14/#16. Toda comparación debe mantener las clases separadas como exige
    [weather.md](weather.md).
 3. **Latencia incompatible con alertas**: actualización declarada «Twice a year with 4-6
-   month delay»; no es una fuente de tiempo real.
+   month delay». Para evaluar un pronóstico histórico, cada campo debe acreditar que ya
+   estaba publicado al emitirlo. Un campo publicado después solo sirve para análisis
+   retrospectivo y se excluye de las entradas de ese pronóstico.
 4. **Comparación complementaria pendiente**: medir el aporte de una configuración
    complementaria aislada con **solo contaminación** sobre los objetivos compartidos de #25
    espera #17/#25 y la autorización de la cuenta ADS; este PR no ejecuta esa comparación ni
