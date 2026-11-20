@@ -5,6 +5,7 @@ import hashlib
 import json
 import math
 import re
+from bisect import bisect_right
 from collections import Counter, defaultdict
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
@@ -147,6 +148,9 @@ def report(issuances, receipts, through):
     observations = audit(receipts, through=through, include_receipts=True, allow_empty=True)
     cutoff = instant(through)
     receipt_at = {instant(r["seen_utc"]): r["receipt_sha256"] for r in observations["receipts"]}
+    history = defaultdict(list)
+    for change in observations["changes"]:
+        history[change["station_hour"]].append((instant(change["seen_utc"]), change["value"]))
     issues, fingerprints = [], []
     for path in sorted(issuances.glob("*.json")):
         raw = path.read_bytes()
@@ -155,6 +159,16 @@ def report(issuances, receipts, through):
             input_time = instant(issue["input_cutoff_utc"])
             if input_time not in receipt_at or issue["receipt_sha256"] != receipt_at[input_time]:
                 raise ValueError("El corte de insumos de la emisión difiere del recibo de SENAMHI")
+            versions = history[issue["origin"]]
+            position = bisect_right(versions, input_time, key=lambda event: event[0])
+            if (
+                position == 0
+                or versions[position - 1][1] != issue["last_ug_m3"]
+                or versions[position - 1][1] is None
+            ):
+                raise ValueError(
+                    "La persistencia difiere de la lectura de origen disponible al emitir"
+                )
             issues.append(issue)
             fingerprints.append(hashlib.sha256(raw).hexdigest())
     result = summarize(issues, observations["changes"], through)

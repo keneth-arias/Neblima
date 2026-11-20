@@ -146,6 +146,14 @@ class LiveScoresTest(unittest.TestCase):
             )
             self.assertEqual(result["counts"]["awaiting_first"], 6)
             self.assertEqual(report(issues, receipts, after)["overall"]["first"]["qwen_mae"], 2)
+            bad = dict(forecast, last_ug_m3=99)
+            path.write_text(json.dumps(bad))
+            with self.assertRaisesRegex(ValueError, "persistencia"):
+                report(issues, receipts, after)
+            bad = dict(forecast, origin="2026-11-20T14:00:00")
+            path.write_text(json.dumps(bad))
+            with self.assertRaisesRegex(ValueError, "persistencia"):
+                report(issues, receipts, after)
             forecast["receipt_sha256"] = "0" * 64
             path.write_text(json.dumps(forecast))
             with self.assertRaisesRegex(ValueError, "recibo"):
