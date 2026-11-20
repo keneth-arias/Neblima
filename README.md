@@ -87,6 +87,15 @@ congelado. Validación seleccionó persistencia. El trabajo del modelo temporal 
 [#27](https://github.com/keneth-arias/airaware/issues/27) y [#28](https://github.com/keneth-arias/airaware/issues/28).
 El conector de Cuybernautas está en [revisión como borrador de TimeNet](https://github.com/OpenTSLM/TimeNet/pull/796).
 
+En la validación histórica de 44 458 ventanas de Lima, añadir el historial de PM10 redujo
+el error absoluto medio del pronóstico de PM10 de 19,62 a 9,65 µg/m³ y el de PM2.5
+de 4,985 a 4,965 µg/m³. Ambas variantes pronosticaron las mismas seis horas.
+[Validación histórica por estación y horizonte](reports/models/validacion-pm25-pm10.md).
+
+En la prueba externa, añadir PM10 redujo su propio error medio de 21,46 a 11,12 µg/m³
+en OpenAQ y de 20,98 a 10,92 µg/m³ en SENAMHI horario. Para PM2.5, la mejora media
+fue de 0,059 y 0,045 µg/m³, respectivamente. [Resultados de los dos proveedores](reports/models/prueba-externa-pm25-pm10.md).
+
 La [adquisición meteorológica de #16](reports/acquisition/weather.md) habilita el análisis
 de una semana de pronósticos archivados. Su cobertura queda dentro de entrenamiento,
 por lo que la [alineación retrospectiva integrada](https://github.com/keneth-arias/airaware/pull/85)

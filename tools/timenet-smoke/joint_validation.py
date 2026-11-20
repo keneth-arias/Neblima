@@ -37,7 +37,7 @@ def read_predictions(data, ids, view, checkpoint, scaler):
     return prediction[order]
 
 
-def paired_table(data, first, both, thresholds):
+def paired_table(data, first, both, thresholds, *, tz="UTC"):
     ids = data["window_id"]
     history, actual = data["history"], data["targets"]
     if (
@@ -57,10 +57,10 @@ def paired_table(data, first, both, thresholds):
             "window_id": np.repeat(ids, 12),
             "station_key": np.repeat(stations, 12),
             "origin_at": pa.array(
-                np.repeat(data["origin_hour"] * 3600, 12), type=pa.timestamp("s", tz="UTC")
+                np.repeat(data["origin_hour"] * 3600, 12), type=pa.timestamp("s", tz=tz)
             ),
             "target_at": pa.array(
-                np.repeat(target_hours.ravel() * 3600, 2), type=pa.timestamp("s", tz="UTC")
+                np.repeat(target_hours.ravel() * 3600, 2), type=pa.timestamp("s", tz=tz)
             ),
             "channel": np.tile(PARAMS, len(ids) * 6),
             "horizon": np.tile(horizons.repeat(2), len(ids)),

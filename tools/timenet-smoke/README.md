@@ -177,10 +177,11 @@ with np.load(matrices / "validation.npz", allow_pickle=False) as datos:
 PY
 ```
 
-En la imagen fijada, ejecutar este comando una vez por variante (`first` para A y `both` para B), con la carpeta del ajuste correspondiente en `$ajuste`. La revisión de los pesos base y del entrenador figuran en la [configuración congelada](../../configs/training/lima-pm25-pm10-ajuste-v1.json).
+En el perfil de entrenamiento de SkyPilot, ejecutar este comando una vez por variante (`first` para A y `both` para B), con la carpeta del ajuste correspondiente en `$ajuste`. El perfil monta `gpu_worker.py` en `/opt/airaware` para aplicar el presupuesto de memoria de la GPU también durante la inferencia. Las revisiones de los pesos base y del entrenador figuran en la [configuración congelada](../../configs/training/lima-pm25-pm10-ajuste-v1.json).
 
 ```bash
-PYTHONPATH=/opt/forecast/src /opt/conda/bin/python -m opentslm.forecast_inference \
+PYTHONPATH=/opt/forecast/src /opt/conda/bin/python /opt/airaware/gpu_worker.py \
+  -m opentslm.forecast_inference \
   --input-view "$vista" --data "$historias/$vista.npz" --scaler "$matrices/scaler.json" \
   --checkpoint "$ajuste/step-00015745" --weights /inputs/qwen/weights --batch 16 \
   --output "$ajuste/replay-validation.npz"

@@ -1,0 +1,56 @@
+{
+  "cgroup_memory_max_bytes": 54999998464,
+  "gpu_count": 1,
+  "gpu_worker_sha256": "894bba3e140e6162c566eb0b868ffe0d68d0208ff74df521b1822157cdae69db",
+  "image": "docker.io/ml-infra/airaware-joint@sha256:14eb3ed9b9ca00c75acbc56991d0f1882dc8efc5306ccf5fa90366673f40b3be",
+  "pod_memory_limit_bytes": 55000000000,
+  "runs": [
+    {
+      "allocator_limit_bytes": 16000000000,
+      "allocator_set_at": "2026-11-20T15:06:53.237982413Z",
+      "checkpoint_sha256": "ca2ee75b0702a7893bc76a196351a45900fd54b68347f724157a532062d5c0cf",
+      "cuda_device": 0,
+      "output_sha256": "1a5e92851c9aadfa145458ea88b6a700934734b916a1d543be9664bb3e9460c6",
+      "predictions_written_at": "2026-11-20T15:13:27.544927210Z",
+      "source": "openaq",
+      "view": "first",
+      "windows": 85538
+    },
+    {
+      "allocator_limit_bytes": 16000000000,
+      "allocator_set_at": "2026-11-20T15:13:29.254341741Z",
+      "checkpoint_sha256": "a63e52690de3e46133728527a1556aaec8746356692f78c4ba70b8937cad8a14",
+      "cuda_device": 0,
+      "output_sha256": "ac4763cd9f1c21bb81d2ee0e263bb57ad2a96319237b77f2c8541ea69e6cc406",
+      "predictions_written_at": "2026-11-20T15:19:53.539898626Z",
+      "source": "openaq",
+      "view": "both",
+      "windows": 85538
+    },
+    {
+      "allocator_limit_bytes": 16000000000,
+      "allocator_set_at": "2026-11-20T15:19:55.315491878Z",
+      "checkpoint_sha256": "ca2ee75b0702a7893bc76a196351a45900fd54b68347f724157a532062d5c0cf",
+      "cuda_device": 0,
+      "output_sha256": "b158d58c78f98d9f552bc1505b19c8fa89133a85a92b55c0f2c169e09cd67976",
+      "predictions_written_at": "2026-11-20T15:27:23.806394859Z",
+      "source": "senamhi_horario",
+      "view": "first",
+      "windows": 102768
+    },
+    {
+      "allocator_limit_bytes": 16000000000,
+      "allocator_set_at": "2026-11-20T15:27:25.649863538Z",
+      "checkpoint_sha256": "a63e52690de3e46133728527a1556aaec8746356692f78c4ba70b8937cad8a14",
+      "cuda_device": 0,
+      "output_sha256": "7ab77cf7420f31ec4a00018df4ae72751eee87731ac4da24a2085c6bcd135542",
+      "predictions_written_at": "2026-11-20T15:34:44.383861153Z",
+      "source": "senamhi_horario",
+      "view": "both",
+      "windows": 102768
+    }
+  ],
+  "runtime_finished_at": "2026-11-20T15:34:45Z",
+  "runtime_started_at": "2026-11-20T15:06:52Z",
+  "training_freeze_sha256": "6727c884d5e180b257ff385ccdebe80853ea8ff79b5ce38420ad0c70ac43f31b"
+}

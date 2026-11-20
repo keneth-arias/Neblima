@@ -24,3 +24,7 @@ Se probó este diseño con TimeNet 0.12.0 en la revisión fijada: `TimeFDataset.
 6. **AirAware · Ronda reservada e informe.** Congelar los puntos de control de A y B en validación antes de la prueba de esta extensión. Publicar MAE por contaminante, horizonte y estación, diferencias pareadas B − A, referencia, denominadores y horas de estación distintas. Informar también concentraciones altas con percentil 95 **por contaminante y serie** calculado en entrenamiento. Cada variante debe rendir 1 026 456 filas en OpenAQ y 1 233 216 filas en SENAMHI con clave única `(fuente, window_id, contaminante, horizonte)`. Registrar resultados por separado si un contaminante mejora y el otro empeora. Usar OpenAQ como prueba con reloj UTC y reportar SENAMHI por separado con su reloj nativo. Evitar promediar fuentes que pueden repetir mediciones. Los resultados de #28 corresponden a las particiones anteriores.
 
 En cada PR de AirAware, ejecutar `make check`, `make test-timef-offline`, `make build` y `make audit`. Conservar CSV, archivos TimeF, matrices y pesos en almacenamiento local. La aceptación final requiere concordancia entre el conector público y el conjunto interno, además de la evaluación de ambos brazos.
+
+## Resultado
+
+El [informe final](../reports/models/prueba-externa-pm25-pm10.md) reúne la cobertura por estación, las métricas externas, la comparación durante concentraciones altas y las instrucciones de reproducción. El [conector hermano](https://github.com/keneth-arias/TimeNet/pull/1) reprodujo las 296 373 tareas históricas y los valores de ambas señales.
