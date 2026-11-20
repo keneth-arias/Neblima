@@ -1,0 +1,75 @@
+{
+  "version": "lima-pm25-pm10-ajuste-v1",
+  "frozen_at_utc": "2026-11-20T02:03:32.613580+00:00",
+  "input_version": "lima-pm25-pm10-v1",
+  "inputs_manifest_sha256": "c7cbdc5f5bf63984953dfc470aab480c8beabec6d817e48fbcfbd97037a09dcf",
+  "train": {
+    "npz_sha256": "5db3e2fa6317a1b3f5a8b7dee8c452aaa8d56ce68ee19e37a89bf724b9ebeeab",
+    "ordered_ids_sha256": "26e8123b3f244ebf6497c854c36a7c896c2766f669a3c30b70e8d73aadf9eb45",
+    "windows": 251915
+  },
+  "validation": {
+    "npz_sha256": "12d94d2a3c2ad36972aba46f661cdd00315e7f4b953f21edada4bfb348f7190e",
+    "ordered_ids_sha256": "a171429ddce5b72212f212dad130d87ca5407a85b2332d9d15f11033c57ed01e",
+    "windows": 44458
+  },
+  "scaler_sha256": "c8ebd87bce74ea0157e85093e4c9c81d981af34fb62f1cbc2c12ce653b2c3863",
+  "timef_manifest_sha256": "d0aeb64d8414ca30547037eca439b1acdb00212b67040c5d7930699edb4c76a5",
+  "channels": [
+    "pm25",
+    "pm10"
+  ],
+  "trainer_commit": "a4def7e420e2ecc271137bb3077341d39878d6c0",
+  "base_revision": "2fc06364715b967f1860aea9cf38778875588b17",
+  "weights_sha256": "1d76cc3cfd4c15f9c749372611e5ca6e0b6f910b1fcf0551ce9157e9bfef29c1",
+  "image": "docker.io/ml-infra/airaware-joint@sha256:14eb3ed9b9ca00c75acbc56991d0f1882dc8efc5306ccf5fa90366673f40b3be",
+  "head": "direct",
+  "views": [
+    "first",
+    "both"
+  ],
+  "training": {
+    "seed": 27,
+    "batch": 16,
+    "updates": 15745,
+    "final_batch": 11,
+    "order_sha256": "3d5748ac25f5f6f1c115cadd612d4489a58c65e6877e7c971721bd50ac17f3cf",
+    "optimizer": "AdamW",
+    "lr": 0.0001,
+    "weight_decay": 0,
+    "gradient_clip": 1,
+    "schedule": "cosine",
+    "precision": "fp32",
+    "lora_rank": 4,
+    "lora_alpha": 8,
+    "max_gpu_hours_per_arm": 4,
+    "save_seconds": 900
+  },
+  "selection": "final_scheduled_step_both_arms",
+  "pilot_train_only": {
+    "first": {
+      "median_windows_s": 67.05002832815259,
+      "peak_allocated_bytes": 7059695104,
+      "checkpoint_bytes": 18778136,
+      "checkpoint_seconds": [
+        0.27959490299690515,
+        0.3089681689889403
+      ],
+      "resumed_from": 8,
+      "final_step": 40,
+      "initial_trainable_sha256": "e9b734f3e635861ea69f3acf29ee7e480f3a635dcef4655f58ff0c263603e048"
+    },
+    "both": {
+      "median_windows_s": 66.63001372738175,
+      "peak_allocated_bytes": 7059695104,
+      "checkpoint_bytes": 18778134,
+      "checkpoint_seconds": [
+        0.2803467939957045,
+        0.28616676399542484
+      ],
+      "resumed_from": 8,
+      "final_step": 40,
+      "initial_trainable_sha256": "e9b734f3e635861ea69f3acf29ee7e480f3a635dcef4655f58ff0c263603e048"
+    }
+  }
+}
