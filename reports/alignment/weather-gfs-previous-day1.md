@@ -101,16 +101,16 @@ existente fue modificada. Controles ejecutados en la rama de esta auditoría: `m
 | (1) Desfases temporales | `nominal_lead_hours: 24`; `issued_at_rule: previous_day1_nominal_lead` | columnas `valid_at`, `issued_at` (= `valid_at` − 24 h), `lead_hours` e `issued_at_rule` | `test_conversion_records_temporal_semantics_and_provenance` | «Semántica temporal: `issued_at` = `valid_at` − 24 h …» |
 | (1) Resolución del producto | sin campo: el proveedor no declara resolución en la respuesta | `declared_grid_resolution: null` (honesto, no se inventa) y `observed_grid_spacing_deg` en la reconciliación del manifiesto | `test_conversion_reports_observed_grid_spacing_per_dimension` | «Espaciamiento mínimo observado …; resolución declarada … nula» |
 | (2) Solo variables disponibles al momento del pronóstico | `excluded_realized_variables: [temperature_2m]`; `product_class: archived_forecast`; `experiment_class: retrospective_issue_time` | cláusula de admisión en `JOIN_QUERY` (`rejected_issue_unknown`, `rejected_issue_after_origin`, `rejected_available_after_origin`); `value` expuesto solo en filas `admissible` (fail-closed); `hour_role` separa `history_input` de `target_forecast`; validador `explicit_exclusions` bloquea la variable realizada | `test_join_rejects_issue_after_origin_and_accepts_boundary_equality`; `test_join_rejects_late_publication_with_earlier_valid_time`; `test_join_masks_feature_value_of_late_issue_and_late_publication`; `test_join_fails_closed_when_issue_time_is_unknown`; `test_join_classifies_present_rows_without_usable_value_as_missing`; `test_join_allows_future_valid_time_only_as_forecast` | «Razones de rechazo en conversión» |
-| (2) Conservar fechas de emisión y disponibilidad | `issued_at_rule`; `available_at_policy: undocumented_null` | columnas `issued_at`, `available_at` y `acquired_at` separadas en `WEATHER_ROWS_SCHEMA` y en la salida unida; `available_at` permanece nulo y `acquired_at` (procedencia local) nunca lo sustituye | `test_conversion_records_temporal_semantics_and_provenance` (conserva las tres fechas); `test_join_masks_feature_value_of_late_issue_and_late_publication` (metadatos íntegros en filas rechazadas); `test_repository_config_matches_pinned_acquisition_plan` (`available_at_policy == "undocumented_null"`) | «Semántica temporal» y limitación 1 |
+| (2) Conservar fechas de emisión y disponibilidad | `issued_at_rule`; `available_at_policy: undocumented_null` | columnas `issued_at`, `available_at` y `acquired_at` separadas en `WEATHER_ROWS_SCHEMA`. La unión proyecta `issued_at`, `available_at` y la huella del original; `available_at` permanece nulo y `acquired_at` (procedencia local) nunca lo sustituye | `test_conversion_records_temporal_semantics_and_provenance` (conserva las tres fechas); `test_join_masks_feature_value_of_late_issue_and_late_publication` (metadatos íntegros en filas rechazadas); `test_repository_config_matches_pinned_acquisition_plan` (`available_at_policy == "undocumented_null"`) | «Semántica temporal» y limitación 1 |
 | (3) Configuraciones separadas solo contaminación / con meteorología | `configs/weather-alignment.yaml` (variante `pm25_gfs_previous_day1`) + `comparison_policy: configs/benchmark.yaml` (`comparison-v3`) | manifiesto: `experiment.reference_configuration: pm25_only` frente a `experiment.weather_configuration`; `AlignmentConfig` con `extra="forbid"` y estaciones únicas | `test_repository_config_matches_pinned_acquisition_plan` (configuración del repositorio válida y conciliada con el plan fijado de 7 coordenadas) | «Paridad de configuraciones (sintética, cadena real)» |
 | (3) Pruebas de cruce | — (la paridad se calcula, no se configura) | bloque `parity` del manifiesto: `identical_window_id_set`, huellas SHA-256 del conjunto de `window_id` (total y elegible, splits frente a resumen) y `eligible_targets_sha256`; la unión nunca descarta ventanas ni reescribe objetivos | `test_full_chain_end_to_end_is_deterministic_and_parity_holds`; `test_missing_weather_stays_null_with_explicit_mask` | «Paridad de configuraciones (sintética, cadena real)» |
 
-## Resultado de la auditoría: sin huecos estructurales
+## Alcance de las pruebas retrospectivas
 
-Cada sub-reclamo de los tres criterios cuenta a la vez con campo de configuración, registro en
-el módulo y prueba nominal: **no se encontró ningún hueco estructural**. Un hueco contaría
-solo si ningún campo ni prueba existente lo cubriera; por eso este PR es solo documental y no
-añade código, pruebas ni dependencias. Inventario completo de las 17 pruebas revisadas:
+Las pruebas cubren la unión retrospectiva por hora de emisión. Con `available_at` nulo,
+la consulta admite un valor si cumple las demás condiciones. Para verificar disponibilidad
+operativa hace falta conocer la hora de publicación del proveedor y exigir que sea anterior
+o igual al origen. Inventario de las 17 pruebas revisadas:
 
 1. `test_conversion_records_temporal_semantics_and_provenance` — semántica temporal
    (`issued_at`, `lead_hours`, `issued_at_rule`, `available_at` nulo, `acquired_at` del
@@ -160,6 +160,3 @@ añade código, pruebas ni dependencias. Inventario completo de las 17 pruebas r
 2. **Disponibilidad horaria del producto archivado**: el proveedor no documenta `available_at`
    por hora (política `undocumented_null`); verificarla contra el servidor para sustituir el
    experimento retrospectivo por tiempo de emisión por disponibilidad operativa estricta.
-
-Nada más queda pendiente de código o pruebas: los tres criterios de aceptación están cubiertos
-por la evidencia de la matriz anterior.
