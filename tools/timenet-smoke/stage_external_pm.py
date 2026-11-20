@@ -34,7 +34,7 @@ FROM renamed UNPIVOT INCLUDE NULLS (raw FOR parametro IN (pm25 AS pm25,PM10 AS p
 """
 
 
-def readings(html):
+def readings(html, *, expected_series=None):
     script = re.sub(r"/\*.*?\*/", "", html, flags=re.S)
     labels = re.search(r"categories:\s*\[([^\]]*)\]", script)
     if not labels or "Highcharts.chart" not in script:
@@ -42,7 +42,9 @@ def readings(html):
     series = re.findall(
         r"name:\s*'([^']+)'[\s\S]*?\bdata:\s*\[([^\]]*)\]", script.split("series:", 1)[1]
     )
-    (values,) = [data for name, data in series if not name.startswith("ECA")]
+    ((name, values),) = [(name, data) for name, data in series if not name.startswith("ECA")]
+    if expected_series is not None and name != expected_series:
+        raise ValueError("La serie medida corresponde a otro contaminante")
 
     def items(text):
         return (
