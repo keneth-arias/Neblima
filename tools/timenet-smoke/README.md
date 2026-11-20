@@ -197,3 +197,14 @@ UV_OFFLINE=true uv run --project tools/timenet-smoke --locked python \
 El verificador coteja el último paso, las sumas de los archivos del estado, el registro efectivo de lotes, el escalador y las concentraciones del conjunto congelado. `paired.parquet` permite revisar cada par de errores. `metrics.json` desglosa por contaminante, estación, horizonte y concentración alta. `freeze.json` identifica ambos modelos y los archivos verificados. La entrada de evaluación es exclusivamente la partición histórica de validación.
 
 Si el nodo se apaga durante el ajuste, el archivo de eventos puede terminar en bytes NUL después de la última línea JSON completa. El verificador registra el nombre, el SHA-256 del archivo original y la cantidad de esos bytes en `recovered_log_tails`. Una línea JSON incompleta o dañada interrumpe la verificación. Para congelar el modelo, todos los pasos deben estar documentados y cada lote repetido después de reanudar debe conservar los mismos identificadores y la misma tasa de aprendizaje.
+
+## Exportación de solo historias para inferencia de PM2.5
+
+Para el producto univariado de seis horas, preparar fuera del pod de inferencia un archivo con las claves `window_id` y `history`. El exportador verifica el manifiesto de #25 y conserva el orden de la cohorte. Ejecutar desde la raíz con una ruta de salida nueva.
+
+```sh
+uv run --project tools/timenet-smoke --locked python tools/timenet-smoke/export_qwen_windows.py \
+  data/timef/airaware/lima-pm25-forecast/0.1.0 history.npz --split validation --history-only
+```
+
+Los objetivos del producto histórico se validan durante esta preparación retrospectiva. Montar únicamente el archivo resultante para inferencia y conservar el archivo con mediciones futuras en el evaluador. Los paquetes del piloto en vivo requieren además evidencia de cuándo llegó cada lectura. [Plan de episodios](../../tasks/pronostico-episodios-lima.md)
