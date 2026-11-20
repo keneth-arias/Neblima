@@ -1,0 +1,10 @@
+{
+  "version": "lima-episode-fixture-v1",
+  "rows": [
+    {"window_id":"w1", "targets":[20,21,10,10,10,10], "event":true, "ongoing_at_origin":false, "first_onset_hour":1},
+    {"window_id":"w2", "targets":[22,20,10,10,10,10], "event":true, "ongoing_at_origin":true, "first_onset_hour":null},
+    {"window_id":"w3", "targets":[15,16,17,18,19,30], "event":true, "ongoing_at_origin":false, "first_onset_hour":6},
+    {"window_id":"w4", "targets":[10,10,null,10,10,25], "event":null, "ongoing_at_origin":false, "first_onset_hour":null},
+    {"window_id":"w5", "targets":[20,21,10,10,10,10], "event":false, "ongoing_at_origin":false, "first_onset_hour":null}
+  ]
+}
