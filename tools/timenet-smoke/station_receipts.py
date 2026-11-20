@@ -100,10 +100,16 @@ def register(root, raw, receipt):
     return target
 
 
-def audit(root):
-    last_check, changes, previous_change = {}, [], {}
+def audit(root, through=None):
+    last_check, last_listed, changes, previous_change = {}, {}, [], {}
     counts = {"first_value": 0, "revision": 0, "withdrawn": 0}
     snapshots = sorted(root.glob("????????T??????.??????Z"))
+    if through is not None:
+        cutoff = datetime.fromisoformat(through)
+        if cutoff.tzinfo is None:
+            raise ValueError("El corte de auditoría requiere una zona horaria")
+        key = cutoff.astimezone(UTC).strftime("%Y%m%dT%H%M%S.%fZ")
+        snapshots = [path for path in snapshots if path.name <= key]
     if not snapshots:
         raise ValueError("No hay capturas para auditar")
     for path in snapshots:
@@ -116,8 +122,13 @@ def audit(root):
         for i in range(24 * ((last - first).days + 1)):
             hour = start + timedelta(hours=i)
             value = points.get(hour)
-            old, checked_at = last_check.get(hour, (None, None))
-            last_check[hour] = value, seen
+            state = "unlisted" if hour not in points else "null" if value is None else "finite"
+            preceding_state, checked_at = last_check.get(hour, (None, None))
+            last_check[hour] = state, seen
+            if state == "unlisted":
+                continue
+            old = last_listed.get(hour)
+            last_listed[hour] = value
             if old == value:
                 continue
             if value is None:
@@ -133,7 +144,10 @@ def audit(root):
                     "kind": kind,
                     "value": value,
                     "seen_utc": seen,
-                    "last_checked_without_value_utc": checked_at if old is None else None,
+                    "preceding_query_state": preceding_state,
+                    "last_checked_without_value_utc": checked_at
+                    if preceding_state in ("unlisted", "null")
+                    else None,
                     "previous_check_utc": checked_at,
                     "source_sha256": r["sha256"],
                     "previous_change_utc": previous_change.get(hour),
@@ -207,6 +221,8 @@ if __name__ == "__main__":
     for name in ("capture", "import", "audit"):
         cmd = commands.add_parser(name)
         cmd.add_argument("root", type=Path)
+        if name == "audit":
+            cmd.add_argument("--through", help="Última recepción UTC incluida (ISO 8601)")
         if name == "import":
             cmd.add_argument("receipt", type=Path)
             cmd.add_argument("chart", type=Path)
@@ -216,4 +232,6 @@ if __name__ == "__main__":
     elif a.command == "capture":
         print(capture(a.root))
     else:
-        print(json.dumps(audit(a.root), allow_nan=False, sort_keys=True, indent=2))
+        print(
+            json.dumps(audit(a.root, through=a.through), allow_nan=False, sort_keys=True, indent=2)
+        )

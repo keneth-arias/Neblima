@@ -36,8 +36,8 @@ class ReceiptTest(TestCase):
         with TemporaryDirectory() as tmp:
             root = Path(tmp)
             self.record(root, 8, [(3, 11), (4, None), (5, 9)])
-            first = self.record(root, 12, [(3, 12), (4, 8), (6, 9)])
-            self.assertEqual(first, self.record(root, 12, [(3, 12), (4, 8), (6, 9)]))
+            first = self.record(root, 12, [(3, 12), (4, 8), (5, None), (6, 9)])
+            self.assertEqual(first, self.record(root, 12, [(3, 12), (4, 8), (5, None), (6, 9)]))
             self.record(root, 14, [], day=19)  # Otra fecha fuera del alcance de la captura.
             result = audit(root)
             self.assertEqual(result["snapshots"], 3)
@@ -91,3 +91,15 @@ class ReceiptTest(TestCase):
             receipt.update(bytes=len(raw), sha256=hashlib.sha256(raw).hexdigest())
             with self.assertRaisesRegex(ValueError, "contaminante"):
                 register(Path(tmp), raw, receipt)
+
+    def test_truncated_chart_does_not_withdraw_an_omitted_category(self):
+        with TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            self.record(root, 8, [(0, 1), (1, 8)])
+            self.record(root, 9, [(0, 1)])
+            self.record(root, 10, [(0, 1), (1, 8), (2, 7)])
+            result = audit(root)
+            self.assertEqual(result["counts"], {"first_value": 3, "withdrawn": 0, "revision": 0})
+            self.assertEqual(result["changes"][-1]["preceding_query_state"], "unlisted")
+            cutoff = "2026-11-20T09:30:00+00:00"
+            self.assertEqual(audit(root, through=cutoff)["snapshots"], 2)
