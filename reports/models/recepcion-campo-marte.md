@@ -24,3 +24,20 @@ uv run --project tools/timenet-smoke --locked python tools/timenet-smoke/station
 ```
 
 Los recibos sirven para caracterizar la fuente antes del piloto. La calibración de episodios y el puntaje de la prueba futura usan una cohorte con su elegibilidad y periodo fijados por separado.
+
+## Puntaje provisional durante la emisión privada
+
+Para cada pronóstico de +1 a +6 horas, el puntaje empareja Qwen y persistencia con la misma medición de Campo de Marte. Presenta dos vistas al corte elegido. La primera conserva la primera lectura recibida estrictamente después de emitir. La última incorpora las correcciones disponibles y excluye del denominador una lectura retirada. Si ya se conocía el objetivo al emitir, ninguna de las vistas lo usa. Un campo de error o cobertura vacío indica que todavía faltan pares para calcularlo.
+
+El informe muestra pares y horas objetivo distintas, error absoluto medio en µg/m³, cobertura y amplitud del intervalo del 80 %, tanto globalmente como por horizonte. El tiempo hasta la primera recepción se mide entre las marcas UTC de emisión y llegada. La etiqueta horaria del gráfico identifica el objetivo. La interpretación de anticipación respecto de la exposición sigue pendiente de la correspondencia entre el reloj del gráfico y UTC.
+
+En bm, el comando usa las emisiones privadas y los recibos operativos guardados. El corte incluye las observaciones recibidas y las emisiones publicadas hasta ese instante. Las huellas de ambos conjuntos permiten reproducir el informe. Una carpeta vacía de emisiones da cero pronósticos. Los datos conservarán su carácter provisional mientras se evalúa la maduración de la fuente.
+
+```bash
+D=/home/shared/github/keneth-arias/airaware/data
+uv run --project tools/timenet-smoke --locked python tools/timenet-smoke/live_concentration_scores.py \
+  "$D/processed/evaluacion-inmediata-campo-marte-20261120/en-vivo/issuances" \
+  "$D/raw/campo-marte-operativo-20261120" --through 2026-11-20T21:00:00+00:00
+```
+
+El servicio horario de bm actualiza `en-vivo/puntaje-por-horizonte.json` después de procesar la consulta. La etiqueta `latest_live_horizon_report` de la primera corrida de emisión en MLflow identifica el archivo privado correspondiente al último corte procesado. Cada archivo conserva su huella en el nombre. Las horas sin medición quedan pendientes.
