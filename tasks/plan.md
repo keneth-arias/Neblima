@@ -95,6 +95,7 @@ M3 y fuentes meteorológicas verificadas habilitan M4. M6 nacional y M7 compleme
 - [#27: Implementar el adaptador de OpenTSLM y una prueba acotada de modelo](https://github.com/keneth-arias/airaware/issues/27)
 - [#28: Entrenar y evaluar el experimento temporal del hackathon](https://github.com/keneth-arias/airaware/issues/28)
 - [#29: Preparar la presentación y la entrega del hackathon](https://github.com/keneth-arias/airaware/issues/29)
+  · [Integración web del mapa de estaciones](#integración-web-del-mapa-de-estaciones)
 - [#30: Normalizar OEFA y validar la compatibilidad de mediciones nacionales](https://github.com/keneth-arias/airaware/issues/30)
 - [#31: Investigar OpenAQ Perú y duplicaciones de agregadores](https://github.com/keneth-arias/airaware/issues/31)
 - [#32: Evaluar estaciones separadas y particiones seguras para preentrenamiento nacional](https://github.com/keneth-arias/airaware/issues/32)
@@ -312,3 +313,25 @@ En #28, comparar primero los cabezales directo y de corrección de persistencia.
 El [plan operativo de MicroK8s y SkyPilot para #28](issue-28-cluster.md) fija el orden de preparación de insumos, uso de ambas RTX 5070 Ti, ensayo de reanudación y dimensionamiento del volumen antes del entrenamiento.
 
 Con el piloto y la imagen por digest verificados, el [plan de evaluación de #28](issue-28-evaluacion.md) ordena los cinco PR restantes. La exportación de entrenamiento y validación puede avanzar junto con la inferencia desde un punto de control. La medición de dos ajustes simultáneos decide el uso de las tarjetas. La selección en validación habilita la prueba reservada y la presentación de #29. La extensión con PM10 queda en #88.
+
+## Integración web del mapa de estaciones
+
+Para la demo de #29, el [mapa de las siete estaciones históricas](../web/estaciones.html)
+se distribuye como un archivo estático. El [README](../README.md) muestra cómo copiarlo a una
+carpeta pública e insertarlo en otra página. Los créditos y el aviso sobre el sistema de
+referencia acompañan la copia.
+
+Verificación local del 20/11/2026:
+
+- Se sirvió una página de prueba en `/demo/` con el bloque del README y el mapa en
+  `/demo/mapas/estaciones.html`. Con anchos de 360 y 1024 píxeles cargaron los siete
+  marcadores y el fondo de OpenStreetMap. La página y el marco conservaron su ancho.
+- Con el teclado se seleccionaron San Borja y Santa Anita y se recuperó la vista de los
+  siete marcadores. El enlace de San Borja abrió su ubicación en otra pestaña.
+- Al bloquear el script de Leaflet, aparecieron los siete enlaces. Se abrió el de
+  Carabayllo en OpenStreetMap y la página anfitriona conservó la lista.
+- `UV_OFFLINE=true uv run --locked pytest -q tests/test_station_map.py` contrastó las siete
+  ubicaciones con [la configuración](../configs/weather-alignment.yaml).
+  `UV_OFFLINE=true make check` aprobó 405 pruebas y los controles del catálogo, formato y tipos.
+  `make build` generó ambas distribuciones y `make audit` terminó sin vulnerabilidades conocidas
+  en las dependencias de Python revisadas.

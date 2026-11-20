@@ -7,6 +7,23 @@ usando mediciones reales. Participamos como el equipo **Cuybernautas**. Keneth A
 El idioma de trabajo del equipo es el **español del Perú**. La documentación, las tareas y los PR se
 redactan en español claro. Los comandos, identificadores y nombres técnicos conservan su forma original.
 
+## Mapa de las siete estaciones de Lima
+
+Crea una carpeta `mapas/` junto a la página que mostrará el mapa y copia allí
+[estaciones.html](web/estaciones.html). Inserta este bloque en esa página. La ruta relativa
+también funciona si el sitio se publica en una subcarpeta.
+
+```html
+<iframe src="./mapas/estaciones.html" title="Siete estaciones de calidad del aire en Lima"
+  height="720" loading="lazy" style="display: block; width: 100%; border: 0"></iframe>
+```
+
+El navegador carga Leaflet desde `unpkg.com` y el fondo de OpenStreetMap desde
+`tile.openstreetmap.org`. La integración funciona sin compilación ni claves. Los enlaces de las estaciones
+también funcionan sin JavaScript. Las ubicaciones provienen de la sección `stations` de
+[la configuración de alineación](configs/weather-alignment.yaml). Conserva los créditos del mapa
+y el [aviso de atribución de los datos](DATA_ATTRIBUTION.md) al integrarlo.
+
 ## Empieza en tu equipo
 
 Instala Git, Make y [uv](https://docs.astral.sh/uv/getting-started/installation/). Desde la carpeta raíz:
