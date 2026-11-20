@@ -70,3 +70,27 @@ class QwenWindowTest(TestCase):
                 self.assertEqual(data["window_id"].tolist(), ["train"])
                 self.assertEqual(data["history"].tolist(), [list(range(24))])
                 self.assertEqual(data["targets"].tolist(), [[2.0] * 6])
+
+    def test_history_only_export_is_independent_of_future_values(self):
+        from unittest.mock import patch
+
+        import numpy as np
+        from export_qwen_windows import export_windows
+        from export_senamhi import sha256_file
+
+        with TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            hashes = []
+            for name, value in (("a", 2.0), ("b", 15.0)):
+                release = self.write_release(root / name, [value] * 6)
+                output = root / f"{name}.npz"
+                with patch(
+                    "export_qwen_windows.MANIFEST_SHA256", sha256_file(release / "manifest.json")
+                ):
+                    result = export_windows(release, output, "train", None, history_only=True)
+                with np.load(output, allow_pickle=False) as data:
+                    self.assertEqual(set(data.files), {"window_id", "history"})
+                    np.testing.assert_array_equal(data["window_id"], ["train"])
+                    np.testing.assert_array_equal(data["history"], [list(range(24))])
+                hashes.append(result["output_sha256"])
+            self.assertEqual(hashes[0], hashes[1])

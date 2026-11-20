@@ -12,7 +12,9 @@ from qwen_window import MANIFEST_SHA256, decode_window
 from timenet.reader import TimeFReader
 
 
-def export_windows(release: Path, output: Path, split: str, sample: int | None) -> dict:
+def export_windows(
+    release: Path, output: Path, split: str, sample: int | None, *, history_only: bool = False
+) -> dict:
     digest = sha256_file(release / "manifest.json")
     if digest != MANIFEST_SHA256:
         raise ValueError("El manifiesto difiere de la versión aprobada en #25")
@@ -37,10 +39,12 @@ def export_windows(release: Path, output: Path, split: str, sample: int | None) 
             if selected is None or task.metadata["window_id"] in selected
         ]
     rows.sort(key=lambda window: window["window_id"])
-    columns = {
-        key: np.array([row[key] for row in rows])
-        for key in ("window_id", "station_key", "origin_at", "history", "targets")
-    }
+    fields = (
+        ("window_id", "history")
+        if history_only
+        else ("window_id", "station_key", "origin_at", "history", "targets")
+    )
+    columns = {key: np.array([row[key] for row in rows]) for key in fields}
     if not rows or len(np.unique(columns["window_id"])) != len(rows):
         raise ValueError("La muestra tiene identificadores repetidos o está vacía")
     if selected is not None and len(rows) != sample:
@@ -64,11 +68,14 @@ if __name__ == "__main__":
     parser.add_argument("--split", choices=("train", "validation", "test"))
     parser.add_argument("--sample", type=int)
     parser.add_argument(
+        "--history-only", action="store_true", help="Exportar solo identificadores e historias"
+    )
+    parser.add_argument(
         "--joint", action="store_true", help="Exportar el histórico bivariado y su escalador"
     )
     args = parser.parse_args()
     if args.joint:
-        if args.split or args.sample is not None:
+        if args.split or args.sample is not None or args.history_only:
             parser.error("--joint requiere ambas particiones completas")
         from joint_windows import export
 
@@ -76,4 +83,14 @@ if __name__ == "__main__":
     else:
         if args.split is None:
             parser.error("Indicar --split para la versión de un solo canal")
-        print(json.dumps(export_windows(args.release, args.output, args.split, args.sample)))
+        print(
+            json.dumps(
+                export_windows(
+                    args.release,
+                    args.output,
+                    args.split,
+                    args.sample,
+                    history_only=args.history_only,
+                )
+            )
+        )

@@ -304,6 +304,8 @@ horizonte de seis horas y conserva su [ficha](../docs/dataset-cards/lima-pm25-fo
 
 ## Entrenamiento con Qwen3.5 en dos GPU
 
+Para el siguiente experimento en Lima, el [plan de pronóstico horario y probabilidad de episodios a seis horas](pronostico-episodios-lima.md) parte del resultado de #28 con LoRA de rango 4 y describe la validación temporal y el piloto por estación.
+
 El [plan de la bifurcación de OpenTSLM y del experimento con entradas comparables](issue-27-qwen-plan.md)
 ordena las entregas de #27, #28 y la extensión opcional #88. Incluye un control de pronóstico
 con las mismas entradas y una medición independiente del costo de distribuir el entrenamiento.
