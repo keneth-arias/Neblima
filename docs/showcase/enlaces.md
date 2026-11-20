@@ -21,7 +21,7 @@ dejar aquí su fecha y comprobante. Requisitos oficiales y plazo: [docs/hackatho
 | Atribución de datos | [DATA_ATTRIBUTION.md](../../DATA_ATTRIBUTION.md) | Listo | Aviso ODC-By-1.0 y crédito a SENAMHI, obligatorio en material difundido |
 | Verificación con el lector oficial de TimeNet | [tools/timenet-smoke/README.md](../../tools/timenet-smoke/README.md) | Listo | Demostrar lectura y verificación de TimeF sin red |
 | Mapa web de las siete estaciones | [web/estaciones.html](../../web/estaciones.html) | Listo (material interno) | Apoyo visual de contexto; en esta entrega solo se enlaza, no se modifica |
-| PR externo TimeNet #796 (borrador) | <https://github.com/OpenTSLM/TimeNet/pull/796> | Abierto como borrador | Enlace del aporte de datos a TimeNet; **solo se enlaza**: está prohibido comentarlo o modificarlo |
+| PR externo TimeNet #796 (borrador) | <https://github.com/OpenTSLM/TimeNet/pull/796> | Abierto como borrador | Enlace del aporte de datos a TimeNet para el formulario de la ronda |
 
 ## Pendientes de envío o autorización
 

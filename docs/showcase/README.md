@@ -15,8 +15,8 @@ reportes ya registrados en Git.
 
 ## Mensajes clave
 
-- Con 24 horas de historia de PM2.5, el modelo temporal evaluado (Qwen3.5-0.8B con LoRA) obtuvo un
-  MAE de **4,994 µg/m³** frente a **6,446 µg/m³** de la referencia de persistencia en la prueba
+- Con 24 horas de historia de PM2.5, el modelo temporal evaluado (Qwen3.5-0.8B con adaptación de bajo rango (LoRA)) obtuvo un
+  error absoluto medio (MAE) de **4,994 µg/m³** frente a **6,446 µg/m³** de la referencia de persistencia en la prueba
   cronológica reservada: una reducción de **1,452 µg/m³ (22,52 %)**. Fuente:
   [reports/models/prueba-reservada-lima.md](../../reports/models/prueba-reservada-lima.md).
 - En concentraciones altas (percentil 95 fijado en entrenamiento), la reducción fue **1,244 µg/m³
@@ -121,7 +121,7 @@ estado actual.
 
 - Mensaje previsto: abrir el conjunto con el lector oficial de TimeNet, mostrar las 24 horas de
   historia y superponer las seis predicciones de Qwen, la referencia de persistencia y las
-  observaciones reservadas. Explicar un acierto y un error: en **Carabayllo** Qwen anticipa parte
+  observaciones de cada ventana de validación. Explicar un acierto y un error: en **Carabayllo** Qwen anticipa parte
   del descenso y reduce el MAE de la ventana en 3,04 µg/m³; en **San Juan de Lurigancho** pierde
   la subida final y persistencia obtiene 2,03 µg/m³ menos. Ambos ejemplos se eligieron en
   validación, antes de la prueba.
