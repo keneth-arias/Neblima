@@ -54,6 +54,7 @@ class LiveScoresTest(unittest.TestCase):
             reading(17, second, None),
             reading(18, second, 20),
             reading(16, later, 100),
+            reading(17, later, 14),
         ]
         r = summarize([forecast], list(reversed(changes)), second)
         self.assertEqual(r["issued"], 1)
@@ -80,6 +81,14 @@ class LiveScoresTest(unittest.TestCase):
         self.assertIsNone(r["by_horizon"][1]["latest"]["qwen_mae"])
         self.assertEqual(r["by_horizon"][0]["latest"]["pairs"], 1)
         self.assertEqual([s["forecast_hour"] for s in r["by_horizon"]], list(range(1, 7)))
+        republished = summarize([forecast], changes, later)
+        self.assertEqual(republished["counts"]["withdrawn"], 0)
+        self.assertEqual(republished["counts"]["observed"], 2)
+        self.assertEqual(republished["overall"]["first"], r["overall"]["first"])
+        horizon = republished["by_horizon"][1]["latest"]
+        self.assertEqual(horizon["pairs"], 1)
+        self.assertEqual(horizon["qwen_mae"], 1)
+        self.assertEqual(horizon["persistence_mae"], 4)
         early = summarize([forecast], changes, first)
         self.assertEqual(early["overall"]["latest"], early["overall"]["first"])
         self.assertEqual(summarize([forecast], changes, "2026-11-20T20:00:00+00:00")["issued"], 0)
@@ -99,7 +108,13 @@ class LiveScoresTest(unittest.TestCase):
         cutoff = "2026-11-20T22:00:00+00:00"
         changed = deepcopy(good)
         changed["hours"][1]["station_label"] = good["hours"][0]["station_label"]
+        crossed = deepcopy(good)
+        crossed["hours"][0]["lower80"] = 16
+        other = issue("2026-11-20T16:00:00", "2026-11-20T20:45:00+00:00")
+        other["checkpoint_sha256"] = "b" * 64
         for forecasts, readings, through in (
+            ([crossed], [], cutoff),
+            ([good, other], [], cutoff),
             ([changed], [], cutoff),
             ([good, good], [], cutoff),
             ([good], [], cutoff[:-6]),
@@ -115,6 +130,16 @@ class LiveScoresTest(unittest.TestCase):
             receipts = Path(tmp) / "recibos"
             issues = Path(tmp) / "emisiones"
             issues.mkdir()
+            receipts.mkdir()
+            empty = report(issues, receipts, "2026-11-20T20:30:00+00:00")
+            self.assertEqual(empty["issued"], 0)
+            self.assertEqual(empty["issuance_sha256"], [])
+            self.assertIsNone(empty["checkpoint_sha256"])
+            self.assertEqual(len(empty["by_horizon"]), 6)
+            for row in empty["by_horizon"]:
+                for view in ("first", "latest"):
+                    self.assertEqual(row[view]["pairs"], 0)
+                    self.assertIsNone(row[view]["qwen_mae"])
             forecast = issue()
 
             def capture(at, values):
