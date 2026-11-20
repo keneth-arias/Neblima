@@ -168,7 +168,7 @@ def verify_candidate_bundle(
                 align(data, ids, "threshold_ug_m3"), [table.get(k, np.nan) for k in stations]
             ):
                 raise ValueError("La estación y el umbral no corresponden a la ventana")
-    return data_sha
+    return data_sha, spec.get("checkpoint_sha256")
 
 
 def candidate_logits(path, digest, ids, threshold_digest, input_manifest_digest):
@@ -238,7 +238,7 @@ def run(args):
     logits = getattr(args, "episode_logits", None)
     if logits:
         path, digest, input_manifest, input_digest = logits
-        input_sha = verify_candidate_bundle(
+        input_sha, expected_checkpoint = verify_candidate_bundle(
             args.blocks,
             phase,
             args.manifest_sha256,
@@ -254,6 +254,8 @@ def run(args):
         scores, episode_checkpoint = candidate_logits(
             Path(path), digest, ids, threshold_hash, input_digest
         )
+        if episode_checkpoint != expected_checkpoint:
+            raise ValueError("Los logits corresponden a otro punto de control")
         identity["episode_checkpoint_sha256"] = episode_checkpoint
         if fitting and args.eligible_labels is None:
             raise ValueError("El calibrador del clasificador requiere etiquetas elegibles")

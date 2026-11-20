@@ -1,5 +1,6 @@
 """Comprobar cuantiles de residuos y probabilidad calibrada con datos sintéticos."""
 
+from contextlib import contextmanager
 from unittest import TestCase
 
 import numpy as np
@@ -25,7 +26,9 @@ class EpisodeCalibrationTest(TestCase):
         self.assertEqual(constant["status"], "single_class")
         np.testing.assert_array_equal(probability(x, constant), 0)
 
-    def test_fit_and_apply_require_disjoint_roles_and_matching_release(self):
+    @staticmethod
+    @contextmanager
+    def calibration_fixture():
         import json
         from argparse import Namespace
         from datetime import UTC, datetime, timedelta
@@ -33,7 +36,6 @@ class EpisodeCalibrationTest(TestCase):
         from tempfile import TemporaryDirectory
 
         from episode_blocks import export_blocks
-        from episode_calibration import run
         from export_senamhi import sha256_file
 
         with TemporaryDirectory() as tmp:
@@ -85,6 +87,14 @@ class EpisodeCalibrationTest(TestCase):
                 manifest_sha256=manifest_hash,
                 eligible_labels=root / "eligible.npz",
             )
+            yield root, args
+
+    def test_fit_and_apply_require_disjoint_roles_and_matching_release(self):
+        from episode_calibration import run
+        from export_senamhi import sha256_file
+
+        with self.calibration_fixture() as (root, args):
+            blocks = args.blocks
             args.forecasts_sha256 = "0" * 64
             with self.assertRaisesRegex(ValueError, "Huella"):
                 run(args)
@@ -113,6 +123,74 @@ class EpisodeCalibrationTest(TestCase):
             with self.assertRaisesRegex(ValueError, "huella"):
                 run(args)
             self.assertFalse(args.output.exists())
+
+    def test_episode_fit_binds_export_to_requested_checkpoint(self):
+        import json
+
+        from episode_calibration import run
+        from export_senamhi import sha256_file
+
+        with self.calibration_fixture() as (root, args):
+            phase = args.blocks / "calibration"
+            table = args.blocks / "thresholds.json"
+            threshold_sha = sha256_file(table)
+            threshold = json.loads(table.read_bytes())["stations"]["s"]
+            data = root / "data.npz"
+            with np.load(phase / "history.npz") as z:
+                ids = z["window_id"]
+                np.savez(
+                    data,
+                    window_id=ids,
+                    history=z["history"],
+                    station_key=["s"] * len(ids),
+                    threshold_ug_m3=np.full(len(ids), threshold),
+                    thresholds_sha256=threshold_sha,
+                )
+            data_sha = sha256_file(data)
+            spec = dict(
+                block="calibration",
+                split_sha256=args.manifest_sha256,
+                head="episode",
+                phase="infer",
+                schema="forecast-input-v1",
+                unit="ug/m3",
+                files={"data.npz": data_sha},
+                thresholds_sha256=threshold_sha,
+            )
+            manifest = root / "bundle.json"
+            export = root / "logits.npz"
+            checkpoint = "e" * 64
+            for requested in ("f" * 64, None, checkpoint):
+                with self.subTest(requested=requested):
+                    args.output = root / f"cal-{requested}.json"
+                    bundle = dict(spec)
+                    if requested is not None:
+                        bundle["checkpoint_sha256"] = requested
+                    manifest.write_text(json.dumps(bundle))
+                    manifest_sha = sha256_file(manifest)
+                    np.savez(
+                        export,
+                        window_id=ids,
+                        episode_logit=np.arange(len(ids), dtype=float),
+                        task="episode",
+                        unit="logit",
+                        schema_version=2,
+                        thresholds_sha256=threshold_sha,
+                        input_manifest_sha256=manifest_sha,
+                        input_sha256=data_sha,
+                        checkpoint_sha256=checkpoint,
+                    )
+                    args.episode_logits = [export, sha256_file(export), manifest, manifest_sha]
+                    if requested == checkpoint:
+                        run(args)
+                        self.assertEqual(
+                            json.loads(args.output.read_bytes())["episode_checkpoint_sha256"],
+                            checkpoint,
+                        )
+                    else:
+                        with self.assertRaisesRegex(ValueError, "punto de control"):
+                            run(args)
+                        self.assertFalse(args.output.exists())
 
     def test_reject_invalid_probability_artifacts(self):
         for model in (

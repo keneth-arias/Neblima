@@ -72,15 +72,14 @@ def compare(
         check_file(blocks / "thresholds.json", m["thresholds_sha256"]).read_text()
     )
     limits = np.array([thresholds["stations"].get(s, np.nan) for s in stations])
-    archive_sha = verify_candidate_bundle(
+    archive_sha, expected_checkpoint = verify_candidate_bundle(
         blocks, "selection", manifest_sha, m, input_manifest, input_manifest_sha, "quantile", ids
     )
     with np.load(check_file(candidate, candidate_sha), allow_pickle=False) as raw:
         if raw["input_sha256"].item() != archive_sha:
             raise ValueError("Los cuantiles proceden de otras historias")
     q, checkpoint = read_quantiles(candidate, candidate_sha, ids, input_manifest_sha)
-    bundle = json.loads(check_file(input_manifest, input_manifest_sha).read_bytes())
-    if bundle.get("checkpoint_sha256") != checkpoint:
+    if expected_checkpoint != checkpoint:
         raise ValueError("Los cuantiles corresponden a otro punto de control")
     with np.load(check_file(reference, reference_sha), allow_pickle=False) as z:
         if z["manifest_sha256"].item() != manifest_sha or z["block"].item() != "selection":
