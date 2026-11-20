@@ -31,6 +31,7 @@ tabular = [
 [package.dev-dependencies]
 dev = [
     { name = "hypothesis" },
+    { name = "lightgbm" },
     { name = "pip-audit" },
     { name = "pyproj", version = "3.7.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
     { name = "pyproj", version = "3.8.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
@@ -56,6 +57,7 @@ provides-extras = ["geo", "tabular"]
 [package.metadata.requires-dev]
 dev = [
     { name = "hypothesis", specifier = ">=6,<7" },
+    { name = "lightgbm", specifier = ">=4.6,<5" },
     { name = "pip-audit", specifier = ">=2,<3" },
     { name = "pyproj", specifier = ">=3.7,<4" },
     { name = "pytest", specifier = ">=9,<10" },

@@ -306,10 +306,6 @@ def test_el_ajuste_minimo_selecciona_en_validacion():
 
 
 def test_lightgbm_ajusta_con_seleccion_en_validacion():
-    pytest.importorskip(
-        "lightgbm",
-        reason="CI instala sin extras; el ajuste LightGBM exige el extra opcional 'tabular'",
-    )
     spec = FitSpec(
         learning_rate=0.2,
         num_leaves=7,
