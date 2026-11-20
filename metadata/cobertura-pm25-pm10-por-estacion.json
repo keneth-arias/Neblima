@@ -1,0 +1,326 @@
+[
+  {
+    "joint": 0,
+    "lost": 0,
+    "pm25": 0,
+    "site": "CAMPO_DE_MARTE",
+    "source": "historico",
+    "split": "purged",
+    "station_key": "90b36a172f1790cf2e37ac2063f80fd27439d4ecf871d72a20bf8e9786587a67"
+  },
+  {
+    "joint": 47723,
+    "lost": 636,
+    "pm25": 48359,
+    "site": "CAMPO_DE_MARTE",
+    "source": "historico",
+    "split": "train",
+    "station_key": "90b36a172f1790cf2e37ac2063f80fd27439d4ecf871d72a20bf8e9786587a67"
+  },
+  {
+    "joint": 3552,
+    "lost": 1339,
+    "pm25": 4891,
+    "site": "CAMPO_DE_MARTE",
+    "source": "historico",
+    "split": "validation",
+    "station_key": "90b36a172f1790cf2e37ac2063f80fd27439d4ecf871d72a20bf8e9786587a67"
+  },
+  {
+    "joint": 29,
+    "lost": 0,
+    "pm25": 29,
+    "site": "CARABAYLLO",
+    "source": "historico",
+    "split": "purged",
+    "station_key": "8436576ff150fd696edbc1cd625bc97696321bc9c57b24b906d0d4a12b71bfff"
+  },
+  {
+    "joint": 31711,
+    "lost": 3812,
+    "pm25": 35523,
+    "site": "CARABAYLLO",
+    "source": "historico",
+    "split": "train",
+    "station_key": "8436576ff150fd696edbc1cd625bc97696321bc9c57b24b906d0d4a12b71bfff"
+  },
+  {
+    "joint": 7405,
+    "lost": 0,
+    "pm25": 7405,
+    "site": "CARABAYLLO",
+    "source": "historico",
+    "split": "validation",
+    "station_key": "8436576ff150fd696edbc1cd625bc97696321bc9c57b24b906d0d4a12b71bfff"
+  },
+  {
+    "joint": 29,
+    "lost": 0,
+    "pm25": 29,
+    "site": "SANTA_ANITA",
+    "source": "historico",
+    "split": "purged",
+    "station_key": "2a0d574b25a5dc8c7f6edda9836225860faaa160763d8bea15d95646794f0bd8"
+  },
+  {
+    "joint": 35509,
+    "lost": 2656,
+    "pm25": 38165,
+    "site": "SANTA_ANITA",
+    "source": "historico",
+    "split": "train",
+    "station_key": "2a0d574b25a5dc8c7f6edda9836225860faaa160763d8bea15d95646794f0bd8"
+  },
+  {
+    "joint": 8545,
+    "lost": 749,
+    "pm25": 9294,
+    "site": "SANTA_ANITA",
+    "source": "historico",
+    "split": "validation",
+    "station_key": "2a0d574b25a5dc8c7f6edda9836225860faaa160763d8bea15d95646794f0bd8"
+  },
+  {
+    "joint": 29,
+    "lost": 0,
+    "pm25": 29,
+    "site": "SAN_BORJA",
+    "source": "historico",
+    "split": "purged",
+    "station_key": "8e88d45c03f25f49b84c98cc4916bd60b67383961e186497f4d77570c2f75d34"
+  },
+  {
+    "joint": 35628,
+    "lost": 6863,
+    "pm25": 42491,
+    "site": "SAN_BORJA",
+    "source": "historico",
+    "split": "train",
+    "station_key": "8e88d45c03f25f49b84c98cc4916bd60b67383961e186497f4d77570c2f75d34"
+  },
+  {
+    "joint": 7703,
+    "lost": 0,
+    "pm25": 7703,
+    "site": "SAN_BORJA",
+    "source": "historico",
+    "split": "validation",
+    "station_key": "8e88d45c03f25f49b84c98cc4916bd60b67383961e186497f4d77570c2f75d34"
+  },
+  {
+    "joint": 0,
+    "lost": 0,
+    "pm25": 0,
+    "site": "SAN_JUAN_DE_LURIGANCHO",
+    "source": "historico",
+    "split": "purged",
+    "station_key": "22c516fbe293a54c1cb5ddc7727d32430200221562cd01af8a40cc4b5de227d4"
+  },
+  {
+    "joint": 34985,
+    "lost": 19817,
+    "pm25": 54802,
+    "site": "SAN_JUAN_DE_LURIGANCHO",
+    "source": "historico",
+    "split": "train",
+    "station_key": "22c516fbe293a54c1cb5ddc7727d32430200221562cd01af8a40cc4b5de227d4"
+  },
+  {
+    "joint": 4940,
+    "lost": 59,
+    "pm25": 4999,
+    "site": "SAN_JUAN_DE_LURIGANCHO",
+    "source": "historico",
+    "split": "validation",
+    "station_key": "22c516fbe293a54c1cb5ddc7727d32430200221562cd01af8a40cc4b5de227d4"
+  },
+  {
+    "joint": 29,
+    "lost": 0,
+    "pm25": 29,
+    "site": "SAN_MARTIN_DE_PORRES",
+    "source": "historico",
+    "split": "purged",
+    "station_key": "35170dbfe2a7135c1cecbae1e367374a284578533740ff5461d40fc764851e07"
+  },
+  {
+    "joint": 33461,
+    "lost": 3154,
+    "pm25": 36615,
+    "site": "SAN_MARTIN_DE_PORRES",
+    "source": "historico",
+    "split": "train",
+    "station_key": "35170dbfe2a7135c1cecbae1e367374a284578533740ff5461d40fc764851e07"
+  },
+  {
+    "joint": 5458,
+    "lost": 0,
+    "pm25": 5458,
+    "site": "SAN_MARTIN_DE_PORRES",
+    "source": "historico",
+    "split": "validation",
+    "station_key": "35170dbfe2a7135c1cecbae1e367374a284578533740ff5461d40fc764851e07"
+  },
+  {
+    "joint": 29,
+    "lost": 0,
+    "pm25": 29,
+    "site": "VILLA_MARIA_DEL_TRIUNFO",
+    "source": "historico",
+    "split": "purged",
+    "station_key": "1e58bb71f42f67bfedae1bad1e35b0aea5f84078da4f3a6f06c695aac1fb99e4"
+  },
+  {
+    "joint": 32898,
+    "lost": 2829,
+    "pm25": 35727,
+    "site": "VILLA_MARIA_DEL_TRIUNFO",
+    "source": "historico",
+    "split": "train",
+    "station_key": "1e58bb71f42f67bfedae1bad1e35b0aea5f84078da4f3a6f06c695aac1fb99e4"
+  },
+  {
+    "joint": 6855,
+    "lost": 773,
+    "pm25": 7628,
+    "site": "VILLA_MARIA_DEL_TRIUNFO",
+    "source": "historico",
+    "split": "validation",
+    "station_key": "1e58bb71f42f67bfedae1bad1e35b0aea5f84078da4f3a6f06c695aac1fb99e4"
+  },
+  {
+    "joint": 15191,
+    "lost": 0,
+    "pm25": 15191,
+    "site": "CAMPO_DE_MARTE",
+    "source": "openaq",
+    "split": "test",
+    "station_key": "2415"
+  },
+  {
+    "joint": 0,
+    "lost": 0,
+    "pm25": 0,
+    "site": "CARABAYLLO",
+    "source": "openaq",
+    "split": "test",
+    "station_key": "2277"
+  },
+  {
+    "joint": 14864,
+    "lost": 0,
+    "pm25": 14864,
+    "site": "SANTA_ANITA",
+    "source": "openaq",
+    "split": "test",
+    "station_key": "2397"
+  },
+  {
+    "joint": 15267,
+    "lost": 0,
+    "pm25": 15267,
+    "site": "SAN_BORJA",
+    "source": "openaq",
+    "split": "test",
+    "station_key": "2402"
+  },
+  {
+    "joint": 3,
+    "lost": 0,
+    "pm25": 3,
+    "site": "SAN_JUAN_DE_LURIGANCHO",
+    "source": "openaq",
+    "split": "test",
+    "station_key": "6501061"
+  },
+  {
+    "joint": 12607,
+    "lost": 37,
+    "pm25": 12644,
+    "site": "SAN_JUAN_DE_LURIGANCHO",
+    "source": "openaq",
+    "split": "test",
+    "station_key": "7464"
+  },
+  {
+    "joint": 14983,
+    "lost": 0,
+    "pm25": 14983,
+    "site": "SAN_MARTIN_DE_PORRES",
+    "source": "openaq",
+    "split": "test",
+    "station_key": "2351"
+  },
+  {
+    "joint": 12623,
+    "lost": 0,
+    "pm25": 12623,
+    "site": "VILLA_MARIA_DEL_TRIUNFO",
+    "source": "openaq",
+    "split": "test",
+    "station_key": "2302"
+  },
+  {
+    "joint": 18116,
+    "lost": 0,
+    "pm25": 18116,
+    "site": "CAMPO_DE_MARTE",
+    "source": "senamhi_horario",
+    "split": "test",
+    "station_key": "112194"
+  },
+  {
+    "joint": 2042,
+    "lost": 0,
+    "pm25": 2042,
+    "site": "CARABAYLLO",
+    "source": "senamhi_horario",
+    "split": "test",
+    "station_key": "113260"
+  },
+  {
+    "joint": 17279,
+    "lost": 0,
+    "pm25": 17279,
+    "site": "SANTA_ANITA",
+    "source": "senamhi_horario",
+    "split": "test",
+    "station_key": "00112271"
+  },
+  {
+    "joint": 17183,
+    "lost": 0,
+    "pm25": 17183,
+    "site": "SAN_BORJA",
+    "source": "senamhi_horario",
+    "split": "test",
+    "station_key": "00112270"
+  },
+  {
+    "joint": 15180,
+    "lost": 37,
+    "pm25": 15217,
+    "site": "SAN_JUAN_DE_LURIGANCHO",
+    "source": "senamhi_horario",
+    "split": "test",
+    "station_key": "113258"
+  },
+  {
+    "joint": 17777,
+    "lost": 0,
+    "pm25": 17777,
+    "site": "SAN_MARTIN_DE_PORRES",
+    "source": "senamhi_horario",
+    "split": "test",
+    "station_key": "00112272"
+  },
+  {
+    "joint": 15191,
+    "lost": 0,
+    "pm25": 15191,
+    "site": "VILLA_MARIA_DEL_TRIUNFO",
+    "source": "senamhi_horario",
+    "split": "test",
+    "station_key": "112233"
+  }
+]

@@ -59,8 +59,9 @@ def coverage(registries):
         if {p.name: sha256_file(p) for p in paths} != dataset["inputs"]:
             raise ValueError("Insumos diferentes de la cohorte")
         retained = {}
+        splits = ("train", "validation", "purged") if source == "historico" else ("test",)
         for station in dataset["stations"]:
-            for split in ("train", "validation", "purged", "test"):
+            for split in splits:
                 key = (station["site"], station["code"], split)
                 retained[key] = retained.get(key, 0) + station[split]
         single = count_pm25(dataset, paths)
@@ -68,19 +69,18 @@ def coverage(registries):
             n, joint = single.get(key, 0), retained.get(key, 0)
             if joint > n:
                 raise ValueError("Hay más ventanas conjuntas que candidatas de PM2.5")
-            if n:
-                site, code, split = key
-                results.append(
-                    dict(
-                        source=source,
-                        site=site,
-                        station_key=code,
-                        split=split,
-                        pm25=n,
-                        joint=joint,
-                        lost=n - joint,
-                    )
+            site, code, split = key
+            results.append(
+                dict(
+                    source=source,
+                    site=site,
+                    station_key=code,
+                    split=split,
+                    pm25=n,
+                    joint=joint,
+                    lost=n - joint,
                 )
+            )
     return results
 
 

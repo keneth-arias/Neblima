@@ -100,3 +100,48 @@ class ExternalTest(unittest.TestCase):
             self.assertEqual(
                 set(pq.read_table(output / "paired.parquet")["source"].to_pylist()), {source}
             )
+
+    def test_coverage_keeps_known_provider_station_with_no_windows(self):
+        from pathlib import Path
+        from tempfile import TemporaryDirectory
+        from unittest.mock import patch
+
+        from joint_coverage import coverage
+        from joint_windows import write_json
+
+        with TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            registry = root / "openaq"
+            registry.mkdir()
+            write_json(registry / "resumen.json", {"inputs": {}})
+            freeze = root / "freeze.json"
+            write_json(
+                freeze,
+                {
+                    "datasets": [
+                        {
+                            "source": "openaq",
+                            "inputs": {},
+                            "stations": [
+                                {
+                                    "site": "Norte",
+                                    "code": "007",
+                                    "train": 0,
+                                    "test": 0,
+                                    "validation": 0,
+                                    "purged": 0,
+                                }
+                            ],
+                        }
+                    ]
+                },
+            )
+            with (
+                patch("joint_coverage.FREEZE", freeze),
+                patch("joint_coverage.count_pm25", return_value={}),
+            ):
+                rows = coverage(root)
+            self.assertEqual(
+                [(r["station_key"], r["split"], r["pm25"], r["joint"], r["lost"]) for r in rows],
+                [("007", "test", 0, 0, 0)],
+            )
