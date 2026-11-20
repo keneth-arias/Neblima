@@ -9,6 +9,27 @@ redactan en español claro. Los comandos, identificadores y nombres técnicos co
 
 ## Mapa de las siete estaciones de Lima
 
+Selecciona un marcador para ver el nombre de la estación. Las ubicaciones históricas son
+referenciales porque el archivo original no declara el sistema de referencia de las coordenadas.
+[Fuente y licencia del Servicio Nacional de Meteorología e Hidrología del Perú](DATA_ATTRIBUTION.md).
+
+```geojson
+{
+  "type": "FeatureCollection",
+  "features": [
+    {"type": "Feature", "id": "CAMPO_DE_MARTE", "properties": {"Estación": "Campo de Marte"}, "geometry": {"type": "Point", "coordinates": [-77.0432, -12.0705]}},
+    {"type": "Feature", "id": "CARABAYLLO", "properties": {"Estación": "Carabayllo"}, "geometry": {"type": "Point", "coordinates": [-77.0336, -11.9022]}},
+    {"type": "Feature", "id": "SANTA_ANITA", "properties": {"Estación": "Santa Anita"}, "geometry": {"type": "Point", "coordinates": [-76.9714, -12.043]}},
+    {"type": "Feature", "id": "SAN_BORJA", "properties": {"Estación": "San Borja"}, "geometry": {"type": "Point", "coordinates": [-77.0077, -12.1086]}},
+    {"type": "Feature", "id": "SAN_JUAN_DE_LURIGANCHO", "properties": {"Estación": "San Juan de Lurigancho"}, "geometry": {"type": "Point", "coordinates": [-76.9992, -11.9816]}},
+    {"type": "Feature", "id": "SAN_MARTIN_DE_PORRES", "properties": {"Estación": "San Martín de Porres"}, "geometry": {"type": "Point", "coordinates": [-77.0845, -12.0089]}},
+    {"type": "Feature", "id": "VILLA_MARIA_DEL_TRIUNFO", "properties": {"Estación": "Villa María del Triunfo"}, "geometry": {"type": "Point", "coordinates": [-76.92, -12.1664]}}
+  ]
+}
+```
+
+### Insertar el mapa en tu sitio
+
 Crea una carpeta `mapas/` junto a la página que mostrará el mapa y copia allí
 [estaciones.html](web/estaciones.html). Inserta este bloque en esa página. La ruta relativa
 también funciona si el sitio se publica en una subcarpeta.

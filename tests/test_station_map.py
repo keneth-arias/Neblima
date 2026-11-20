@@ -1,3 +1,5 @@
+import json
+import re
 from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import parse_qs, urlsplit
@@ -29,3 +31,21 @@ def test_map_uses_all_seven_source_locations() -> None:
     links.feed((ROOT / "web/estaciones.html").read_text())
     assert len(links.locations) == 7
     assert sorted(links.locations) == sorted(expected)
+
+
+def test_readme_map_matches_station_locations() -> None:
+    readme = (ROOT / "README.md").read_text()
+    block = re.search(r"^```geojson\n(.*?)\n```$", readme, re.MULTILINE | re.DOTALL)
+    assert block is not None
+    data = json.loads(block[1])
+    assert data["type"] == "FeatureCollection"
+    links = StationLinks()
+    links.feed((ROOT / "web/estaciones.html").read_text())
+    locations = []
+    for feature in data["features"]:
+        assert feature["type"] == "Feature"
+        assert feature["geometry"]["type"] == "Point"
+        assert feature["properties"]["Estación"]
+        longitude, latitude = feature["geometry"]["coordinates"]
+        locations.append((feature["id"], latitude, longitude))
+    assert sorted(locations) == sorted(links.locations)
