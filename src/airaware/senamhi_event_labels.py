@@ -1,9 +1,12 @@
 """Integración estructural de ventanas #18 con etiquetas PM2.5; elegibilidad cerrada.
 
 Separa dos comprobaciones: la compatibilidad estructural (límites, estación, reconstrucción
-y conciliación de conteos) y la elegibilidad científica para etiquetar. La elegibilidad exige
-evidencia explícita de unidades, método, posición del intervalo y calidad; sin esa evidencia
-se publica solo un informe de compatibilidad, nunca etiquetas aparentemente válidas.
+y conciliación de conteos) y la elegibilidad científica para etiquetar. Verifica además la
+separación temporal historia/objetivo: ningún campo derivado de etiquetas entra en las
+entradas del modelo y las etiquetas publicadas solo refieren horas posteriores a origin_at.
+La elegibilidad exige evidencia explícita de unidades, método, posición del intervalo y
+calidad; sin esa evidencia se publica solo un informe de compatibilidad, nunca etiquetas
+aparentemente válidas.
 """
 
 import json
@@ -81,6 +84,66 @@ LABEL_COLUMNS = (
 )
 
 LABEL_COUNTS = {"above_reference": 0, "not_above_reference": 0, "not_evaluable": 0}
+
+# Campos que solo pueden existir en la emisión de etiquetas; si alguno aparece en el paquete
+# de entradas (windows.parquet) es una fuga del objetivo y detiene la evaluación.
+LABEL_DERIVED_FIELDS = frozenset(
+    {
+        "kind",
+        "label",
+        "mean_ug_m3",
+        "policy_id",
+        "reason",
+        "required_hours",
+        "valid_hours",
+        "observation_ids",
+        "valid_observation_ids",
+        "source_observation_ids",
+    }
+)
+
+LEAKAGE_BOUNDARY_QUERY = """
+SELECT count(*) FROM read_parquet(?) AS w
+WHERE w.history_start > w.origin_at OR w.target_start <= w.origin_at
+   OR date_diff('hour', w.origin_at, w.target_end) != ?
+"""
+
+LEAKAGE_OVERLAP_QUERY = """
+SELECT count(*) FROM read_parquet(?) AS w
+JOIN read_parquet(?) AS h
+  ON h.series_id = w.series_id AND h.observed_at >= w.history_start
+ AND h.observed_at <= w.origin_at AND h.observation_id IS NOT NULL
+JOIN read_parquet(?) AS t
+  ON t.series_id = w.series_id AND t.observed_at > w.origin_at
+ AND t.observed_at <= w.target_end AND t.observation_id = h.observation_id
+"""
+
+LEAKAGE_LABEL_HOURS_QUERY = """
+WITH refs AS (
+    SELECT l.series_id, l.origin_at, unnest(l.observation_ids) AS observation_id
+    FROM read_parquet(?) AS l
+)
+SELECT count(*) FROM refs
+LEFT JOIN read_parquet(?) AS g
+  ON g.series_id = refs.series_id AND g.observation_id = refs.observation_id
+WHERE g.observed_at IS NULL OR g.observed_at <= refs.origin_at
+"""
+
+LEAKAGE_LABEL_MEAN_QUERY = """
+WITH expanded AS (
+    SELECT l.window_id, l.mean_ug_m3, unnest(w.target_values) AS value
+    FROM read_parquet(?) AS l
+    JOIN read_parquet(?) AS w
+      ON w.window_id = l.window_id AND w.series_id = l.series_id
+    WHERE l.reason = 'evaluated' AND l.valid_hours = ?
+)
+SELECT count(*) FROM (
+    SELECT window_id, mean_ug_m3, count(*) AS hours, avg(value) AS future_mean
+    FROM expanded GROUP BY window_id, mean_ug_m3
+)
+WHERE hours != ? OR mean_ug_m3 IS NULL OR NOT isfinite(mean_ug_m3)
+   OR abs(mean_ug_m3 - future_mean) > 1e-9
+"""
 
 
 class LabelingEvidence(BaseModel):
@@ -180,6 +243,79 @@ def _utc(instant: datetime) -> datetime:
     if instant.tzinfo is not None:
         raise ValueError("La grilla no debería traer zona horaria en la lectura")
     return instant.replace(tzinfo=UTC)
+
+
+def verify_no_label_leakage(links: BundleLinks, labels: Path | None = None) -> dict:
+    """Verificar que ningún campo derivado de etiquetas entra en las entradas del modelo.
+
+    Las entradas solo pueden usar horas con observed_at <= origin_at (historia) y los
+    objetivos solo horas > origin_at; los identificadores del objetivo no pueden repetir
+    los de la historia y la media publicada debe reconstruirse con el bloque futuro
+    completo. Si se pasa un archivo de etiquetas publicado, también se verifican sus
+    identificadores y su media. Cualquier violación detiene el proceso.
+    """
+    with duckdb.connect(config={"threads": 2}) as db:
+        db.execute("SET TimeZone = 'UTC'")
+        inputs = sorted(
+            row[0]
+            for row in db.execute(
+                "DESCRIBE SELECT * FROM read_parquet(?)", [str(links.windows)]
+            ).fetchall()
+        )
+        leaked = sorted(set(inputs) & LABEL_DERIVED_FIELDS)
+        if leaked:
+            raise ValueError("Campos derivados de etiquetas en las entradas: " + ", ".join(leaked))
+        windows_checked = db.execute(
+            "SELECT count(*) FROM read_parquet(?)", [str(links.windows)]
+        ).fetchone()
+        boundary = db.execute(
+            LEAKAGE_BOUNDARY_QUERY, [str(links.windows), links.horizon_hours]
+        ).fetchone()
+        overlaps = db.execute(
+            LEAKAGE_OVERLAP_QUERY,
+            [str(links.windows), str(links.hours), str(links.hours)],
+        ).fetchone()
+        if windows_checked is None or boundary is None or overlaps is None:
+            raise ValueError("La verificación antifuga no pudo leer el paquete de entradas")
+        if boundary[0]:
+            raise ValueError("Los límites de la historia o del objetivo no respetan origin_at")
+        if overlaps[0]:
+            raise ValueError("Identificadores de la historia aparecen en el bloque futuro")
+        summary = {
+            "label_derived_columns": leaked,
+            "windows_checked": windows_checked[0],
+            "boundary_violations": boundary[0],
+            "history_future_id_overlaps": overlaps[0],
+            "labels_checked": 0,
+            "label_hours_at_or_before_origin": 0,
+            "label_mean_not_future_only": 0,
+        }
+        if labels is None:
+            return summary
+        hours_before = db.execute(
+            LEAKAGE_LABEL_HOURS_QUERY, [str(labels), str(links.hours)]
+        ).fetchone()
+        mean_mismatch = db.execute(
+            LEAKAGE_LABEL_MEAN_QUERY,
+            [str(labels), str(links.windows), links.horizon_hours, links.horizon_hours],
+        ).fetchone()
+        if hours_before is None or mean_mismatch is None:
+            raise ValueError("La verificación antifuga no pudo leer las etiquetas publicadas")
+        if hours_before[0]:
+            raise ValueError("Etiquetas con horas de la historia o desconocidas en observation_ids")
+        if mean_mismatch[0]:
+            raise ValueError("La media publicada no se reconstruye con el bloque futuro")
+        labels_checked = db.execute(
+            "SELECT count(*) FROM read_parquet(?)", [str(labels)]
+        ).fetchone()
+        summary.update(
+            {
+                "labels_checked": labels_checked[0] if labels_checked else 0,
+                "label_hours_at_or_before_origin": hours_before[0],
+                "label_mean_not_future_only": mean_mismatch[0],
+            }
+        )
+        return summary
 
 
 def _measured_value(*, status, is_missing, is_imputed, value) -> float | None:
@@ -439,6 +575,8 @@ def _write_labels(
 ) -> dict:
     counts = dict(LABEL_COUNTS)
     reasons = {reason: 0 for reason in ("evaluated", "insufficient_valid_hours")}
+    constructor = {entry["series_id"]: entry for entry in links.windows_manifest["counts"]}
+    reconciliation: dict[str, dict] = {}
     admitted_quality = set(evidence.quality_valid_values)
     columns = ", ".join(LABEL_COLUMNS)
     with duckdb.connect(config={"threads": 2}) as db:
@@ -469,6 +607,26 @@ def _write_labels(
                 )
                 for group in _iter_window_groups(db, links, series_id)
             ]
+            entry = constructor.get(series_id, {})
+            candidates = {
+                key: entry.get(key, 0)
+                for key in ("candidates", "complete", "history_missing", "future_missing")
+            }
+            evaluated = sum(1 for row in labeled if row["reason"] == "evaluated")
+            discarded = len(labeled) - evaluated
+            if candidates["complete"] != evaluated + discarded or candidates["candidates"] != (
+                candidates["complete"]
+                + candidates["history_missing"]
+                + candidates["future_missing"]
+            ):
+                raise ValueError(
+                    "Las etiquetas emitidas no coinciden con las ventanas completas de la serie"
+                )
+            reconciliation[series_id] = {
+                **candidates,
+                "labels_evaluated": evaluated,
+                "labels_discarded": discarded,
+            }
             for row in labeled:
                 counts[row["label"]] += 1
                 reasons[row["reason"]] += 1
@@ -483,7 +641,7 @@ def _write_labels(
             "TO ? (FORMAT PARQUET)",
             [str(output_file)],
         )
-    return {"labels": counts, "reasons": reasons}
+    return {"labels": counts, "reasons": reasons, "reconciliation": reconciliation}
 
 
 def evaluate_windows(
@@ -498,11 +656,13 @@ def evaluate_windows(
     policy_sha256 = sha256_file(policy_path)
     policy = load_policy(policy_path)
     links = verify_bundle(timeline_dir, windows_dir)
+    leakage = verify_no_label_leakage(links)
     inspection = inspect_structure(links)
     reasons = assess_eligibility(links, inspection, policy, evidence)
     counts = dict(inspection["counts"])
     counts["labels"] = dict(LABEL_COUNTS)
     counts["label_reasons"] = {"evaluated": 0, "insufficient_valid_hours": 0}
+    reconciliation: dict[str, dict] = {}
     common = {
         "policy_id": policy.policy_id,
         "policy_sha256": policy_sha256,
@@ -514,6 +674,7 @@ def evaluate_windows(
         "history_hours": links.history_hours,
         "horizon_hours": links.horizon_hours,
         "step_hours": links.step_hours,
+        "leakage": leakage,
     }
     with new_bundle(output) as staging:
         if reasons:
@@ -549,6 +710,8 @@ def evaluate_windows(
             counts["label_reasons"] = written["reasons"]
             if sum(counts["labels"].values()) != counts["windows_total"]:
                 raise ValueError("El número de etiquetas no coincide con las ventanas auditadas")
+            leakage = verify_no_label_leakage(links, labels=output_file)
+            reconciliation = written["reconciliation"]
             labeling = "evaluated"
         if (
             sha256_file(links.hours) != links.timeline_sha256
@@ -564,7 +727,10 @@ def evaluate_windows(
             "counts": counts,
             "output_sha256": sha256_file(output_file),
             **common,
+            "leakage": leakage,
         }
+        if reconciliation:
+            manifest["labels_reconciliation"] = reconciliation
         (staging / "manifest.json").write_text(
             json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8"
         )
