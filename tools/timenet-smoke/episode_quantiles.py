@@ -3,12 +3,13 @@
 import argparse
 import json
 import os
+import re
 from pathlib import Path
 from tempfile import NamedTemporaryFile
 
 import numpy as np
-from episode_calibration import align, check_file
-from episode_score import scores
+from episode_calibration import align, check_file, verify_candidate_bundle
+from episode_score import block_difference, scores
 from paired_forecasts import ordered_ids
 
 
@@ -31,11 +32,21 @@ def read_quantiles(path, digest, ids, manifest_sha):
             or not np.array_equal(q[:, :, 1], align(z, ids, "predicted"))
         ):
             raise ValueError("Cuantiles con cruce, valor no finito o mediana incompatible")
-        return q, z["checkpoint_sha256"].item()
+        checkpoint = z["checkpoint_sha256"].item()
+        if not isinstance(checkpoint, str) or not re.fullmatch("[a-f0-9]{64}", checkpoint):
+            raise ValueError("Huella de punto de control inválida")
+        return q, checkpoint
 
 
 def compare(
-    blocks, manifest_sha, candidate, candidate_sha, input_manifest_sha, reference, reference_sha
+    blocks,
+    manifest_sha,
+    candidate,
+    candidate_sha,
+    input_manifest_sha,
+    reference,
+    reference_sha,
+    input_manifest,
 ):
     from episode_blocks import VERSION
 
@@ -57,6 +68,12 @@ def compare(
         check_file(blocks / "thresholds.json", m["thresholds_sha256"]).read_text()
     )
     limits = np.array([thresholds["stations"].get(s, np.nan) for s in stations])
+    archive_sha = verify_candidate_bundle(
+        blocks, "selection", manifest_sha, m, input_manifest, input_manifest_sha, "quantile", ids
+    )
+    with np.load(check_file(candidate, candidate_sha), allow_pickle=False) as raw:
+        if raw["input_sha256"].item() != archive_sha:
+            raise ValueError("Los cuantiles proceden de otras historias")
     q, checkpoint = read_quantiles(candidate, candidate_sha, ids, input_manifest_sha)
     with np.load(check_file(reference, reference_sha), allow_pickle=False) as z:
         if z["manifest_sha256"].item() != manifest_sha or z["block"].item() != "selection":
@@ -75,23 +92,7 @@ def compare(
     def interval(mask, delta, block_hours):
         valid = mask & np.isfinite(y)
         which = np.broadcast_to(hours[:, None], y.shape)[valid] // block_hours
-        keys, groups = np.unique(which, return_inverse=True)
-        sums = np.bincount(groups, weights=delta[valid])
-        counts = np.bincount(groups)
-        if len(keys) < 2:
-            return {
-                "blocks": len(keys),
-                "difference": float(sums.sum() / counts.sum()) if len(keys) else None,
-                "ci95": None,
-            }
-        rng = np.random.default_rng(27)
-        draws = rng.integers(len(keys), size=(1000, len(keys)))
-        boot = sums[draws].sum(1) / counts[draws].sum(1)
-        return {
-            "blocks": len(keys),
-            "difference": float(sums.sum() / counts.sum()),
-            "ci95": np.quantile(boot, [0.025, 0.975]).tolist(),
-        }
+        return block_difference(which, delta[valid], 1)
 
     strata = {"all": np.isfinite(y), "high": y >= limits[:, None]}
     diffs = {
@@ -123,6 +124,7 @@ def compare(
 
 if __name__ == "__main__":
     p = argparse.ArgumentParser(description=__doc__)
+    p.add_argument("--input-manifest", type=Path, required=True)
     for name in ("blocks", "candidate", "reference", "output"):
         p.add_argument(name, type=Path)
     for name in ("manifest", "candidate", "input-manifest", "reference"):
@@ -136,6 +138,7 @@ if __name__ == "__main__":
         a.input_manifest_sha256,
         a.reference,
         a.reference_sha256,
+        a.input_manifest,
     )
     with NamedTemporaryFile(dir=a.output.parent) as tmp:
         tmp.write((json.dumps(result, indent=2, sort_keys=True, allow_nan=False) + "\n").encode())

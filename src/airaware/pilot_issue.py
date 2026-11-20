@@ -24,6 +24,8 @@ class Pilot:
                 feed TEXT, station TEXT, hour INTEGER, revision INTEGER,
                 value REAL, arrival INTEGER,
                 source TEXT, PRIMARY KEY(feed,station,hour,revision));
+            CREATE TABLE IF NOT EXISTS source_policies (
+                feed TEXT PRIMARY KEY, delay INTEGER NOT NULL, evidence TEXT NOT NULL);
             CREATE TABLE IF NOT EXISTS issues (
                 feed TEXT, station TEXT, origin INTEGER, snapshot TEXT NOT NULL,
                 result TEXT, mature TEXT, PRIMARY KEY(feed,station,origin));
@@ -34,6 +36,21 @@ class Pilot:
 
     def __exit__(self, *exception):
         self.db.close()
+
+    def register(self, feed: str, delay: int, evidence: str) -> None:
+        """Fijar por fuente la demora basada en el registro de llegadas previo al piloto."""
+        if not feed or delay < 0 or not re.fullmatch("[a-f0-9]{64}", evidence):
+            raise ValueError("Demora o evidencia de fuente inválidas")
+        with self.db:
+            self.db.execute("BEGIN IMMEDIATE")
+            prior = self.db.execute(
+                "SELECT delay,evidence FROM source_policies WHERE feed=?", (feed,)
+            ).fetchone()
+            if prior and prior != (delay, evidence):
+                raise ValueError("La política de la fuente ya está congelada")
+            self.db.execute(
+                "INSERT OR IGNORE INTO source_policies VALUES(?,?,?)", (feed, delay, evidence)
+            )
 
     def receive(
         self,
@@ -98,6 +115,11 @@ class Pilot:
         key = (feed, station, origin)
         with self.db:
             self.db.execute("BEGIN IMMEDIATE")
+            policy = self.db.execute(
+                "SELECT delay,evidence FROM source_policies WHERE feed=?", (feed,)
+            ).fetchone()
+            if not policy:
+                raise ValueError("Falta la política de maduración de la fuente")
             existing = self.db.execute(
                 "SELECT snapshot FROM issues WHERE feed=? AND station=? AND origin=?", key
             ).fetchone()
@@ -118,6 +140,8 @@ class Pilot:
                 "station": station,
                 "origin": origin,
                 "release": release,
+                "maturity_delay": policy[0],
+                "maturity_evidence": policy[1],
                 "cutoff": cutoff,
                 "reason": reason,
                 "history": values,
@@ -166,21 +190,21 @@ class Pilot:
             return body
 
     def mature(self, issue, now: int, *, delay: int):
-        if delay < 0:
-            raise ValueError("Demora de maduración negativa")
+        if delay != issue["maturity_delay"]:
+            raise ValueError("La demora difiere de la política de la fuente")
         cutoff = issue["origin"] + 6 * 3600 + delay
         with self.db:
             self.db.execute("BEGIN IMMEDIATE")
             key, saved = self._issue(issue)
             if saved[1] is None:
                 raise ValueError("Falta la primera emisión")
+            if now < json.loads(saved[1])["issued"] or now < cutoff:
+                return None
             if saved[2]:
                 vintage = json.loads(saved[2])
                 if cutoff != vintage["cutoff"]:
                     raise ValueError("La demora difiere del corte congelado")
                 return vintage
-            if now < cutoff:
-                return None
             rows = self._view(issue["feed"], issue["station"], issue["origin"] + 3600, 6, cutoff)
             vintage = {
                 "cutoff": cutoff,

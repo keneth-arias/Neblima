@@ -41,7 +41,8 @@ def test_selection_prefers_new_onsets_under_station_budget():
             ("reference", 0.7, {"s": good}),
             ("episode", 0.8, {"s": over}),
             ("episode", 0.9, {"s": good}),
-        ]
+        ],
+        calibration={"reference": (0.1, 0.2), "episode": (0.1, 0.2)},
     )
     assert selected is not None and selected["method"] == "reference"
 
@@ -70,3 +71,25 @@ def test_reference_fixture_reconciles_abstentions_and_misses():
     assert sum(s["counts"]["active"] for s in result.values()) == 1
     assert sum(s["counts"]["indeterminate"] for s in result.values()) == 1
     assert sum(s["counts"]["false"] for s in result.values()) == 1
+
+
+def test_expired_origins_cannot_subsidize_false_warnings():
+    y = {h: 0.0 for h in range(180)}
+    origins = [Origin(0, 0.0, 1.0, 0.0), *[Origin(h, h + 7.0, 0.0, 0.0) for h in range(1, 168)]]
+    r = evaluate(origins, y, 1.0, 0.5)
+    assert (r["evaluable_origins"], r["false_per_station_week"], r["expired_origins"]) == (
+        1,
+        168.0,
+        167,
+    )
+    assert select_policy([("episode", 0.5, {"s": r})], calibration={"episode": (0.1, 0.2)}) is None
+
+
+def test_onset_crossing_block_retains_original_warning():
+    from airaware.episode_warnings import paired_detection
+
+    y = {h: float(h in (168, 335)) for h in range(160, 343)}
+    a = [Origin(166, 166.0, 1.0, 0.0), Origin(333, 333.0, 0.0, 0.0)]
+    b = [Origin(166, 166.0, 0.0, 0.0), Origin(333, 333.0, 0.0, 0.0)]
+    r = paired_detection({"s": evaluate(a, y, 1.0, 0.5)}, {"s": evaluate(b, y, 1.0, 0.5)})
+    assert r["difference"] == 0.5

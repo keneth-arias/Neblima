@@ -57,3 +57,56 @@ class EpisodeScoreTest(TestCase):
             np.savez(path, **fields)
             with self.assertRaisesRegex(ValueError, "cruce"):
                 read_quantiles(path, sha256_file(path), np.array(["a", "b"]), "a" * 64)
+
+    def test_training_frequency_persistence_reliability_and_paired_brier(self):
+        y = np.array([[1] * 6, [6] * 6], dtype=float)
+        table = scores(
+            y,
+            y,
+            y,
+            y,
+            np.array([5.0, 5.0]),
+            np.array([0.0, 0.0]),
+            np.array([0.1, 0.9]),
+            np.array([0, 1]),
+            np.array([0.5, 0.5]),
+            np.array([0, 168]),
+        )["event"]["all"]
+        self.assertAlmostEqual(table["brier"], 0.01)
+        self.assertEqual(table["training_frequency_brier"], 0.25)
+        self.assertEqual(table["persistence_brier"], 0.5)
+        self.assertEqual(sum(r["windows"] for r in table["reliability"]), 2)
+        self.assertAlmostEqual(table["brier_difference"]["difference"], -0.24)
+
+    def test_coincident_ids_do_not_admit_foreign_histories(self):
+        import json
+        from pathlib import Path
+        from tempfile import TemporaryDirectory
+
+        from episode_calibration import verify_candidate_bundle
+        from export_senamhi import sha256_file
+
+        with TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            folder = root / "selection"
+            folder.mkdir()
+            ids = np.array(["a", "b"])
+            np.savez(folder / "history.npz", window_id=ids, history=np.ones((2, 24)))
+            frozen = sha256_file(folder / "history.npz")
+            m = {"blocks": {"selection": {"files": {"history.npz": frozen}}}}
+            np.savez(root / "data.npz", window_id=ids, history=np.zeros((2, 24)))
+            spec = {
+                "head": "quantile",
+                "phase": "infer",
+                "schema": "forecast-input-v1",
+                "unit": "ug/m3",
+                "block": "selection",
+                "split_sha256": "a" * 64,
+                "files": {"data.npz": sha256_file(root / "data.npz")},
+            }
+            release = root / "manifest.json"
+            release.write_text(json.dumps(spec))
+            with self.assertRaisesRegex(ValueError, "historias"):
+                verify_candidate_bundle(
+                    root, "selection", "a" * 64, m, release, sha256_file(release), "quantile", ids
+                )

@@ -1,0 +1,20 @@
+version: lima-comparacion-cuantiles-v1
+scope: retrospective_selection
+blocks_sha256: 42181b3ff858029a3982d2f408c954ff14b51f6afb7f068130caed4a294274e1
+reference: direct_rank4_alpha8_residual_10_90
+candidate: quantile_rank4_alpha8_10_50_90
+seeds: [27, 28]
+deployable_seed_if_qualified: 27
+batch: 16
+epochs: 1
+include_final_partial_batch: true
+optimizer_steps: 14838
+global_mae_max_increase_ug_m3: 0
+high_mae_must_improve: true
+nominal_hourly_coverage: 0.8
+global_coverage_absolute_tolerance: 0.05
+high_coverage_error_must_decrease: true
+tie: retain_direct
+uncertainty: paired_calendar_block_bootstrap
+block_hours: [84, 168, 336]
+test_policy: new_unseen_station_hours_required_before_pilot

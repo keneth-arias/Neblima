@@ -1,5 +1,7 @@
 """Simular avisos por estación respetando el orden de emisión y el horizonte de seis horas."""
 
+import hashlib
+import json
 import math
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
@@ -19,6 +21,10 @@ class Origin:
 
 class WarningReport(TypedDict):
     counts: dict[str, int]
+    cohort_sha256: str
+    expired_origins: int
+    excluded_onsets: list[int]
+    unanchored_high: list[int]
     evaluable_origins: int
     emitted: int
     late: int
@@ -62,10 +68,23 @@ def evaluate(
     eligible: set[int] = set()
     leads: list[float] = []
     next_issue = -math.inf
-    opportunities = late = 0
+    opportunities = late = expired = 0
+    cohort = []
     for row in sorted(origins, key=lambda o: (o.issued, o.hour)):
         if not math.isfinite(row.issued) or row.issued < row.hour:
             raise ValueError("La emisión precede al origen o no es finita")
+        cohort.append(
+            (
+                row.hour,
+                row.issued,
+                row.latest if row.latest is not None and math.isfinite(row.latest) else None,
+                [known.get(h) for h in range(row.hour, row.hour + 7)],
+            )
+        )
+        if row.issued >= row.hour + 6 or row.hour + 6 - row.issued < min_lead:
+            expired += 1
+            counts["abstained"] += 1
+            continue
         if row.latest is None or not math.isfinite(row.latest):
             counts["abstained"] += 1
             continue
@@ -106,6 +125,14 @@ def evaluate(
     span = max((r.hour for r in origins), default=0) - min((r.hour for r in origins), default=0) + 1
     return {
         "counts": counts,
+        "cohort_sha256": hashlib.sha256(
+            json.dumps([threshold, cooldown, min_lead, cohort], allow_nan=False).encode()
+        ).hexdigest(),
+        "expired_origins": expired,
+        "excluded_onsets": sorted(onsets - eligible),
+        "unanchored_high": sorted(
+            h for h, v in known.items() if v >= threshold and h - 1 not in known
+        ),
         "evaluable_origins": opportunities,
         "emitted": sum(counts[k] for k in ("hit", "false", "indeterminate")),
         "late": late,
@@ -125,11 +152,27 @@ class Policy(TypedDict):
 
 
 def select_policy(
-    candidates: Sequence[tuple[str, float, Mapping[str, WarningReport]]], *, budget: float = 1
+    candidates: Sequence[tuple[str, float, Mapping[str, WarningReport]]],
+    *,
+    calibration: Mapping[str, tuple[float, float]],
+    budget: float = 1,
 ) -> Policy | None:
     """Aplicar el presupuesto por estación y conservar la referencia ante empate."""
+    if not math.isfinite(budget) or budget < 0:
+        raise ValueError("Presupuesto de avisos inválido")
+    refs = [stations for method, _, stations in candidates if method == "reference"]
+    if not refs or not refs[0]:
+        return None
+    common = {key: s["cohort_sha256"] for key, s in refs[0].items()}
     options: list[Policy] = []
     for method, cut, stations in candidates:
+        if {key: s["cohort_sha256"] for key, s in stations.items()} != common:
+            raise ValueError("Los métodos deben compartir estaciones y oportunidades")
+        if method not in calibration:
+            continue
+        brier, frequency_brier = calibration[method]
+        if not 0 <= brier <= frequency_brier <= 1:
+            continue
         if not stations or any(
             not s["evaluable_origins"]
             or 168 * s["counts"]["false"] > budget * s["evaluable_origins"]
@@ -145,8 +188,10 @@ def select_policy(
                 "median_lead": float(median(leads)) if leads else None,
             }
         )
+    if not any(p["method"] == "reference" for p in options):
+        return None
     return max(
-        options,
+        (p for p in options if p["detected"] > 0),
         key=lambda p: (p["detected"], p["method"] == "reference", p["median_lead"] or 0, p["cut"]),
         default=None,
     )
@@ -192,6 +237,31 @@ def paired_interval(
             upper=samples[math.ceil(0.975 * (draws - 1))],
         )
     return result
+
+
+def paired_detection(
+    first: Mapping[str, WarningReport],
+    second: Mapping[str, WarningReport],
+    *,
+    block_hours: int = 168,
+):
+    """Emparejar en la cronología completa y remuestrear cada inicio en su hora."""
+    if set(first) != set(second):
+        raise ValueError("Estaciones no emparejadas")
+    hours, a, b = [], [], []
+    for station, left in first.items():
+        right = second[station]
+        if (
+            left["cohort_sha256"] != right["cohort_sha256"]
+            or left["observable_onsets"] != right["observable_onsets"]
+        ):
+            raise ValueError("Inicios no emparejados")
+        detected_left, detected_right = set(left["matched_onsets"]), set(right["matched_onsets"])
+        for hour in left["observable_onsets"]:
+            hours.append(hour)
+            a.append(float(hour in detected_left))
+            b.append(float(hour in detected_right))
+    return paired_interval(hours, a, b, block_hours=block_hours)
 
 
 def replay_fixture(inputs, evaluation) -> dict[str, WarningReport]:

@@ -118,6 +118,59 @@ def align(archive, ids, field):
     return archive[field][order]
 
 
+def verify_candidate_bundle(
+    blocks, block, split_sha, manifest, bundle_manifest, bundle_sha, head, ids
+):
+    spec = json.loads(check_file(bundle_manifest, bundle_sha).read_text())
+    expected = {
+        "block": block,
+        "split_sha256": split_sha,
+        "schema": "forecast-input-v1",
+        "phase": "infer",
+        "unit": "ug/m3",
+        "head": head,
+    }
+    if any(spec.get(k) != v for k, v in expected.items()):
+        raise ValueError("El insumo no corresponde al bloque de inferencia")
+    role = blocks / block
+    frozen = manifest["blocks"][block]["files"]
+    fields = {"window_id", "history"}
+    if head == "episode":
+        fields.update(("station_key", "threshold_ug_m3", "thresholds_sha256"))
+    data_sha = spec["files"]["data.npz"]
+    with (
+        np.load(
+            check_file(bundle_manifest.parent / "data.npz", data_sha), allow_pickle=False
+        ) as data,
+        np.load(
+            check_file(role / "history.npz", frozen["history.npz"]), allow_pickle=False
+        ) as history,
+    ):
+        if set(data.files) != fields or not np.array_equal(
+            align(data, ids, "history"), align(history, ids, "history")
+        ):
+            raise ValueError("Las historias del candidato difieren del bloque congelado")
+        if head == "episode":
+            threshold_sha = manifest["thresholds_sha256"]
+            if (
+                data["thresholds_sha256"].item() != threshold_sha
+                or spec.get("thresholds_sha256") != threshold_sha
+            ):
+                raise ValueError("El umbral del insumo difiere del bloque")
+            table = json.loads(check_file(blocks / "thresholds.json", threshold_sha).read_text())[
+                "stations"
+            ]
+            with np.load(
+                check_file(role / "index.npz", frozen["index.npz"]), allow_pickle=False
+            ) as index:
+                stations = align(index, ids, "station_key")
+            if not np.array_equal(align(data, ids, "station_key"), stations) or not np.array_equal(
+                align(data, ids, "threshold_ug_m3"), [table.get(k, np.nan) for k in stations]
+            ):
+                raise ValueError("La estación y el umbral no corresponden a la ventana")
+    return data_sha
+
+
 def candidate_logits(path, digest, ids, threshold_digest, input_manifest_digest):
     with np.load(check_file(path, digest), allow_pickle=False) as archive:
         contract = {
@@ -180,7 +233,20 @@ def run(args):
     scores = predicted.max(axis=1) - limits
     logits = getattr(args, "episode_logits", None)
     if logits:
-        path, digest, input_digest = logits
+        path, digest, input_manifest, input_digest = logits
+        input_sha = verify_candidate_bundle(
+            args.blocks,
+            phase,
+            args.manifest_sha256,
+            manifest,
+            Path(input_manifest),
+            input_digest,
+            "episode",
+            ids,
+        )
+        with np.load(Path(path), allow_pickle=False) as raw:
+            if raw["input_sha256"].item() != input_sha:
+                raise ValueError("La exportación no corresponde al archivo de historias")
         scores, episode_checkpoint = candidate_logits(
             Path(path), digest, ids, threshold_hash, input_digest
         )
@@ -248,6 +314,12 @@ def run(args):
             "checkpoint_sha256": checkpoint,
             "block": phase,
         }
+        if logits:
+            values.update(
+                episode_checkpoint_sha256=identity["episode_checkpoint_sha256"],
+                episode_logits_sha256=digest,
+                input_manifest_sha256=input_digest,
+            )
         if artifact["probability"] is not None:
             eligible = np.isfinite(scores) & np.isfinite(limits)
             probs = np.full(len(ids), np.nan)
@@ -273,7 +345,9 @@ if __name__ == "__main__":
     apply.add_argument("--calibrator-sha256", required=True)
     for command in (fit, apply):
         command.add_argument(
-            "--episode-logits", nargs=3, metavar=("NPZ", "SHA256", "MANIFIESTO_SHA256")
+            "--episode-logits",
+            nargs=4,
+            metavar=("NPZ", "SHA256", "MANIFIESTO", "MANIFIESTO_SHA256"),
         )
         command.add_argument("blocks", type=Path)
         command.add_argument("forecasts", type=Path)

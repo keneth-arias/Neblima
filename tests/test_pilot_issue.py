@@ -10,6 +10,7 @@ def test_late_updates_retries_rollback_and_maturity(tmp_path: Path):
     origin = 3600 * 100
     source = "a" * 64
     with Pilot(db) as p:
+        p.register("f", 30, source)
         for h in range(24):
             hour = origin - (23 - h) * 3600
             p.receive("f", "s", hour, h, 10.0, hour, source)
@@ -40,6 +41,7 @@ def test_late_updates_retries_rollback_and_maturity(tmp_path: Path):
 
 def test_missing_or_stale_issue_is_explicit(tmp_path: Path):
     with Pilot(tmp_path / "db") as p:
+        p.register("f", 30, "a" * 64)
         issue = p.begin("f", "s", 360000, "f" * 64, 360001, max_age=600)
         assert issue["reason"] == "missing_history"
         late = p.begin("f", "s", 363600, "f" * 64, 365000, max_age=600)
@@ -51,6 +53,7 @@ def test_two_writers_obtain_same_first_issue(tmp_path: Path):
 
     db = tmp_path / "pilot.sqlite"
     with Pilot(db) as p:
+        p.register("feed", 30, "a" * 64)
         first = p.begin("feed", "station", 360000, "a" * 64, 360000, max_age=3600)
 
     def publish(second):
@@ -62,3 +65,15 @@ def test_two_writers_obtain_same_first_issue(tmp_path: Path):
     with ThreadPoolExecutor(2) as pool:
         a, b = pool.map(publish, [5, 6])
     assert a == b
+
+
+def test_source_maturity_cannot_be_reselected_after_issuance(tmp_path: Path):
+    with Pilot(tmp_path / "db") as p:
+        p.register("s", 3600, "c" * 64)
+        with pytest.raises(ValueError):
+            p.register("s", 0, "d" * 64)
+        issue = p.begin("s", "station", 360000, "b" * 64, 360010, max_age=90)
+        p.publish(issue, {"abstained": "missing_history"}, 360000 + 8 * 3600)
+        assert p.mature(issue, 360000 + 7 * 3600, delay=3600) is None
+        with pytest.raises(ValueError):
+            p.mature(issue, 360000 + 8 * 3600, delay=0)
