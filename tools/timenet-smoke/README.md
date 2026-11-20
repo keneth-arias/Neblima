@@ -164,3 +164,5 @@ UV_OFFLINE=true uv run --project tools/timenet-smoke --locked python \
 ```
 
 El verificador coteja el último paso, las sumas de los archivos del estado, el registro efectivo de lotes, el escalador y las concentraciones del conjunto congelado. `paired.parquet` permite revisar cada par de errores. `metrics.json` desglosa por contaminante, estación, horizonte y concentración alta. `freeze.json` identifica ambos modelos y los archivos verificados. La entrada de evaluación es exclusivamente la partición histórica de validación.
+
+Si el nodo se apaga durante el ajuste, el archivo de eventos puede terminar en bytes NUL después de la última línea JSON completa. El verificador registra el nombre, el SHA-256 del archivo original y la cantidad de esos bytes en `recovered_log_tails`. Una línea JSON incompleta o dañada interrumpe la verificación. Para congelar el modelo, todos los pasos deben estar documentados y cada lote repetido después de reanudar debe conservar los mismos identificadores y la misma tasa de aprendizaje.
