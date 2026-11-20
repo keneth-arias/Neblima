@@ -210,6 +210,35 @@ class ScoreTest(TestCase):
                 self.assertEqual(result["eligible_histories"], n)
                 self.assertEqual(result["concentration"]["all"]["targets"], 6 * n)
 
+    def test_worker_membership_and_missing_output(self):
+        with TemporaryDirectory() as tmp:
+            inputs, out = self.stage(Path(tmp), "direct", 168)
+            with self.assertRaisesRegex(ValueError, "salida original"):
+                score(*inputs, None, now=CLOSED)
+            pred = out / "predictions-step-00014838.npz"
+            with np.load(pred, allow_pickle=False) as z:
+                values = dict(z)
+            values["window_id"] = values["window_id"][::-1]
+            np.savez(pred, **values)
+            write_json(out / ".infer-step-00014838.receipt.json", sha256_file(pred))
+            track(out)
+            with self.assertRaisesRegex(ValueError, "orígenes"):
+                score(*inputs, out, now=CLOSED)
+            cohort = inputs[4]
+            observed = cohort / "scoring/observed.npz"
+            with np.load(observed, allow_pickle=False) as z:
+                values = dict(z)
+            values["window_id"] = values["window_id"][::-1]
+            np.savez(observed, **values)
+            receipt = cohort / "receipt.json"
+            meta = json.loads(receipt.read_bytes())
+            meta["files"]["scoring/observed.npz"] = sha256_file(observed)
+            write_json(receipt, meta)
+            references = list(inputs)
+            references[5] = sha256_file(receipt)
+            with self.assertRaisesRegex(ValueError, "objetivos difieren"):
+                score(*references, out, now=CLOSED)
+
     def test_veto_and_mismatched_receipt(self):
         with TemporaryDirectory() as tmp:
             inputs, out = self.stage(Path(tmp), "direct", 168)

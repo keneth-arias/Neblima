@@ -210,7 +210,14 @@ def score(
             cal = read(calibration, release["direct_calibrator_sha256"])
             if cal["checkpoint_sha256"] != release["checkpoint_sha256"]:
                 raise ValueError("Se requiere el calibrador del modelo directo")
-            lower, upper = np.asarray(cal["residual_q10_q90"])
+            residuals = np.asarray(cal["residual_q10_q90"])
+            if (
+                residuals.shape != (2, 6)
+                or not np.isfinite(residuals).all()
+                or (residuals[0] > residuals[1]).any()
+            ):
+                raise ValueError("Los residuos del calibrador deben estar ordenados y ser finitos")
+            lower, upper = residuals
             lo, hi = np.maximum(0.0, point + lower), np.maximum(0.0, point + upper)
         else:
             raise ValueError("Cabezal de concentración desconocido")
