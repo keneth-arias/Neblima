@@ -1,13 +1,38 @@
 """Controles del emparejamiento de ambas salidas y la referencia independiente."""
 
+import hashlib
 import unittest
+from pathlib import Path
+from tempfile import TemporaryDirectory
 
 import duckdb
 import numpy as np
-from joint_validation import paired_table, read_predictions, summarize
+from joint_validation import paired_table, read_predictions, summarize, training_events
 
 
 class JointValidationTest(unittest.TestCase):
+    def test_record_only_unterminated_nul_padding_after_a_complete_event(self):
+        with TemporaryDirectory() as tmp:
+            log = Path(tmp) / "events-1.jsonl"
+            prefix = b'{"step":1}\n'
+            tails = {}
+            log.write_bytes(prefix + bytes(17))
+            self.assertEqual(list(training_events(log, tails)), [{"step": 1}])
+            self.assertEqual(
+                tails,
+                {
+                    log.name: {
+                        "nul_bytes": 17,
+                        "sha256": hashlib.sha256(log.read_bytes()).hexdigest(),
+                    }
+                },
+            )
+            for bad in [b"", b'{"step":', bytes(17) + b'\n{"step":2}\n', bytes(2) + b"x"]:
+                with self.subTest(bad=bad):
+                    log.write_bytes(prefix + bad if bad else bytes(17))
+                    with self.assertRaises(ValueError):
+                        list(training_events(log, {}))
+
     def setUp(self):
         self.ids = np.array(["a", "c", "d"])
         self.channels = np.array(["pm25", "pm10"])
