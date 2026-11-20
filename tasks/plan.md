@@ -335,3 +335,7 @@ Verificación local del 20/11/2026:
   `UV_OFFLINE=true make check` aprobó 405 pruebas y los controles del catálogo, formato y tipos.
   `make build` generó ambas distribuciones y `make audit` terminó sin vulnerabilidades conocidas
   en las dependencias de Python revisadas.
+
+## #88 · Ampliación de TimeF a PM2.5 y PM10
+
+El [plan del conector, conjunto y modelo bivariados](issue-88-pm10.md) organiza seis PR y fija los conteos de cobertura. El diseño contrasta dos variantes que pronostican ambos contaminantes a seis horas sobre las mismas ventanas.
