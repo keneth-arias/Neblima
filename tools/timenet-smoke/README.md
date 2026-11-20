@@ -157,6 +157,37 @@ El manifiesto fija las huellas de las matrices de entrenamiento y validación, d
 
 `joint_validation.py` recibe las matrices históricas, las carpetas de los dos ajustes (A y B), dos exportaciones independientes de inferencia desde los estados restaurados y una carpeta nueva de salida. La reconstrucción de A puede recibir toda la historia de PM10 enmascarada. Ambas exportaciones deben contener exactamente las mismas predicciones por ventana que en la primera restauración.
 
+Para reproducir la prueba de A, crear los dos insumos de inferencia desde la misma validación. El siguiente comando recibe la carpeta de matrices exportadas y una carpeta de salida nueva. Conserva los identificadores en su orden original y excluye los objetivos.
+
+```bash
+UV_OFFLINE=true uv run --project tools/timenet-smoke --locked python - "$matrices" "$historias" <<'PY'
+import sys
+from pathlib import Path
+import numpy as np
+
+matrices, salida = map(Path, sys.argv[1:])
+salida.mkdir()
+with np.load(matrices / "validation.npz", allow_pickle=False) as datos:
+    for vista in ("both", "first"):
+        historia = datos["history"]
+        if vista == "first":
+            historia[:, :, 1] = np.nan
+        np.savez(salida / f"{vista}.npz", window_id=datos["window_id"],
+                 channels=datos["channels"], history=historia)
+PY
+```
+
+En la imagen fijada, ejecutar este comando una vez por variante (`first` para A y `both` para B), con la carpeta del ajuste correspondiente en `$ajuste`. La revisión de los pesos base y del entrenador figuran en la [configuración congelada](../../configs/training/lima-pm25-pm10-ajuste-v1.json).
+
+```bash
+PYTHONPATH=/opt/forecast/src /opt/conda/bin/python -m opentslm.forecast_inference \
+  --input-view "$vista" --data "$historias/$vista.npz" --scaler "$matrices/scaler.json" \
+  --checkpoint "$ajuste/step-00015745" --weights /inputs/qwen/weights --batch 16 \
+  --output "$ajuste/replay-validation.npz"
+```
+
+Desde la raíz de AirAware, comparar los cuatro archivos de predicciones y generar el informe numérico.
+
 ```bash
 UV_OFFLINE=true uv run --project tools/timenet-smoke --locked python \
   tools/timenet-smoke/joint_validation.py "$matrices" "$ajuste_a" "$ajuste_b" \
