@@ -1,0 +1,51 @@
+{
+  "base_revision": "2fc06364715b967f1860aea9cf38778875588b17",
+  "base_weights_sha256": "1d76cc3cfd4c15f9c749372611e5ca6e0b6f910b1fcf0551ce9157e9bfef29c1",
+  "channels": [
+    "pm25",
+    "pm10"
+  ],
+  "image": "docker.io/ml-infra/airaware-joint@sha256:14eb3ed9b9ca00c75acbc56991d0f1882dc8efc5306ccf5fa90366673f40b3be",
+  "inputs_manifest_sha256": "c7cbdc5f5bf63984953dfc470aab480c8beabec6d817e48fbcfbd97037a09dcf",
+  "metrics_sha256": "61a5baa26f22291a98b130f31844da40e7c6c23591b3caa5abb7d6f3c6a0cc88",
+  "models": {
+    "both": {
+      "checkpoint": "step-00015745",
+      "checkpoint_sha256": "a63e52690de3e46133728527a1556aaec8746356692f78c4ba70b8937cad8a14",
+      "initial_trainable_sha256": "e9b734f3e635861ea69f3acf29ee7e480f3a635dcef4655f58ff0c263603e048",
+      "order_sha256": "3d5748ac25f5f6f1c115cadd612d4489a58c65e6877e7c971721bd50ac17f3cf",
+      "predictions_sha256": "f6bfcc0b172c037bbfbdb100ab532cb13b64b048dd12b22c010bee3eb3206391",
+      "recovered_log_tails": {
+        "events-5sgm3ods.jsonl": {
+          "nul_bytes": 1472,
+          "sha256": "12c46ec69f3e9b1c7c702d27bf231299cdcab1e3ce056303b886292e8be9b3a1"
+        }
+      },
+      "replay_sha256": "f6bfcc0b172c037bbfbdb100ab532cb13b64b048dd12b22c010bee3eb3206391",
+      "steps": 15745,
+      "windows_seen": 251915
+    },
+    "first": {
+      "checkpoint": "step-00015745",
+      "checkpoint_sha256": "ca2ee75b0702a7893bc76a196351a45900fd54b68347f724157a532062d5c0cf",
+      "initial_trainable_sha256": "e9b734f3e635861ea69f3acf29ee7e480f3a635dcef4655f58ff0c263603e048",
+      "order_sha256": "3d5748ac25f5f6f1c115cadd612d4489a58c65e6877e7c971721bd50ac17f3cf",
+      "predictions_sha256": "6547173ebfeb39688ef63bdd6cff200ad6bd0d24733b18433bdbf3c0916c7d35",
+      "recovered_log_tails": {
+        "events-erwhnv8_.jsonl": {
+          "nul_bytes": 1387,
+          "sha256": "8a9755b794f3df91ff449ee36800f303740307d5204d66e6a71481b6deb6416d"
+        }
+      },
+      "replay_sha256": "6547173ebfeb39688ef63bdd6cff200ad6bd0d24733b18433bdbf3c0916c7d35",
+      "steps": 15745,
+      "windows_seen": 251915
+    }
+  },
+  "paired_sha256": "f8a29cc081bd59e35ca2e609e6430654e1e00f363b7ef0776bff80277382dd62",
+  "policy_sha256": "0ff99984a00de2eb73a89e5aca133522e8eb5d7e1de9cfffcdd76ebaf37f279f",
+  "scaler_sha256": "c8ebd87bce74ea0157e85093e4c9c81d981af34fb62f1cbc2c12ce653b2c3863",
+  "split": "validation",
+  "trainer_commit": "a4def7e420e2ecc271137bb3077341d39878d6c0",
+  "version": "lima-pm25-pm10-ajuste-v1"
+}
