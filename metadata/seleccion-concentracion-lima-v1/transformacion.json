@@ -1,0 +1,7 @@
+{
+  "head": "direct",
+  "input": "raw_history_24h",
+  "transform": "history_mean_population_std_flat_one_v1",
+  "model": "2fc06364715b967f1860aea9cf38778875588b17",
+  "unit": "ug/m3"
+}

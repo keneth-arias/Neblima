@@ -170,8 +170,48 @@ def training_frequencies(blocks, manifest, manifest_sha, archive_spec, threshold
     return {s: float(labels[valid & (stations == s)].mean()) for s in np.unique(stations[valid])}
 
 
+def persistence_mae(targets, last, limits):
+    error = np.abs(targets - last[:, None])
+
+    def summarize(mask):
+        def mean(values):
+            return float(values.mean()) if values.size else None
+
+        return {
+            "targets": int(mask.sum()),
+            "mae": mean(error[mask]),
+            "by_horizon": [
+                mean(column[keep]) for column, keep in zip(error.T, mask.T, strict=True)
+            ],
+        }
+
+    finite = np.isfinite(targets)
+    return {"all": summarize(finite), "high": summarize(finite & (targets >= limits[:, None]))}
+
+
+def station_target_hours(stations, origins, targets, limits):
+    hours = origins[:, None] + np.arange(1, targets.shape[1] + 1)
+    finite = np.isfinite(targets)
+    high = finite & (targets >= limits[:, None])
+    counts = {}
+    for station in np.unique(stations):
+        rows = (stations == station)[:, None]
+        counts[station] = {
+            "all": len(np.unique(hours[rows & finite])),
+            "high": len(np.unique(hours[rows & high])),
+        }
+    return counts
+
+
 def evaluate(
-    blocks, manifest_sha, forecast, forecast_sha, label_archive=None, training_labels=None
+    blocks,
+    manifest_sha,
+    forecast,
+    forecast_sha,
+    label_archive=None,
+    training_labels=None,
+    *,
+    describe_cohort=False,
 ):
     manifest = json.loads(check_file(blocks / "manifest.json", manifest_sha).read_text())
     if manifest["version"] != VERSION or manifest["unit"] != "ug/m3":
@@ -238,6 +278,14 @@ def evaluate(
         )
 
     return {
+        **(
+            {
+                "station_target_hours": station_target_hours(stations, hours, y, limits),
+                "persistence_mae": persistence_mae(y, last, limits),
+            }
+            if describe_cohort
+            else {}
+        ),
         "version": "pm25-episode-score-v1",
         "purpose": "retrospective_replay",
         "manifest_sha256": manifest_sha,
@@ -258,6 +306,7 @@ if __name__ == "__main__":
     p.add_argument("--forecast-sha256", required=True)
     p.add_argument("--eligible-labels", nargs=2, metavar=("NPZ", "SHA256"))
     p.add_argument("--training-labels", nargs=2, metavar=("NPZ", "SHA256"))
+    p.add_argument("--describe-cohort", action="store_true")
     a = p.parse_args()
     result = evaluate(
         a.blocks,
@@ -266,6 +315,7 @@ if __name__ == "__main__":
         a.forecast_sha256,
         a.eligible_labels,
         a.training_labels,
+        describe_cohort=a.describe_cohort,
     )
     with NamedTemporaryFile(dir=a.output.parent) as tmp:
         tmp.write((json.dumps(result, sort_keys=True, indent=2, allow_nan=False) + "\n").encode())

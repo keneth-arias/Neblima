@@ -1,38 +1,66 @@
 [
   {
+    "airaware_sha": "62abf2c852644bb2bc9124cdb0c01512981a74af",
     "checkpoint_sha256": "d42dc1d91dce1abc6284f9cff68df3d0ff7ccbc08ede744865cde1762e53658e",
     "duration_seconds": 3392.274,
+    "end_time_utc": "2026-11-20T19:26:33.008000+00:00",
     "experiment_id": "2",
     "head": "direct",
+    "image": "docker.io/ml-infra/airaware-episodes@sha256:5ca73291e6064ae8483286e2857cdffa627a30d8badaf4b34f9616fa110d0d84",
+    "infra_sha": "7d9818c4be3541a50ab16248111ebe8c853d562e",
     "peak_gpu_allocated_bytes": 7059513344.0,
     "run_id": "7d09aac2b99943b78fe9c309f26a123f",
-    "seed": 27
+    "seed": 27,
+    "start_time_utc": "2026-11-20T18:30:00.734000+00:00",
+    "status": "FINISHED",
+    "trainer_sha": "836032a687f94b225b260b4cc0806eb38fcdf67b"
   },
   {
+    "airaware_sha": "82cf16edde8dbdeb7333256f6c1811be2db071dd",
     "checkpoint_sha256": "03e8bcd7e5ea08b2bb115267803e1ce85209e06c3b3be987fbb1aa6398e3c222",
     "duration_seconds": 3446.21,
+    "end_time_utc": "2026-11-20T18:27:00.840000+00:00",
     "experiment_id": "2",
     "head": "quantile",
+    "image": "docker.io/ml-infra/airaware-episodes@sha256:460d2be0d996c7163e702a2ab7cf478c2651b909e511720cc26b7c0076e4313b",
+    "infra_sha": "68ab47d0a2685843b48d2de3fb5a6763dcd6164e",
     "peak_gpu_allocated_bytes": 7059661824.0,
     "run_id": "bb32b92dc0394f8bb435cae736ac6fe3",
-    "seed": 27
+    "seed": 27,
+    "start_time_utc": "2026-11-20T17:29:34.630000+00:00",
+    "status": "FINISHED",
+    "trainer_sha": "9b5d61767b6b7db53a17980f111528ab3742fc77"
   },
   {
+    "airaware_sha": "62abf2c852644bb2bc9124cdb0c01512981a74af",
     "checkpoint_sha256": "4ae45e02ae79920cd67e59f6fb35a3c454035ff456fd077dc7cf38188889156a",
     "duration_seconds": 3519.563,
+    "end_time_utc": "2026-11-20T19:35:43.441000+00:00",
     "experiment_id": "2",
     "head": "direct",
+    "image": "docker.io/ml-infra/airaware-episodes@sha256:5ca73291e6064ae8483286e2857cdffa627a30d8badaf4b34f9616fa110d0d84",
+    "infra_sha": "7d9818c4be3541a50ab16248111ebe8c853d562e",
     "peak_gpu_allocated_bytes": 7059513344.0,
     "run_id": "e5547072e3a34028a7cc796044f7ced3",
-    "seed": 28
+    "seed": 28,
+    "start_time_utc": "2026-11-20T18:37:03.878000+00:00",
+    "status": "FINISHED",
+    "trainer_sha": "836032a687f94b225b260b4cc0806eb38fcdf67b"
   },
   {
+    "airaware_sha": "82cf16edde8dbdeb7333256f6c1811be2db071dd",
     "checkpoint_sha256": "8ca995269cf112381d0d212aac717ee23d6f3154d085b29ebc7cb412ae7fe88e",
     "duration_seconds": 3517.782,
+    "end_time_utc": "2026-11-20T18:34:04.365000+00:00",
     "experiment_id": "2",
     "head": "quantile",
+    "image": "docker.io/ml-infra/airaware-episodes@sha256:460d2be0d996c7163e702a2ab7cf478c2651b909e511720cc26b7c0076e4313b",
+    "infra_sha": "68ab47d0a2685843b48d2de3fb5a6763dcd6164e",
     "peak_gpu_allocated_bytes": 7059661824.0,
     "run_id": "af35ec3e9ed74c729ab723294e94cd97",
-    "seed": 28
+    "seed": 28,
+    "start_time_utc": "2026-11-20T17:35:26.583000+00:00",
+    "status": "FINISHED",
+    "trainer_sha": "9b5d61767b6b7db53a17980f111528ab3742fc77"
   }
 ]
