@@ -96,10 +96,6 @@ def _check_aligned(instant: datetime) -> None:
         raise ValueError("El instante debe coincidir con una hora exacta")
 
 
-def _iso_utc(instant: datetime) -> str:
-    return instant.astimezone(UTC).isoformat()
-
-
 @dataclass(frozen=True)
 class SyntheticSeries:
     """Serie horaria sintética identificada como tal; no contiene observaciones reales."""
@@ -174,7 +170,7 @@ def answer_moment(values: Sequence[float], *, start: datetime) -> str:
         raise ValueError("La ventana no tiene valores")
     _check_aligned(start)
     index = max(range(len(values)), key=lambda position: values[position])
-    return _iso_utc(start + index * HOUR)
+    return (start.astimezone(UTC) + index * HOUR).isoformat()
 
 
 def answer_trend(values: Sequence[float]) -> str:
@@ -291,12 +287,17 @@ def recompute_answer(
     missing = [series_id for series_id in question.series_ids if series_id not in series_by_id]
     if missing:
         raise ValueError(f"La pregunta referencia series desconocidas: {', '.join(missing)}")
-    values = [
-        _window_values(
-            series_by_id[series_id], question.window_start, question.window_end_exclusive
-        )
-        for series_id in question.series_ids
-    ]
+    values = []
+    observation_ids = []
+    for series_id in question.series_ids:
+        series = series_by_id[series_id]
+        first, last = _window_range(series, question.window_start, question.window_end_exclusive)
+        if series.series_id != series_id:
+            raise ValueError(f"El identificador de la serie no coincide con {series_id}")
+        values.append(series.values[first:last])
+        observation_ids.extend(series.observation_ids[first:last])
+    if tuple(observation_ids) != question.observation_ids:
+        raise ValueError("Las observaciones declaradas difieren de las de la ventana")
     if question.family == "trend":
         _require_series_count(question, 1)
         return answer_trend(values[0])
@@ -333,13 +334,14 @@ def generate_questions(
             raise ValueError(
                 f"Las series requieren al menos {_MINIMUM_HOURS} horas para las cuatro familias"
             )
-    trend_start = series.start + _TREND_START_HOUR * HOUR
+    origin = series.start.astimezone(UTC)
+    trend_start = origin + _TREND_START_HOUR * HOUR
     trend_end = trend_start + _TREND_HOURS * HOUR
-    maximum_start = series.start + _MAXIMUM_START_HOUR * HOUR
+    maximum_start = origin + _MAXIMUM_START_HOUR * HOUR
     maximum_end = maximum_start + _MAXIMUM_HOURS * HOUR
-    moment_start = series.start + _MOMENT_START_HOUR * HOUR
+    moment_start = origin + _MOMENT_START_HOUR * HOUR
     moment_end = moment_start + _MOMENT_HOURS * HOUR
-    comparison_start = series.start + _COMPARISON_START_HOUR * HOUR
+    comparison_start = origin + _COMPARISON_START_HOUR * HOUR
     comparison_end = comparison_start + _COMPARISON_HOURS * HOUR
     questions = [
         TemporalQuestion(
@@ -461,14 +463,14 @@ def validate_qa_separated(
             "Los casos de QA comparten campos con el objetivo de pronóstico: " + ", ".join(mixed)
         )
     for question in questions:
+        start = question.window_start.astimezone(UTC)
+        end_exclusive = question.window_end_exclusive.astimezone(UTC)
         for interval in forecast_intervals:
             if interval.series_id not in question.series_ids:
                 continue
-            target_end_exclusive = interval.target_end + HOUR
-            if question.window_start.astimezone(UTC) < target_end_exclusive.astimezone(
-                UTC
-            ) and interval.target_start.astimezone(UTC) < question.window_end_exclusive.astimezone(
-                UTC
+            if (
+                start <= interval.target_end.astimezone(UTC)
+                and interval.target_start.astimezone(UTC) < end_exclusive
             ):
                 raise ValueError(
                     f"La ventana de la pregunta {question.question_id} se solapa con el "

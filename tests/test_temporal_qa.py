@@ -5,6 +5,7 @@ import re
 from dataclasses import fields, replace
 from datetime import UTC, datetime, timedelta
 from statistics import fmean
+from zoneinfo import ZoneInfo
 
 import pytest
 
@@ -387,3 +388,36 @@ def test_qa_module_does_not_import_forecast_or_database_modules():
     source = inspect.getsource(temporal_qa_module)
     for forbidden in ("senamhi_windows", "senamhi_splits", "duckdb", "pyarrow"):
         assert not re.search(rf"^\s*(?:from|import)\s+\S*{forbidden}", source, re.MULTILINE)
+
+
+def test_verificacion_exige_las_observaciones_de_ambas_series():
+    a, b, questions = build_all()
+    comparison = questions[-1]
+    altered = replace(
+        comparison, observation_ids=(*comparison.observation_ids[:-1], b.observation_ids[0])
+    )
+    with pytest.raises(ValueError, match="observaci"):
+        verify_answer(altered, mapping(a, b))
+
+
+def test_ventanas_y_momento_usan_horas_transcurridas_al_cambiar_el_reloj():
+    a, b = build_pair()
+    inicio = datetime(2026, 3, 7, tzinfo=ZoneInfo("America/New_York"))
+    utc = inicio.astimezone(UTC)
+    local_questions = generate_questions(replace(a, start=inicio), replace(b, start=inicio))
+    assert local_questions == generate_questions(replace(a, start=utc), replace(b, start=utc))
+
+
+def test_instante_del_maximo_cruza_la_hora_repetida():
+    inicio = datetime(2026, 11, 1, 1, tzinfo=ZoneInfo("America/New_York"), fold=0)
+    assert answer_moment((1, 2), start=inicio) == "2026-11-01T06:00:00+00:00"
+
+
+def test_separacion_distingue_las_dos_horas_repetidas():
+    primera = datetime(2026, 11, 1, 1, tzinfo=ZoneInfo("America/New_York"), fold=0)
+    segunda = primera.replace(fold=1).astimezone(UTC)
+    pregunta = replace(
+        base_question(), window_start=segunda, window_end_exclusive=segunda + timedelta(hours=1)
+    )
+    objetivo = ForecastTargetInterval(pregunta.series_ids[0], primera, primera)
+    validate_qa_separated([pregunta], [objetivo])
