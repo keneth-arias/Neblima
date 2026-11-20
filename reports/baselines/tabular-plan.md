@@ -1,10 +1,11 @@
 # Plan del modelo tabular para PM2.5 en Lima
 
 Estado al 20/11/2026: módulo entregado y verificado con datos sintéticos deterministas
-(`tests/test_tabular_benchmark.py`). La **ejecución real sigue pendiente** porque los datos del
-servidor de [#22](../../tasks/issue-22-plan.md) no están accesibles desde este entorno; este documento no
-reporta ninguna cifra del modelo tabular. No hay resultados propios: todo número citado proviene
-de [las referencias de #25](lima-pm25.md) o de [las particiones de #19](../../tasks/issue-19-plan.md).
+(`tests/test_tabular_benchmark.py`). La **ejecución real se completó el 20/11/2026** sobre las
+ventanas históricas de [#19](../../tasks/issue-19-plan.md) y los objetivos externos congelados de
+[#88](../models/prueba-externa-pm25-pm10.md): los resultados, denominadores y decisiones de protocolo
+están en [tabular-datos-reales.md](tabular-datos-reales.md). Este documento no reporta cifras propias:
+todo número citado aquí proviene de [las referencias de #25](lima-pm25.md) o de las particiones de #19.
 
 ## Método
 
@@ -64,17 +65,20 @@ de [las referencias de #25](lima-pm25.md) o de [las particiones de #19](../../ta
   el conteo de pares comunes por partición, citando los MAE publicados de #25 como referencia
   (persistencia: 9,5291 en validación y 6,4459 en prueba).
 
-## Pendientes para la ejecución real
+## Pendientes
 
-- Datos del servidor inaccesible: sin ellos no hay ajuste, ni métricas, ni cifras de este modelo.
+- Datos del servidor: resuelto el 20/11/2026 con el árbol compartido en solo lectura; ver
+  [tabular-datos-reales.md](tabular-datos-reales.md).
 - Etiquetas de episodios de #20 no emitidas: precisión, exhaustividad, F1 y PR-AUC solo podrán
   informarse cuando existan; con los p95 de entrenamiento la detección es una agrupación
   exploratoria, no una etiqueta regulatoria.
 - Configuración de hiperparámetros definitiva: propongo añadir a `configs/benchmark.yaml` un
   bloque `tabular` (tasa de aprendizaje, hojas, rondas máximas y parada temprana); el archivo no
-  se editó en este PR por ser de solo lectura para esta tarea.
+  se editó en este PR por ser de solo lectura para esta tarea. La grilla acotada usada en la
+  ejecución real quedó declarada en `tools/training/eval_tabular_real.py`.
 - Al ejecutarse, seguir el flujo de #28: unir por `window_id`/`forecast_hour`, reportar conteos y
-  registrar sumas y SHA-256 de entradas y salidas en el manifiesto.
+  registrar sumas y SHA-256 de entradas y salidas en el manifiesto. Hecho en la ejecución del
+  20/11/2026; la evidencia queda en `metadata/tabular-datos-reales.json`.
 
 ## Cómo ejecutar cuando haya datos
 
