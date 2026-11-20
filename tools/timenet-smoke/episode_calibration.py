@@ -4,6 +4,7 @@ import argparse
 import json
 import os
 import re
+from hashlib import file_digest
 from pathlib import Path
 from tempfile import NamedTemporaryFile
 
@@ -171,27 +172,33 @@ def verify_candidate_bundle(
     return data_sha, spec.get("checkpoint_sha256")
 
 
-def candidate_logits(path, digest, ids, threshold_digest, input_manifest_digest):
-    with np.load(check_file(path, digest), allow_pickle=False) as archive:
-        contract = {
-            "task": "episode",
-            "unit": "logit",
-            "schema_version": 2,
-            "thresholds_sha256": threshold_digest,
-            "input_manifest_sha256": input_manifest_digest,
-        }
-        if any(archive[k].item() != v for k, v in contract.items()):
-            raise ValueError("Exportación del clasificador incompatible")
-        logits = align(archive, ids, "episode_logit")
-        checkpoint = archive["checkpoint_sha256"].item()
-        if (
-            logits.shape != (len(ids),)
-            or not np.isfinite(logits).all()
-            or not isinstance(checkpoint, str)
-            or not re.fullmatch("[0-9a-f]{64}", checkpoint)
-        ):
-            raise ValueError("Puntaje o punto de control inválidos")
-        return logits, checkpoint
+def candidate_logits(path, digest, ids, threshold_digest, input_manifest_digest, *, input_sha=None):
+    with path.open("rb") as stream:
+        if file_digest(stream, "sha256").hexdigest() != digest:
+            raise ValueError(f"La huella difiere para {path.name}")
+        stream.seek(0)
+        with np.load(stream, allow_pickle=False) as archive:
+            if input_sha is not None and archive["input_sha256"].item() != input_sha:
+                raise ValueError("La exportación no corresponde al archivo de historias")
+            contract = {
+                "task": "episode",
+                "unit": "logit",
+                "schema_version": 2,
+                "thresholds_sha256": threshold_digest,
+                "input_manifest_sha256": input_manifest_digest,
+            }
+            if any(archive[k].item() != v for k, v in contract.items()):
+                raise ValueError("Exportación del clasificador incompatible")
+            logits = align(archive, ids, "episode_logit")
+            checkpoint = archive["checkpoint_sha256"].item()
+            if (
+                logits.shape != (len(ids),)
+                or not np.isfinite(logits).all()
+                or not isinstance(checkpoint, str)
+                or not re.fullmatch("[0-9a-f]{64}", checkpoint)
+            ):
+                raise ValueError("Puntaje o punto de control inválidos")
+            return logits, checkpoint
 
 
 def run(args):
@@ -248,11 +255,8 @@ def run(args):
             "episode",
             ids,
         )
-        with np.load(Path(path), allow_pickle=False) as raw:
-            if raw["input_sha256"].item() != input_sha:
-                raise ValueError("La exportación no corresponde al archivo de historias")
         scores, episode_checkpoint = candidate_logits(
-            Path(path), digest, ids, threshold_hash, input_digest
+            Path(path), digest, ids, threshold_hash, input_digest, input_sha=input_sha
         )
         if episode_checkpoint != expected_checkpoint:
             raise ValueError("Los logits corresponden a otro punto de control")
