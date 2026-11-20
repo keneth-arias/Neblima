@@ -78,6 +78,8 @@ def compare(
     with np.load(check_file(reference, reference_sha), allow_pickle=False) as z:
         if z["manifest_sha256"].item() != manifest_sha or z["block"].item() != "selection":
             raise ValueError("La referencia procede de otra selección")
+        reference_checkpoint = z["checkpoint_sha256"].item()
+        calibrator_sha = z["calibrator_sha256"].item()
         rp, rl, ru = (align(z, ids, k) for k in ("predicted", "lower", "upper"))
     predicted = q[:, :, 1]
     lower, upper = np.maximum(q[:, :, 0], 0.0), np.maximum(q[:, :, 2], 0.0)
@@ -101,12 +103,15 @@ def compare(
         "width": (upper - lower) - (ru - rl),
     }
     return {
-        "version": "lima-quantile-comparison-v1",
+        "version": "lima-quantile-comparison-v2",
         "block": "selection",
         "purpose": "historical_replay",
         "checkpoint_sha256": checkpoint,
         "candidate_sha256": candidate_sha,
         "reference_sha256": reference_sha,
+        "reference_checkpoint_sha256": reference_checkpoint,
+        "reference_calibrator_sha256": calibrator_sha,
+        "reference_overall": scores(y, rp, rl, ru, limits, np.zeros(len(y))),
         "input_manifest_sha256": input_manifest_sha,
         "manifest_sha256": manifest_sha,
         "crossed": 0,

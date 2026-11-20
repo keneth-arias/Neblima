@@ -5,7 +5,8 @@ import json
 import math
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
-from statistics import median
+from pathlib import Path
+from statistics import median, quantiles
 from typing import TypedDict
 
 
@@ -22,6 +23,9 @@ class Origin:
 class WarningReport(TypedDict):
     counts: dict[str, int]
     cohort_sha256: str
+    min_lead: float
+    cooldown: float
+    cut: float
     expired_origins: int
     excluded_onsets: list[int]
     unanchored_high: list[int]
@@ -128,6 +132,9 @@ def evaluate(
         "cohort_sha256": hashlib.sha256(
             json.dumps([threshold, cooldown, min_lead, cohort], allow_nan=False).encode()
         ).hexdigest(),
+        "min_lead": min_lead,
+        "cooldown": cooldown,
+        "cut": cut,
         "expired_origins": expired,
         "excluded_onsets": sorted(onsets - eligible),
         "unanchored_high": sorted(
@@ -144,7 +151,43 @@ def evaluate(
     }
 
 
+@dataclass(frozen=True)
+class WarningRule:
+    sha256: str
+    min_lead: float
+    cooldown: float
+    budget: float
+    max_brier_excess: float
+
+    @classmethod
+    def read(cls, path: Path, expected_sha256: str) -> "WarningRule":
+        raw = path.read_bytes()
+        if hashlib.sha256(raw).hexdigest() != expected_sha256:
+            raise ValueError("La huella de la regla de selección difiere")
+        spec = json.loads(raw)
+        if (
+            spec["version"] != "lima-regla-inicios-v1"
+            or spec["reference"] != "calibrated_forecast_max_minus_threshold"
+            or spec["ties"] != "retain_reference"
+        ):
+            raise ValueError("Versión, referencia o desempate de regla incompatible")
+        rule = cls(
+            expected_sha256,
+            spec["minimum_lead_hours"],
+            spec["cooldown_hours"],
+            spec["max_false_per_168_evaluable_origins"],
+            spec["maximum_brier_excess_over_training_frequency"],
+        )
+        for value in (rule.min_lead, rule.cooldown, rule.budget, rule.max_brier_excess):
+            if type(value) not in (int, float) or not math.isfinite(value) or value < 0:
+                raise ValueError("Criterio de selección inválido")
+        if rule.min_lead > 6 or rule.max_brier_excess > 1:
+            raise ValueError("Anticipación o tolerancia de Brier fuera del rango")
+        return rule
+
+
 class Policy(TypedDict):
+    rule_sha256: str
     method: str
     cut: float
     detected: int
@@ -155,27 +198,37 @@ def select_policy(
     candidates: Sequence[tuple[str, float, Mapping[str, WarningReport]]],
     *,
     calibration: Mapping[str, tuple[float, float]],
-    budget: float = 1,
+    rule: WarningRule,
 ) -> Policy | None:
     """Aplicar el presupuesto por estación y conservar la referencia ante empate."""
-    if not math.isfinite(budget) or budget < 0:
-        raise ValueError("Presupuesto de avisos inválido")
     refs = [stations for method, _, stations in candidates if method == "reference"]
     if not refs or not refs[0]:
         return None
     common = {key: s["cohort_sha256"] for key, s in refs[0].items()}
     options: list[Policy] = []
     for method, cut, stations in candidates:
+        if method not in ("reference", "episode"):
+            raise ValueError("Método de aviso desconocido")
+        if not 0 <= cut <= 1 or any(s["cut"] != cut for s in stations.values()):
+            raise ValueError("El corte declarado difiere del aplicado")
+        if any(
+            s["min_lead"] != rule.min_lead or s["cooldown"] != rule.cooldown
+            for s in stations.values()
+        ):
+            raise ValueError("Anticipación o pausa incompatibles con la regla congelada")
         if {key: s["cohort_sha256"] for key, s in stations.items()} != common:
             raise ValueError("Los métodos deben compartir estaciones y oportunidades")
         if method not in calibration:
             continue
         brier, frequency_brier = calibration[method]
-        if not 0 <= brier <= frequency_brier <= 1:
+        if not (
+            0 <= brier <= 1
+            and 0 <= frequency_brier <= 1
+            and brier - frequency_brier <= rule.max_brier_excess
+        ):
             continue
         if not stations or any(
-            not s["evaluable_origins"]
-            or 168 * s["counts"]["false"] > budget * s["evaluable_origins"]
+            168 * s["counts"]["false"] > rule.budget * s["evaluable_origins"]
             for s in stations.values()
         ):
             continue
@@ -184,6 +237,7 @@ def select_policy(
             {
                 "method": method,
                 "cut": cut,
+                "rule_sha256": rule.sha256,
                 "detected": sum(len(s["matched_onsets"]) for s in stations.values()),
                 "median_lead": float(median(leads)) if leads else None,
             }
@@ -231,11 +285,8 @@ def paired_interval(
         for _ in range(draws):
             sample = rng.choices(values, k=len(values))
             samples.append(sum(v for v, _ in sample) / sum(n for _, n in sample))
-        samples.sort()
-        result.update(
-            lower=samples[math.floor(0.025 * (draws - 1))],
-            upper=samples[math.ceil(0.975 * (draws - 1))],
-        )
+        percentiles = quantiles(samples, n=40, method="inclusive")
+        result.update(lower=percentiles[0], upper=percentiles[-1])
     return result
 
 
@@ -274,9 +325,10 @@ def replay_fixture(inputs, evaluation) -> dict[str, WarningReport]:
     if (
         outcomes["version"] != "lima-episode-fixture-v1"
         or histories["version"] != outcomes["version"]
+        or histories["unit"] != "ug/m3"
     ):
         raise ValueError("Se requiere el ejemplo sintético versionado de AirAware")
-    by_id = {row["window_id"]: row["targets"] for row in outcomes["rows"]}
+    by_id = {row["window_id"]: row for row in outcomes["rows"]}
     if len(by_id) != len(outcomes["rows"]) or set(by_id) != set(histories["window_id"]):
         raise ValueError("Objetivos e historias difieren")
     rows: dict[str, list[Origin]] = {}
@@ -294,7 +346,22 @@ def replay_fixture(inputs, evaluation) -> dict[str, WarningReport]:
         if limits.setdefault(station, limit) != limit:
             raise ValueError("Umbral inestable por estación")
         values = observations.setdefault(station, {})
-        for offset, value in enumerate([history[-1], *by_id[wid]]):
+        answer = by_id[wid]
+        future = answer["targets"]
+        if len(history) != 24 or len(future) != 6:
+            raise ValueError("Dimensiones del ejemplo incompatibles")
+        event = onset = None
+        if None not in future:
+            event = max(future) >= limit
+            transitions = zip([history[-1], *future[:-1]], future, strict=True)
+            onset = next((n for n, (a, b) in enumerate(transitions, 1) if a < limit <= b), None)
+        if (answer["event"], answer["first_onset_hour"], answer["ongoing_at_origin"]) != (
+            event,
+            onset,
+            history[-1] >= limit,
+        ):
+            raise ValueError("La solución publicada difiere de las lecturas sintéticas")
+        for offset, value in enumerate([history[-1], *future]):
             if values.setdefault(hour + offset, value) != value:
                 raise ValueError("Observaciones inconsistentes en una hora compartida")
     return {s: evaluate(frames, observations[s], limits[s], 1.0) for s, frames in rows.items()}

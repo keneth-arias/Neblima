@@ -1,0 +1,9 @@
+{
+  "version": "lima-regla-inicios-v1",
+  "minimum_lead_hours": 1,
+  "cooldown_hours": 6,
+  "max_false_per_168_evaluable_origins": 1,
+  "maximum_brier_excess_over_training_frequency": 0,
+  "reference": "calibrated_forecast_max_minus_threshold",
+  "ties": "retain_reference"
+}

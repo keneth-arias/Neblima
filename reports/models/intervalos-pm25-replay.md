@@ -15,3 +15,16 @@ uv run --project tools/timenet-smoke --locked python tools/timenet-smoke/replay_
 El comando genera bloques, calibrador, predicciones, informe de cobertura por estación, horizonte y nivel observado, y archivos de intersección exacta de IDs y horas por estación con cada uso previo. Las 50 789 ventanas del bloque final coinciden con la prueba ya evaluada (53 863 horas-estación entre historias y objetivos). El evaluador de esta repetición admite únicamente selección. Cada fila del índice conserva la hora original, la estación y la posición del archivo original en la lista de fuentes del manifiesto. El exportador de #25 verificó las unidades y la procedencia en el TimeF de origen. Las matrices antiguas solo conservan el identificador de estación. Hace falta recuperar la identidad de sensor antes de emitir etiquetas reales.
 
 El ajuste opcional de probabilidad acepta `--eligible-labels`, un NPZ de evaluación con `window_id`, `event` (0, 1, o −1 para no evaluable), `manifest_sha256` y `thresholds_sha256`. Usar etiquetas con elegibilidad establecida por el responsable de los datos. La prueba sintética contrasta cada positivo con los seis objetivos y fija el calibrador logístico de pendiente no negativa. La salida señala las estaciones sin umbral conocido. Esta repetición real produjo únicamente intervalos de concentración.
+
+## Comparación entre cabezales con dos semillas
+
+Para cada semilla (27 y 28), calibrar los residuos del control directo en calibración y aplicar ese calibrador en selección. Entregar su archivo de intervalos como referencia a `episode_quantiles.py`. El informe contiene las medidas de ambos cabezales y sus diferencias pareadas. Para calcular la decisión histórica correr desde la raíz con las rutas a los dos informes, los manifiestos de los puntos de control finales de cada cabezal y los paquetes de entrenamiento directo.
+
+```sh
+regla=configs/training/lima-comparacion-cuantiles-v1.yaml
+uv run --locked python -m airaware.episode_forecast_selection "$regla" "$huella_regla_preinscrita" seleccion.json \
+  --pair "$informe27" "$cuantiles27/manifest.json" "$directo27/manifest.json" "$paquete27/manifest.json" \
+  --pair "$informe28" "$cuantiles28/manifest.json" "$directo28/manifest.json" "$paquete28/manifest.json"
+```
+
+La salida conserva las huellas de los insumos y la decisión sobre la media de las semillas. Verifica que cada comparación usó su control directo pareado, que ambos ajustes terminaron la misma época y que las dos semillas cubren la misma cohorte. La decisión indica qué cabezal pasaría a una prueba posterior con horas nuevas. [Criterios congelados](../../configs/training/lima-comparacion-cuantiles-v1.yaml)
