@@ -12,6 +12,19 @@ from verify_campo_replay import compare, compare_calibration, partitions, verify
 
 
 class CampoReplayTest(unittest.TestCase):
+    def test_umbral_exige_la_estacion_y_el_percentil_del_sello(self):
+        from verify_campo_replay import METADATA, RESULTS, frozen_threshold, read
+
+        seal = read(METADATA / "seleccion-concentracion-lima-v1/sello.json")
+        protocol = read(RESULTS / "recalibracion/protocolo.json")
+        self.assertEqual(frozen_threshold(seal, protocol), 34.95)
+        with self.assertRaisesRegex(ValueError, "umbral"):
+            frozen_threshold(seal, dict(protocol, threshold_ug_m3=35.3875))
+        with self.assertRaisesRegex(ValueError, "estación"):
+            frozen_threshold(seal, dict(protocol, station="otra"))
+        with self.assertRaisesRegex(ValueError, "huella"):
+            frozen_threshold(dict(seal, thresholds_sha256="0" * 64), protocol)
+
     def test_separacion_usa_toda_la_historia_y_seis_objetivos(self):
         train, evaluation = partitions(np.array([93, 94, 122, 123]), 100)
         self.assertEqual(train.tolist(), [True, False, False, False])

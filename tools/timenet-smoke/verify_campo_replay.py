@@ -233,6 +233,24 @@ def verify_live_predictions(work, issued, residuals):
             raise ValueError("Los valores o las horas de la emisión difieren de la salida privada")
 
 
+def frozen_threshold(seal, diagnostic):
+    config = METADATA.parent / "configs/training/lima-prueba-futura-campo-marte-v1.json"
+    station = read(check_file(config, seal["protocol_sha256"]))
+    table = read(check_file(RESULTS / "umbrales-entrenamiento.json", seal["thresholds_sha256"]))
+    if station["thresholds_sha256"] != seal["thresholds_sha256"]:
+        raise ValueError("La huella de umbrales difiere de la registrada en el sello")
+    if station["station_code"] != diagnostic["station"] or diagnostic["station"] != "112194":
+        raise ValueError("La estación del diagnóstico difiere de la registrada")
+    threshold = table["stations"][station["historical_station_key"]]
+    if (
+        table["unit"] != diagnostic["unit"]
+        or table["method"] != "linear_p95_unique_training_station_hours"
+        or threshold != diagnostic["threshold_ug_m3"]
+    ):
+        raise ValueError("El umbral del diagnóstico difiere de la tabla de entrenamiento")
+    return threshold
+
+
 def verify(data):
     root = data / "processed/evaluacion-inmediata-campo-marte-20261120"
     seal = read(METADATA / "seleccion-concentracion-lima-v1/sello.json")
@@ -242,7 +260,7 @@ def verify(data):
             seal["direct_calibrator_sha256"],
         )
     )
-    threshold = read(RESULTS / "recalibracion/protocolo.json")["threshold_ug_m3"]
+    threshold = frozen_threshold(seal, read(RESULTS / "recalibracion/protocolo.json"))
     previous = previous_origins(data)
     overlap = read(RESULTS / "interseccion-88.json")
     compare(overlap["cohort_88_station_origins"], len(previous))

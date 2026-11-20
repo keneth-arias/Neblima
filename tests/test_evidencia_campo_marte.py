@@ -21,6 +21,16 @@ def test_vinculos_entre_puntajes_calibracion_y_emision_privada():
     model = read(selected / "sello.json")
     folder = EVIDENCE / "recalibracion"
     protocol = read(folder / "protocolo.json")
+    thresholds = EVIDENCE / "umbrales-entrenamiento.json"
+    mapping_path = ROOT.parent / "configs/training/lima-prueba-futura-campo-marte-v1.json"
+    assert digest(mapping_path) == model["protocol_sha256"]
+    mapping = read(mapping_path)
+    assert digest(thresholds) == model["thresholds_sha256"] == mapping["thresholds_sha256"]
+    assert mapping["station_code"] == protocol["station"] == "112194"
+    table = read(thresholds)
+    assert table["method"] == "linear_p95_unique_training_station_hours"
+    assert table["unit"] == protocol["unit"] == "ug/m3"
+    assert table["stations"][mapping["historical_station_key"]] == protocol["threshold_ug_m3"]
     candidate = read(folder / "candidato.json")
     comparison = read(folder / "comparacion.json")
     tracking = read(folder / "seguimiento.json")
