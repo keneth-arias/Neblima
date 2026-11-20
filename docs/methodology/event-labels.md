@@ -1,6 +1,6 @@
 # Etiquetas de referencia para episodios PM2.5
 
-Revisión: 16/11/2026 UTC. Responsable: Keneth. Regla `pe-pm25-reference-2017-v1`.
+Revisión: 20/11/2026 UTC. Responsable: Keneth. Regla `pe-pm25-reference-2017-v1`.
 Implementación: `airaware.event_labels`; configuración: `configs/thresholds.yaml`.
 
 ## Fuentes oficiales y alcance
@@ -138,6 +138,55 @@ etiquetas: la posición del intervalo y la calidad individual siguen sin evidenc
 El registro compacto está en `metadata/issue-20-label-integration.json`; los datos masivos quedan
 fuera de Git. El benchmark principal 24/6 no es un conjunto de episodios etiquetables.
 
+## Verificación antifuga y reconciliación de descartes
+
+`verify_no_label_leakage` comprueba, sobre los archivos del paquete y antes de publicar, que
+ningún campo derivado de etiquetas (`label`, `mean_ug_m3`, `valid_hours`, `required_hours`,
+`policy_id`, `kind`, `reason`, `observation_ids`, `valid_observation_ids`,
+`source_observation_ids`) aparece en el esquema de las entradas (`windows.parquet`); que la
+historia abarca las `history_hours` declaradas hasta `origin_at` y el objetivo abarca desde
+la hora siguiente hasta `origin_at + horizon_hours`; que ningún identificador de
+observación del bloque futuro repite uno de la historia; y, si se pasa un archivo de etiquetas,
+que hay una etiqueta por ventana, que cada identificador de `observation_ids` corresponde
+a su hora exacta en el objetivo de esa ventana y que
+la media de cada etiqueta `evaluated` con todas las horas válidas se reconstruye con el promedio
+del bloque futuro. Cualquier violación detiene la evaluación sin publicar nada. El manifiesto
+registra el resumen en `leakage`.
+
+La emisión de etiquetas reconcilia los descartes por serie con el constructor de #18:
+`complete == labels_evaluated + labels_discarded` y
+`candidates == complete + history_missing + future_missing` para cada serie; una discrepancia
+detiene el proceso antes de escribir. El manifiesto publicado incluye `labels_reconciliation`
+con los conteos del constructor y de la emisión, incluso para series con cero ventanas completas.
+Los candidatos descartados por el
+constructor (sin historia o sin objetivo completo) no pueden originar etiquetas.
+
+## Matriz de verificación (#20)
+
+Estado al 20/11/2026. «Probado» significa prueba automatizada offline sobre paquetes sintéticos
+(`uv run --locked pytest tests/test_senamhi_event_labels.py`); no equivale a validación de datos
+reales ni a afirmaciones de cumplimiento legal o ausencia de riesgo.
+
+| Comprobación | Estado | Evidencia |
+| --- | --- | --- |
+| Umbrales y regla de etiqueta (49,999/50/50,001; 17/18/23/24 horas; negativos y no finitos) | Probado estructuralmente | `tests/test_event_labels.py`; `test_threshold_remains_strict_through_the_adapter` |
+| Ventana móvil ≠ excedencia regulatoria diaria; `not_evaluable` ≠ negativo | Probado estructuralmente | `tests/test_event_labels.py`; `test_zero_is_measured_and_negative_value_is_not_a_negative_label` |
+| `quality=unknown` jamás válido; calidad nula bloquea; posición del intervalo no coercible | Probado estructuralmente | `test_unknown_quality_and_interval_position_cannot_be_coerced`; `test_evidence_cannot_admit_unknown_quality`; `test_missing_quality_never_becomes_valid_quality`; ADR-005 |
+| Reconstrucción exacta del objetivo 24/24, límites, estación, hashes y vínculos | Probado estructuralmente | `test_horizon24_bundle_reconstructs_targets_and_labels`; `test_structural_inconsistencies_are_rejected` |
+| `origin_at` excluido del objetivo; objetivos solo de horas > `origin_at` | Probado estructuralmente | `test_origin_at_is_excluded_and_bounds_included`; `verify_no_label_leakage` en `test_history_after_origin_is_rejected_as_leakage` |
+| Ningún campo derivado de etiquetas en las entradas del modelo | Probado estructuralmente | `test_label_fields_never_enter_the_model_inputs` (inyección de columna `label` detiene la evaluación sin publicar) |
+| Identificadores del objetivo distintos de los de la historia | Probado estructuralmente | `test_label_observations_cannot_reference_history_hours` |
+| Media publicada reconstruible solo con el bloque futuro; la historia no altera la etiqueta | Probado estructuralmente | `test_published_mean_and_ids_come_from_the_future_block_only`; `test_history_values_cannot_change_a_target_only_label` |
+| Reconciliación de conteos del constructor vs manifiesto (candidatos y descartes por serie) | Probado estructuralmente | `inspect_structure` en `test_structural_inconsistencies_are_rejected[missing_hour]` y conciliación por serie del manifiesto |
+| Suma exacta por serie: `complete == elegidas + descartadas(reason)`; discrepancia detiene el proceso (fail closed) | Probado estructuralmente | `test_discard_counts_reconcile_per_series`; `test_missing_window_group_stops_label_publication` |
+| Sin evidencia no se emiten etiquetas; fallas no publican paquetes parciales; repetición determinista | Probado estructuralmente | `test_structurally_complete_window_stays_scientifically_inadmissible`; `test_failed_write_publishes_no_partial_bundle`; `test_failure_during_label_write_publishes_nothing`; `test_repeated_execution_is_logically_and_binarily_identical` |
+| Conciliación antifuga y por serie sobre el paquete real de #13/#18 con esta versión del código | Exige paquete real (fuera de Git; servidor inaccesible hoy) | Corrida del 18/11/2026 registrada en `metadata/issue-20-label-integration.json` con el código previo; falta re-ejecutar con `leakage` y `labels_reconciliation` |
+| Decisión de emitir etiquetas reales sobre datos SENAMHI | Exige evidencia institucional (#43) | Posición del intervalo (`hour_ending`), calidad individual y unidades acreditadas por la fuente; sin ello solo se publica `compatibility.json` |
+
+La verificación estructural no sustituye la evidencia de #43 ni la ejecución sobre el paquete
+real: acredita coherencia interna del método de etiquetado, no la semántica de las mediciones
+originales ni conclusiones sobre el aire de Lima.
+
 ## Límites científicos y regulatorios
 
 Una ventana móvil no se convierte en día calendario por durar 24 h. Una comparación diaria no basta
@@ -156,9 +205,15 @@ Comando enfocado: `uv run --locked pytest tests/test_event_labels.py`.
 El adaptador agrega pruebas de reconstrucción exacta 24/24, exclusión de `origin_at`, cruce de
 medianoche UTC, aislamiento de serie/estación, horizontes distintos de 24, hashes y vínculos,
 calidad nula/desconocida, conteos por motivo, paquete vacío, escritura atómica y repetición
-determinista: `uv run --locked pytest tests/test_senamhi_event_labels.py`.
+determinista, más la verificación antifuga reutilizable (entradas sin campos derivados de
+etiquetas, historia antes de `origin_at`, objetivos después, identificadores de historia y futuro
+disjuntos, media publicada reconstruible con el futuro) y la reconciliación exacta por serie
+entre los descartes del constructor y las etiquetas emitidas:
+`uv run --locked pytest tests/test_senamhi_event_labels.py`.
 
 La integración estructural con #18 está verificada con datos reales y sin modificar el paquete de
-ventanas. #20 sigue abierta por decisión explícita de Keneth: falta acreditar la posición del
-intervalo y la calidad individual para emitir etiquetas reales. Hasta entonces no se generan
+ventanas. #20 sigue abierta por decisión explícita de Keneth: los criterios de conteos comunes y
+antifuga quedan probados de forma estructural (matriz anterior), pero falta acreditar la posición
+del intervalo y la calidad individual para emitir etiquetas reales, y re-ejecutar la conciliación
+sobre el paquete real con esta versión. Hasta entonces no se generan
 etiquetas, no se eligen particiones por desempeño y #26 no debe usar etiquetas no sustentadas.
