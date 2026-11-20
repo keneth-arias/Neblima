@@ -1,0 +1,418 @@
+{
+  "version": "lima-pm25-pm10-externa-20261120",
+  "timenet_commit": "9bd1613019ee61fbc52e02106a1a45990ead7a54",
+  "channels": [
+    "pm25",
+    "pm10"
+  ],
+  "history_hours": 24,
+  "forecast_hours": 6,
+  "split_policy": {
+    "train_fraction": 0.85,
+    "validation_fraction": 0.15,
+    "external_start": "2024-06-01",
+    "cut_utc": "2023-04-02T07:00:00+00:00",
+    "historical_candidates": 296518,
+    "train": 251915,
+    "validation": 44458,
+    "purged": 145
+  },
+  "retrieval": {
+    "first_refresh_utc": "2026-11-20T01:24:05.399244+00:00",
+    "last_refresh_utc": "2026-11-20T01:24:09.729956+00:00",
+    "historical_csv_sha256": "896ae8a106fb128460e81b3f58096f6b9c4d582ef28fffa46e5394c5875c40d4",
+    "baseline_receipts_sha256": "a0121b7077025b561d8b80c671e6c382e5da953c3840d39c15a9b442005eaa83",
+    "refresh_receipts_sha256": "cf29254a857f5afa081f9030210476c2ecca77c910dcae1378c37a8ed6f42287",
+    "baseline_objects": 12147,
+    "senamhi_charts": 24,
+    "openaq_annual_inventories": 27,
+    "new_or_changed_openaq_days": 0,
+    "latest_finite_openaq_pm_utc": "2026-10-29T00:00:00+00:00"
+  },
+  "matched_previous_cohort_before_new_purge": {
+    "train": 198320,
+    "validation": 50046,
+    "test": 47839
+  },
+  "datasets": [
+    {
+      "source": "historico",
+      "dataset_id": "airaware/lima-pm25-pm10-forecast",
+      "dataset_version": "0.1.0",
+      "begin": "2015-01-01T00:00:00",
+      "end_exclusive": "2024-06-01T00:00:00",
+      "cut_utc": "2023-04-02T07:00:00+00:00",
+      "stations": [
+        {
+          "site": "VILLA_MARIA_DEL_TRIUNFO",
+          "code": "1e58bb71f42f67bfedae1bad1e35b0aea5f84078da4f3a6f06c695aac1fb99e4",
+          "sensors": [
+            null,
+            null
+          ],
+          "train": 32898,
+          "validation": 6855,
+          "test": 0,
+          "purged": 29,
+          "first_history": "2015-01-01T05:00:00+00:00",
+          "last_target": "2024-05-29T23:00:00+00:00"
+        },
+        {
+          "site": "SAN_JUAN_DE_LURIGANCHO",
+          "code": "22c516fbe293a54c1cb5ddc7727d32430200221562cd01af8a40cc4b5de227d4",
+          "sensors": [
+            null,
+            null
+          ],
+          "train": 34985,
+          "validation": 4940,
+          "test": 0,
+          "purged": 0,
+          "first_history": "2015-01-01T05:00:00+00:00",
+          "last_target": "2024-05-29T23:00:00+00:00"
+        },
+        {
+          "site": "SANTA_ANITA",
+          "code": "2a0d574b25a5dc8c7f6edda9836225860faaa160763d8bea15d95646794f0bd8",
+          "sensors": [
+            null,
+            null
+          ],
+          "train": 35509,
+          "validation": 8545,
+          "test": 0,
+          "purged": 29,
+          "first_history": "2015-01-01T05:00:00+00:00",
+          "last_target": "2024-05-29T23:00:00+00:00"
+        },
+        {
+          "site": "SAN_MARTIN_DE_PORRES",
+          "code": "35170dbfe2a7135c1cecbae1e367374a284578533740ff5461d40fc764851e07",
+          "sensors": [
+            null,
+            null
+          ],
+          "train": 33461,
+          "validation": 5458,
+          "test": 0,
+          "purged": 29,
+          "first_history": "2015-01-01T05:00:00+00:00",
+          "last_target": "2024-05-29T23:00:00+00:00"
+        },
+        {
+          "site": "CARABAYLLO",
+          "code": "8436576ff150fd696edbc1cd625bc97696321bc9c57b24b906d0d4a12b71bfff",
+          "sensors": [
+            null,
+            null
+          ],
+          "train": 31711,
+          "validation": 7405,
+          "test": 0,
+          "purged": 29,
+          "first_history": "2015-01-01T05:00:00+00:00",
+          "last_target": "2024-02-29T23:00:00+00:00"
+        },
+        {
+          "site": "SAN_BORJA",
+          "code": "8e88d45c03f25f49b84c98cc4916bd60b67383961e186497f4d77570c2f75d34",
+          "sensors": [
+            null,
+            null
+          ],
+          "train": 35628,
+          "validation": 7703,
+          "test": 0,
+          "purged": 29,
+          "first_history": "2015-07-10T01:00:00+00:00",
+          "last_target": "2024-05-30T02:00:00+00:00"
+        },
+        {
+          "site": "CAMPO_DE_MARTE",
+          "code": "90b36a172f1790cf2e37ac2063f80fd27439d4ecf871d72a20bf8e9786587a67",
+          "sensors": [
+            null,
+            null
+          ],
+          "train": 47723,
+          "validation": 3552,
+          "test": 0,
+          "purged": 0,
+          "first_history": "2015-01-14T05:00:00+00:00",
+          "last_target": "2024-05-29T23:00:00+00:00"
+        }
+      ],
+      "inputs": {
+        "historico.parquet": "6e5274eb93572d7188c3c5118efca8107db0af8eaac3b0e14470fb5688e13c4d"
+      },
+      "manifest_sha256": "d0aeb64d8414ca30547037eca439b1acdb00212b67040c5d7930699edb4c76a5",
+      "verified": {
+        "tasks": 296373,
+        "history_values": 14225904,
+        "target_values": 3556476,
+        "split_ids_sha256": {
+          "train": "26e8123b3f244ebf6497c854c36a7c896c2766f669a3c30b70e8d73aadf9eb45",
+          "validation": "a171429ddce5b72212f212dad130d87ca5407a85b2332d9d15f11033c57ed01e"
+        }
+      },
+      "repeat_manifest_sha256": "80b64edbf1ae6884d14e11fad284c58cb60ada9ac1bfba8d6f8316a08882df89"
+    },
+    {
+      "source": "openaq",
+      "dataset_id": "airaware/lima-pm25-pm10-openaq",
+      "dataset_version": "0.1.0",
+      "begin": "2024-06-01T00:00:00",
+      "end_exclusive": "2026-11-20T01:24:00",
+      "cut_utc": null,
+      "stations": [
+        {
+          "site": "CARABAYLLO",
+          "code": "2277",
+          "sensors": [
+            "4171",
+            "4163"
+          ],
+          "train": 0,
+          "validation": 0,
+          "test": 0,
+          "purged": 0,
+          "first_history": null,
+          "last_target": null
+        },
+        {
+          "site": "VILLA_MARIA_DEL_TRIUNFO",
+          "code": "2302",
+          "sensors": [
+            "4165",
+            "4611"
+          ],
+          "train": 0,
+          "validation": 0,
+          "test": 12623,
+          "purged": 0,
+          "first_history": "2024-06-01T00:00:00+00:00",
+          "last_target": "2026-07-08T07:00:00+00:00"
+        },
+        {
+          "site": "SAN_MARTIN_DE_PORRES",
+          "code": "2351",
+          "sensors": [
+            "4319",
+            "4322"
+          ],
+          "train": 0,
+          "validation": 0,
+          "test": 14983,
+          "purged": 0,
+          "first_history": "2024-06-01T00:00:00+00:00",
+          "last_target": "2026-09-15T11:00:00+00:00"
+        },
+        {
+          "site": "SANTA_ANITA",
+          "code": "2397",
+          "sensors": [
+            "4480",
+            "4483"
+          ],
+          "train": 0,
+          "validation": 0,
+          "test": 14864,
+          "purged": 0,
+          "first_history": "2024-06-01T00:00:00+00:00",
+          "last_target": "2026-09-15T11:00:00+00:00"
+        },
+        {
+          "site": "SAN_BORJA",
+          "code": "2402",
+          "sensors": [
+            "4492",
+            "4587"
+          ],
+          "train": 0,
+          "validation": 0,
+          "test": 15267,
+          "purged": 0,
+          "first_history": "2024-06-01T00:00:00+00:00",
+          "last_target": "2026-07-08T07:00:00+00:00"
+        },
+        {
+          "site": "CAMPO_DE_MARTE",
+          "code": "2415",
+          "sensors": [
+            "4672",
+            "4645"
+          ],
+          "train": 0,
+          "validation": 0,
+          "test": 15191,
+          "purged": 0,
+          "first_history": "2024-06-01T00:00:00+00:00",
+          "last_target": "2026-09-15T11:00:00+00:00"
+        },
+        {
+          "site": "SAN_JUAN_DE_LURIGANCHO",
+          "code": "6501061",
+          "sensors": [
+            "17336555",
+            "17336560"
+          ],
+          "train": 0,
+          "validation": 0,
+          "test": 3,
+          "purged": 0,
+          "first_history": "2026-09-14T04:00:00+00:00",
+          "last_target": "2026-09-15T11:00:00+00:00"
+        },
+        {
+          "site": "SAN_JUAN_DE_LURIGANCHO",
+          "code": "7464",
+          "sensors": [
+            "23128",
+            "21669"
+          ],
+          "train": 0,
+          "validation": 0,
+          "test": 12607,
+          "purged": 0,
+          "first_history": "2024-06-25T22:00:00+00:00",
+          "last_target": "2026-07-08T07:00:00+00:00"
+        }
+      ],
+      "inputs": {
+        "observaciones.parquet": "0623be0b25cd0bd108065ae35257ef0c3d38cb6e8cfa072c29cd6b9b74071f1d"
+      },
+      "manifest_sha256": "182515abee87227bddb9e510c7f84309891b7afa0f8514fdb637708f6ecfa98c",
+      "verified": {
+        "tasks": 85538,
+        "history_values": 4105824,
+        "target_values": 1026456,
+        "split_ids_sha256": {
+          "test": "0b33a613bd42405a1bc83d917c6ffa6b63fb80d0df05784b95bc8f8aad473007"
+        }
+      },
+      "repeat_manifest_sha256": "704818aef2eb50b93447640ed1ff3a5c2c2237391f21f0f859b8377a2196195a"
+    },
+    {
+      "source": "senamhi_horario",
+      "dataset_id": "airaware/lima-pm25-pm10-senamhi-horario",
+      "dataset_version": "0.1.0",
+      "begin": "2024-06-01T00:00:00",
+      "end_exclusive": "2026-11-21T00:00:00",
+      "cut_utc": null,
+      "stations": [
+        {
+          "site": "SAN_BORJA",
+          "code": "00112270",
+          "sensors": [
+            null,
+            null
+          ],
+          "train": 0,
+          "validation": 0,
+          "test": 17183,
+          "purged": 0,
+          "first_history": "2024-06-01T00:00:00",
+          "last_target": "2026-11-19T20:00:00"
+        },
+        {
+          "site": "SANTA_ANITA",
+          "code": "00112271",
+          "sensors": [
+            null,
+            null
+          ],
+          "train": 0,
+          "validation": 0,
+          "test": 17279,
+          "purged": 0,
+          "first_history": "2024-06-01T00:00:00",
+          "last_target": "2026-11-19T11:00:00"
+        },
+        {
+          "site": "SAN_MARTIN_DE_PORRES",
+          "code": "00112272",
+          "sensors": [
+            null,
+            null
+          ],
+          "train": 0,
+          "validation": 0,
+          "test": 17777,
+          "purged": 0,
+          "first_history": "2024-06-01T00:00:00",
+          "last_target": "2026-11-18T15:00:00"
+        },
+        {
+          "site": "CAMPO_DE_MARTE",
+          "code": "112194",
+          "sensors": [
+            null,
+            null
+          ],
+          "train": 0,
+          "validation": 0,
+          "test": 18116,
+          "purged": 0,
+          "first_history": "2024-06-01T00:00:00",
+          "last_target": "2026-11-19T20:00:00"
+        },
+        {
+          "site": "VILLA_MARIA_DEL_TRIUNFO",
+          "code": "112233",
+          "sensors": [
+            null,
+            null
+          ],
+          "train": 0,
+          "validation": 0,
+          "test": 15191,
+          "purged": 0,
+          "first_history": "2024-06-01T00:00:00",
+          "last_target": "2026-11-19T20:00:00"
+        },
+        {
+          "site": "SAN_JUAN_DE_LURIGANCHO",
+          "code": "113258",
+          "sensors": [
+            null,
+            null
+          ],
+          "train": 0,
+          "validation": 0,
+          "test": 15180,
+          "purged": 0,
+          "first_history": "2024-06-25T17:00:00",
+          "last_target": "2026-11-19T20:00:00"
+        },
+        {
+          "site": "CARABAYLLO",
+          "code": "113260",
+          "sensors": [
+            null,
+            null
+          ],
+          "train": 0,
+          "validation": 0,
+          "test": 2042,
+          "purged": 0,
+          "first_history": "2026-07-30T14:00:00",
+          "last_target": "2026-11-18T14:00:00"
+        }
+      ],
+      "inputs": {
+        "observaciones.parquet": "0623be0b25cd0bd108065ae35257ef0c3d38cb6e8cfa072c29cd6b9b74071f1d",
+        "actualizacion.parquet": "a167ab2365d77016c98fdf21c556db574cf8c71501c2bac417cdd383299e1346"
+      },
+      "manifest_sha256": "5b34f95f540c7ef3c2787040b09f54531535875918c1facc5f68723c4625bc42",
+      "verified": {
+        "tasks": 102768,
+        "history_values": 4932864,
+        "target_values": 1233216,
+        "split_ids_sha256": {
+          "test": "23bb76c7a70e57d5675b6d5a30940c66c792ca7482a03f9edafcc9a255537d3a"
+        }
+      },
+      "repeat_manifest_sha256": "9edf57ce601708a71f3608767e374053f4e880148abbf0fae83ec619512c16ba"
+    }
+  ]
+}

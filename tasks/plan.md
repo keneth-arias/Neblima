@@ -338,4 +338,4 @@ Verificación local del 20/11/2026:
 
 ## #88 · Ampliación de TimeF a PM2.5 y PM10
 
-El [plan del conector, conjunto y modelo bivariados](issue-88-pm10.md) organiza seis PR y fija los conteos de cobertura. El diseño contrasta dos variantes que pronostican ambos contaminantes a seis horas sobre las mismas ventanas.
+El [plan del conector, conjunto y modelo bivariados](issue-88-pm10.md) incorpora el histórico 85/15 y la prueba externa desde junio de 2024. El [informe de preparación](../reports/prueba-externa-pm.md) registra los tres conjuntos TimeF y sus controles. El diseño contrasta dos variantes que pronostican ambos contaminantes a seis horas sobre las mismas ventanas.
