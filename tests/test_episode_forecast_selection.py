@@ -57,7 +57,7 @@ def test_reject_duplicate_seed_different_cohorts_and_missing_measures():
         decide(SPEC, rows)
 
 
-def test_pair_checks_real_checkpoints_and_training_bundle(tmp_path):
+def checkpoint_pair(tmp_path, seed=27, high_mae=14):
     def save(name, obj):
         path = tmp_path / name
         path.write_text(json.dumps(obj, sort_keys=True))
@@ -70,7 +70,7 @@ def test_pair_checks_real_checkpoints_and_training_bundle(tmp_path):
         "data": "b" * 64,
         "weights": "c" * 64,
         "model": "rev",
-        "seed": 27,
+        "seed": seed,
         "batch": 16,
         "schedule": 14838,
         "world": 1,
@@ -99,8 +99,21 @@ def test_pair_checks_real_checkpoints_and_training_bundle(tmp_path):
     dc = {k: v for k, v in ident.items() if k != "task_schema"}
     dc.update(head="direct", matched_point="complete_epoch_v1", input_manifest_sha256=bs)
     d, ds = save("d.json", {"step": 14838, "identity": dc})
-    row = pair(27)
+    row = pair(seed)
+    row["quantile"]["high"]["mae"] = high_mae
+    calibrator, cs = save(
+        "calibrator.json",
+        {
+            "version": "pm25-six-hour-calibration-v1",
+            "unit": "ug/m3",
+            "manifest_sha256": SPEC["blocks_sha256"],
+            "checkpoint_sha256": ds,
+            "thresholds_sha256": "60767fb660521ecbd392cd0fd8f455f8941f97cae30108da2c3936db0d76fecd",
+            "residual_q10_q90": [[-1] * 6, [2] * 6],
+        },
+    )
     report = {
+        "reference_calibrator_sha256": cs,
         "version": "lima-quantile-comparison-v2",
         "block": "selection",
         "purpose": "historical_replay",
@@ -112,10 +125,81 @@ def test_pair_checks_real_checkpoints_and_training_bundle(tmp_path):
         "crossed": 0,
     }
     p, _ = save("report.json", report)
-    assert read_pair(SPEC, p, q, d, bundle)["seed"] == 27
-    dc["data"] = "d" * 64
-    d, ds = save("d.json", {"step": 14838, "identity": dc})
-    report["reference_checkpoint_sha256"] = ds
-    p, _ = save("report.json", report)
+    return (p, q, d, bundle), calibrator
+
+
+def test_pair_checks_real_checkpoints_and_training_bundle(tmp_path):
+    paths, _ = checkpoint_pair(tmp_path)
+    assert read_pair(SPEC, *paths)["seed"] == 27
+    p, _, d, _ = paths
+    direct = json.loads(d.read_bytes())
+    direct["identity"]["data"] = "d" * 64
+    d.write_text(json.dumps(direct))
+    report = json.loads(p.read_bytes())
+    report["reference_checkpoint_sha256"] = hashlib.sha256(d.read_bytes()).hexdigest()
+    p.write_text(json.dumps(report))
     with pytest.raises(ValueError, match="entrenamiento"):
-        read_pair(SPEC, p, q, d, bundle)
+        read_pair(SPEC, *paths)
+
+
+@pytest.mark.parametrize(("high_mae", "head"), [(14, "quantile"), (16, "direct")])
+def test_freeze_verified_pairs_and_matching_intervals(tmp_path, high_mae, head):
+    from airaware.holdout_release import bind
+
+    folder = Path(__file__).resolve().parents[1] / "configs/training"
+    protocol = folder / "lima-prueba-futura-campo-marte-v1.json"
+    rule = folder / "lima-comparacion-cuantiles-v1.yaml"
+    paths = []
+    for seed in (28, 27):
+        root = tmp_path / str(seed)
+        root.mkdir()
+        pair_paths, _ = checkpoint_pair(root, seed, high_mae)
+        paths.append(pair_paths)
+
+    def digest(path):
+        return hashlib.sha256(path.read_bytes()).hexdigest()
+
+    rows = [read_pair(SPEC, *p) for p in paths]
+    decision = decide(SPEC, rows)
+    decision.update(rule_sha256=digest(rule), blocks_sha256=SPEC["blocks_sha256"])
+    receipt = tmp_path / "decision.json"
+    receipt.write_text(json.dumps(decision))
+
+    def freeze():
+        return bind(protocol, digest(protocol), rule, receipt, digest(receipt), paths, calibrator)
+
+    calibrator = tmp_path / "27" / "calibrator.json"
+    binding, deadline = freeze()
+    assert binding["checkpoint_sha256"] == rows[1][head + "_checkpoint_sha256"]
+    assert binding["head"] == head and binding["seed"] == 27
+    assert binding["protocol_sha256"] == digest(protocol)
+    assert binding["direct_calibrator_sha256"] == digest(calibrator)
+    assert deadline.isoformat() == "2026-11-22T00:00:00+00:00"
+    calibrator = tmp_path / "28" / "calibrator.json"
+    with pytest.raises(ValueError, match="huella"):
+        freeze()
+    calibrator = tmp_path / "27" / "calibrator.json"
+    receipt.write_text(json.dumps({**decision, "seed": 28}))
+    with pytest.raises(ValueError, match="selección registrada"):
+        freeze()
+
+
+def test_seal_is_once_only_and_checks_actual_time(tmp_path):
+    from concurrent.futures import ThreadPoolExecutor
+    from datetime import UTC, datetime, timedelta
+
+    from airaware.holdout_release import publish
+
+    path = tmp_path / "sello.json"
+    binding = {"version": "fixture", "head": "direct"}
+    now = datetime.now(UTC)
+    deadline = now + timedelta(hours=1)
+    with pytest.raises(ValueError, match="plazo"):
+        publish(path, binding, now)
+    assert not path.exists()
+    with ThreadPoolExecutor(max_workers=4) as pool:
+        results = list(pool.map(lambda _: publish(path, binding, deadline), range(8)))
+    assert [json.loads(path.read_text())] * 8 == results
+    assert now <= datetime.fromisoformat(results[0]["sealed_at_utc"]) < deadline
+    with pytest.raises(ValueError, match="otra versión"):
+        publish(path, {**binding, "head": "quantile"}, deadline)

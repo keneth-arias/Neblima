@@ -100,7 +100,8 @@ def register(root, raw, receipt):
     return target
 
 
-def audit(root, through=None):
+def audit(root, through=None, *, include_receipts=False, allow_empty=False):
+    receipts = []
     last_check, last_listed, changes, previous_change = {}, {}, [], {}
     counts = {"first_value": 0, "revision": 0, "withdrawn": 0}
     snapshots = sorted(root.glob("????????T??????.??????Z"))
@@ -110,14 +111,23 @@ def audit(root, through=None):
             raise ValueError("El corte de auditoría requiere una zona horaria")
         key = cutoff.astimezone(UTC).strftime("%Y%m%dT%H%M%S.%fZ")
         snapshots = [path for path in snapshots if path.name <= key]
-    if not snapshots:
+    if not snapshots and not (allow_empty and root.is_dir()):
         raise ValueError("No hay capturas para auditar")
     for path in snapshots:
-        r = json.loads((path / "receipt.json").read_bytes())
+        receipt_bytes = (path / "receipt.json").read_bytes()
+        r = json.loads(receipt_bytes)
         arrival, first, last, points = validate((path / "chart.html").read_bytes(), r)
         if path.name != arrival.strftime("%Y%m%dT%H%M%S.%fZ"):
             raise ValueError("La hora del recibo difiere de su directorio")
         seen = arrival.isoformat()
+        if include_receipts:
+            receipts.append(
+                {
+                    "seen_utc": seen,
+                    "receipt_sha256": hashlib.sha256(receipt_bytes).hexdigest(),
+                    "chart_sha256": r["sha256"],
+                }
+            )
         start = datetime.combine(first, time.min)
         for i in range(24 * ((last - first).days + 1)):
             hour = start + timedelta(hours=i)
@@ -160,6 +170,7 @@ def audit(root, through=None):
         "parameter": "pm25",
         "observation_timezone": None,
         "snapshots": len(snapshots),
+        **({"receipts": receipts} if include_receipts else {}),
         "coverage_by_station_hour": {
             h.isoformat(): {
                 "last_queried_utc": at,
