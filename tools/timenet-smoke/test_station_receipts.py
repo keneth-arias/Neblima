@@ -45,7 +45,13 @@ class ReceiptTest(TestCase):
             self.assertEqual(result["counts"], {"first_value": 4, "revision": 1, "withdrawn": 1})
             changes = result["changes"]
             row = next(r for r in changes if r["station_hour"] == "2026-11-20T06:00:00")
-            self.assertEqual(row["last_checked_without_value_utc"], "2026-11-20T08:30:00+00:00")
+            self.assertIsNone(row["last_checked_without_value_utc"])
+            self.assertEqual(row["previous_check_utc"], "2026-11-20T08:30:00+00:00")
+            four = next(r for r in changes if r["station_hour"] == "2026-11-20T04:00:00")
+            self.assertEqual(four["last_checked_without_value_utc"], "2026-11-20T08:30:00+00:00")
+            coverage = result["coverage_by_station_hour"][row["station_hour"]]
+            self.assertFalse(coverage["in_latest_query"])
+            self.assertEqual(coverage["last_queried_utc"], "2026-11-20T12:30:00+00:00")
             self.assertIsNone(changes[0]["last_checked_without_value_utc"])
             self.assertEqual(changes[-2]["kind"], "withdrawn")
 

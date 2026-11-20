@@ -146,7 +146,7 @@ def audit(root, through=None):
                     "seen_utc": seen,
                     "preceding_query_state": preceding_state,
                     "last_checked_without_value_utc": checked_at
-                    if preceding_state in ("unlisted", "null")
+                    if preceding_state == "null"
                     else None,
                     "previous_check_utc": checked_at,
                     "source_sha256": r["sha256"],
@@ -160,6 +160,14 @@ def audit(root, through=None):
         "parameter": "pm25",
         "observation_timezone": None,
         "snapshots": len(snapshots),
+        "coverage_by_station_hour": {
+            h.isoformat(): {
+                "last_queried_utc": at,
+                "last_query_state": state,
+                "in_latest_query": at == seen,
+            }
+            for h, (state, at) in sorted(last_check.items())
+        },
         "counts": counts,
         "changes": changes,
     }
@@ -169,7 +177,7 @@ def capture(root):
     today = datetime.now(UTC).date()
     url = chart_url(today - timedelta(days=2), today)
     calls = [
-        ("goto", {"url": url, "timeout": 15000, "waitUntil": "domcontentloaded"}),
+        ("goto", {"url": "about:blank", "timeout": 15000, "waitUntil": "domcontentloaded"}),
         ("download", {"url": url, "path": "chart.html"}),
     ]
     requests = "".join(
@@ -210,7 +218,9 @@ def capture(root):
                 "recuperado_utc": arrival,
                 "bytes": len(raw),
                 "sha256": hashlib.sha256(raw).hexdigest(),
-                "http_status": None,
+                "http_status": responses[2]["result"]
+                .get("structuredContent", {})
+                .get("httpStatus"),
             },
         )
 
