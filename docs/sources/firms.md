@@ -4,14 +4,14 @@ Tarea: [#34 — Evaluar incendios, movilidad y otras variables de contexto opcio
 Revisión: 20/11/2026 UTC. Alcance: solo documentación oficial; sin descargas de datos ni
 muestras, sin cuentas nuevas y sin claves. Esta entrega investiga la fuente y propone; la
 implementación de adquisición espera los acuerdos de #33 y la comparación contra la
-referencia fija queda registrada como pendiente de #33/#25. El catálogo
+referencia de #25 queda pendiente hasta disponer de entradas verificadas. El catálogo
 (`configs/sources.yaml`) y el registro de acceso (`metadata/source-access.json`) se
 actualizan en un cambio coordinado posterior.
 
 Producto elegido: **NASA FIRMS (Fire Information for Resource Management System)**, el
 servicio de la NASA que distribuye detecciones de incendios activos y anomalías térmicas de
-los instrumentos MODIS (abordo de Terra y Aqua) y VIIRS (abordo de NOAA-20 y NOAA-21,
-antes JPSS-1 y JPSS-2), con archivo histórico público. Es una fuente **satelital de
+los instrumentos MODIS (Moderate Resolution Imaging Spectroradiometer, a bordo de Terra y Aqua)
+y VIIRS (Visible Infrared Imaging Radiometer Suite, con series de S-NPP, NOAA-20 y NOAA-21), con archivo histórico público. Es una fuente **satelital de
 detección por pasada**: cada registro proviene de una observación térmica del satélite en
 un momento concreto, y no es una medición de estación ni un producto de modelado.
 
@@ -20,9 +20,9 @@ un momento concreto, y no es una medición de estación ni un producto de modela
 Este entorno de ejecución no tenía Lightpanda disponible (no existe el binario ni una sesión
 compartida). La regla de [web-access](../web-access.md) exige no cambiar de herramienta en
 silencio: se usó `curl` HTTP puntual y documentado como alternativa explícita, con URL, fecha
-UTC, código HTTP y resultado registrados abajo. Fueron 12 solicitudes en total: 6 con
-contenido (200), 2 con error de aplicación esperado (400 de endpoints sin parámetros) y 4
-fallos documentados (403 de CloudFront en dos URLs del host `earthdata.nasa.gov`, 404 de la
+UTC, código HTTP y resultado registrados abajo. La consulta inicial hizo 12 solicitudes: 5 con
+respuesta 200, 2 con error de aplicación (400 de endpoints sin parámetros) y 5
+fallos documentados (403 de CloudFront en tres URLs del host `earthdata.nasa.gov`, 404 de la
 ruta histórica de la FAQ y fallo de cadena TLS en `modis-fire.umd.edu`). Ninguna solicitud
 descargó datos ni muestras. No hubo reintentos: cada URL se consultó una sola vez, dentro del
 tope de 12 fetches; el host bloqueado no se insistió más allá de lo registrado y no se eludió
@@ -45,22 +45,26 @@ la fecha de cada fila.
 | 11 | https://firms.modaps.eosdis.nasa.gov/faq/ | 2026-11-20T11:45:45Z | 404 | Ruta histórica de la FAQ inexistente («Page not found»); la página de error remite a Fire Map, datos activos y descargas; la FAQ vigente vive en el host bloqueado (filas 2 y 5). |
 | 12 | https://firms.modaps.eosdis.nasa.gov/content/manifest/firms.json | 2026-11-20T11:46:38Z | 200 | Manifiesto PWA del sitio (nombre corto, iconos y URL de inicio del mapa); sin contenido documental. Se conserva en el registro por honestidad del conteo. |
 
+### Verificación posterior con Lightpanda
+
+El 20/11/2026 UTC se abrieron las siguientes páginas oficiales. Las cuatro devolvieron
+HTTP 200 con contenido y la URL final coincidió con la solicitada.
+
+| Página y título | Evidencia revisada |
+| --- | --- |
+| [Archive Download - NASA / LANCE / FIRMS](https://firms.modaps.eosdis.nasa.gov/download/) | Fechas por producto y reemplazo del dato en tiempo casi real por la versión científica con unos cinco meses de retraso. |
+| [Land, Atmosphere Near real-time Capability for Earth observation](https://www.earthdata.nasa.gov/data/projects/lance) | Reconocimiento de LANCE y descargo de responsabilidad. |
+| [FIRMS / NASA Earthdata](https://www.earthdata.nasa.gov/data/tools/firms) | Pautas de atribución cuando se comparten datos o imágenes, y descargo aplicable a FIRMS. |
+| [FIRMS FAQ / NASA Earthdata](https://www.earthdata.nasa.gov/data/tools/firms/faq) | Centro y tamaño nominal del píxel, confianza por instrumento, nubes, datos faltantes y latencia de entrega. |
+
 ## Resultado para el equipo
 
-FIRMS es el mejor sustentado hasta hoy para la variable de incendios de #34: su archivo
-histórico público declara cobertura que cubre completa la ventana de Lima (2015-01-01 a
-2024-05-31) con los productos MODIS C6.1 y VIIRS, el acceso es gratuito con barrera solo de
-registro (MAP_KEY por correo o Earthdata Login), y los formatos (CSV/JSON/SHP) permiten una
-adquisición acotada por región y ventana temporal. Quedan dos bloqueos verificados y
-fechados: el texto formal de uso y citación de NASA Earthdata no se pudo capturar (403 de
-CloudFront en dos URLs) y tanto el MAP_KEY como el Earthdata Login exigen registros que este
-proyecto reserva a la autorización de Keneth, igual que la cuenta del ADS de [#33](https://github.com/keneth-arias/airaware/issues/33)
-([PR #119](https://github.com/keneth-arias/airaware/pull/119)) y la clave de OpenAQ de
-[#31](https://github.com/keneth-arias/airaware/issues/31) ([PR #116](https://github.com/keneth-arias/airaware/pull/116)).
-Por tanto esta entrega no afirma derechos de redistribución ni disponibilidad operativa;
-propone la fuente y documenta la vía de acceso. La comparación con y sin la variable contra
-la referencia fija ([reports/baselines/lima-pm25.md](../../reports/baselines/lima-pm25.md))
-queda pendiente de #33/#25.
+MODIS C6.1 y VIIRS S-NPP tienen cobertura temporal declarada durante toda la ventana de
+Lima (01/01/2015 a 31/05/2024). NOAA-20 y NOAA-21 solo cubren parte del periodo. La
+presencia de detecciones sobre una estación y la fecha de publicación de cada versión
+siguen sin comprobarse. Solicitar la clave o el acceso por correo queda pendiente de autorización. Para incorporar la variable al pronóstico habrá que reconstruir lo que
+ya estaba publicado en cada origen y medir su aporte sobre casos comparables con la
+[referencia de Lima](../../reports/baselines/lima-pm25.md).
 
 ## (a) Clasificación explícita: qué es y qué no es FIRMS
 
@@ -72,9 +76,8 @@ queda pendiente de #33/#25.
 - **NRT frente a estándar**: hay dos calidades que no deben mezclarse. La NRT (tiempo casi
   real) está disponible globalmente «within 3 hours of satellite observation» (portal); la
   de **calidad estándar** (science quality) reemplaza a la NRT en el archivo con
-  «approximately a 5 month lag» (página de descargas). Para historia del benchmark corresponde
-  la estándar; la NRT solo sería de utilidad para sistemas en vivo, con la advertencia de que
-  sus valores pueden cambiar al reemplazo.
+  «approximately a 5 month lag» (página de descargas). La versión para cada origen se elige según su fecha de
+  publicación verificable. El reemplazo posterior puede modificar una detección.
 - **No es una medición de estación**: la unidad es una detección por pasada satelital con
   coordenada y hora, no una lectura en un punto fijo con continuidad horaria como SENAMHI.
 - **No es un producto de modelado**: a diferencia del reanálisis CAMS EAC4 investigado en
@@ -90,17 +93,13 @@ queda pendiente de #33/#25.
   un límite de 5000 transacciones por intervalo de 10 minutos (20/11/2026); la página de
   descargas declara autenticación por Earthdata Login o código por correo para el archivo
   histórico (20/11/2026); el portal declara que FIRMS forma parte de NASA LANCE (20/11/2026).
-- **No capturado**: el texto de uso y citación de NASA Earthdata. Las anclas oficiales
-  «#ed-firms-citation» y «#ed-lance-disclaimer» viven en
-  `earthdata.nasa.gov/data/projects/lance`, y la FAQ vigente en
-  `earthdata.nasa.gov/data/tools/firms/faq`; las tres URLs del host consultadas respondieron
-  403 de CloudFront en este entorno (filas 2, 5 y 6), y el sitio de la Universidad de
-  Maryland, que aloja las guías con la política de uso, falló por TLS (fila 10).
-- **Consecuencia**: esta entrega **no afirma licencia de redistribución** ni la ausencia de
-  condiciones adicionales. El campo `redistribution` del catálogo registra la decisión del
-  proyecto, no el texto legal (convención de [weather.md](weather.md)); esa decisión sigue
-  sin tomarse. La lectura del texto de citación por un canal con sesión estándar (navegador o
-  Lightpanda) es un pendiente registrado antes de cualquier alta en `configs/sources.yaml`.
+- **Atribución y uso.** La ficha de FIRMS de NASA Earthdata pide reconocer a FIRMS, a LANCE
+  y al sistema de información de ciencias de la Tierra (ESDIS) al compartir datos o imágenes.
+  También remite al descargo de responsabilidad del usuario. La FAQ pide acreditar las
+  imágenes a NASA FIRMS. Las páginas se pudieron leer con Lightpanda durante la revisión.
+- **Decisión del proyecto.** Antes de redistribuir un producto concreto, registrar su versión,
+  la cita correspondiente y la decisión de Keneth sobre los derechos de uso. El campo
+  `redistribution` del catálogo sigue pendiente.
 
 ## (c) Cobertura declarada (capturada el 20/11/2026 UTC)
 
@@ -112,11 +111,11 @@ queda pendiente de #33/#25.
 | VIIRS NOAA-20 375 m | 01/04/2018 – presente (página de descargas) |
 | VIIRS NOAA-21 375 m | 01/03/2023 – presente (página de descargas) |
 | LANDSAT 30 m | 20/06/2022 – presente (página de descargas); no cubre la ventana histórica de Lima, se descarta para esta variable |
-| Resolución espacial | 375 m declarado para los productos VIIRS listados; el tamaño nominal de pixel de MODIS no apareció en las páginas capturadas (vive en la FAQ/guías pendientes) y no se afirma aquí |
+| Resolución espacial | Píxel nominal de aproximadamente 1 km para MODIS y 375 m para VIIRS. La coordenada señala el centro. El tamaño real varía con el barrido (FAQ, 20/11/2026) |
 | Resolución temporal | Detecciones por pasada del satélite; disponibilidad NRT global dentro de ~3 horas de la observación; el archivo histórico contiene lo anterior a los últimos 7 días (página de descargas) |
 | Actualización del archivo | NRT se reemplaza por calidad estándar con aproximadamente 5 meses de desfase (página de descargas) |
 | Formatos | SHP, KML, TXT (texto separado por comas), JSON y WMS (portal y página de descargas) |
-| Ventana de Lima (2015-01-01 a 2024-05-31) | Cubierta de punta a punta por MODIS C6.1 (desde 2000), VIIRS S-NPP (desde 2012) y VIIRS NOAA-20 (desde 2018), según las fechas declaradas arriba |
+| Ventana de Lima (2015-01-01 a 2024-05-31) | Completa en las fechas declaradas de MODIS C6.1 y VIIRS S-NPP. Parcial para NOAA-20 desde abril de 2018 y NOAA-21 desde marzo de 2023 |
 
 Cobertura temporal y procedencia: las fechas anteriores son las **declaradas** por la fuente
 en la página de descargas de este entorno; que el archivo responda peticiones reales sobre
@@ -128,16 +127,14 @@ Lima en esa ventana se demostrará con acceso autorizado, no se afirma aquí.
   MODIS o VIIRS en una pasada, con coordenada, marca de tiempo, instrumento y nivel de
   confianza). El propio portal describe el producto como «active fire / hotspot data» y
   atribuye las detecciones a «thermal anomalies» (consultado el 20/11/2026).
-- Una detección **no equivale a un incendio confirmado**: ni el portal ni la página de
-  descargas capturadas afirman verificación en terreno, y la semántica de los niveles de
-  confianza y los orígenes típicos de falsas alarmas se documenta en la FAQ y en las guías de
-  usuario, que quedaron fuera de alcance en esta revisión (filas 2, 5, 6 y 10).
-- Por precaución, esta entrega adopta la definición conservadora de trabajo: **cada registro
-  se trata como una detección térmica candidata**, nunca como un incendio confirmado, y
-  cualquier uso como señal exige primero la lectura de la FAQ y de las guías de usuario
-  (pendientes registradas). No se inventan conteos, tasas de acierto ni densidades de
-  detecciones sobre Lima: sin descargas no hay evidencia de cuántas detecciones diarias
-  reales hay en la región.
+- La coordenada ubica el centro de un píxel con una anomalía térmica candidata. Confirmar
+  un incendio en terreno requiere evidencia adicional. La FAQ describe confianza de 0 a
+  100 % para MODIS y categorías baja, nominal y alta para VIIRS. Conservar el campo y el
+  instrumento al comparar detecciones.
+- La cobertura depende de la pasada, las nubes y los datos faltantes. Un archivo vacío o
+  una hora sin registros no demuestra ausencia de incendios. Para contar cero detecciones
+  se necesita evidencia de observación utilizable del área durante la ventana. Si falta,
+  registrar cobertura desconocida. Esta revisión documental no midió detecciones en Lima.
 
 ## (e) Vía de acceso (documentada; sin descargas ni cuentas)
 
@@ -155,7 +152,7 @@ Lima en esa ventana se demostrará con acceso autorizado, no se afirma aquí.
   las páginas capturadas (medirlo exigiría iniciar una solicitud de descarga o recorrer el
   almacén): no se afirma tamaño.
 - **Pendiente de autorización**: obtener el MAP_KEY exige registrar un correo y el archivo
-  exige Earthdata Login; ambos son registros de servicio. No se creó cuenta, no se pidió
+  admite Earthdata Login o un código por correo. No se creó cuenta, no se pidió
   clave y no se descargó nada. Quedan registrados como **pendientes de autorización de
   Keneth**, con el mismo tratamiento que la cuenta del ADS (#33/PR #119) y la clave de
   OpenAQ (#31/PR #116). La adquisición futura será el descargador reproducible acotado de
@@ -169,17 +166,17 @@ Lima en esa ventana se demostrará con acceso autorizado, no se afirma aquí.
   separar por producto (MODIS frente a VIIRS) para no mezclar calidades de pixel. Estos
   valores son ejemplos de diseño para discutir, no decisiones: el radio y la ventana se
   fijarían con evidencia y revisión en la entrega de adquisición.
-- **Sin información futura**: la ventana solo usa detecciones disponibles antes del origen
-  del pronóstico. La latencia declarada (~3 horas desde la observación) y el desfase de
-  ingreso al archivo histórico imponen desfases mínimos al cálculo de la variable; ninguna
-  etiqueta posterior al horizonte entra como entrada.
-- **Procedencia por calidad**: para la historia del benchmark se usaría calidad estándar y se
-  registraría la versión del producto por observación, porque el archivo reemplaza NRT por
-  estándar con ~5 meses de desfase y mezclar calidades viciaría la comparación.
+- **Disponibilidad en el origen.** Conservar hora de observación, producto, versión y
+  evidencia de cuándo se publicó esa versión. Una detección solo entra si ya se había
+  observado y publicado al emitir el pronóstico. Las tres horas de la entrega casi en
+  tiempo real son una estimación del servicio. El archivo estándar puede contener una
+  revisión publicada meses después. Si solo se conserva esa revisión y se desconoce su
+  fecha de publicación, excluirla de la entrada y registrar la pérdida de cobertura.
 - **Comparación pendiente**: el aporte real se medirá como configuración con y sin la
   variable sobre los mismos casos de la referencia fija (persistencia y las otras dos
   referencias de [reports/baselines/lima-pm25.md](../../reports/baselines/lima-pm25.md);
-  2 033 352 objetivos) cuando lo habiliten #33 y #25. Este PR no ejecuta esa comparación ni
+  2 033 352 objetivos entre las tres particiones). Registrar cuántos objetivos de prueba
+  conservan cobertura y comparar ambas configuraciones sobre esos mismos identificadores. Este PR no ejecuta esa comparación ni
   anticipa resultados.
 - **Criterio de postergación**: si el acceso autorizado no demuestra disponibilidad histórica
   real del archivo para la ventana de Lima, la fuente se posterga, como exige la issue #34
@@ -190,7 +187,7 @@ Lima en esa ventana se demostrará con acceso autorizado, no se afirma aquí.
 Criterios aplicados por esta revisión (evidencia fechada arriba):
 
 1. **Disponibilidad histórica declarada**: el archivo cubre la ventana de Lima completa con
-   MODIS C6.1 y VIIRS (fechas capturadas en la fila 4), cosa que las alternativas no cumplen
+   MODIS C6.1 y VIIRS S-NPP (fechas capturadas en la fila 4), cosa que las alternativas no cumplen
    o no declaran en páginas públicas verificadas en esta revisión.
 2. **Costo de acceso**: gratuito con barrera solo de registro (MAP_KEY «free», Earthdata
    Login); la barrera es una autorización pendiente, no un pago ni un servicio contratado.
@@ -202,8 +199,8 @@ Criterios aplicados por esta revisión (evidencia fechada arriba):
 
 Alternativas con su motivo registrado:
 
-- **Movilidad/tránsito**: **excluida** por regla expresa de la issue #34 («No hagas
-  recolección masiva de movilidad ni contrates servicios»). Además,
+- **Movilidad/tránsito**: postergada en esta entrega. #34 limita la recolección masiva y la
+  contratación de servicios.
   [senamhi-reference-adaptation.md](senamhi-reference-adaptation.md) ya señalaba que una
   covariable de movilidad exige fecha de disponibilidad declarada y no introducir información
   futura, y el inventario la mantiene como línea de investigación sin fuente concreta.
@@ -220,15 +217,12 @@ Alternativas con su motivo registrado:
 
 ## (h) Límites explícitos
 
-1. **Detección ≠ incendio confirmado**: definición conservadora adoptada (d); la semántica de
-   confianza y falsas alarmas pendiente de FAQ y guías de usuario.
-2. **Licencia formal sin capturar**: 403 de CloudFront en las URLs de earthdata (filas 2, 5
-   y 6); sin afirmación de redistribución ni de condiciones adicionales hasta leer el texto
-   oficial por un canal con sesión estándar.
-3. **Resolución de MODIS sin declarar aquí**: el pixel nominal de MODIS no apareció en las
-   páginas capturadas; solo 375 m quedó evidenciado para los productos VIIRS listados.
-4. **NRT frente a estándar**: el reemplazo con ~5 meses de desfase obliga a registrar la
-   versión del producto por observación en cualquier uso histórico.
+1. **Confianza.** Cada instrumento publica su propia escala. El umbral para Lima sigue pendiente.
+2. **Uso del producto.** La atribución general está documentada en (b). Queda por revisar
+   la cita del producto elegido y acordar una eventual redistribución.
+3. **Resolución.** Las coordenadas y tamaños nominales de píxel limitan la precisión espacial de
+   la asociación con una estación.
+4. **Versiones históricas.** Falta demostrar qué versión estaba disponible en cada origen.
 5. **Densidad de detecciones sobre Lima sin verificar**: sin descargas no hay conteo de
    registros por día en la región; la utilidad real se demuestra en la comparación de (f).
 6. **Fin declarado de VIIRS S-NPP (02/11/2026)**: es la fecha que publicó la fuente en la
@@ -244,14 +238,12 @@ Alternativas con su motivo registrado:
 - Autorización de Keneth para el correo con MAP_KEY y/o la cuenta Earthdata Login (mismo
   tratamiento que la cuenta ADS de #33 y la clave de OpenAQ de #31). Sin cuentas nuevas por
   parte de agentes.
-- Lectura del texto de uso y citación de NASA Earthdata (anclas «#ed-firms-citation» y
-  «#ed-lance-disclaimer») y de la FAQ vigente de FIRMS por un canal con sesión estándar;
-  hoy 403 de CloudFront con evidencia fechada (filas 2, 5 y 6).
-- Lectura de las guías de usuario de MODIS C6.1 y VIIRS (enlaces capturados en la fila 4,
-  host con fallo TLS en la fila 10) para la semántica de confianza y falsas alarmas.
+- Registrar con el producto elegido la cita específica y las condiciones de la versión.
+- Revisar las guías de usuario para decidir cómo evaluar la confianza y las falsas alarmas
+  en la región seleccionada.
 - Lectura de la documentación de la API de FIRMS y diseño del descargador reproducible
-  acotado por bbox y ventana (espera #6/#7).
+  acotado por región y ventana con los controles de #6/#7.
 - Comparación con y sin la variable contra la referencia fija de
-  [reports/baselines/lima-pm25.md](../../reports/baselines/lima-pm25.md): espera #33/#25.
+  [#25](../../reports/baselines/lima-pm25.md), cuando #33 y la evidencia de disponibilidad lo permitan.
 - Alta de la fuente en `configs/sources.yaml` y en `metadata/source-access.json` en un
   cambio coordinado con revisión; esta entrega no editó esos archivos.
