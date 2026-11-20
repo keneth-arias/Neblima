@@ -1,0 +1,22 @@
+{
+  "channels": [
+    "pm25",
+    "pm10"
+  ],
+  "cut_utc": "2023-04-02T07:00:00+00:00",
+  "inputs": {
+    "train": {
+      "npz_sha256": "5db3e2fa6317a1b3f5a8b7dee8c452aaa8d56ce68ee19e37a89bf724b9ebeeab",
+      "ordered_ids_sha256": "26e8123b3f244ebf6497c854c36a7c896c2766f669a3c30b70e8d73aadf9eb45",
+      "windows": 251915
+    },
+    "validation": {
+      "npz_sha256": "12d94d2a3c2ad36972aba46f661cdd00315e7f4b953f21edada4bfb348f7190e",
+      "ordered_ids_sha256": "a171429ddce5b72212f212dad130d87ca5407a85b2332d9d15f11033c57ed01e",
+      "windows": 44458
+    }
+  },
+  "scaler_sha256": "c8ebd87bce74ea0157e85093e4c9c81d981af34fb62f1cbc2c12ce653b2c3863",
+  "timef_manifest_sha256": "d0aeb64d8414ca30547037eca439b1acdb00212b67040c5d7930699edb4c76a5",
+  "version": "lima-pm25-pm10-v1"
+}
