@@ -1,0 +1,38 @@
+[
+  {
+    "checkpoint_sha256": "d42dc1d91dce1abc6284f9cff68df3d0ff7ccbc08ede744865cde1762e53658e",
+    "duration_seconds": 3392.274,
+    "experiment_id": "2",
+    "head": "direct",
+    "peak_gpu_allocated_bytes": 7059513344.0,
+    "run_id": "7d09aac2b99943b78fe9c309f26a123f",
+    "seed": 27
+  },
+  {
+    "checkpoint_sha256": "03e8bcd7e5ea08b2bb115267803e1ce85209e06c3b3be987fbb1aa6398e3c222",
+    "duration_seconds": 3446.21,
+    "experiment_id": "2",
+    "head": "quantile",
+    "peak_gpu_allocated_bytes": 7059661824.0,
+    "run_id": "bb32b92dc0394f8bb435cae736ac6fe3",
+    "seed": 27
+  },
+  {
+    "checkpoint_sha256": "4ae45e02ae79920cd67e59f6fb35a3c454035ff456fd077dc7cf38188889156a",
+    "duration_seconds": 3519.563,
+    "experiment_id": "2",
+    "head": "direct",
+    "peak_gpu_allocated_bytes": 7059513344.0,
+    "run_id": "e5547072e3a34028a7cc796044f7ced3",
+    "seed": 28
+  },
+  {
+    "checkpoint_sha256": "8ca995269cf112381d0d212aac717ee23d6f3154d085b29ebc7cb412ae7fe88e",
+    "duration_seconds": 3517.782,
+    "experiment_id": "2",
+    "head": "quantile",
+    "peak_gpu_allocated_bytes": 7059661824.0,
+    "run_id": "af35ec3e9ed74c729ab723294e94cd97",
+    "seed": 28
+  }
+]

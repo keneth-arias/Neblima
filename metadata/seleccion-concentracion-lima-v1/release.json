@@ -1,0 +1,14 @@
+{
+  "base_manifest_sha256": "1d76cc3cfd4c15f9c749372611e5ca6e0b6f910b1fcf0551ce9157e9bfef29c1",
+  "checkpoint_sha256": "d42dc1d91dce1abc6284f9cff68df3d0ff7ccbc08ede744865cde1762e53658e",
+  "components": {
+    "calibration.json": "16ee82189518ed7a1f634037acab6db17563ec6680a31626834e4d26b5b41e21",
+    "policy.json": "05247b30009d94399d68cfeff86a2449c6f3d936ab59270122751e0d23fde059",
+    "transform.json": "0ea884684c92ef507a3f766e12c8b1ac8905dc7c5f0a22c915850b5c071c17a7"
+  },
+  "image": "ghcr.io/keneth-arias/ml-infra-qwen@sha256:5ca73291e6064ae8483286e2857cdffa627a30d8badaf4b34f9616fa110d0d84",
+  "inference_batch": 32,
+  "mode": "concentration",
+  "purpose": "retrospective_holdout_only",
+  "version": 1
+}

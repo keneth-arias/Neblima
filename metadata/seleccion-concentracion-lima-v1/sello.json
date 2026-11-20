@@ -1,0 +1,18 @@
+{
+  "base_weights_sha256": "1d76cc3cfd4c15f9c749372611e5ca6e0b6f910b1fcf0551ce9157e9bfef29c1",
+  "blocks_sha256": "42181b3ff858029a3982d2f408c954ff14b51f6afb7f068130caed4a294274e1",
+  "checkpoint_sha256": "d42dc1d91dce1abc6284f9cff68df3d0ff7ccbc08ede744865cde1762e53658e",
+  "decision_sha256": "291e4edc20b1146aac07a2e16594b1c2fe30b64e69511f3e72de0b041be1056f",
+  "direct_calibrator_sha256": "16ee82189518ed7a1f634037acab6db17563ec6680a31626834e4d26b5b41e21",
+  "head": "direct",
+  "image": "ghcr.io/keneth-arias/ml-infra-qwen@sha256:5ca73291e6064ae8483286e2857cdffa627a30d8badaf4b34f9616fa110d0d84",
+  "interval_method": "calibration_residuals",
+  "model_revision": "2fc06364715b967f1860aea9cf38778875588b17",
+  "protocol_sha256": "82bc1f6794fd2ea7ae02d6d2390abd012a1fd8813199d9d2624896c7fa5ea952",
+  "scope": "retrospective_concentration_only",
+  "sealed_at_utc": "2026-11-20T19:40:38.579459+00:00",
+  "seed": 27,
+  "selection_rule_sha256": "ebcae890a6f242f5b73ede80301d92fb8f672a7a0acbe99b59d589db87f4e40e",
+  "thresholds_sha256": "60767fb660521ecbd392cd0fd8f455f8941f97cae30108da2c3936db0d76fecd",
+  "version": "lima-concentracion-prueba-congelada-v1"
+}

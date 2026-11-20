@@ -1,0 +1,28 @@
+{
+  "calibration_forecasts_sha256": "509f7d0b955e9992c43e8d05612877c6a70f7b6dbd39d9b3cf3e3dbc8ebe746e",
+  "calibration_windows": 25201,
+  "checkpoint_sha256": "d42dc1d91dce1abc6284f9cff68df3d0ff7ccbc08ede744865cde1762e53658e",
+  "manifest_sha256": "42181b3ff858029a3982d2f408c954ff14b51f6afb7f068130caed4a294274e1",
+  "probability": null,
+  "residual_q10_q90": [
+    [
+      -7.257161331176757,
+      -11.6016911315918,
+      -13.834268951416014,
+      -15.292376708984378,
+      -16.329761047363284,
+      -16.89875503540039
+    ],
+    [
+      8.132580566406247,
+      12.605096740722658,
+      15.465535125732423,
+      17.096452331542963,
+      18.16827423095703,
+      19.011124496459963
+    ]
+  ],
+  "thresholds_sha256": "60767fb660521ecbd392cd0fd8f455f8941f97cae30108da2c3936db0d76fecd",
+  "unit": "ug/m3",
+  "version": "pm25-six-hour-calibration-v1"
+}
