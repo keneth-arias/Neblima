@@ -339,3 +339,5 @@ Verificación local del 20/11/2026:
 ## #88 · Ampliación de TimeF a PM2.5 y PM10
 
 El [plan del conector, conjunto y modelo bivariados](issue-88-pm10.md) incorpora el histórico 85/15 y la prueba externa desde junio de 2024. El [informe de preparación](../reports/prueba-externa-pm.md) registra los tres conjuntos TimeF y sus controles. El diseño contrasta dos variantes que pronostican ambos contaminantes a seis horas sobre las mismas ventanas.
+
+Para ejecutar y congelar la [comparación pareada en validación](issue-88-validacion.md), seguir las subtareas de GitHub. [#102](https://github.com/keneth-arias/airaware/issues/102) entrega las matrices y el escalador. [#103](https://github.com/keneth-arias/airaware/issues/103) conecta el entrenador y la inferencia. Ambas habilitan [#104](https://github.com/keneth-arias/airaware/issues/104), el ajuste en dos GPU. [#105](https://github.com/keneth-arias/airaware/issues/105) entrega los errores pareados y el manifiesto de los dos modelos antes de la prueba externa.
