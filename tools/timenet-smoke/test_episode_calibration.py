@@ -85,18 +85,25 @@ class EpisodeCalibrationTest(TestCase):
                 manifest_sha256=manifest_hash,
                 eligible_labels=root / "eligible.npz",
             )
+            args.forecasts_sha256 = "0" * 64
+            with self.assertRaisesRegex(ValueError, "Huella"):
+                run(args)
+            self.assertFalse(args.output.exists())
+            args.forecasts_sha256 = sha256_file(args.forecasts)
             run(args)
             args.command = "apply"
             args.calibrator = args.output
             args.calibrator_sha256 = sha256_file(args.output)
             args.block = "selection"
             args.forecasts = root / "selection.npz"
+            args.forecasts_sha256 = sha256_file(args.forecasts)
             args.output = root / "scored.npz"
             (
                 blocks / "selection" / "observed.npz"
             ).unlink()  # el pod de inferencia carece de objetivos
             run(args)
             with np.load(args.output) as z:
+                self.assertEqual(z["forecasts_sha256"].item(), args.forecasts_sha256)
                 self.assertTrue(np.all(z["lower"] <= z["upper"]))
                 self.assertTrue(
                     np.all((z["episode_probability"] >= 0) & (z["episode_probability"] <= 1))

@@ -3,6 +3,7 @@
 import argparse
 import json
 import os
+import random
 from pathlib import Path
 from tempfile import NamedTemporaryFile
 
@@ -18,7 +19,7 @@ def scores(
     lower,
     upper,
     limits,
-    last,
+    last=None,
     probabilities=None,
     labels=None,
     frequencies=None,
@@ -60,7 +61,9 @@ def scores(
     }
     if probabilities is not None and labels is not None:
         if (
-            labels.shape != limits.shape
+            last is None
+            or last.shape != limits.shape
+            or labels.shape != limits.shape
             or probabilities.shape != limits.shape
             or not np.isin(labels, [-1, 0, 1]).all()
             or np.any((labels != -1) & (~valid.all(axis=1) | ~np.isfinite(limits)))
@@ -130,8 +133,8 @@ def block_difference(hours, values, size):
     counts = np.bincount(groups)
     result = {"blocks": len(keys), "difference": float(sums.sum() / counts.sum()), "ci95": None}
     if len(keys) > 1:
-        rng = np.random.default_rng(27)
-        draws = rng.integers(len(keys), size=(1000, len(keys)))
+        rng = random.Random(27)
+        draws = np.array([rng.choices(range(len(keys)), k=len(keys)) for _ in range(1000)])
         boot = sums[draws].sum(1) / counts[draws].sum(1)
         result["ci95"] = np.quantile(boot, [0.025, 0.975]).tolist()
     return result

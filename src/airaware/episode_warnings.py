@@ -32,6 +32,8 @@ class WarningReport(TypedDict):
     evaluable_origins: int
     emitted: int
     late: int
+    delayed_emissions: int
+    emission_delays: list[float]
     matched_onsets: list[int]
     observable_onsets: list[int]
     lead_hours: list[float]
@@ -71,6 +73,7 @@ def evaluate(
     matched: list[int] = []
     eligible: set[int] = set()
     leads: list[float] = []
+    emission_delays = []
     next_issue = -math.inf
     opportunities = late = expired = 0
     cohort = []
@@ -115,13 +118,14 @@ def evaluate(
             counts["suppressed"] += 1
             continue
         next_issue = row.issued + cooldown
+        emission_delays.append(row.issued - row.hour)
         if not complete:
             counts["indeterminate"] += 1
             continue
         first = next((h for h in future if h not in matched), None)
+        late += int(any(h in onsets and h <= row.issued for h in horizon))
         if first is None:
             counts["false"] += 1
-            late += int(any(h in onsets and h <= row.issued for h in horizon))
         else:
             counts["hit"] += 1
             matched.append(first)
@@ -143,6 +147,8 @@ def evaluate(
         "evaluable_origins": opportunities,
         "emitted": sum(counts[k] for k in ("hit", "false", "indeterminate")),
         "late": late,
+        "delayed_emissions": sum(delay > 0 for delay in emission_delays),
+        "emission_delays": emission_delays,
         "observable_onsets": sorted(eligible),
         "matched_onsets": matched,
         "lead_hours": leads,
@@ -197,7 +203,7 @@ class Policy(TypedDict):
 def select_policy(
     candidates: Sequence[tuple[str, float, Mapping[str, WarningReport]]],
     *,
-    calibration: Mapping[str, tuple[float, float]],
+    calibration: Mapping[str, Mapping[str, tuple[float, float] | None]],
     rule: WarningRule,
 ) -> Policy | None:
     """Aplicar el presupuesto por estación y conservar la referencia ante empate."""
@@ -218,14 +224,26 @@ def select_policy(
             raise ValueError("Anticipación o pausa incompatibles con la regla congelada")
         if {key: s["cohort_sha256"] for key, s in stations.items()} != common:
             raise ValueError("Los métodos deben compartir estaciones y oportunidades")
-        if method not in calibration:
+        evidence = calibration.get(method, {})
+        if set(evidence) != set(stations):
             continue
-        brier, frequency_brier = calibration[method]
-        if not (
-            0 <= brier <= 1
-            and 0 <= frequency_brier <= 1
-            and brier - frequency_brier <= rule.max_brier_excess
-        ):
+        calibrated = True
+        for station, measures in evidence.items():
+            if measures is None:
+                if stations[station]["evaluable_origins"]:
+                    calibrated = False
+                continue
+            brier, frequency_brier = measures
+            reference = calibration.get("reference", {}).get(station)
+            if reference is not None and reference[1] != frequency_brier:
+                raise ValueError("La referencia de frecuencia debe ser común por estación")
+            if not (
+                0 <= brier <= 1
+                and 0 <= frequency_brier <= 1
+                and brier - frequency_brier <= rule.max_brier_excess
+            ):
+                calibrated = False
+        if not calibrated:
             continue
         if not stations or any(
             168 * s["counts"]["false"] > rule.budget * s["evaluable_origins"]
@@ -272,7 +290,7 @@ def paired_interval(
         block = hour // block_hours
         value, count = totals.get(block, (0.0, 0))
         totals[block] = (value + a - b, count + 1)
-    values = list(totals.values())
+    values = [totals[k] for k in sorted(totals)]
     result: dict[str, int | float | None] = {
         "blocks": len(values),
         "difference": sum(t for t, _ in values) / len(hours) if hours else None,

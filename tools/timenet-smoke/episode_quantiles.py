@@ -25,13 +25,17 @@ def read_quantiles(path, digest, ids, manifest_sha):
         ):
             raise ValueError("Esquema de cuantiles o procedencia incompatibles")
         q = align(z, ids, "quantiles")
-        if (
-            q.shape != (len(ids), 6, 3)
-            or not np.isfinite(q).all()
-            or np.any(np.diff(q, axis=-1) < 0)
-            or not np.array_equal(q[:, :, 1], align(z, ids, "predicted"))
-        ):
-            raise ValueError("Cuantiles con cruce, valor no finito o mediana incompatible")
+        if q.shape != (len(ids), 6, 3) or not np.isfinite(q).all():
+            raise ValueError("Dimensiones o cuantiles no finitos")
+        crossed = np.any(np.diff(q, axis=-1) < 0, axis=-1)
+        count = int(crossed.sum())
+        if count:
+            row, horizon = np.argwhere(crossed)[0]
+            raise ValueError(
+                f"{count} cruce(s) ventana-hora; primero {ids[row]} a +{horizon + 1} h"
+            )
+        if not np.array_equal(q[:, :, 1], align(z, ids, "predicted")):
+            raise ValueError("La mediana no coincide con la predicción exportada")
         checkpoint = z["checkpoint_sha256"].item()
         if not isinstance(checkpoint, str) or not re.fullmatch("[a-f0-9]{64}", checkpoint):
             raise ValueError("Huella de punto de control inválida")
@@ -75,6 +79,9 @@ def compare(
         if raw["input_sha256"].item() != archive_sha:
             raise ValueError("Los cuantiles proceden de otras historias")
     q, checkpoint = read_quantiles(candidate, candidate_sha, ids, input_manifest_sha)
+    bundle = json.loads(check_file(input_manifest, input_manifest_sha).read_bytes())
+    if bundle.get("checkpoint_sha256") != checkpoint:
+        raise ValueError("Los cuantiles corresponden a otro punto de control")
     with np.load(check_file(reference, reference_sha), allow_pickle=False) as z:
         if z["manifest_sha256"].item() != manifest_sha or z["block"].item() != "selection":
             raise ValueError("La referencia procede de otra selección")
@@ -85,9 +92,7 @@ def compare(
     lower, upper = np.maximum(q[:, :, 0], 0.0), np.maximum(q[:, :, 2], 0.0)
 
     def report(mask):
-        return scores(
-            y[mask], predicted[mask], lower[mask], upper[mask], limits[mask], np.zeros(mask.sum())
-        )
+        return scores(y[mask], predicted[mask], lower[mask], upper[mask], limits[mask])
 
     # Agregar contribuciones dentro de cada bloque de calendario antes del remuestreo.
     # Cada sorteo reutiliza los mismos bloques para todas las estaciones y ambos modelos.
@@ -111,7 +116,7 @@ def compare(
         "reference_sha256": reference_sha,
         "reference_checkpoint_sha256": reference_checkpoint,
         "reference_calibrator_sha256": calibrator_sha,
-        "reference_overall": scores(y, rp, rl, ru, limits, np.zeros(len(y))),
+        "reference_overall": scores(y, rp, rl, ru, limits),
         "input_manifest_sha256": input_manifest_sha,
         "manifest_sha256": manifest_sha,
         "crossed": 0,

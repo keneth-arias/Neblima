@@ -55,7 +55,7 @@ class EpisodeScoreTest(TestCase):
             self.assertEqual(checkpoint, "c" * 64)
             values[1, 1] = [3, 1, 2]
             np.savez(path, **fields)
-            with self.assertRaisesRegex(ValueError, "cruce"):
+            with self.assertRaisesRegex(ValueError, "1 cruce.*a.*2"):
                 read_quantiles(path, sha256_file(path), np.array(["a", "b"]), "a" * 64)
 
     def test_training_frequency_persistence_reliability_and_paired_brier(self):
@@ -110,3 +110,20 @@ class EpisodeScoreTest(TestCase):
                 verify_candidate_bundle(
                     root, "selection", "a" * 64, m, release, sha256_file(release), "quantile", ids
                 )
+
+    def test_same_calendar_draws_for_concentration_and_onsets(self):
+        from pathlib import Path
+        from runpy import run_path
+
+        from episode_score import block_difference
+
+        warnings = run_path(
+            str(Path(__file__).resolve().parents[2] / "src/airaware/episode_warnings.py")
+        )
+        hours = np.array([503, 504, 0, 169, 168, 335, 502, 3, 4, 5])
+        delta = np.array([3, 12, 5, 1, 8, 1, 9, -2, 1, 6], dtype=float)
+        a = warnings["paired_interval"](hours.tolist(), delta.tolist(), [0.0] * len(hours))
+        b = block_difference(hours, delta, 168)
+        np.testing.assert_allclose(
+            [a["difference"], a["lower"], a["upper"]], [b["difference"], *b["ci95"]]
+        )

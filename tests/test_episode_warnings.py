@@ -57,7 +57,7 @@ def test_selection_prefers_new_onsets_under_station_budget():
             ("episode", 0.7, {"s": good}),
         ],
         rule=rule(),
-        calibration={"reference": (0.1, 0.2), "episode": (0.1, 0.2)},
+        calibration={"reference": {"s": (0.1, 0.2)}, "episode": {"s": (0.1, 0.2)}},
     )
     assert selected is not None and selected["method"] == "reference"
 
@@ -99,7 +99,7 @@ def test_expired_origins_cannot_subsidize_false_warnings():
     )
     assert (
         select_policy(
-            [("episode", 0.5, {"s": r})], rule=rule(), calibration={"episode": (0.1, 0.2)}
+            [("episode", 0.5, {"s": r})], rule=rule(), calibration={"episode": {"s": (0.1, 0.2)}}
         )
         is None
     )
@@ -120,7 +120,9 @@ def test_station_without_opportunities_remains_in_common_cohort():
     good = evaluate([Origin(0, 0, 1, 0)], y, 1, 0.5, min_lead=1)
     empty = evaluate([Origin(0, 0, 1, 1)], {h: 1.0 for h in range(8)}, 1, 0.5, min_lead=1)
     reference = ("reference", 0.5, {"s1": good, "s2": empty})
-    selected = select_policy([reference], rule=rule(), calibration={"reference": (0.1, 0.2)})
+    selected = select_policy(
+        [reference], rule=rule(), calibration={"reference": {"s1": (0.1, 0.2), "s2": None}}
+    )
     assert selected and selected["detected"] == 1
     assert empty["false_per_station_week"] is None
     with pytest.raises(ValueError, match="estaciones"):
@@ -135,7 +137,9 @@ def test_frozen_rule_enforces_lead_cut_budget_and_calibration(tmp_path):
     reference = evaluate([origins[0], Origin(10, 10, 0, 0)], y, 1, 0.5, min_lead=1)
     options = [("episode", 0.5, {"s": candidate}), ("reference", 0.5, {"s": reference})]
     selected = select_policy(
-        options, rule=policy, calibration={"reference": (0.1, 0.2), "episode": (0.3, 0.2)}
+        options,
+        rule=policy,
+        calibration={"reference": {"s": (0.1, 0.2)}, "episode": {"s": (0.3, 0.2)}},
     )
     assert (
         selected and selected["method"] == "reference" and selected["rule_sha256"] == policy.sha256
@@ -170,3 +174,17 @@ def test_replay_rejects_an_invented_synthetic_onset(tmp_path):
     altered.write_text(json.dumps(answers))
     with pytest.raises(ValueError, match="solución"):
         replay_fixture(root / "inferencia/ventanas.json", altered)
+
+
+def test_missing_previous_hour_and_incomplete_followup_inventory():
+    report = evaluate([Origin(0, 0, 1, 5)], {0: 5, 2: 25, 3: 5, 4: 25}, 20, 0.5)
+    assert report["unanchored_high"] == [2]
+    assert report["excluded_onsets"] == [4]
+    assert report["counts"]["indeterminate"] == 1 and report["observable_onsets"] == []
+
+
+def test_delayed_issuance_can_still_claim_a_later_onset():
+    readings = {h: float(h in (2, 4)) for h in range(7)}
+    report = evaluate([Origin(0, 2.5, 1, 0)], readings, 1, 0.5)
+    assert report["matched_onsets"] == [4] and report["late"] == 1
+    assert report["delayed_emissions"] == 1 and report["emission_delays"] == [2.5]

@@ -212,6 +212,10 @@ def run(args):
     threshold_hash = manifest["thresholds_sha256"]
     thresholds = json.loads(check_file(args.blocks / "thresholds.json", threshold_hash).read_text())
     limits = np.array([thresholds["stations"].get(s, np.nan) for s in stations])
+    forecast_sha = sha256_file(args.forecasts)
+    expected_forecasts = getattr(args, "forecasts_sha256", None)
+    if expected_forecasts is not None and forecast_sha != expected_forecasts:
+        raise ValueError("Huella incompatible de los pronósticos directos")
     with np.load(args.forecasts, allow_pickle=False) as forecasts:
         predicted = align(forecasts, ids, "predicted")
         checkpoint = str(forecasts["checkpoint_sha256"].item())
@@ -260,7 +264,7 @@ def run(args):
             observed = align(observations, ids, "targets")
         artifact = {
             **identity,
-            "calibration_forecasts_sha256": sha256_file(args.forecasts),
+            "calibration_forecasts_sha256": forecast_sha,
             "calibration_windows": len(ids),
             "residual_q10_q90": fit_residuals(predicted, observed).tolist(),
             "probability": None,
@@ -314,6 +318,8 @@ def run(args):
             "checkpoint_sha256": checkpoint,
             "block": phase,
         }
+        if expected_forecasts is not None:
+            values["forecasts_sha256"] = forecast_sha
         if logits:
             values.update(
                 episode_checkpoint_sha256=identity["episode_checkpoint_sha256"],
@@ -349,6 +355,7 @@ if __name__ == "__main__":
             nargs=4,
             metavar=("NPZ", "SHA256", "MANIFIESTO", "MANIFIESTO_SHA256"),
         )
+        command.add_argument("--forecasts-sha256", help="Huella fijada en el recibo del exportador")
         command.add_argument("blocks", type=Path)
         command.add_argument("forecasts", type=Path)
         command.add_argument("output", type=Path)
