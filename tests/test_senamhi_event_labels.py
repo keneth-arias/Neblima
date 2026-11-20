@@ -15,6 +15,8 @@ from airaware.senamhi_event_labels import (
     evaluate_windows,
     inspect_structure,
     load_evidence,
+    verify_bundle,
+    verify_no_label_leakage,
 )
 from airaware.senamhi_timeline import HOURS_FILE, TIMELINE_VERSION
 from airaware.senamhi_windows import WINDOWS_FILE, WINDOWS_VERSION
@@ -675,3 +677,237 @@ def test_load_evidence_reads_json_and_rejects_unsupported_semantics(tmp_path):
     path.write_text(json.dumps({**EVIDENCE, "interval_position": "hour_starting"}))
     with pytest.raises(ValidationError):
         load_evidence(path)
+
+
+def test_label_fields_never_enter_the_model_inputs(tmp_path):
+    timeline = write_timeline(tmp_path, make_rows(value=lambda h: 999.0 if h < 24 else 10.0))
+    windows = build_windows(timeline, tmp_path / "windows")
+    links = verify_bundle(timeline, windows)
+    assert verify_no_label_leakage(links) == {
+        "label_derived_columns": [],
+        "windows_checked": 1,
+        "boundary_violations": 0,
+        "history_future_id_overlaps": 0,
+        "labels_checked": 0,
+        "label_hours_at_or_before_origin": 0,
+        "label_mean_not_future_only": 0,
+    }
+    output = tmp_path / "labels"
+    summary = evaluate(timeline, windows, output, ev=evidence())
+    assert summary["labeling"] == "evaluated"
+    row = pq.read_table(output / "labels.parquet").to_pylist()[0]
+    assert row["mean_ug_m3"] == 10.0
+    assert row["observation_ids"] == [f"obs-{h}" for h in range(24, 48)]
+    assert read_manifest(output)["leakage"]["labels_checked"] == 1
+    checked = verify_no_label_leakage(links, labels=output / "labels.parquet")
+    assert checked["labels_checked"] == 1
+    table = pq.read_table(windows / WINDOWS_FILE)
+    tampered = table.append_column(
+        pa.field("label", pa.string()), pa.array(["above_reference"] * table.num_rows)
+    )
+    pq.write_table(tampered, windows / WINDOWS_FILE)
+    manifest = read_manifest(windows)
+    manifest["output_sha256"] = sha256_file(windows / WINDOWS_FILE)
+    write_manifest(windows, manifest)
+    with pytest.raises(ValueError, match="Campos derivados de etiquetas"):
+        verify_no_label_leakage(links)
+    second = tmp_path / "labels2"
+    with pytest.raises(ValueError, match="Campos derivados de etiquetas"):
+        evaluate(timeline, windows, second, ev=evidence())
+    assert not second.exists()
+    assert list(tmp_path.glob(".airaware-*")) == []
+
+
+def test_label_observations_cannot_reference_history_hours(tmp_path):
+    rows = make_rows()
+    for row in rows:
+        if row["observed_at"] == BASE + timedelta(hours=10):
+            row["observation_id"] = "obs-30"
+            row["source_observation_ids"] = ["obs-30"]
+    timeline = write_timeline(tmp_path, rows)
+    windows = build_windows(timeline, tmp_path / "windows")
+    links = verify_bundle(timeline, windows)
+    with pytest.raises(ValueError, match="Identificadores de la historia"):
+        verify_no_label_leakage(links)
+    with pytest.raises(ValueError, match="Identificadores de la historia"):
+        evaluate(timeline, windows, tmp_path / "labels", ev=evidence())
+    assert not (tmp_path / "labels").exists()
+    assert list(tmp_path.glob(".airaware-*")) == []
+
+
+def test_published_mean_and_ids_come_from_the_future_block_only(tmp_path):
+    timeline, windows, output = full_bundle(tmp_path)
+    evaluate(timeline, windows, output, ev=evidence())
+    links = verify_bundle(timeline, windows)
+    labels_file = output / "labels.parquet"
+    table = pq.read_table(labels_file)
+    index = table.schema.get_field_index("mean_ug_m3")
+    means = pa.array(
+        [value + 1.0 for value in table.column("mean_ug_m3").to_pylist()], pa.float64()
+    )
+    pq.write_table(table.set_column(index, table.schema.field(index), means), labels_file)
+    with pytest.raises(ValueError, match="media publicada"):
+        verify_no_label_leakage(links, labels=labels_file)
+    table = pq.read_table(labels_file)
+    index = table.schema.get_field_index("observation_ids")
+    ids = pa.array(
+        [["obs-5", *rest[1:]] for rest in table.column("observation_ids").to_pylist()],
+        pa.list_(pa.string()),
+    )
+    pq.write_table(table.set_column(index, table.schema.field(index), ids), labels_file)
+    with pytest.raises(ValueError, match="historia o desconocidas"):
+        verify_no_label_leakage(links, labels=labels_file)
+
+
+def test_history_after_origin_is_rejected_as_leakage(tmp_path):
+    timeline = write_timeline(tmp_path, make_rows())
+    windows = build_windows(timeline, tmp_path / "windows")
+    rewrite_windows(
+        windows,
+        mutate=lambda row: {**row, "history_start": row["origin_at"] + timedelta(hours=1)},
+    )
+    links = verify_bundle(timeline, windows)
+    with pytest.raises(ValueError, match="no respetan origin_at"):
+        verify_no_label_leakage(links)
+    with pytest.raises(ValueError, match="no respetan origin_at"):
+        evaluate(timeline, windows, tmp_path / "labels", ev=evidence())
+    assert not (tmp_path / "labels").exists()
+    assert list(tmp_path.glob(".airaware-*")) == []
+
+
+def test_discard_counts_reconcile_per_series(tmp_path):
+    def holes(h):
+        return None if h in (6, 30, 100) else 10.0
+
+    rows = (
+        make_rows(hours=range(120), value=holes, series="serie-a", station="estacion-a", prefix="a")
+        + make_rows(series="serie-b", station="estacion-b", prefix="b")
+        + make_rows(
+            value=lambda h: -3.0 if h == 30 else 10.0,
+            series="serie-c",
+            station="estacion-c",
+            prefix="c",
+        )
+    )
+    timeline = write_timeline(tmp_path, rows)
+    windows = build_windows(timeline, tmp_path / "windows")
+    summary = evaluate(timeline, windows, tmp_path / "labels", ev=evidence())
+    assert summary["labeling"] == "evaluated"
+    manifest = read_manifest(tmp_path / "labels")
+    assert manifest["counts"]["windows_total"] == 24
+    assert manifest["labels_reconciliation"] == {
+        "serie-a": {
+            "candidates": 73,
+            "complete": 22,
+            "history_missing": 31,
+            "future_missing": 20,
+            "labels_evaluated": 22,
+            "labels_discarded": 0,
+        },
+        "serie-b": {
+            "candidates": 1,
+            "complete": 1,
+            "history_missing": 0,
+            "future_missing": 0,
+            "labels_evaluated": 1,
+            "labels_discarded": 0,
+        },
+        "serie-c": {
+            "candidates": 1,
+            "complete": 1,
+            "history_missing": 0,
+            "future_missing": 0,
+            "labels_evaluated": 0,
+            "labels_discarded": 1,
+        },
+    }
+    for entry in manifest["labels_reconciliation"].values():
+        assert entry["candidates"] == (
+            entry["complete"] + entry["history_missing"] + entry["future_missing"]
+        )
+        assert entry["complete"] == entry["labels_evaluated"] + entry["labels_discarded"]
+    labels = pq.read_table(tmp_path / "labels" / "labels.parquet").to_pylist()
+    assert [row["series_id"] for row in labels].count("serie-a") == 22
+    discarded = {BASE + timedelta(hours=h) for h in [*range(23, 54), *range(76, 96)]}
+    assert not discarded & {row["origin_at"] for row in labels if row["series_id"] == "serie-a"}
+    assert manifest["counts"]["label_reasons"] == {
+        "evaluated": 23,
+        "insufficient_valid_hours": 1,
+    }
+
+
+def test_missing_window_group_stops_label_publication(tmp_path, monkeypatch):
+    timeline, windows, output = full_bundle(tmp_path)
+
+    def drop_all(db, links, series_id, batch_size=4096):
+        yield from ()
+
+    monkeypatch.setattr("airaware.senamhi_event_labels._iter_window_groups", drop_all)
+    with pytest.raises(ValueError, match="no coinciden con las ventanas completas"):
+        evaluate(timeline, windows, output, ev=evidence())
+    assert not output.exists()
+    assert list(tmp_path.glob(".airaware-*")) == []
+
+
+@pytest.mark.parametrize(
+    ("field", "offset"),
+    [
+        ("history_start", None),
+        ("history_start", timedelta(hours=1)),
+        ("target_end", timedelta(minutes=1)),
+    ],
+)
+def test_leakage_requires_exact_window_bounds(tmp_path, field, offset):
+    timeline, windows, _ = full_bundle(tmp_path)
+    rewrite_windows(windows, lambda row: {**row, field: row[field] + offset if offset else None})
+    with pytest.raises(ValueError, match="límites"):
+        verify_no_label_leakage(verify_bundle(timeline, windows))
+
+
+@pytest.mark.parametrize(
+    "change", ["orphan", "origin", "outside", "empty_ids", "missing", "duplicate"]
+)
+def test_leakage_checks_published_labels_against_their_own_window(tmp_path, change):
+    timeline = write_timeline(tmp_path, make_rows(hours=range(49)))
+    windows = build_windows(timeline, tmp_path / "windows")
+    output = tmp_path / "labels"
+    evaluate(timeline, windows, output, ev=evidence())
+    path = output / "labels.parquet"
+    table = pq.read_table(path)
+    rows = table.to_pylist()
+    if change == "orphan":
+        rows[0]["window_id"] = "ventana-desconocida"
+    elif change == "origin":
+        rows[0]["origin_at"] -= timedelta(hours=1)
+    elif change == "outside":
+        rows[0]["observation_ids"][-1] = "obs-48"
+    elif change == "empty_ids":
+        rows[0]["observation_ids"] = []
+    elif change == "missing":
+        rows.pop()
+    else:
+        rows[1] = rows[0]
+    pq.write_table(pa.Table.from_pylist(rows, schema=table.schema), path)
+    with pytest.raises(ValueError):
+        verify_no_label_leakage(verify_bundle(timeline, windows), labels=path)
+
+
+def test_reconciliation_includes_series_with_only_discarded_candidates(tmp_path):
+    rows = make_rows() + make_rows(
+        series="serie-b",
+        station="estacion-b",
+        prefix="b",
+        value=lambda h: None if h == 30 else 10.0,
+    )
+    timeline = write_timeline(tmp_path, rows)
+    windows = build_windows(timeline, tmp_path / "windows")
+    output = tmp_path / "labels"
+    evaluate(timeline, windows, output, ev=evidence())
+    assert read_manifest(output)["labels_reconciliation"]["serie-b"] == {
+        "candidates": 1,
+        "complete": 0,
+        "history_missing": 0,
+        "future_missing": 1,
+        "labels_evaluated": 0,
+        "labels_discarded": 0,
+    }
