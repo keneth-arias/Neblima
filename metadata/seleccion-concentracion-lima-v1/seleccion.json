@@ -1,0 +1,115 @@
+{
+  "blocks_sha256": "42181b3ff858029a3982d2f408c954ff14b51f6afb7f068130caed4a294274e1",
+  "gates": {
+    "global_coverage": true,
+    "global_mae": true,
+    "high_coverage": true,
+    "high_mae": false
+  },
+  "means": {
+    "direct": {
+      "all": {
+        "coverage": 0.9062339458605019,
+        "mae": 6.2625997901845025
+      },
+      "high": {
+        "coverage": 0.5551340794711936,
+        "mae": 15.720081980956055
+      }
+    },
+    "quantile": {
+      "all": {
+        "coverage": 0.7867351643285253,
+        "mae": 6.161343572490891
+      },
+      "high": {
+        "coverage": 0.580147224517389,
+        "mae": 17.04359327701393
+      }
+    }
+  },
+  "rule_sha256": "ebcae890a6f242f5b73ede80301d92fb8f672a7a0acbe99b59d589db87f4e40e",
+  "scope": "retrospective_selection",
+  "seed": 27,
+  "seeds": [
+    {
+      "base_weights_sha256": "1d76cc3cfd4c15f9c749372611e5ca6e0b6f910b1fcf0551ce9157e9bfef29c1",
+      "direct": {
+        "all": {
+          "coverage": 0.9068168346176645,
+          "mae": 6.238002795862302,
+          "targets": 151830,
+          "width": 28.347081593225624
+        },
+        "high": {
+          "coverage": 0.5576504168857508,
+          "mae": 15.787606451114348,
+          "targets": 13313,
+          "width": 28.600493319736426
+        }
+      },
+      "direct_bundle_sha256": "dbdf60a98d8a15645f63440dbc6a15cee9a092c2ec7270e5b83392d86d63618e",
+      "direct_checkpoint_sha256": "d42dc1d91dce1abc6284f9cff68df3d0ff7ccbc08ede744865cde1762e53658e",
+      "model_revision": "2fc06364715b967f1860aea9cf38778875588b17",
+      "quantile": {
+        "all": {
+          "coverage": 0.7846868207864058,
+          "mae": 6.1584606827629935,
+          "targets": 151830,
+          "width": 19.0810546875
+        },
+        "high": {
+          "coverage": 0.5759783670096897,
+          "mae": 17.135088920604723,
+          "targets": 13313,
+          "width": 30.62510871887207
+        }
+      },
+      "quantile_checkpoint_sha256": "03e8bcd7e5ea08b2bb115267803e1ce85209e06c3b3be987fbb1aa6398e3c222",
+      "report_sha256": "ac0dd6742a83a37ee8a96e8c97688cd79650ee740422fa8bdaece1b049085211",
+      "seed": 27,
+      "training_data_sha256": "e0b490cf9a545098e0f6da159a1fb34b791659253ae26f8f4a5d4963cb526748"
+    },
+    {
+      "base_weights_sha256": "1d76cc3cfd4c15f9c749372611e5ca6e0b6f910b1fcf0551ce9157e9bfef29c1",
+      "direct": {
+        "all": {
+          "coverage": 0.9056510571033393,
+          "mae": 6.287196784506703,
+          "targets": 151830,
+          "width": 28.3301869888979
+        },
+        "high": {
+          "coverage": 0.5526177420566364,
+          "mae": 15.652557510797761,
+          "targets": 13313,
+          "width": 28.612429115274207
+        }
+      },
+      "direct_bundle_sha256": "3d344bc580c2a82e81bc435d8bde629ed85b07ef7c5452d667fb4835b03bd725",
+      "direct_checkpoint_sha256": "4ae45e02ae79920cd67e59f6fb35a3c454035ff456fd077dc7cf38188889156a",
+      "model_revision": "2fc06364715b967f1860aea9cf38778875588b17",
+      "quantile": {
+        "all": {
+          "coverage": 0.7887835078706448,
+          "mae": 6.164226462218787,
+          "targets": 151830,
+          "width": 19.429885864257812
+        },
+        "high": {
+          "coverage": 0.5843160820250882,
+          "mae": 16.952097633423136,
+          "targets": 13313,
+          "width": 31.173097610473633
+        }
+      },
+      "quantile_checkpoint_sha256": "8ca995269cf112381d0d212aac717ee23d6f3154d085b29ebc7cb412ae7fe88e",
+      "report_sha256": "c982f0bac3dedefd67b58e32637c0b3067ce1d2fe040bc4648db767b0ef190f2",
+      "seed": 28,
+      "training_data_sha256": "e0b490cf9a545098e0f6da159a1fb34b791659253ae26f8f4a5d4963cb526748"
+    }
+  ],
+  "selected": "direct",
+  "test_policy": "new_unseen_station_hours_required_before_pilot",
+  "version": "lima-eleccion-concentracion-v1"
+}

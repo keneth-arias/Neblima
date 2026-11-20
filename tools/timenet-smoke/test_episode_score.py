@@ -7,6 +7,20 @@ from episode_score import scores
 
 
 class EpisodeScoreTest(TestCase):
+    def test_distinct_hours_handles_overlap_stations_and_missing_targets(self):
+        from episode_score import persistence_mae, station_target_hours
+
+        targets = np.array([[5, 10, np.nan], [10, np.nan, 2], [8, np.nan, np.nan]])
+        baseline = persistence_mae(targets, np.array([4, 8, 7]), np.array([10, 10, 7]))
+        self.assertEqual(baseline["all"]["targets"], 5)
+        self.assertEqual(
+            baseline["high"], {"targets": 3, "mae": 3.0, "by_horizon": [1.5, 6.0, None]}
+        )
+        result = station_target_hours(
+            np.array(["a", "a", "b"]), np.array([0, 1, 0]), targets, np.array([10, 10, 7])
+        )
+        self.assertEqual(result, {"a": {"all": 3, "high": 1}, "b": {"all": 1, "high": 1}})
+
     def test_incomplete_follow_up_and_active_history(self):
         y = np.array([[1.0, 2, 3, 4, 5, 6], [1.0, 2, 3, 4, 5, np.nan]])
         table = scores(
