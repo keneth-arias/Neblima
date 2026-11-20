@@ -76,6 +76,7 @@ def score(
     calibration,
     output,
     *,
+    tracking=None,
     now=None,
 ):
     def read(path, digest):
@@ -152,7 +153,7 @@ def score(
         or np.isinf(y).any()
     ):
         raise ValueError("Ventanas de prueba incompatibles")
-    output_sha = intent_sha = receipt_sha = None
+    output_sha = intent_sha = receipt_sha = tracked_sha = run_id = None
     if len(ids):
         if output is None:
             raise ValueError("Se requiere la salida original de inferencia")
@@ -172,6 +173,23 @@ def score(
         receipt_sha = sha256_file(receipt_path)
         output_sha = read(receipt_path, receipt_sha)
         pred = check_file(output / f"predictions-{step}.npz", output_sha)
+        if tracking is None:
+            raise ValueError("Se requiere el registro independiente de MLflow")
+        tracked_path, tracked_sha = tracking
+        run = read(tracked_path, tracked_sha)["run"]
+        params = {row["key"]: row["value"] for row in run["data"]["params"]}
+        tags = {row["key"]: row["value"] for row in run["data"]["tags"]}
+        run_id = run["info"]["run_id"]
+        keys = ("phase", "head", "bundle_sha256", "image", "step", "seed", "run_id")
+        if (
+            run["info"]["status"] != "FINISHED"
+            or not run_id
+            or intent["seed"] != release["seed"]
+            or any(params.get(k) != str(intent[k]) for k in keys)
+            or tags.get("artifact_sha256") != output_sha
+            or tags.get("checkpoint_sha256") != release["checkpoint_sha256"]
+        ):
+            raise ValueError("MLflow no vincula esta salida con la inferencia congelada")
         with np.load(pred, allow_pickle=False) as data:
             if (
                 data["checkpoint_sha256"].item() != release["checkpoint_sha256"]
@@ -187,7 +205,7 @@ def score(
                 raise ValueError("Los cuantiles proceden de otra matriz o versión de Qwen")
         if head == "quantile":
             q, _ = read_quantiles(pred, output_sha, ids, bundle_sha)
-            lo, hi = q[:, :, 0], q[:, :, 2]
+            lo, hi = np.maximum(0.0, q[:, :, 0]), np.maximum(0.0, q[:, :, 2])
         elif head == "direct":
             cal = read(calibration, release["direct_calibrator_sha256"])
             if cal["checkpoint_sha256"] != release["checkpoint_sha256"]:
@@ -210,6 +228,8 @@ def score(
         "cohort_sha256": cohort_sha,
         "infer_manifest_sha256": bundle_sha,
         "predictions_sha256": output_sha,
+        "mlflow_run_id": run_id,
+        "mlflow_record_sha256": tracked_sha,
         "worker_intent_sha256": intent_sha,
         "worker_receipt_sha256": receipt_sha,
         "checkpoint_sha256": release["checkpoint_sha256"],
@@ -223,6 +243,7 @@ if __name__ == "__main__":
     for arg in ("protocol", "seal", "cohort"):
         p.add_argument(f"--{arg}-sha256", required=True)
     p.add_argument("--worker-output", type=Path)
+    p.add_argument("--mlflow-record", nargs=2, metavar=("ARCHIVO", "SHA256"))
     a = p.parse_args()
     result = score(
         a.protocol,
@@ -234,6 +255,7 @@ if __name__ == "__main__":
         a.thresholds,
         a.calibrator,
         a.worker_output,
+        tracking=(Path(a.mlflow_record[0]), a.mlflow_record[1]) if a.mlflow_record else None,
     )
     with NamedTemporaryFile(dir=a.report.parent) as tmp:
         tmp.write((json.dumps(result, allow_nan=False, indent=2, sort_keys=True) + "\n").encode())

@@ -9,9 +9,35 @@ from unittest import TestCase
 import numpy as np
 from export_senamhi import sha256_file
 from holdout_station_windows import write_json
-from score_station_holdout import score
+from score_station_holdout import score as score_run
 
 CLOSED = datetime(2026, 12, 2, 19, tzinfo=UTC)
+
+
+def score(*args, now):
+    output = args[-1]
+    path = output.parent / "tracking.json" if output is not None else None
+    return score_run(*args, now=now, tracking=(path, sha256_file(path)) if path else None)
+
+
+def track(output):
+    intent = json.loads((output / ".infer-step-00014838.intent.json").read_bytes())
+    predicted = sha256_file(output / "predictions-step-00014838.npz")
+    write_json(
+        output.parent / "tracking.json",
+        {
+            "run": {
+                "info": {"run_id": "fixture-run", "status": "FINISHED"},
+                "data": {
+                    "params": [{"key": k, "value": str(v)} for k, v in intent.items()],
+                    "tags": [
+                        {"key": "artifact_sha256", "value": predicted},
+                        {"key": "checkpoint_sha256", "value": "a" * 64},
+                    ],
+                },
+            }
+        },
+    )
 
 
 class ScoreTest(TestCase):
@@ -43,6 +69,7 @@ class ScoreTest(TestCase):
             "image": spec["image"],
             "model_revision": "fixture",
             "base_weights_sha256": "b" * 64,
+            "seed": 27,
             "sealed_at_utc": "2026-11-20T19:00:00+00:00",
             "direct_calibrator_sha256": sha256_file(cal),
             "head": head,
@@ -114,12 +141,15 @@ class ScoreTest(TestCase):
                 "bundle_sha256": bs,
                 "image": spec["image"],
                 "step": 14838,
+                "seed": 27,
+                "run_id": "test-forecast",
             },
         )
         write_json(
             out / ".infer-step-00014838.receipt.json",
             sha256_file(out / "predictions-step-00014838.npz"),
         )
+        track(out)
         return (
             protocol,
             sha256_file(protocol),
@@ -154,6 +184,23 @@ class ScoreTest(TestCase):
                 with self.assertRaisesRegex(ValueError, "otra inferencia"):
                     score(*inputs, output, now=CLOSED)
 
+    def test_quantile_width_uses_the_same_physical_bounds_as_selection(self):
+        with TemporaryDirectory() as tmp:
+            inputs, out = self.stage(Path(tmp), "quantile", 168)
+            pred = out / "predictions-step-00014838.npz"
+            with np.load(pred, allow_pickle=False) as z:
+                values = dict(z)
+            values["quantiles"][:, :, 0] = -8
+            np.savez(pred, **values)
+            write_json(out / ".infer-step-00014838.receipt.json", sha256_file(pred))
+            with self.assertRaisesRegex(ValueError, "MLflow"):
+                score(*inputs, out, now=CLOSED)
+            track(out)
+            result = score(*inputs, out, now=CLOSED)
+            self.assertAlmostEqual(
+                result["concentration"]["all"]["width"], values["quantiles"][:, :, 2].mean()
+            )
+
     def test_sparse_and_empty_cohort(self):
         for n in (0, 4):
             with self.subTest(n=n), TemporaryDirectory() as tmp:
@@ -174,6 +221,9 @@ class ScoreTest(TestCase):
             with self.assertRaisesRegex(ValueError, "huella"):
                 score(*inputs, out, now=CLOSED)
             write_json(out / ".infer-step-00014838.receipt.json", sha256_file(pred))
+            with self.assertRaisesRegex(ValueError, "MLflow"):
+                score(*inputs, out, now=CLOSED)
+            track(out)
             result = score(*inputs, out, now=CLOSED)
             self.assertEqual(result["decision"], "veto_pilot_on_this_release")
             self.assertFalse(result["gates"]["lower_mae_than_persistence"])
