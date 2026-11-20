@@ -104,6 +104,16 @@ def summarize(db):
     return {"targets": rows, "station_target_hours": station_hours, "groups": groups}
 
 
+def training_events(log, recovered_tails):
+    """Registrar el relleno NUL sin salto de línea que dejó un apagado del nodo."""
+    with log.open("rb") as stream:
+        for number, line in enumerate(stream, start=1):
+            if number > 1 and not line.strip(b"\x00"):
+                recovered_tails[log.name] = {"nul_bytes": len(line), "sha256": sha256_file(log)}
+                return
+            yield json.loads(line)
+
+
 def verify_fit(run, view, policy):
     train = policy["training"]
     scheduled = train["updates"]
@@ -151,17 +161,16 @@ def verify_fit(run, view, policy):
     # Una reanudación puede volver a ejecutar el tramo posterior a un guardado.
     # Admitirlo solo cuando conserva exactamente exposición y tasa programada.
     steps = {}
+    recovered_tails = {}
     for log in sorted(run.glob("events-*.jsonl")):
-        with log.open() as stream:
-            for line in stream:
-                event = json.loads(line)
-                if "window_ids" not in event:
-                    continue
-                record = (event["window_ids"], event["learning_rate_next"])
-                i = event["step"]
-                if i in steps and steps[i] != record:
-                    raise ValueError("Intentos con diferente exposición")
-                steps[i] = record
+        for event in training_events(log, recovered_tails):
+            if "window_ids" not in event:
+                continue
+            record = (event["window_ids"], event["learning_rate_next"])
+            i = event["step"]
+            if i in steps and steps[i] != record:
+                raise ValueError("Intentos con diferente exposición")
+            steps[i] = record
     if set(steps) != set(range(1, scheduled + 1)):
         raise ValueError("Faltan pasos del ajuste")
     order = hashlib.sha256()
@@ -183,6 +192,7 @@ def verify_fit(run, view, policy):
         "steps": scheduled,
         "windows_seen": seen,
         "order_sha256": order.hexdigest(),
+        "recovered_log_tails": recovered_tails,
     }
 
 
