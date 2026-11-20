@@ -1,6 +1,6 @@
 # Procedencia de las ventanas de PM2.5 de Lima
 
-El 20 de noviembre de 2026 se reconstruyeron la grilla horaria de #18 y las particiones de #25 desde el CSV histórico de SENAMHI aprobado en el ADR-005. Las huellas de la grilla y las particiones coincidieron con las del ejemplo Qwen de #25. Para cada fila de los índices del experimento de seis horas se verificaron ID, estación, hora UTC y partición original. El cotejo incluyó la purga de la repetición y exigió una correspondencia uno a uno en ambos sentidos. Solo se leyeron índices y metadatos para hacer el cotejo. [Procedencia del ejemplo de #25](../../metadata/qwen-smoke.json)
+El 20 de noviembre de 2026 se reconstruyeron la grilla horaria de #18 y las particiones de #25 desde el CSV histórico de SENAMHI aprobado en el ADR-005. Las huellas de la grilla y las particiones coincidieron con las del ejemplo Qwen de #25. Para cada fila de los índices del experimento de seis horas se verificaron ID, estación, hora UTC y partición original. El cotejo incluyó la purga de la repetición y exigió una correspondencia uno a uno en ambos sentidos. El cotejo proyectó las columnas de identidad de los índices, las particiones y la grilla y filtró por contaminante y unidad. [Procedencia del ejemplo de #25](../../metadata/qwen-smoke.json)
 
 | Bloque del experimento H24/F6 | Ventanas con serie de origen identificada |
 | --- | ---: |

@@ -11,13 +11,16 @@ from episode_blocks import BLOCKS, VERSION
 from episode_calibration import check_file
 
 
-def trace(blocks, splits, hours, block_hash, split_hash, timeline_hash):
+def trace(blocks, splits, hours, block_hash, split_hash, timeline_hash, source_hashes):
     check_file(blocks / "manifest.json", block_hash)
     check_file(splits, split_hash)
     check_file(hours, timeline_hash)
     manifest = json.loads((blocks / "manifest.json").read_text())
     if manifest["version"] != VERSION or manifest["purpose"] != "retrospective_replay":
         raise ValueError("Se requiere la repetición histórica de cuatro bloques")
+
+    if manifest["source_sha256"] != [source_hashes[k] for k in ("train", "validation", "test")]:
+        raise ValueError("El orden de las fuentes difiere del recibo congelado")
 
     with duckdb.connect(config={"threads": 2}) as db:
         db.execute("SET TimeZone='UTC'")
@@ -80,12 +83,12 @@ def trace(blocks, splits, hours, block_hash, split_hash, timeline_hash):
         """).fetchone()
         if missing or total != distinct_ids or total == 0:
             raise ValueError("Los bloques y las series de origen no corresponden uno a uno")
-        signals = {}
+        by_series = {}
         for station, series, sensor, block, windows in db.execute("""
             SELECT station_key, series_id, sensor_id, block, count(*) FROM links
             GROUP BY ALL ORDER BY station_key, series_id, block
         """).fetchall():
-            entry = signals.setdefault(
+            entry = by_series.setdefault(
                 (station, series),
                 dict(station_key=station, series_id=series, sensor_id=sensor, blocks={}),
             )
@@ -96,7 +99,7 @@ def trace(blocks, splits, hours, block_hash, split_hash, timeline_hash):
         "splits_sha256": split_hash,
         "timeline_sha256": timeline_hash,
         "matched_windows_including_purged": total,
-        "series": list(signals.values()),
+        "series": list(by_series.values()),
     }
 
 
@@ -115,6 +118,7 @@ def main():
         replay["manifest_sha256"],
         origin["splits_sha256"],
         origin["timeline_sha256"],
+        replay["source_sha256"],
     )
     print(json.dumps(receipt, sort_keys=True, indent=2))
 
