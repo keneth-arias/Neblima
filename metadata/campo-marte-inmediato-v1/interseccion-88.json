@@ -1,0 +1,14 @@
+{
+  "cohort_88_station_origins": 18116,
+  "shared_station_origins": {
+    "archivo": {
+      "also_in_88": 17927,
+      "in_replay": 17927
+    },
+    "reciente": {
+      "also_in_88": 159,
+      "in_replay": 168
+    }
+  },
+  "station": "112194"
+}

@@ -1,0 +1,273 @@
+{
+  "by_forecast_quartile": [
+    {
+      "candidate": {
+        "coverage": 0.8184919822586149,
+        "width": 9.14011871347835
+      },
+      "original": {
+        "coverage": 0.9934322756738314,
+        "width": 26.84262848248237
+      },
+      "pairs": 11724,
+      "station_hours": 2831
+    },
+    {
+      "candidate": {
+        "coverage": 0.8597481545809813,
+        "width": 13.90522602429309
+      },
+      "original": {
+        "coverage": 0.9872340425531915,
+        "width": 28.60118561106395
+      },
+      "pairs": 11515,
+      "station_hours": 3586
+    },
+    {
+      "candidate": {
+        "coverage": 0.8720945676716696,
+        "width": 18.733708635417095
+      },
+      "original": {
+        "coverage": 0.9601540709257538,
+        "width": 28.34036311728845
+      },
+      "pairs": 7529,
+      "station_hours": 2565
+    },
+    {
+      "candidate": {
+        "coverage": 0.7723915050784856,
+        "width": 27.966292062884445
+      },
+      "original": {
+        "coverage": 0.7659279778393352,
+        "width": 28.13410870478975
+      },
+      "pairs": 4332,
+      "station_hours": 1303
+    }
+  ],
+  "by_horizon": [
+    {
+      "candidate": {
+        "coverage": 0.8333333333333334,
+        "width": 8.564279694881195
+      },
+      "original": {
+        "coverage": 0.9451282051282052,
+        "width": 15.3595532440426
+      },
+      "pairs": 5850,
+      "station_hours": 5850
+    },
+    {
+      "candidate": {
+        "coverage": 0.8384615384615385,
+        "width": 12.98438608238269
+      },
+      "original": {
+        "coverage": 0.9526495726495726,
+        "width": 24.011265779456938
+      },
+      "pairs": 5850,
+      "station_hours": 5850
+    },
+    {
+      "candidate": {
+        "coverage": 0.8369230769230769,
+        "width": 15.46184241423648
+      },
+      "original": {
+        "coverage": 0.9586324786324786,
+        "width": 28.806869676573676
+      },
+      "pairs": 5850,
+      "station_hours": 5850
+    },
+    {
+      "candidate": {
+        "coverage": 0.8398290598290599,
+        "width": 16.998790203977244
+      },
+      "original": {
+        "coverage": 0.96,
+        "width": 31.522743790239353
+      },
+      "pairs": 5850,
+      "station_hours": 5850
+    },
+    {
+      "candidate": {
+        "coverage": 0.8403418803418803,
+        "width": 17.965854745474434
+      },
+      "original": {
+        "coverage": 0.9593162393162393,
+        "width": 33.267655698744456
+      },
+      "pairs": 5850,
+      "station_hours": 5850
+    },
+    {
+      "candidate": {
+        "coverage": 0.8381196581196582,
+        "width": 18.533137286231863
+      },
+      "original": {
+        "coverage": 0.9613675213675213,
+        "width": 34.433139410812835
+      },
+      "pairs": 5850,
+      "station_hours": 5850
+    }
+  ],
+  "candidate_sha256": "097d3d264d174473d5dd5775205f709217c4ecee1eae1774f73111a728f02f52",
+  "decision": "reject_candidate",
+  "eval_ids_sha256": "d158e50c0e0672e29658f007efde069f99503ec521302793e86e98d04b00f262",
+  "first_calibration": "112194/2024-06-01T23:00:00",
+  "first_comparison": "112194/2026-01-01T23:00:00",
+  "gates": {
+    "pooled_coverage": true,
+    "retains_high_coverage": false,
+    "smaller_mean_width": true
+  },
+  "high_by_horizon": [
+    {
+      "candidate": {
+        "coverage": 0.6102719033232629,
+        "width": 16.79905222037048
+      },
+      "original": {
+        "coverage": 0.5619335347432024,
+        "width": 15.389741897583008
+      },
+      "pairs": 331,
+      "station_hours": 331
+    },
+    {
+      "candidate": {
+        "coverage": 0.536144578313253,
+        "width": 24.127231547344156
+      },
+      "original": {
+        "coverage": 0.5391566265060241,
+        "width": 24.20678787231446
+      },
+      "pairs": 332,
+      "station_hours": 332
+    },
+    {
+      "candidate": {
+        "coverage": 0.46546546546546547,
+        "width": 27.0704157679217
+      },
+      "original": {
+        "coverage": 0.5465465465465466,
+        "width": 29.286870844958433
+      },
+      "pairs": 333,
+      "station_hours": 333
+    },
+    {
+      "candidate": {
+        "coverage": 0.4251497005988024,
+        "width": 28.438077499138387
+      },
+      "original": {
+        "coverage": 0.5179640718562875,
+        "width": 32.36401741690265
+      },
+      "pairs": 334,
+      "station_hours": 334
+    },
+    {
+      "candidate": {
+        "coverage": 0.3712574850299401,
+        "width": 28.18621414218834
+      },
+      "original": {
+        "coverage": 0.5119760479041916,
+        "width": 34.456898997415344
+      },
+      "pairs": 334,
+      "station_hours": 334
+    },
+    {
+      "candidate": {
+        "coverage": 0.3652694610778443,
+        "width": 28.144358066741578
+      },
+      "original": {
+        "coverage": 0.5239520958083832,
+        "width": 35.835040683517924
+      },
+      "pairs": 334,
+      "station_hours": 334
+    }
+  ],
+  "last_calibration": "112194/2025-12-31T17:00:00",
+  "last_comparison": "112194/2026-11-11T17:00:00",
+  "n_calibration": 12048,
+  "n_comparison": 5850,
+  "n_purged": 29,
+  "observed_high": {
+    "candidate": {
+      "coverage": 0.461961961961962,
+      "width": 25.474426732669485
+    },
+    "original": {
+      "coverage": 0.5335335335335335,
+      "width": 28.613751653531896
+    },
+    "paired_coverage": {
+      "blocks": 31,
+      "ci95": [
+        -0.13321642102510722,
+        -0.03829870375721447
+      ],
+      "difference": -0.07157157157157157
+    },
+    "paired_width": {
+      "blocks": 31,
+      "ci95": [
+        -4.767586165905796,
+        -2.1399569871806228
+      ],
+      "difference": -3.1393249208624048
+    },
+    "pairs": 1998,
+    "station_hours": 346
+  },
+  "overall": {
+    "candidate": {
+      "coverage": 0.8378347578347578,
+      "width": 15.08471507119732
+    },
+    "original": {
+      "coverage": 0.9561823361823362,
+      "width": 27.900204599978306
+    },
+    "paired_coverage": {
+      "blocks": 45,
+      "ci95": [
+        -0.13771572865522044,
+        -0.09857657240118323
+      ],
+      "difference": -0.11834757834757835
+    },
+    "paired_width": {
+      "blocks": 45,
+      "ci95": [
+        -13.852731264867774,
+        -11.647529506566846
+      ],
+      "difference": -12.815489528781006
+    },
+    "pairs": 35100,
+    "station_hours": 6010
+  },
+  "protocol_sha256": "681e530f76ff9770fbcc161ee2609d1aeb4c3614f67b217a97a5c563746c9689",
+  "purpose": "retrospective_calibration_diagnostic_only"
+}

@@ -1,0 +1,20 @@
+{
+  "archive_end_exclusive": "2026-11-12T00:00:00",
+  "archive_report_sha256": "a42a972d3eb391b3e63d2ffffbd080e25f3b38481535225d3d2e47ee66e2604a",
+  "archive_start": "2024-06-01T00:00:00",
+  "checkpoint_sha256": "d42dc1d91dce1abc6284f9cff68df3d0ff7ccbc08ede744865cde1762e53658e",
+  "clock": "published_station_labels",
+  "comparison": "Frozen original point model and calibrator as reference. Candidate qualifies for independent shadow confirmation only if pooled evaluation coverage is within [0.75,0.85], mean width decreases, and measured high-hour coverage is at least the reference on identical targets. Empty high stratum is inconclusive. No automatic release.",
+  "cut": "2026-01-01T00:00:00",
+  "diagnostic": "Report paired 95% bootstrap CIs for coverage and width differences, using 168h calendar blocks by origin, and coverage by horizon, issued point-forecast quartile, and observed high hours. Distinguish pairs and unique target hours. This archive was previously scored in aggregate.",
+  "forecast_sha256": "a846d662994e9db4a5d055ff30b7ea65ad8e0d327530bcbb876c81f324e0ac14",
+  "original_calibrator_sha256": "16ee82189518ed7a1f634037acab6db17563ec6680a31626834e4d26b5b41e21",
+  "partition_rule": "All 24 history hours and all 6 future hours must lie within the same half-open partition. Purge crossers.",
+  "purpose": "retrospective_calibration_diagnostic_only",
+  "recorded_at_utc": "2026-11-20T20:40:35.255669+00:00",
+  "station": "112194",
+  "strata": "For each horizon, cut the calibration point forecasts at their linear quartiles. Assign ties to the higher group. Fit linear q10,q90 of observed minus predicted within each group. Use pooled horizon residuals for bins with fewer than 200 calibration windows. Clip endpoints at zero.",
+  "threshold_ug_m3": 34.95,
+  "unit": "ug/m3",
+  "version": "campo-residuos-condicionales-v1"
+}
