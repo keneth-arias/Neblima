@@ -8,11 +8,33 @@ from tempfile import TemporaryDirectory
 from unittest import TestCase
 
 import numpy as np
-from holdout_station_windows import prepare
+from holdout_station_windows import cohort, prepare
 from station_receipts import chart_url, register
 
 
 class HoldoutTest(TestCase):
+    def test_out_of_float32_range_is_a_reasoned_abstention(self):
+        start = datetime(2026, 11, 23, 1)
+        values = [
+            {
+                "station_hour": (start + timedelta(hours=h)).isoformat(),
+                "value": 1e39 if h == 23 else 4.0,
+            }
+            for h in range(24)
+        ]
+        protocol = {
+            "origin_start_inclusive": "2026-11-24T00:00:00",
+            "origin_stop_exclusive": "2026-12-01T00:00:00",
+            "history_hours": 24,
+            "forecast_hours": 6,
+            "schedule_hours": 168,
+        }
+        origins, ids, h, y = cohort(protocol, values)
+        self.assertEqual(origins[0]["out_of_range_history_hours"], 1)
+        self.assertEqual(origins[0]["missing_history_hours"], 0)
+        self.assertFalse(origins[0]["eligible"])
+        self.assertEqual((len(ids), h.shape, y.shape), (0, (0, 24), (0, 6)))
+
     def test_real_receipt_parser_blind_histories_and_locked_vintage(self):
         protocol = (
             Path(__file__).resolve().parents[2]
@@ -48,6 +70,14 @@ class HoldoutTest(TestCase):
             with self.assertRaisesRegex(ValueError, "apertura"):
                 run(vintage - timedelta(seconds=1))
             self.assertFalse(output.exists())
+            receipts.mkdir()
+            empty = prepare(
+                protocol, protocol_sha, seal, seal_sha, receipts, root / "empty", vintage
+            )
+            self.assertEqual(
+                (empty["origins"], empty["eligible_histories"], empty["source_receipts"]),
+                (168, 0, []),
+            )
             start = datetime(2026, 11, 23, 1)
 
             def record(items, arrival):

@@ -28,7 +28,7 @@ uv run --project tools/timenet-smoke --locked python tools/timenet-smoke/holdout
   "$P" "$SELLO" "$RECEPCIONES" "$COHORTE" --protocol-sha256 "$SHA_PROTOCOLO" --seal-sha256 "$SHA_SELLO"
 ```
 
-La segunda orden abre la cohorte a partir del cierre del 02/12 y verifica los recibos originales. Los 168 orígenes quedan inventariados. Se entrega al proceso de inferencia únicamente `infer/`, con el ID y las 24 lecturas finitas de cada historia completa. Los objetivos faltantes conservan su lugar en `scoring/observed.npz`; un objetivo faltante nunca descarta una historia apta. La carpeta de puntuación queda fuera del montaje de inferencia.
+La segunda orden abre la cohorte a partir del cierre del 02/12 y verifica los recibos originales. Los 168 orígenes quedan inventariados, con conteos de lecturas ausentes y lecturas fuera del rango numérico de la imagen. Si no hay historias aptas, se registra un resultado inconcluso sin asignar GPU. Se entrega al proceso de inferencia únicamente `infer/`, con el ID y las 24 lecturas finitas de cada historia completa. Los objetivos faltantes conservan su lugar en `scoring/observed.npz`; un objetivo faltante nunca descarta una historia apta. La carpeta de puntuación queda fuera del montaje de inferencia.
 
 ## Decisión registrada
 

@@ -100,7 +100,7 @@ def register(root, raw, receipt):
     return target
 
 
-def audit(root, through=None, *, include_receipts=False):
+def audit(root, through=None, *, include_receipts=False, allow_empty=False):
     receipts = []
     last_check, last_listed, changes, previous_change = {}, {}, [], {}
     counts = {"first_value": 0, "revision": 0, "withdrawn": 0}
@@ -111,7 +111,7 @@ def audit(root, through=None, *, include_receipts=False):
             raise ValueError("El corte de auditoría requiere una zona horaria")
         key = cutoff.astimezone(UTC).strftime("%Y%m%dT%H%M%S.%fZ")
         snapshots = [path for path in snapshots if path.name <= key]
-    if not snapshots:
+    if not snapshots and not (allow_empty and root.is_dir()):
         raise ValueError("No hay capturas para auditar")
     for path in snapshots:
         receipt_bytes = (path / "receipt.json").read_bytes()

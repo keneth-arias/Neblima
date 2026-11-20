@@ -37,10 +37,17 @@ def cohort(protocol, observations):
         key = f"112194/{origin.isoformat()}"
         h = [hours.get(origin - j * HOUR) for j in range(23, -1, -1)]
         missing = h.count(None)
+        invalid = sum(v is not None and abs(v) > float(np.finfo(np.float32).max) for v in h)
+        eligible = not (missing or invalid)
         origins.append(
-            {"window_id": key, "missing_history_hours": missing, "eligible": missing == 0}
+            {
+                "window_id": key,
+                "missing_history_hours": missing,
+                "out_of_range_history_hours": invalid,
+                "eligible": eligible,
+            }
         )
-        if not missing:
+        if eligible:
             ids.append(key)
             histories.append(h)
             targets.append([hours.get(origin + j * HOUR) for j in range(1, 7)])
@@ -72,7 +79,7 @@ def prepare(protocol_path, protocol_sha, seal_path, seal_sha, root, output, now)
         or now < vintage
     ):
         raise ValueError("Protocolo, sello o fecha de apertura incompatibles")
-    observed = audit(root, through=vintage.isoformat(), include_receipts=True)
+    observed = audit(root, through=vintage.isoformat(), include_receipts=True, allow_empty=True)
     origins, ids, histories, targets = cohort(protocol, observed["changes"])
     with (output.parent / f".{output.name}.lock").open("a") as lock:
         fcntl.flock(lock, fcntl.LOCK_EX)
