@@ -10,7 +10,7 @@ este documento evalúa datos reales todavía.
 
 - Código nuevo: `src/airaware/benchmarks/holdout.py` con el subpaquete
   `airaware.benchmarks`; pruebas en `tests/test_holdout_isolation.py`
-  (16 pruebas, todas sintéticas, deterministas y sin red).
+  (pruebas sintéticas, deterministas y sin red).
 - No se modificó ningún archivo existente: `senamhi_splits.py`,
   `senamhi_windows.py` y las particiones congeladas de Lima se conservan
   intactos. No hay dependencias nuevas.
@@ -30,11 +30,12 @@ declarado en JSON canónico (claves ordenadas, sin espacios). Dos
 configuraciones idénticas producen planes y hash idénticos; cambiar cualquier
 entrada cambia el hash. Se rechaza una estación a la vez reservada y de
 entrenamiento, claves duplicadas, claves fuera del patrón de identidad,
-coordenadas imposibles y periodos mal ordenados o sin zona UTC.
+coordenadas imposibles y periodos mal ordenados o sin zona UTC. Las estaciones del plan
+son inmutables. Al leer un plan guardado se verifican la versión y la huella SHA-256.
 
 ## Aislamiento de estaciones probado (R2)
 
-`verify_isolation(plan, manifests)` comprueba que ninguna estación reservada
+`verify_isolation(plan, manifests, periods)` comprueba que ninguna estación reservada
 aparece en los `counts` de los manifiestos de entrenamiento, validación, prueba
 ni preentrenamiento, según el esquema fijado por `senamhi_splits.py`
 (`version` `senamhi-pm25-splits-v1` y filas `station_key`/`split`). Una fila de
@@ -42,7 +43,11 @@ la estación reservada en cualquier split del paquete —incluida la purga— es
 violación `station_leakage` con el `station_key`, el manifiesto infractor y el
 `split`. `assert_isolation` falla cerrado: lanza `HoldoutIsolationError` con el
 detalle de cada violación. Un manifiesto con versión distinta o sin `counts`
-también falla cerrado. La prueba inyecta la estación reservada en cada manifiesto
+también falla cerrado. El control completo requiere dos paquetes identificados con las claves
+`entrenamiento` y `preentrenamiento`. Cada manifiesto de #19 ya abarca las particiones
+`train`, `validation` y `test`, con `purged` opcional y conteos positivos. Se pueden
+incluir paquetes adicionales por nombre. Cada paquete requiere un periodo con la misma clave.
+La prueba inyecta la estación reservada en cada manifiesto
 (entrenamiento, validación, prueba y preentrenamiento) y exige el fallo con
 detalle exacto.
 
@@ -54,7 +59,9 @@ entrenamiento; cualquier par por debajo del umbral produce una violación
 `spatial_proximity` con la distancia y el par involucrado. La prueba usa una
 geometría sintética de distancia conocida (un grado de longitud en el ecuador,
 111,195 km) y comprueba tanto el fallo con umbral 150 km como el paso con
-100 km sobre la misma geometría.
+100 km sobre la misma geometría. Si una estación de algún manifiesto carece de identidad y
+coordenadas en `training_stations` y tampoco es reservada, el informe la identifica como
+`undeclared_station` y el aislamiento falla.
 
 ## Aislamiento temporal probado (R4)
 
@@ -77,7 +84,8 @@ observada de PM2.5 dentro del periodo reservado según el esquema de counts de
 la grilla de #15 (`senamhi-hourly-v1`), horas esperadas del periodo cerrado,
 cobertura, mínimo declarado y marca `sufficient`. Las estaciones por debajo del
 mínimo se listan en `insufficient_station_keys` y `all_sufficient` queda en
-falso; una estación sin filas se reporta con cero horas disponibles. Nunca se
+falso; una estación sin filas se reporta con cero horas disponibles. Si las horas observadas
+superan las horas del periodo, se rechaza el conteo y se identifica la estación. Nunca se
 inventan horas ni se imputa: la insuficiencia se informa, no se corrige. En la
 ejecución real, las horas del periodo deben contarse del `hours.parquet` del
 paquete de #19/#30 filtrando `observed_at` dentro del periodo reservado y
@@ -106,5 +114,6 @@ make build   # exit 0: sdist y wheel; el wheel incluye airaware/benchmarks/holdo
 make audit   # exit 0: sin vulnerabilidades conocidas (requiere internet)
 ```
 
-Las 16 pruebas nuevas están en `tests/test_holdout_isolation.py` y no consultan
-la red ni leen particiones reales.
+La revisión amplió los casos de regresión en `tests/test_holdout_isolation.py` para cubrir
+evidencia faltante, estaciones sin coordenadas declaradas, cobertura imposible e integridad
+del plan guardado.

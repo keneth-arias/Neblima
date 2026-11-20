@@ -5,6 +5,7 @@ ninguna prueba consulta la red ni lee particiones congeladas reales.
 """
 
 import json
+from collections.abc import MutableSequence
 from datetime import UTC, datetime
 
 import pytest
@@ -14,6 +15,7 @@ from airaware.benchmarks.holdout import (
     HOLDOUT_PLAN_VERSION,
     HoldoutConfig,
     HoldoutIsolationError,
+    HoldoutPlan,
     PeriodUtc,
     assert_isolation,
     plan_holdout,
@@ -80,10 +82,15 @@ def isolated_manifests(**extra) -> dict[str, dict]:
         "entrenamiento": splits_manifest([TRAIN_D, TRAIN_E]),
         "validación": splits_manifest([TRAIN_D, TRAIN_E]),
         "prueba": splits_manifest([TRAIN_D, TRAIN_E]),
-        "preentrenamiento": splits_manifest([TRAIN_D, TRAIN_E, TRAIN_F]),
+        "preentrenamiento": splits_manifest([TRAIN_D, TRAIN_E]),
     }
     manifests.update(extra)
     return manifests
+
+
+def disjoint_periods(**overrides) -> dict:
+    periods = dict.fromkeys(isolated_manifests(), ("2021-01-01T00:00Z", "2022-12-31T23:00Z"))
+    return {**periods, **overrides}
 
 
 def grid_manifest(observed: dict[str, int], version: str = TIMELINE_VERSION) -> dict:
@@ -146,10 +153,10 @@ def test_plan_rejects_ambiguous_or_malformed_config():
 
 def test_station_isolation_passes_without_reserved_keys():
     plan = plan_holdout(HoldoutConfig(**build_config()))
-    report = verify_isolation(plan, isolated_manifests())
+    report = verify_isolation(plan, isolated_manifests(), disjoint_periods())
     assert report["violations"] == []
     assert report["isolated"] is True
-    assert_isolation(plan, isolated_manifests())
+    assert_isolation(plan, isolated_manifests(), disjoint_periods())
 
 
 @pytest.mark.parametrize("label", ["entrenamiento", "validación", "prueba", "preentrenamiento"])
@@ -157,7 +164,7 @@ def test_station_isolation_fails_closed_with_detail(label):
     plan = plan_holdout(HoldoutConfig(**build_config()))
     manifests = isolated_manifests()
     manifests[label] = splits_manifest([TRAIN_D, TRAIN_E, RESERVED_A])
-    report = verify_isolation(plan, manifests)
+    report = verify_isolation(plan, manifests, disjoint_periods())
     leakage = [
         item
         for item in report["violations"]
@@ -174,7 +181,7 @@ def test_station_isolation_fails_closed_with_detail(label):
         for split in ("train", "validation", "test")
     ]
     with pytest.raises(HoldoutIsolationError) as raised:
-        assert_isolation(plan, manifests)
+        assert_isolation(plan, manifests, disjoint_periods())
     assert str(RESERVED_A) in str(raised.value)
     assert "train" in str(raised.value)
     assert label in str(raised.value)
@@ -185,10 +192,10 @@ def test_station_isolation_rejects_manifests_outside_the_contract():
     plan = plan_holdout(HoldoutConfig(**build_config()))
     stale = isolated_manifests(entrenamiento=splits_manifest([TRAIN_D], version="otro-v0"))
     with pytest.raises(HoldoutIsolationError, match="contrato"):
-        assert_isolation(plan, stale)
+        assert_isolation(plan, stale, disjoint_periods())
     incomplete = isolated_manifests(prueba={"version": SPLITS_VERSION})
     with pytest.raises(HoldoutIsolationError, match="counts"):
-        assert_isolation(plan, incomplete)
+        assert_isolation(plan, incomplete, disjoint_periods())
 
 
 def test_spatial_isolation_enforces_declared_threshold():
@@ -200,7 +207,8 @@ def test_spatial_isolation_enforces_declared_threshold():
         )
     )
     plan = plan_holdout(close)
-    report = verify_isolation(plan, isolated_manifests())
+    manifests = {label: splits_manifest([TRAIN_D]) for label in isolated_manifests()}
+    report = verify_isolation(plan, manifests, disjoint_periods())
     assert report["isolated"] is False
     assert report["violations"] == [
         {
@@ -212,10 +220,10 @@ def test_spatial_isolation_enforces_declared_threshold():
         }
     ]
     with pytest.raises(HoldoutIsolationError, match="dista"):
-        assert_isolation(plan, isolated_manifests())
-    farther = HoldoutConfig(**build_config(min_distance_km=100.0))
+        assert_isolation(plan, manifests, disjoint_periods())
+    farther = close.model_copy(update={"min_distance_km": 100.0})
     same_geometry = plan_holdout(farther)
-    assert verify_isolation(same_geometry, isolated_manifests())["violations"] == []
+    assert verify_isolation(same_geometry, manifests, disjoint_periods())["violations"] == []
 
 
 def test_temporal_isolation_rejects_overlap_and_inclusive_boundary():
@@ -226,7 +234,7 @@ def test_temporal_isolation_rejects_overlap_and_inclusive_boundary():
             datetime(2023, 2, 15, 12, tzinfo=UTC),
         )
     }
-    report = verify_isolation(plan, isolated_manifests(), periods=inside)
+    report = verify_isolation(plan, isolated_manifests(), periods=disjoint_periods(**inside))
     assert report["isolated"] is False
     assert report["violations"] == [
         {
@@ -243,14 +251,14 @@ def test_temporal_isolation_rejects_overlap_and_inclusive_boundary():
         }
     ]
     with pytest.raises(HoldoutIsolationError, match="solapa"):
-        assert_isolation(plan, isolated_manifests(), periods=inside)
+        assert_isolation(plan, isolated_manifests(), periods=disjoint_periods(**inside))
     touching = {
         "preentrenamiento": (
             datetime(2022, 1, 1, tzinfo=UTC),
             datetime(2023, 1, 1, tzinfo=UTC),
         )
     }
-    boundary = verify_isolation(plan, isolated_manifests(), periods=touching)
+    boundary = verify_isolation(plan, isolated_manifests(), periods=disjoint_periods(**touching))
     assert boundary["isolated"] is False
     assert boundary["violations"][0]["type"] == "temporal_overlap"
     disjoint = {
@@ -259,7 +267,7 @@ def test_temporal_isolation_rejects_overlap_and_inclusive_boundary():
             datetime(2022, 12, 31, 23, tzinfo=UTC),
         )
     }
-    clear = verify_isolation(plan, isolated_manifests(), periods=disjoint)
+    clear = verify_isolation(plan, isolated_manifests(), periods=disjoint_periods(**disjoint))
     assert clear["violations"] == []
     assert clear["isolated"] is True
 
@@ -268,7 +276,7 @@ def test_temporal_isolation_requires_explicit_utc_periods():
     plan = plan_holdout(HoldoutConfig(**build_config()))
     naive = {"preentrenamiento": (datetime(2022, 1, 1), datetime(2022, 3, 1))}
     with pytest.raises(HoldoutIsolationError, match="UTC"):
-        verify_isolation(plan, isolated_manifests(), periods=naive)
+        verify_isolation(plan, isolated_manifests(), periods=disjoint_periods(**naive))
 
 
 def test_representativity_reports_coverage_and_marks_insufficiency():
@@ -364,5 +372,86 @@ def test_period_and_verifications_stay_serializable():
         "end": "2023-06-30T23:00:00+00:00",
     }
     plan = plan_holdout(HoldoutConfig(**build_config()))
-    report = verify_isolation(plan, isolated_manifests())
+    report = verify_isolation(plan, isolated_manifests(), disjoint_periods())
     assert json.dumps(report, sort_keys=True)
+
+
+@pytest.mark.parametrize(
+    "missing",
+    [
+        "manifests",
+        "periods",
+        "no_period_argument",
+        "one_period",
+        "training",
+        "pretraining",
+        "empty_counts",
+        "orphan_period",
+    ],
+)
+def test_full_isolation_requires_evidence_for_each_package(missing):
+    plan = plan_holdout(HoldoutConfig(**build_config()))
+    manifests = isolated_manifests()
+    periods = disjoint_periods()
+    if missing == "manifests":
+        manifests.clear()
+    elif missing == "periods":
+        periods.clear()
+    elif missing == "one_period":
+        del periods["entrenamiento"]
+    elif missing in ("training", "pretraining"):
+        label = "entrenamiento" if missing == "training" else "preentrenamiento"
+        del manifests[label], periods[label]
+    elif missing == "empty_counts":
+        manifests["entrenamiento"] = splits_manifest([])
+    elif missing == "orphan_period":
+        periods["otro"] = periods["entrenamiento"]
+    with pytest.raises(HoldoutIsolationError):
+        if missing == "no_period_argument":
+            verify_isolation(plan, manifests)
+        else:
+            verify_isolation(plan, manifests, periods)
+
+
+def test_pretraining_station_must_have_declared_coordinates():
+    plan = plan_holdout(HoldoutConfig(**build_config()))
+    manifests = isolated_manifests(preentrenamiento=splits_manifest([TRAIN_F]))
+    with pytest.raises(HoldoutIsolationError, match=TRAIN_F):
+        assert_isolation(plan, manifests, disjoint_periods())
+
+
+def test_available_hours_cannot_exceed_the_reserved_period():
+    plan = plan_holdout(HoldoutConfig(**build_config()))
+    full = summarize_representativity(plan, grid_manifest({RESERVED_A: EXPECTED_HOURS_PERIOD}))
+    assert full["stations"][0]["coverage_ratio"] == 1.0
+    with pytest.raises(HoldoutIsolationError, match=RESERVED_A):
+        summarize_representativity(plan, grid_manifest({RESERVED_A: EXPECTED_HOURS_PERIOD + 1}))
+
+
+def test_frozen_plan_keeps_its_declared_stations():
+    plan = plan_holdout(HoldoutConfig(**build_config()))
+    for stations in (plan.reserved_stations, plan.training_stations):
+        assert not isinstance(stations, MutableSequence)
+
+
+def test_loading_a_plan_verifies_its_fingerprint():
+    plan = plan_holdout(HoldoutConfig(**build_config()))
+    assert HoldoutPlan.model_validate_json(plan.to_json()) == plan
+    changed = {**plan.to_dict(), "min_distance_km": 0.1}
+    with pytest.raises(ValidationError, match="SHA-256"):
+        HoldoutPlan.model_validate(changed)
+
+
+@pytest.mark.parametrize("change", ["missing_split", "unknown_split", "zero_windows"])
+def test_split_manifest_requires_populated_partitions(change):
+    plan = plan_holdout(HoldoutConfig(**build_config()))
+    manifests = isolated_manifests()
+    counts = manifests["entrenamiento"]["counts"]
+    if change == "missing_split":
+        counts[:] = [row for row in counts if row["split"] != "test"]
+    elif change == "unknown_split":
+        counts[0]["split"] = "otro"
+    else:
+        counts[0]["windows"] = 0
+    with pytest.raises(HoldoutIsolationError, match="entrenamiento"):
+        verify_isolation(plan, manifests, disjoint_periods())

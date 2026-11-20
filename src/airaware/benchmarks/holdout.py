@@ -120,8 +120,8 @@ class HoldoutConfig(BaseModel):
 
     criterion: str = Field(min_length=1)
     created_at_utc: datetime
-    reserved_stations: list[StationIdentity] = Field(min_length=1)
-    training_stations: list[StationIdentity] = Field(min_length=1)
+    reserved_stations: tuple[StationIdentity, ...] = Field(min_length=1)
+    training_stations: tuple[StationIdentity, ...] = Field(min_length=1)
     reserved_period: PeriodUtc
     min_distance_km: float = Field(gt=0)
     min_hours_per_station: int = Field(ge=1)
@@ -152,24 +152,19 @@ class HoldoutConfig(BaseModel):
         return value.isoformat()
 
 
-class HoldoutPlan(BaseModel):
+class HoldoutPlan(HoldoutConfig):
     """Plan versionado y auditable; el hash cubre todo el contenido declarado."""
 
-    model_config = ConfigDict(extra="forbid", frozen=True)
-
     version: str
-    criterion: str
-    created_at_utc: datetime
-    reserved_stations: list[StationIdentity]
-    training_stations: list[StationIdentity]
-    reserved_period: PeriodUtc
-    min_distance_km: float
-    min_hours_per_station: int
     plan_sha256: str = Field(pattern=STATION_KEY_PATTERN)
 
-    @field_serializer("created_at_utc")
-    def _iso_creation(self, value: datetime) -> str:
-        return value.isoformat()
+    @model_validator(mode="after")
+    def _verify_content(self) -> "HoldoutPlan":
+        if self.version != HOLDOUT_PLAN_VERSION:
+            raise ValueError("Versión desconocida del plan de retención")
+        if self.plan_sha256 != _plan_digest(self.content_dict()):
+            raise ValueError("El SHA-256 del plan no coincide con el contenido declarado")
+        return self
 
     def to_dict(self) -> dict:
         return self.model_dump(mode="json")
@@ -183,21 +178,14 @@ class HoldoutPlan(BaseModel):
         return payload
 
 
+def _plan_digest(content: dict) -> str:
+    return sha256(_canonical_json(content).encode("utf-8")).hexdigest()
+
+
 def plan_holdout(config: HoldoutConfig) -> HoldoutPlan:
     """Fijar el plan de retención con hash SHA-256 de su contenido declarado."""
-    draft = HoldoutPlan(
-        version=HOLDOUT_PLAN_VERSION,
-        criterion=config.criterion,
-        created_at_utc=config.created_at_utc,
-        reserved_stations=config.reserved_stations,
-        training_stations=config.training_stations,
-        reserved_period=config.reserved_period,
-        min_distance_km=config.min_distance_km,
-        min_hours_per_station=config.min_hours_per_station,
-        plan_sha256="0" * 64,
-    )
-    digest = sha256(_canonical_json(draft.content_dict()).encode("utf-8")).hexdigest()
-    return draft.model_copy(update={"plan_sha256": digest})
+    content = {**config.model_dump(mode="json"), "version": HOLDOUT_PLAN_VERSION}
+    return HoldoutPlan.model_validate({**content, "plan_sha256": _plan_digest(content)})
 
 
 def haversine_km(first: tuple[float, float], second: tuple[float, float]) -> float:
@@ -240,7 +228,13 @@ def _manifest_counts(manifest: object, label: str) -> list[Mapping]:
             raise _contract_error(
                 f"El manifiesto '{label}' tiene una fila de counts sin station_key o split"
             )
+        windows = row.get("windows")
+        if type(windows) is not int or windows <= 0:
+            raise _contract_error(f"El manifiesto '{label}' tiene un conteo de ventanas inválido")
         rows.append(row)
+    splits = {row["split"] for row in rows}
+    if splits - {"purged"} != {"train", "validation", "test"}:
+        raise _contract_error(f"Las particiones del manifiesto '{label}' difieren de las de #19")
     return rows
 
 
@@ -248,13 +242,14 @@ def station_leakage_violations(plan: HoldoutPlan, manifests: Mapping[str, object
     """Estaciones reservadas presentes en manifiestos de entrenamiento o afines."""
     reserved = {item.station_key for item in plan.reserved_stations}
     violations: list[dict] = []
+    training = {item.station_key for item in plan.training_stations}
     for label in manifests:
         for row in _manifest_counts(manifests[label], label):
             key = row["station_key"]
-            if key in reserved:
+            if key not in training:
                 violations.append(
                     {
-                        "type": "station_leakage",
+                        "type": "station_leakage" if key in reserved else "undeclared_station",
                         "manifest": label,
                         "station_key": key,
                         "split": row["split"],
@@ -332,6 +327,11 @@ def _describe(violation: Mapping) -> str:
             f"estación reservada {violation['station_key']} aparece en el manifiesto "
             f"'{violation['manifest']}' (split infractor: {violation['split']})"
         )
+    if kind == "undeclared_station":
+        return (
+            f"la estación {violation['station_key']} del manifiesto '{violation['manifest']}' "
+            f"({violation['split']}) carece de coordenadas en training_stations"
+        )
     if kind == "spatial_proximity":
         return (
             f"la estación reservada {violation['reserved_station_key']} dista "
@@ -354,6 +354,14 @@ def verify_isolation(
     periods: Mapping[str, object] | None = None,
 ) -> dict:
     """Verificar aislamiento de estaciones, espacio y tiempo; reporte serializable."""
+    required = {"entrenamiento", "preentrenamiento"}
+    missing = required.difference(manifests)
+    if missing:
+        raise HoldoutIsolationError("Faltan manifiestos de " + ", ".join(sorted(missing)))
+    period_labels = set(periods or {})
+    if period_labels != set(manifests):
+        detail = ", ".join(sorted(period_labels.symmetric_difference(manifests)))
+        raise HoldoutIsolationError(f"Se exige un periodo por manifiesto. Revisar {detail}")
     violations = [
         *station_leakage_violations(plan, manifests),
         *spatial_isolation_violations(plan),
@@ -437,6 +445,11 @@ def summarize_representativity(plan: HoldoutPlan, period_grid_manifest: object) 
     insufficient: list[str] = []
     for station in plan.reserved_stations:
         available = observed.get(station.station_key, 0)
+        if available > expected:
+            raise HoldoutIsolationError(
+                f"La estación {station.station_key} declara {available} horas observadas "
+                f"en un periodo de {expected} horas"
+            )
         sufficient = available >= plan.min_hours_per_station
         if not sufficient:
             insufficient.append(station.station_key)
