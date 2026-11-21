@@ -74,6 +74,9 @@ class DirectCohortsTest(unittest.TestCase):
 
     def test_physical_roles_and_fit_only_threshold(self):
         record = self.run_export()
+        purged = self.dest / "purged.json"
+        self.assertEqual(json.loads(purged.read_bytes()), ["id-2", "id-3", "id-6", "id-7"])
+        self.assertEqual(record["purged_file_sha256"], sha256_file(purged))
         seen = set()
         for role, owner in (
             ("fit", "trainer"),
@@ -105,11 +108,46 @@ class DirectCohortsTest(unittest.TestCase):
         with self.assertRaises(FileExistsError):
             self.run_export()
 
+    def test_index_includes_incomplete_windows_omitted_by_producer(self):
+        index = self.root / "train/index.npz"
+        with np.load(index, allow_pickle=False) as original:
+            # Intercalar un ID sin objetivos completos y desordenar también el índice.
+            rows = {k: original[k][::-1] for k in original.files}
+        np.savez(
+            index,
+            window_id=np.append(rows["window_id"], "id-1a"),
+            station_key=np.append(rows["station_key"], "T"),
+            origin_hour=np.append(rows["origin_hour"], 95),
+        )
+        self.write_fit()
+        self.protocol["source_manifest_sha256"] = sha256_file(self.root / "manifest.json")
+        self.run_export()
+        with np.load(self.dest / "trainer/fit/data.npz", allow_pickle=False) as fit:
+            self.assertEqual(fit["window_id"].tolist(), ["id-0", "id-1"])
+            self.assertEqual(fit["origin_hour"].tolist(), [92, 93])
+
+    def test_unindexed_fit_id_is_rejected(self):
+        self.fit["window_id"][0] = "zzzz"
+        self.write_fit()
+        self.protocol["source_manifest_sha256"] = sha256_file(self.root / "manifest.json")
+        with self.assertRaisesRegex(ValueError, "índice"):
+            self.run_export()
+        self.assertFalse(self.dest.exists())
+
+    def test_rejects_unsorted_cuts_and_window_ending_at_final_cut(self):
+        cuts = self.protocol["cuts_utc"]
+        for bad in ([cuts[1], cuts[0], cuts[2]], [*cuts[:2], "1970-01-13T11:00:00Z"]):
+            with self.subTest(cuts=bad):
+                self.protocol["cuts_utc"] = bad
+                with self.assertRaisesRegex(ValueError, "Cortes"):
+                    self.run_export()
+                self.assertFalse(self.dest.exists())
+
     def test_missing_fit_row_even_with_new_file_digests(self):
         self.fit = {k: v[1:] for k, v in self.fit.items()}
         self.write_fit()
         self.protocol["source_manifest_sha256"] = sha256_file(self.root / "manifest.json")
-        with self.assertRaisesRegex(ValueError, "identificadores"):
+        with self.assertRaisesRegex(ValueError, "confirmation"):
             self.run_export()
         self.assertFalse(self.dest.exists())
 

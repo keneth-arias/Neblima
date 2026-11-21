@@ -37,16 +37,17 @@ def load_training(blocks, source_hash):
         np.load(check_file(folder / "index.npz", files["index.npz"]), allow_pickle=False) as index,
         np.load(check_file(folder / "fit.npz", files["fit.npz"]), allow_pickle=False) as fit,
     ):
-        ids, index_order = ordered_ids(index["window_id"])
-        fit_ids, fit_order = ordered_ids(fit["window_id"])
-        if not np.array_equal(ids, fit_ids):
+        index_ids, index_order = ordered_ids(index["window_id"])
+        ids, fit_order = ordered_ids(fit["window_id"])
+        positions = np.searchsorted(index_ids, ids)
+        if np.any(positions == len(index_ids)) or not np.array_equal(index_ids[positions], ids):
             raise ValueError("Los identificadores de ajuste difieren del índice")
         rows = {"window_id": ids}
         for name in ("station_key", "origin_hour"):
             values = index[name]
-            if values.shape != ids.shape:
+            if values.shape != index_ids.shape:
                 raise ValueError(f"Dimensiones incorrectas en {name}")
-            rows[name] = values[index_order]
+            rows[name] = values[index_order[positions]]
         for name, width in (("history", 24), ("targets", 6)):
             values = fit[name]
             if (
@@ -145,6 +146,7 @@ def export(blocks, protocol_path, output):
             )
             record["manifests"][role] = sha256_file(folder / "manifest.json")
         write_json(stage / "purged.json", ids[groups["purged"]].tolist())
+        record["purged_file_sha256"] = sha256_file(stage / "purged.json")
         write_json(stage / "manifest.json", record)
         stage.rename(output)
     return record
