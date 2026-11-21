@@ -143,6 +143,31 @@ class DirectCohortsTest(unittest.TestCase):
                     self.run_export()
                 self.assertFalse(self.dest.exists())
 
+    def test_nonfinite_complete_window_rejected(self):
+        for field, value in (("history", np.nan), ("targets", np.inf)):
+            with self.subTest(field=field):
+                original = self.fit[field]
+                self.fit[field] = original.astype(float)
+                self.fit[field][0, 0] = value
+                self.write_fit()
+                self.protocol["source_manifest_sha256"] = sha256_file(self.root / "manifest.json")
+                with self.assertRaisesRegex(ValueError, "finitos"):
+                    self.run_export()
+                self.assertFalse(self.dest.exists())
+                self.fit[field] = original
+
+    def test_duplicate_station_hour_rejected(self):
+        index = self.root / "train/index.npz"
+        with np.load(index, allow_pickle=False) as data:
+            rows = dict(data)
+        rows["origin_hour"][0] = rows["origin_hour"][1]
+        np.savez(index, **rows)
+        self.write_fit()
+        self.protocol["source_manifest_sha256"] = sha256_file(self.root / "manifest.json")
+        with self.assertRaisesRegex(ValueError, "duplicadas"):
+            self.run_export()
+        self.assertFalse(self.dest.exists())
+
     def test_missing_fit_row_even_with_new_file_digests(self):
         self.fit = {k: v[1:] for k, v in self.fit.items()}
         self.write_fit()

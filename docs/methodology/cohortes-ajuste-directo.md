@@ -13,7 +13,7 @@ uv run --project tools/timenet-smoke --locked python tools/timenet-smoke/direct_
 | `trainer/fit/` | Ajuste y muestra fija para la curva | 225 338 |
 | `trainer/inner_validation/` | Evaluación periódica y selección del paso | 6 664 |
 | `scorer/confirmation/` | Comparación posterior entre checkpoints congelados | 5 163 |
-| `purged.json` | Auditoría local de las ventanas que cruzan un corte | 232 |
+| `purged.json` | Ventanas con seis objetivos completos que cruzan un corte | 232 |
 
 Cada ventana usa las horas del origen −23 al origen +6, ambas inclusive. El archivo histórico de ajuste solo incluye ventanas con seis objetivos completos. Para cada una, el exportador busca su identificador en el índice y recupera su estación y hora de origen. El índice puede incluir ventanas adicionales. El protocolo comprueba el conteo y la huella de cada rol. Calcula el percentil 95 de cada estación con horas únicas de las historias de ajuste. `graph_sample` identifica las 6 664 filas de ajuste elegidas por el orden de la huella de cada ID. La huella de pertenencia ordena los identificadores como texto UTF-8 y añade un salto de línea después de cada uno.
 
