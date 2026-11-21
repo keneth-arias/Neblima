@@ -38,3 +38,13 @@ El informe compara el error absoluto medio (MAE, µg/m³) de ambos objetivos y d
 La mejora es el MAE del control menos el del candidato, promediada con igual peso por semilla. El bloque principal agrupa la **hora objetivo UTC** desde la época Unix por división entera entre 168. Con al menos cuatro bloques con observaciones altas, se remuestrean todos los bloques observados con reemplazo, usando los mismos bloques para las dos semillas, objetivos y estaciones. En cada réplica se ponderan los errores por número de pares. Con el generador de NumPy y semilla 27 se conservan 2000 réplicas con pares altos; el informe cuenta los descartes y calcula los percentiles lineales 2,5 y 97,5. También informa la sensibilidad a bloques de 84 y 336 horas.
 
 Con soporte semanal insuficiente, el resultado es `inconclusive`. Con soporte suficiente, se conserva el control si la mejora en horas altas es nula o negativa, o aumenta el MAE global. Se avanza a calibración si la mejora en horas altas tiene límite inferior estrictamente positivo y se cumple el criterio global. Si la mejora observada es positiva y el intervalo incluye cero, el resultado es inconcluso. La decisión usa solo el bloque de 168 horas. Conservar el informe y las dos huellas bajo el control de acceso del evaluador y cerrar la confirmación para este experimento. La elegibilidad de un paquete requiere evaluar por separado la calibración, la selección histórica y la capacidad lingüística de ambos checkpoints.
+
+## Vincular el ajuste con OpenTSLM-Flamingo
+
+Para preparar los insumos de Flamingo, el responsable de la entrega conserva las carpetas de rol y verifica la huella del manifiesto raíz contra el registro de la exportación. El siguiente comando genera un archivo JSON con las huellas de los dos roles de entrenamiento, del modelo anterior y del nuevo. Comprueba los archivos de ajuste y validación sin abrir la carpeta del evaluador.
+
+```sh
+uv run --project tools/timenet-smoke --locked python tools/timenet-smoke/flamingo_binding.py "$entrega" --release-sha256 "$huella_entrega" --output "$destino/airaware-binding.json"
+```
+
+La salida estándar contiene la huella del nuevo JSON. La lista de ocho archivos del modelo corresponde a la revisión `5e030b001fb8d4be6d10ebb3a8b9bc3e6ef80983` de `opentime/tslm-nov26`. El proceso de preparación debe comprobar también los bytes del modelo contra esa lista antes de iniciar el ajuste. Los permisos de traslado de datos y la aprobación del trabajo en el clúster administrado de Nebius se verifican por separado. [Huellas del modelo](../../configs/training/tslm-nov26-SHA256SUMS)
