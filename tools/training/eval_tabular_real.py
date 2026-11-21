@@ -3,8 +3,8 @@
 Ajusta el modelo tabular solo con entrenamiento, selecciona la configuración únicamente
 por MAE de validación y evalúa una sola vez sobre las ventanas externas congeladas de la
 prueba bivariada (#88), unidas por window_id/forecast_hour con las predicciones registradas
-de persistencia y del modelo temporal A. Si un horizonte falta en cualquier lado, su ventana
-completa sale de la comparación y la exclusión se cuenta en la evidencia. Las métricas de
+de persistencia y del modelo temporal A. Si un horizonte falta en cualquier lado, se bloquea
+la comparación para conservar el denominador congelado. Las métricas de
 episodios quedan pendientes de las etiquetas de #20 y no se calculan aquí.
 """
 
@@ -14,6 +14,7 @@ import argparse
 import gc
 import hashlib
 import json
+import math
 import platform
 import subprocess
 import sys
@@ -77,8 +78,10 @@ def git_commit() -> str:
     ).stdout.strip()
 
 
-def verify_manifest(folder: Path, names: tuple[str, ...]) -> dict:
+def verify_manifest(folder: Path, names: tuple[str, ...], *, expected: dict | None = None) -> dict:
     manifest = json.loads((folder / "manifest.json").read_text())
+    if expected is not None and manifest != expected:
+        raise Bloqueo(f"Las matrices de {folder} difieren de la congelación registrada")
     for name in names:
         if sha256_file(folder / name) != manifest["files"][name]:
             raise Bloqueo(f"{folder / name} no coincide con su manifiesto")
@@ -165,20 +168,16 @@ def table_predictions(table, column: str) -> list[Prediction]:
 
 def align_by_window(
     tabular: list[Prediction], reference: list[Prediction]
-) -> tuple[list[Prediction], list[Prediction], int, int]:
-    """Excluye ventanas completas con horizontes faltantes en cualquier lado y las cuenta."""
+) -> tuple[list[Prediction], list[Prediction]]:
+    """Exige las mismas ventanas completas H24/F6; nunca reduce la cohorte congelada."""
     tab_keys = {(p.window_id, p.forecast_hour) for p in tabular}
     ref_keys = {(p.window_id, p.forecast_hour) for p in reference}
-    if tab_keys == ref_keys:
-        return tabular, reference, 0, 0
-    fuera = {w for w, _ in tab_keys ^ ref_keys}
-    tab_sub = [p for p in tabular if p.window_id not in fuera]
-    ref_sub = [p for p in reference if p.window_id not in fuera]
-    if {(p.window_id, p.forecast_hour) for p in tab_sub} != {
-        (p.window_id, p.forecast_hour) for p in ref_sub
-    }:
-        raise Bloqueo("La cobertura no coincide ni excluyendo ventanas completas")
-    return tab_sub, ref_sub, len(fuera), len(tab_keys ^ ref_keys)
+    if not tab_keys or tab_keys != ref_keys:
+        raise Bloqueo("La cobertura difiere de los objetivos congelados")
+    windows = {window for window, _ in tab_keys}
+    if len(tab_keys) != 6 * len(windows) or any(not 1 <= hour <= 6 for _, hour in tab_keys):
+        raise Bloqueo("La cobertura exige los seis horizontes de cada ventana")
+    return tabular, reference
 
 
 def marginal(preds: Sequence[Prediction], key: Callable[[Prediction], object]) -> list[dict]:
@@ -221,6 +220,8 @@ def station_hours(table) -> int:
 
 
 def assert_close(label: str, computed: float, registered: float) -> None:
+    if not math.isfinite(computed) or not math.isfinite(registered):
+        raise Bloqueo(f"{label}: el cotejo exige valores finitos")
     if abs(computed - registered) > MATCH_TOLERANCE:
         raise Bloqueo(f"{label}: calculado {computed} difiere del registrado {registered}")
 
@@ -237,9 +238,7 @@ def main() -> int:
     parser.add_argument("--output", type=Path, required=True, help="Evidencia JSON a escribir")
     args = parser.parse_args()
     if args.output.exists():
-        raise SystemExit(
-            f"La evidencia ya existe; la evaluación solo se ejecuta una vez: {args.output}"
-        )
+        raise SystemExit(f"La evidencia ya existe y no se sobrescribe: {args.output}")
 
     started = datetime.now(UTC)
     evidence: dict = {
@@ -338,9 +337,11 @@ def main() -> int:
 
     evidence["fuentes"] = {}
     for source in SOURCES:
-        matrices = verify_manifest(args.externa / source, ("inputs.npz", "observed.npz"))
         result = args.externa / f"result-{source}"
         registered, body = pm25_channel_row(result / "metrics.json")
+        matrices = verify_manifest(
+            args.externa / source, ("inputs.npz", "observed.npz"), expected=body["matrices"]
+        )
         if sha256_file(result / "paired.parquet") != body["paired_sha256"]:
             raise Bloqueo(f"paired.parquet de {source} no coincide con su metrics.json")
         if body["models_freeze_sha256"] != MODELS_FREEZE_SHA256:
@@ -368,9 +369,7 @@ def main() -> int:
         del table
         gc.collect()
 
-        tab_sub, ref_sub, excluded_windows, excluded_pairs = align_by_window(
-            tabular_predictions, references["persistence"]
-        )
+        tab_sub, ref_sub = align_by_window(tabular_predictions, references["persistence"])
         joined = paired_join(tab_sub, ref_sub)
         tab_aligned = [first for first, _ in joined]
         ref_aligned = [second for _, second in joined]
@@ -383,8 +382,8 @@ def main() -> int:
             "windows": len(tabular_predictions) // 6,
             "targets": len(joined),
             "station_hours": station_hours_total,
-            "excluded_windows": excluded_windows,
-            "excluded_pairs": excluded_pairs,
+            "excluded_windows": 0,
+            "excluded_pairs": 0,
             "registrado": {
                 "mae_persistence": registered["mae_persistence"],
                 "mae_temporal_first": registered["mae_a"],
@@ -408,22 +407,18 @@ def main() -> int:
         del references["persistence"], tab_sub, ref_sub, joined, tab_aligned, ref_aligned
         gc.collect()
 
-        first_sub, _, excluded_first_windows, excluded_first_pairs = align_by_window(
-            tabular_predictions, references["first"]
-        )
-        joined_first = paired_join(first_sub, references["first"])
+        first_sub, first_reference = align_by_window(tabular_predictions, references["first"])
+        joined_first = paired_join(first_sub, first_reference)
         tab_first = [first for first, _ in joined_first]
         ref_first = [second for _, second in joined_first]
         assert_close(
             f"modelo temporal A en prueba externa {source}", mae(ref_first), registered["mae_a"]
         )
-        if (excluded_first_windows, excluded_first_pairs) != (0, 0):
-            raise Bloqueo(f"La cobertura del modelo temporal A de {source} difiere de la tabular")
         source_evidence["first"] = {"overall": overall(ref_first)}
         source_evidence["delta_tabular_menos_temporal_first"] = paired_evaluation(
             ref_first, tab_first
         ).difference
-        del references["first"], first_sub, joined_first, tab_first, ref_first
+        del references["first"], first_sub, first_reference, joined_first, tab_first, ref_first
         gc.collect()
 
         evidence["fuentes"][source] = source_evidence

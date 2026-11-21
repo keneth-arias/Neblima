@@ -13,7 +13,7 @@ Plan del método y contrato del módulo: [tabular-plan.md](tabular-plan.md).
 ## Método y selección en validación
 
 Las características por par ventana-horizonte son los 24 lags horarios de PM2.5 de la historia,
-el horizonte y el calendario UTC de la hora objetivo, más el desfase respecto de la media de
+el horizonte y el calendario horario de la etiqueta objetivo, más el desfase respecto de la media de
 entrenamiento por estación (`airaware.benchmarks.features` y `processing`). El ajuste usa
 LightGBM 4.7.0 con pérdida L1, parada temprana y elección de iteraciones sobre el MAE de
 validación (`airaware.benchmarks.model`), con un hilo y modo determinista. El criterio de
@@ -132,14 +132,18 @@ una comparación de detección exige las etiquetas de #20 y quedará para una ro
 
 ## Protocolo y decisiones
 
-- **Objetivos ya gastados una vez.** Las dos cohortes externas se usaron para la comparación
-  A/B de #88. El protocolo permite una comparación nueva sin fuga porque el tabular no recibió
-  ninguna información de prueba antes de evaluarse: candidatos e iteraciones se fijaron con
-  validación, la evaluación se ejecutó una sola vez por fuente y el corredor rechaza una
-  segunda ejecución (la evidencia no se sobrescribe).
+- **Comparación posterior sobre una prueba ya utilizada.** Las dos cohortes externas y sus
+  resultados A/B de #88 ya estaban disponibles al preparar este trabajo. El corredor ajusta
+  con entrenamiento y selecciona con validación antes de calcular las métricas externas,
+  pero eso no convierte estos datos en una prueba nueva e independiente. Los resultados son
+  exploratorios sobre las cohortes existentes; una confirmación requiere otra cohorte
+  reservada. El control de salida evita sobrescribir una ruta existente, no impide ejecutar
+  otra evaluación con una ruta diferente ni acredita una congelación previa independiente.
 - **Identidad de objetivos.** La unión uno a uno por `window_id`/`forecast_hour` exige la misma
-  estación y el mismo valor objetivo; de haber faltado un horizonte en cualquier lado, su
-  ventana completa habría salido con la exclusión contada. No hubo exclusiones.
+  estación y el mismo valor objetivo. La corrida registrada no tuvo exclusiones. Tras la
+  revisión, el corredor bloquea cualquier diferencia de cobertura o ventana sin los seis
+  horizontes para conservar el denominador congelado; también coteja las matrices contra
+  el manifiesto incorporado en los resultados de referencia.
 - **Referencias de #25.** Las referencias históricas de #25 (prueba de 304 734 pares) no están
   en este entorno. La comparación usa la prueba externa bivariada, cuyos valores de
   persistencia (7,170 y 6,906 µg/m³) son los que el issue #26 cita como referencia separada.
@@ -149,6 +153,10 @@ una comparación de detección exige las etiquetas de #20 y quedará para una ro
   característica de desfase queda en 0,0 en toda la prueba, como define el contrato del módulo.
   La señal principal son los lags crudos. Vincular identidades de estación es parte del
   trabajo de identidad en curso y no se improvisó aquí.
+- **Reloj por fuente.** El histórico y OpenAQ tienen etiquetas UTC. En SENAMHI horario,
+  el calendario se calcula sobre la hora publicada por el proveedor, cuya zona no está
+  confirmada; el contenedor `datetime` interno no acredita una conversión real a UTC.
+  Esta diferencia de calendario limita la comparación entre fuentes.
 - **Cómputo acotado.** Un hilo, modo determinista, `nice -n 10`, sin GPU: 125 s en total para
   tres ajustes y dos evaluaciones. No se subieron datos ni pesos; la evidencia solo contiene
   agregados.
@@ -164,7 +172,7 @@ nice -n 10 uv run --locked --extra tabular python tools/training/eval_tabular_re
 ```
 
 El corredor verifica cada manifiesto antes de leer los npz, ajusta y selecciona solo con
-entrenamiento y validación, evalúa una vez y coteja cada MAE de referencia contra los valores
+entrenamiento y validación, evalúa cada fuente y coteja cada MAE de referencia contra los valores
 registrados; cualquier discrepancia termina con un bloqueo explícito y sin evidencia.
 
 ## Trazabilidad
@@ -175,5 +183,11 @@ Comando, hashes de entrada, configuración elegida, resultados por estación y h
 estado de episodios: [metadata/tabular-datos-reales.json](../../metadata/tabular-datos-reales.json).
 Fuente de los datos: Servicio Nacional de Meteorología e Hidrología del Perú (SENAMHI), con
 republicaciones de OpenAQ en la cohorte externa. Datos bajo ODC-BY-1.0 según
-[DATA_ATTRIBUTION.md](../../DATA_ATTRIBUTION.md). Las predicciones individuales permanecen en
-el almacenamiento compartido, fuera de Git.
+[DATA_ATTRIBUTION.md](../../DATA_ATTRIBUTION.md). Las predicciones pareadas de referencia permanecen
+en el almacenamiento compartido, fuera de Git. Esta corrida conserva agregados del tabular;
+no guarda sus predicciones individuales ni sus pesos, lo que limita su auditoría posterior.
+
+La corrida original corresponde al [corredor incorporado en este PR](https://github.com/keneth-arias/airaware/blob/21db5ad4991aa42f47789501906e3c997a518e70/tools/training/eval_tabular_real.py).
+La revisión añadió controles de cobertura, vínculo con las matrices congeladas y rechazo de
+métricas no finitas, probados con insumos sintéticos en `tests/test_tabular_real.py`.
+La evidencia numérica original se conserva; estos ajustes no implican otra evaluación real.

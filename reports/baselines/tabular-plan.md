@@ -6,6 +6,8 @@ ventanas históricas de [#19](../../tasks/issue-19-plan.md) y los objetivos exte
 [#88](../models/prueba-externa-pm25-pm10.md): los resultados, denominadores y decisiones de protocolo
 están en [tabular-datos-reales.md](tabular-datos-reales.md). Este documento no reporta cifras propias:
 todo número citado aquí proviene de [las referencias de #25](lima-pm25.md) o de las particiones de #19.
+La comparación externa es exploratoria sobre cohortes ya utilizadas por #88; la prueba
+histórica de #25 y las métricas de episodios siguen pendientes para esta tarea.
 
 ## Método
 
