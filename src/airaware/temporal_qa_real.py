@@ -166,10 +166,12 @@ def elegir_tramos(
 ) -> list[tuple[int, int]]:
     """Elegir los últimos tramos disponibles y devolverlos en orden cronológico.
 
-    Regla determinista: se toman los `cantidad` tramos con las horas más recientes y se
-    asignan a las familias en su orden canónico (tendencia, máximo, momento, comparación).
+    Regla determinista: se toman las últimas 24 horas de los `cantidad` tramos completos
+    más recientes y se asignan a las familias en su orden canónico.
     """
-    elegidos = sorted(tramos[-cantidad:])
+    elegidos = sorted(
+        (fin - TRAMO_HORAS + 1, fin) for inicio, fin in tramos if fin - inicio + 1 >= TRAMO_HORAS
+    )[-cantidad:]
     if len(elegidos) < cantidad:
         raise ValueError(
             f"La serie no ofrece {cantidad} tramos libres de {TRAMO_HORAS} horas; "

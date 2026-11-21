@@ -53,10 +53,11 @@ Los objetivos congelados del pronóstico cubren, para esta serie, del 2015-01-15
 2024-05-29T23:00 UTC sin huecos mayores a 24 horas: no existe ningún tramo libre finito de
 48 horas o más, así que el diseño canónico consecutivo (tendencia de 48 horas) no cabe fuera
 de los objetivos. La regla elegida, determinista y documentada: **tramos contiguos de 24
-horas con ambos canales finitos que ningún objetivo congelado cubre; se toman los cuatro más
-recientes y se asignan a las familias en orden canónico**. La ventana de tendencia usa dos
+horas con ambos canales finitos que ningún objetivo congelado cubre; se toman las últimas
+24 horas de los cuatro tramos completos más recientes y se asignan a las familias en orden
+canónico**. La ventana de tendencia usa dos
 mitades de 12 horas; `answer_trend` admite cualquier longitud par y las pruebas cubren ese
-caso. [Conjunto local](../../data/qa/preguntas-temporales-reales-campo-de-marte.json),
+caso. Conjunto local: `data/qa/preguntas-temporales-reales-campo-de-marte.json`,
 SHA-256 `30d8bdd3…ce2cd`, 18 101 bytes.
 
 ## Conteos por familia y respuestas
@@ -87,8 +88,8 @@ comportamientos sin depender de los datos compartidos.
 
 - `validate_qa_separated` recibió los 102 550 intervalos objetivo congelados de las dos
   series (51 275 ventanas por canal, particiones train y validation) y no encontró solape:
-  las cuatro ventanas de QA quedan fuera de la cobertura 2015-01-15T05:00 /
-  2024-05-29T23:00 UTC y entre sí son disjuntas.
+  las cuatro ventanas de QA están en huecos entre esos intervalos objetivo, dentro del rango
+  global 2015-01-15T05:00 / 2024-05-29T23:00 UTC, y entre sí son disjuntas.
 - Las ventanas de QA terminan el 2024-05-19T18:00 UTC, antes del inicio de los objetivos de
   prueba externa de openaq y senamhi_horario (ambas desde el 2024-06-02), y sus series tienen
   identificadores distintos; ningún caso de prueba del pronóstico entra al conjunto.
@@ -117,3 +118,16 @@ Ajuste pequeño con pruebas, sin cambiar el diseño de #112 ni debilitar la veri
   de #35 (pendiente declarado, no improvisado aquí), junto con la validación contra el
   runtime de TimeNet y la cobertura de más estaciones y de las fuentes openaq y
   senamhi_horario cuando se resuelva su reloj y sus derechos.
+
+## Ajustes de revisión (21/11/2026)
+
+La selección toma ahora exactamente las últimas 24 horas de cada tramo libre elegido.
+Antes devolvía el tramo entero: una longitud impar podía detener la pregunta de tendencia y
+una longitud mayor a 24 no respetaba la regla declarada. Dos pruebas nuevas cubren tramos
+largos y la generación completa con longitudes impares.
+
+La repetición sin red sobre los mismos insumos compartidos, leídos en solo lectura, produjo
+el mismo SHA-256 `30d8bdd39332ad14685a68a5a2a01a4e5e9e6b80b2e10fe5403ad61e3f9ce2cd`.
+Las cuatro respuestas y la separación de los 102 550 intervalos objetivo quedaron verificadas;
+la evidencia original se conserva. Los huecos elegidos están dentro del rango global de
+fechas del pronóstico, fuera de sus intervalos objetivo individuales.

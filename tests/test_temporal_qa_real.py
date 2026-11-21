@@ -74,6 +74,13 @@ def test_elegir_tramos_toma_los_mas_recientes_en_orden_cronologico():
         elegir_tramos([(0, 23)], cantidad=2)
 
 
+def test_elegir_tramos_limita_cada_pregunta_a_las_ultimas_24_horas():
+    tramos = [(0, 24), (100, 128), (200, 247), (300, 323)]
+    assert elegir_tramos(tramos) == [(1, 24), (105, 128), (224, 247), (300, 323)]
+    with pytest.raises(ValueError, match="tramos libres"):
+        elegir_tramos([(0, 22)], cantidad=1)
+
+
 def test_identidad_series_reproduce_los_identificadores_del_release():
     assert identidad_series(CODIGO_CAMPO_DE_MARTE) == (
         "ae2485b1585f200b3d55be0ff285dedcb8f454b003433eb9ce6e7b948554ee80",
@@ -148,6 +155,23 @@ def test_construir_conjunto_pasa_el_control_de_separacion_del_modulo():
     resultado = construir_conjunto(bloque, series, len(inicios))
     intervalos = [ForecastTargetInterval("otra-serie", ORIGEN, ORIGEN + timedelta(hours=24))]
     validate_qa_separated(resultado["preguntas"], intervalos)
+
+
+def test_construir_conjunto_admite_tramos_libres_de_longitud_impar():
+    horas = [
+        hora
+        for inicio, fin in [(0, 24), (50, 78), (100, 126), (150, 177), (200, 259)]
+        for hora in range(inicio, fin + 1)
+    ]
+    bloque = {"horas": horas, "pm25": [10.0] * len(horas), "pm10": [20.0] * len(horas)}
+    inicios = inicios_validos(horas, bloque["pm25"], bloque["pm10"])
+    resultado = construir_conjunto(bloque, ("pm25", "pm10"), len(inicios))
+    assert len(resultado["preguntas"]) == 4
+    assert all(resultado["verificaciones"])
+    for pregunta in resultado["preguntas"]:
+        assert pregunta.window_end_exclusive - pregunta.window_start == timedelta(hours=24)
+        esperado = 48 if pregunta.family == "comparison" else 24
+        assert len(pregunta.observation_ids) == esperado
 
 
 def test_sitio_del_paquete_es_campo_de_marte():
