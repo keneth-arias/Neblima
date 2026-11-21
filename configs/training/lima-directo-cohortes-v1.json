@@ -1,0 +1,13 @@
+{
+  "version": "lima-directo-cohortes-v1",
+  "source_manifest_sha256": "42181b3ff858029a3982d2f408c954ff14b51f6afb7f068130caed4a294274e1",
+  "weights_manifest_sha256": "1d76cc3cfd4c15f9c749372611e5ca6e0b6f910b1fcf0551ce9157e9bfef29c1",
+  "cuts_utc": ["2021-11-17T08:00:00Z", "2022-02-09T08:00:00Z", "2022-03-16T08:00:00Z"],
+  "cohorts": {
+    "fit": {"windows": 225338, "ids_sha256": "fd4b784c69c69e13a3a35f1aedb901544fddc15ec2131eba450867569601ceed"},
+    "inner_validation": {"windows": 6664, "ids_sha256": "833c99f176381d1708f3132980e8a5959a0fea2ac4cbdd80a153b013bbd66fd8"},
+    "confirmation": {"windows": 5163, "ids_sha256": "cc88051cdff3069d67979047d23e487fb0d558a935ed8c708fbdd00f57e8d9ac"},
+    "purged": {"windows": 232, "ids_sha256": "88027732a4c7f8f9ef281740977e3f231dc9db49ca871fefa427cac53443224c"}
+  },
+  "fit_graph_sample": {"windows": 6664, "ids_sha256": "3c255da75f8cdba1b4b29213e45836694d698318a6e8f11d4b17c4ec2a9853bc"}
+}
