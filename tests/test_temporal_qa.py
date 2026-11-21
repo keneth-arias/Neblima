@@ -1,10 +1,11 @@
-"""Pruebas de preguntas temporales sintéticas con respuestas calculables (issue #35)."""
+"""Pruebas de preguntas temporales sintéticas y observadas con respuestas calculables (#35)."""
 
 import inspect
 import re
 from dataclasses import fields, replace
 from datetime import UTC, datetime, timedelta
 from statistics import fmean
+from typing import cast
 from zoneinfo import ZoneInfo
 
 import pytest
@@ -15,6 +16,8 @@ from airaware.temporal_qa import (
     PM25_UNIT,
     QA_FAMILIES,
     ForecastTargetInterval,
+    ObservedSeries,
+    QAFamily,
     SyntheticSeries,
     TemporalQuestion,
     answer_comparison,
@@ -22,7 +25,9 @@ from airaware.temporal_qa import (
     answer_moment,
     answer_trend,
     build_synthetic_series,
+    build_temporal_question,
     generate_questions,
+    generate_questions_for_windows,
     recompute_answer,
     validate_qa_separated,
     verify_answer,
@@ -421,3 +426,202 @@ def test_separacion_distingue_las_dos_horas_repetidas():
     )
     objetivo = ForecastTargetInterval(pregunta.series_ids[0], primera, primera)
     validate_qa_separated([pregunta], [objetivo])
+
+
+def build_observed_pair() -> tuple[ObservedSeries, ObservedSeries]:
+    values_a = tuple(round(10.0 + (index // 12) * 5.0, 2) for index in range(24))
+    values_b = tuple(round(15.0 + (index % 12) * 0.25, 2) for index in range(24))
+    attribution = "SENAMHI, Lima; licencia ODC-BY-1.0"
+    a = ObservedSeries(
+        series_id="observada-campo-de-marte-pm25",
+        start=START,
+        values=values_a,
+        attribution=attribution,
+    )
+    b = ObservedSeries(
+        series_id="observada-campo-de-marte-pm10",
+        start=START,
+        values=values_b,
+        attribution=attribution,
+        pollutant="PM10",
+    )
+    return a, b
+
+
+def test_observed_series_requires_attribution_alignment_and_finite_values():
+    values = (1.0, 2.0)
+    with pytest.raises(ValueError, match="atribución"):
+        ObservedSeries(series_id="s", start=START, values=values, attribution=" ")
+    with pytest.raises(ValueError, match="zona horaria"):
+        ObservedSeries(
+            series_id="s", start=START.replace(tzinfo=None), values=values, attribution="SENAMHI"
+        )
+    with pytest.raises(ValueError, match="finitos"):
+        ObservedSeries(
+            series_id="s", start=START, values=(1.0, float("nan")), attribution="SENAMHI"
+        )
+    with pytest.raises(ValueError, match="negativos"):
+        ObservedSeries(series_id="s", start=START, values=(1.0, -2.0), attribution="SENAMHI")
+
+
+def test_observed_identifiers_embed_the_utc_instant_of_each_cell():
+    series, _b = build_observed_pair()
+    assert series.observation_ids == tuple(
+        f"obs:{series.series_id}:{(START + timedelta(hours=index)).isoformat()}"
+        for index in range(len(series.values))
+    )
+    assert len(set(series.observation_ids)) == len(series.values)
+
+
+def test_build_question_on_observed_segment_round_trips():
+    series, _b = build_observed_pair()
+    question = build_temporal_question(
+        "trend",
+        segments={series.series_id: series},
+        window_start=START,
+        window_end_exclusive=START + timedelta(hours=24),
+    )
+    assert question.question_id == f"tqa-v1-{series.series_id}-trend"
+    assert question.answer == "aumento"
+    assert len(question.observation_ids) == 24
+    assert verify_answer(question, {series.series_id: series}) is True
+    assert recompute_answer(question, {series.series_id: series}) == question.answer
+    assert question.window_start == START
+    assert question.window_end_exclusive == START + timedelta(hours=24)
+
+
+def test_comparison_prompt_names_each_pollutant_when_they_differ():
+    a, b = build_observed_pair()
+    question = build_temporal_question(
+        "comparison",
+        segments={a.series_id: a, b.series_id: b},
+        window_start=START,
+        window_end_exclusive=START + timedelta(hours=24),
+    )
+    assert f"media mayor: {a.series_id} (PM2.5) o {b.series_id} (PM10)" in question.prompt
+    assert question.answer == b.series_id
+    assert verify_answer(question, {a.series_id: a, b.series_id: b}) is True
+
+
+def test_comparison_prompt_keeps_the_single_pollutant_phrasing():
+    a, b = build_observed_pair()
+    b = replace(b, pollutant="PM2.5")
+    question = build_temporal_question(
+        "comparison",
+        segments={a.series_id: a, b.series_id: b},
+        window_start=START,
+        window_end_exclusive=START + timedelta(hours=24),
+    )
+    assert "¿cuál de las dos series tiene la media de PM2.5 mayor:" in question.prompt
+
+
+def test_build_question_validates_family_and_segment_counts():
+    a, b = build_observed_pair()
+    window = (START, START + timedelta(hours=24))
+    with pytest.raises(ValueError, match="Familia"):
+        build_temporal_question(
+            cast(QAFamily, "forecast"),
+            segments={a.series_id: a},
+            window_start=window[0],
+            window_end_exclusive=window[1],
+        )
+    with pytest.raises(ValueError, match="2 serie"):
+        build_temporal_question(
+            "comparison",
+            segments={a.series_id: a},
+            window_start=window[0],
+            window_end_exclusive=window[1],
+        )
+    with pytest.raises(ValueError, match="1 serie"):
+        build_temporal_question(
+            "trend",
+            segments={a.series_id: a, b.series_id: b},
+            window_start=window[0],
+            window_end_exclusive=window[1],
+        )
+    with pytest.raises(ValueError, match="coincide"):
+        build_temporal_question(
+            "trend",
+            segments={"otra-serie": a},
+            window_start=window[0],
+            window_end_exclusive=window[1],
+        )
+
+
+def test_build_trend_rejects_odd_length_window():
+    series, _b = build_observed_pair()
+    with pytest.raises(ValueError, match="par"):
+        build_temporal_question(
+            "trend",
+            segments={series.series_id: series},
+            window_start=START,
+            window_end_exclusive=START + timedelta(hours=23),
+        )
+
+
+def test_generate_questions_for_windows_builds_the_requested_families():
+    a, b = build_pair()
+    windows: dict[QAFamily, tuple[datetime, datetime]] = {
+        "trend": (START, START + timedelta(hours=48))
+    }
+    subset = generate_questions_for_windows(a, b, windows)
+    canonical = generate_questions(a, b)
+    assert len(subset) == 1
+    assert subset[0] == canonical[0]
+    with pytest.raises(ValueError, match="no admitidas"):
+        generate_questions_for_windows(
+            a,
+            b,
+            cast(
+                dict[QAFamily, tuple[datetime, datetime]],
+                {"forecast": (START, START + timedelta(hours=4))},
+            ),
+        )
+    with pytest.raises(ValueError, match="al menos una familia"):
+        generate_questions_for_windows(a, b, {})
+    with pytest.raises(ValueError, match="distintos"):
+        generate_questions_for_windows(a, a, {"trend": (START, START + timedelta(hours=48))})
+    overlapping: dict[QAFamily, tuple[datetime, datetime]] = {
+        "maximum": (START, START + timedelta(hours=24)),
+        "moment": (START + timedelta(hours=12), START + timedelta(hours=36)),
+    }
+    with pytest.raises(ValueError, match="solapan"):
+        generate_questions_for_windows(a, b, overlapping)
+
+
+def test_observed_series_supports_the_canonical_consecutive_layout():
+    a, b = build_observed_pair()
+    grown_a = replace(
+        a, values=tuple(a.values + tuple(round(20.0 - index * 0.1, 2) for index in range(96)))
+    )
+    grown_b = replace(
+        b, values=tuple(b.values + tuple(round(15.0 + index * 0.1, 2) for index in range(96)))
+    )
+    questions = generate_questions(grown_a, grown_b)
+    assert len(questions) == 4
+    assert {question.family for question in questions} == set(QA_FAMILIES)
+    for question in questions:
+        assert verify_answer(question, {grown_a.series_id: grown_a, grown_b.series_id: grown_b})
+
+
+def test_observed_questions_stay_separated_from_forecast_targets():
+    a, _b = build_observed_pair()
+    question = build_temporal_question(
+        "maximum",
+        segments={a.series_id: a},
+        window_start=START,
+        window_end_exclusive=START + timedelta(hours=24),
+    )
+    outside = ForecastTargetInterval(
+        series_id=a.series_id,
+        target_start=START + timedelta(hours=25),
+        target_end=START + timedelta(hours=30),
+    )
+    assert validate_qa_separated([question], [outside]) is None
+    inside = ForecastTargetInterval(
+        series_id=a.series_id,
+        target_start=START,
+        target_end=START + timedelta(hours=5),
+    )
+    with pytest.raises(ValueError, match="solapa"):
+        validate_qa_separated([question], [inside])
