@@ -4,7 +4,7 @@ Registro central de lo que se puede entregar y de lo que falta para la primera r
 [TimeNet](https://challenge.timenet.ai/). Este archivo no envía ni publica nada: solo indica dónde
 está cada evidencia y su estado. Cada envío requiere la autorización prevista en el plan y debe
 dejar aquí su fecha y comprobante. Requisitos oficiales y plazo: [docs/hackathon.md](../hackathon.md)
-(página consultada por última vez el 17/11/2026; cierre de la primera ronda: 23/11/2026 a las
+(página consultada por última vez el 20/11/2026; cierre de la primera ronda: 23/11/2026 a las
 2:59 a. m. en America/Lima, volver a consultar la fuente antes de enviar).
 
 ## Enlaces y materiales disponibles
@@ -21,6 +21,8 @@ dejar aquí su fecha y comprobante. Requisitos oficiales y plazo: [docs/hackatho
 | Selección inicial y política de la fuente | [reports/benchmark-selection.md](../../reports/benchmark-selection.md) · [docs/decisions/005-senamhi-operating-policy.md](../decisions/005-senamhi-operating-policy.md) | Listo | Justificar la elección de SENAMHI/Lima/PM2.5 y el alcance retrospectivo |
 | Atribución de datos | [DATA_ATTRIBUTION.md](../../DATA_ATTRIBUTION.md) | Listo | Aviso ODC-By-1.0 y crédito a SENAMHI, obligatorio en material difundido |
 | Verificación con el lector oficial de TimeNet | [tools/timenet-smoke/README.md](../../tools/timenet-smoke/README.md) | Listo | Demostrar lectura y verificación de TimeF sin red |
+| Borradores de publicaciones (X, LinkedIn y Discord) | [docs/showcase/publicaciones.md](publicaciones.md) | Borrador listo, espera autorización para publicar | Textos con cifras versionadas, alcance retrospectivo y atribución; publicar solo con autorización de Keneth |
+| Guion de grabación de la demo | [docs/showcase/demo-guion.md](demo-guion.md) | Borrador listo, espera autorización para grabar | Toma por toma con comandos, textos del acierto y del error, y verificación contra la matriz del jurado |
 | Mapa web de las siete estaciones | [web/estaciones.html](../../web/estaciones.html) | Listo (material interno) | Apoyo visual de contexto; en esta entrega solo se enlaza, no se modifica |
 | PR externo TimeNet #796 (borrador) | <https://github.com/OpenTSLM/TimeNet/pull/796> | Abierto como borrador | Enlace del aporte de datos a TimeNet para el formulario de la ronda |
 
@@ -29,12 +31,12 @@ dejar aquí su fecha y comprobante. Requisitos oficiales y plazo: [docs/hackatho
 | Elemento | Estado | Nota |
 | --- | --- | --- |
 | Formulario oficial por equipo y ronda | **Pendiente de envío autorizado** | No se ha enviado; al enviarlo, registrar aquí fecha y comprobante |
-| Publicación en X | Sin enlace; texto por preparar | Requerida por la página oficial; espera autorización de Keneth; no se ha publicado nada |
-| Publicación en LinkedIn | Sin enlace; texto por preparar | Requerida por la página oficial; espera autorización de Keneth; no se ha publicado nada |
-| Discord del hackathon | Sin enlace; mensaje no enviado | Espera autorización; guardar aquí el enlace o comprobante del mensaje |
-| Demo grabada | Sin enlace; insumos listos | Grabación pendiente; insumos en [README.md](README.md) (sección 7) |
+| Publicación en X | Sin enlace; borrador listo en [publicaciones.md](publicaciones.md) | Requerida por la página oficial; espera autorización de Keneth; no se ha publicado nada |
+| Publicación en LinkedIn | Sin enlace; borrador listo en [publicaciones.md](publicaciones.md) | Requerida por la página oficial; espera autorización de Keneth; no se ha publicado nada |
+| Discord del hackathon | Sin enlace; mensaje no enviado | Espera autorización; borrador del mensaje en [publicaciones.md](publicaciones.md); guardar aquí el enlace o comprobante |
+| Demo grabada | Sin enlace; guion listo | Grabación pendiente; guion toma por toma en [demo-guion.md](demo-guion.md) e insumos en [README.md](README.md) (sección 7) |
 | Inscripción individual | Por confirmar | Cada integrante confirma su registro; equipo Cuybernautas de tres personas |
-| Página oficial del reto (verificación vigente) | <https://challenge.timenet.ai/> | Volver a consultar reglas, fecha límite y PR de datos antes de cada envío; última revisión registrada: 17/11/2026 |
+| Página oficial del reto (verificación vigente) | <https://challenge.timenet.ai/> | Volver a consultar reglas, fecha límite y PR de datos antes de cada envío; última revisión registrada: 20/11/2026 a las 21:48 UTC (Lightpanda, HTTP 200; reglas, plazo y requisito del PR de datos sin cambios respecto de lo registrado) |
 
 ## Notas
 
