@@ -1,0 +1,223 @@
+{
+ "cadena_congelada": {
+  "history_hours": 24,
+  "horizon_hours": 6,
+  "origen": "keneth-arias airaware data/processed/lima-procedencia-20261120 (solo lectura)",
+  "splits_sha256": "a02e001795bf84985c087766ee46ea7acc53d86e5d2ed96b0974a5c6fd62502d",
+  "test_start": "2023-02-25 18:00:00+00",
+  "timeline_sha256": "2e8fa784cea645b8eb97b42f3fe36e6c532b5959cc8ae66da0ea416df513413c",
+  "validation_start": "2022-03-16 08:00:00+00",
+  "windows_sha256": "fdbbe324f4674a176bc2b865adb191f8acee409719ccbf5bf8f240903782c862"
+ },
+ "clasificacion_evidencia": {
+  "nota": "Ninguno de los 1176 valores tiene hora de publicación del proveedor (available_at nulo por política undocumented_null); acquired_at (2026-11-17, procedencia local) nunca la sustituye. issued_at es nominal (valid_at - 24 h).",
+  "operativo_acreditado": 0,
+  "retrospectivo_por_emision": 1176
+ },
+ "commit": "4dd224470aa15ccd8da519f274f11882029cd1c5",
+ "ejecucion": {
+  "comando": "uv run --locked airaware align weather --config configs/weather-alignment.yaml --data-dir data --output data/alignment/gfs-prevday1-union-real-20261120 --windows <arbol_pm25>/windows-6 --timeline <arbol_pm25>/timeline --splits <arbol_pm25>/splits-6",
+  "determinismo": "run2 offline byte a byte identica (4/4 archivos)",
+  "fin_utc": "2026-11-20T22:59:30Z",
+  "inicio_utc": "2026-11-20T22:59:23Z",
+  "nice": 10,
+  "red": "sin red",
+  "salidas": {
+   "manifest_sha256": "565efed86bbc0c93642d06e2a2906ef4dfc3949dfe61823fc28d1d1f23ea1d68",
+   "weather_rows_sha256": "f742fa94da67e1e5fe7c884413770db6cb0e35f5e51c219eabaf95d13d031537",
+   "window_weather_sha256": "cd33eb1f9fd2047711d7eec9f25889813f9317017573ac458f29a4ee4908608e",
+   "windows_weather_summary_sha256": "3bb39f5531642dc84e1b1408c0cd6825a54fa187e38903ec6b88adb7d8dea641"
+  }
+ },
+ "evidencia_por_valor": {
+  "available_at_no_nulo": 0,
+  "distancia_km_haversine": [
+   2.48,
+   10.041
+  ],
+  "huellas_originales_distintas": 7,
+  "issued_at_rango": [
+   "2022-03-08 00:00:00+00",
+   "2022-03-14 23:00:00+00"
+  ],
+  "valid_at_rango": [
+   "2022-03-09 00:00:00+00",
+   "2022-03-15 23:00:00+00"
+  ],
+  "valores_meteorologicos": 1176,
+  "valores_presentes": 1176
+ },
+ "fecha_utc": "2026-11-20",
+ "issue": 17,
+ "paridad_con_referencia": {
+  "comparison_policy_sha256": "f2f71fb714f21b9de308fd1c07e0732a90a5cafcf6d5dcb07dfa6f49296dd66f",
+  "eligible_targets_sha256": "14871eb8a810b8403f5dd8aea0a8168df2dbfb14274b4739a0a9202091f8e899",
+  "identical_window_id_set": true,
+  "nota": "El modulo acredita paridad de objetivos elegibles (mismas ventanas y mismos objetivos); no calcula metricas de desempeno.",
+  "referencia": "pm25_only (configs/benchmark.yaml, comparison-v3)",
+  "window_id_set_sha256_eligible": "b5027fd18d77f116237d33dc5db62134c8a689fb77d765fe5ec16a9a0c7e367b"
+ },
+ "por_estacion": {
+  "1e58bb71f42f67bfedae1bad1e35b0aea5f84078da4f3a6f06c695aac1fb99e4": {
+   "estacion": "VILLA_MARIA_DEL_TRIUNFO",
+   "filas_admisible": 5040,
+   "horas_distintas": 168,
+   "ventanas_complete": 139,
+   "ventanas_missing": 43179,
+   "ventanas_partial": 37
+  },
+  "22c516fbe293a54c1cb5ddc7727d32430200221562cd01af8a40cc4b5de227d4": {
+   "estacion": "SAN_JUAN_DE_LURIGANCHO",
+   "filas_admisible": 5040,
+   "horas_distintas": 168,
+   "ventanas_complete": 139,
+   "ventanas_missing": 59596,
+   "ventanas_partial": 37
+  },
+  "2a0d574b25a5dc8c7f6edda9836225860faaa160763d8bea15d95646794f0bd8": {
+   "estacion": "SANTA_ANITA",
+   "filas_admisible": 5040,
+   "horas_distintas": 168,
+   "ventanas_complete": 139,
+   "ventanas_missing": 47254,
+   "ventanas_partial": 37
+  },
+  "35170dbfe2a7135c1cecbae1e367374a284578533740ff5461d40fc764851e07": {
+   "estacion": "SAN_MARTIN_DE_PORRES",
+   "filas_admisible": 5040,
+   "horas_distintas": 168,
+   "ventanas_complete": 139,
+   "ventanas_missing": 41874,
+   "ventanas_partial": 37
+  },
+  "8436576ff150fd696edbc1cd625bc97696321bc9c57b24b906d0d4a12b71bfff": {
+   "estacion": "CARABAYLLO",
+   "filas_admisible": 5040,
+   "horas_distintas": 168,
+   "ventanas_complete": 139,
+   "ventanas_missing": 42723,
+   "ventanas_partial": 37
+  },
+  "8e88d45c03f25f49b84c98cc4916bd60b67383961e186497f4d77570c2f75d34": {
+   "estacion": "SAN_BORJA",
+   "filas_admisible": 5040,
+   "horas_distintas": 168,
+   "ventanas_complete": 139,
+   "ventanas_missing": 49989,
+   "ventanas_partial": 37
+  },
+  "90b36a172f1790cf2e37ac2063f80fd27439d4ecf871d72a20bf8e9786587a67": {
+   "estacion": "CAMPO_DE_MARTE",
+   "filas_admisible": 5040,
+   "horas_distintas": 168,
+   "ventanas_complete": 139,
+   "ventanas_missing": 53045,
+   "ventanas_partial": 37
+  }
+ },
+ "rama": "feat/issue-17-union-real",
+ "recursos": [
+  {
+   "acquired_at": "2026-11-17T23:41:49.103923Z",
+   "estacion": "SANTA_ANITA",
+   "filas": 168,
+   "manifesto_adquisicion_sha256": "6f93ab99e403509f25994f5671913d7b6affb85d89a74e4dced40daa8761ce2c",
+   "original_sha256": "1042ce4db0b57a154e2fad618a2c3a427b02b8bef6afc429558133809506529c",
+   "station_key": "2a0d574b25a5dc8c7f6edda9836225860faaa160763d8bea15d95646794f0bd8",
+   "tamano_bytes": 5210
+  },
+  {
+   "acquired_at": "2026-11-17T23:41:48.022482Z",
+   "estacion": "SAN_BORJA",
+   "filas": 168,
+   "manifesto_adquisicion_sha256": "a54d1ab4b42bc8e0c6292bc3e745529bafdd5286b1c73b98e7f6eb0909b352fc",
+   "original_sha256": "67bbbf7cb59c9b390e9b2c3bf5e6aca1fca2ff737d21ecc7b0faf267e7dd819e",
+   "station_key": "8e88d45c03f25f49b84c98cc4916bd60b67383961e186497f4d77570c2f75d34",
+   "tamano_bytes": 5211
+  },
+  {
+   "acquired_at": "2026-11-17T23:41:47.736809Z",
+   "estacion": "CAMPO_DE_MARTE",
+   "filas": 168,
+   "manifesto_adquisicion_sha256": "df20b11f4bc9b2562e25dc56b67ec89490160e6f8facb98baf88fcd3d86cc8b4",
+   "original_sha256": "68e226286d2c09aeb286b104484dbe6cd64afac26aef279cc2b4c3ca5d7ffe34",
+   "station_key": "90b36a172f1790cf2e37ac2063f80fd27439d4ecf871d72a20bf8e9786587a67",
+   "tamano_bytes": 5209
+  },
+  {
+   "acquired_at": "2026-11-17T23:41:48.534672Z",
+   "estacion": "SAN_JUAN_DE_LURIGANCHO",
+   "filas": 168,
+   "manifesto_adquisicion_sha256": "26d7ca838ff413bcb86925f3346478f09bacf8c00ed39380895cee56dd5ab2b4",
+   "original_sha256": "71a24374363af6fea66ff6f29c8cb94047367353c9841b6036152793e2c218eb",
+   "station_key": "22c516fbe293a54c1cb5ddc7727d32430200221562cd01af8a40cc4b5de227d4",
+   "tamano_bytes": 5210
+  },
+  {
+   "acquired_at": "2026-11-17T23:41:49.435672Z",
+   "estacion": "VILLA_MARIA_DEL_TRIUNFO",
+   "filas": 168,
+   "manifesto_adquisicion_sha256": "49f5aa2b6853e6afe529717b71df826c000900d4f956c1984bc3804f1a3d5e0a",
+   "original_sha256": "8085551c68513c17b042a2f97940ac94b232f9d52ede135e0a2d6139a16cc281",
+   "station_key": "1e58bb71f42f67bfedae1bad1e35b0aea5f84078da4f3a6f06c695aac1fb99e4",
+   "tamano_bytes": 5209
+  },
+  {
+   "acquired_at": "2026-11-17T23:41:48.816607Z",
+   "estacion": "SAN_MARTIN_DE_PORRES",
+   "filas": 168,
+   "manifesto_adquisicion_sha256": "0ceec668eddfbc211df148cba6b08b4d3b6841afd25c6d56f19f958470f2d184",
+   "original_sha256": "c59ca87211180bece3bdbf181ab6bbf773fe5e57eaf9f741e029d1b19ceb80d3",
+   "station_key": "35170dbfe2a7135c1cecbae1e367374a284578533740ff5461d40fc764851e07",
+   "tamano_bytes": 5210
+  },
+  {
+   "acquired_at": "2026-11-17T23:41:47.288678Z",
+   "estacion": "CARABAYLLO",
+   "filas": 168,
+   "manifesto_adquisicion_sha256": "ae32a4add201a769592f2cbc1593ba4624c14c1708a6ed3b4ff9ff63dddd0b55",
+   "original_sha256": "debbacdb895ac356572497c5d2a90ba20bad46d4249ec68a83f554a7c5b8bd6e",
+   "station_key": "8436576ff150fd696edbc1cd625bc97696321bc9c57b24b906d0d4a12b71bfff",
+   "tamano_bytes": 5211
+  }
+ ],
+ "union": {
+  "admisible_por_split": {
+   "purged": {
+    "admissible": 1617,
+    "missing_weather": 7773
+   },
+   "test": {
+    "admissible": 0,
+    "missing_weather": 1523670
+   },
+   "train": {
+    "admissible": 33663,
+    "missing_weather": 7088247
+   },
+   "validation": {
+    "admissible": 0,
+    "missing_weather": 1521180
+   }
+  },
+  "caso_real_de_publicacion_tardia": "no existe en los datos; el salvaguarda queda demostrado por las pruebas existentes test_join_rejects_issue_after_origin_and_accepts_boundary_equality y test_join_rejects_late_publication_with_earlier_valid_time",
+  "cobertura_clima": "2022-03-09T00:00Z/2022-03-15T23:00Z (168 h por estacion)",
+  "estado": {
+   "admissible": 35280,
+   "missing_weather": 10140870
+  },
+  "filas_unidas": 10176150,
+  "margen_emision_horas_antes_del_origen": [
+   18.0,
+   47.0
+  ],
+  "ventanas_elegibles": 338892,
+  "ventanas_elegibles_weather_status": {
+   "complete": 973,
+   "missing": 337660,
+   "partial": 259
+  },
+  "ventanas_total": 339205
+ },
+ "version": "weather-union-real-20261120"
+}
