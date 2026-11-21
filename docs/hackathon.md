@@ -1,6 +1,8 @@
 # Requisitos y evidencia para el hackathon de TimeNet
 
-Fuente principal: [página oficial del reto](https://challenge.timenet.ai/), consultada nuevamente el 17/11/2026.
+Fuente principal: [página oficial del reto](https://challenge.timenet.ai/), consultada nuevamente
+el 20/11/2026 a las 21:48 UTC con Lightpanda (HTTP 200); reglas, plazo y requisito del PR de datos
+sin cambios respecto de lo registrado en esta página.
 El equipo usa esta matriz para preparar evidencias, sin afirmar que ya completó la entrega.
 Las responsabilidades internas son acuerdos de AirAware, no reglas del organizador.
 

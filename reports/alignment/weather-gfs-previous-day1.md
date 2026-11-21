@@ -105,6 +105,22 @@ existente fue modificada. Controles ejecutados en la rama de esta auditoría: `m
 | (3) Configuraciones separadas solo contaminación / con meteorología | `configs/weather-alignment.yaml` (variante `pm25_gfs_previous_day1`) + `comparison_policy: configs/benchmark.yaml` (`comparison-v3`) | manifiesto: `experiment.reference_configuration: pm25_only` frente a `experiment.weather_configuration`; `AlignmentConfig` con `extra="forbid"` y estaciones únicas | `test_repository_config_matches_pinned_acquisition_plan` (configuración del repositorio válida y conciliada con el plan fijado de 7 coordenadas) | «Paridad de configuraciones (sintética, cadena real)» |
 | (3) Pruebas de cruce | — (la paridad se calcula, no se configura) | bloque `parity` del manifiesto: `identical_window_id_set`, huellas SHA-256 del conjunto de `window_id` (total y elegible, splits frente a resumen) y `eligible_targets_sha256`; la unión nunca descarta ventanas ni reescribe objetivos | `test_full_chain_end_to_end_is_deterministic_and_parity_holds`; `test_missing_weather_stays_null_with_explicit_mask` | «Paridad de configuraciones (sintética, cadena real)» |
 
+## Unión real sobre ventanas congeladas (20/11/2026)
+
+El pendiente 1 de «Qué falta» se ejecutó el 2026-11-20 sobre la cadena congelada real de
+`lima-procedencia-20261120` (grilla `senamhi-hourly-v1`, ventanas `senamhi-pm25-windows-v1`
+con historia 24 h y horizonte 6 h, particiones `senamhi-pm25-splits-v1`), sin modificar el
+módulo ni la configuración. Detalle completo con comando, fechas UTC, commit y SHA-256 en
+`reports/alignment/weather-gfs-union-real-20261120.md` y en
+`metadata/weather-union-real-20261120.json`. Resultados que actualizan la matriz:
+
+| Criterio | Evidencia de la unión real |
+| --- | --- |
+| (2) Solo variables disponibles al momento del pronóstico | 10 176 150 filas unidas (339 205 ventanas × 30 h, ninguna descartada); `admissible` 35 280 (= 168 h × 30 ventanas × 7 estaciones); rechazos 0 — no existe caso real de publicación posterior al origen (margen de emisión 18–47 h antes del origen, `available_at` nulo), y el salvaguarda sigue demostrado por las pruebas 7, 8, 9 y 11 del inventario |
+| (2) Conservar emisión y disponibilidad por valor | `issued_at` nominal en los 1 176 valores; `available_at` nulo (1 176/1 176); `acquired_at` 2026-11-17 solo como procedencia local; `original_sha256` (7 huellas) propagado fila por fila en la unión |
+| (3) Pruebas de cruce | Paridad real citada del manifiesto: `identical_window_id_set: true`, huellas de `window_id` iguales (total y elegible) y `eligible_targets_sha256 14871eb8…` compartidos con la referencia `pm25_only` |
+| Clasificación retrospectivo vs operativo | Retrospectivo acreditado: 1 176 valores (35 280 usos unidos). Operativo acreditado: 0 valores — sin evidencia por valor de publicación previa a la emisión |
+
 ## Alcance de las pruebas retrospectivas
 
 Las pruebas cubren la unión retrospectiva por hora de emisión. Con `available_at` nulo,
@@ -152,11 +168,13 @@ o igual al origen. Inventario de las 17 pruebas revisadas:
 
 ## Qué falta para cerrar #17
 
-1. **Unión real meteorología–contaminación** sobre las ventanas y particiones congeladas del
-   paquete de datos (#13/#18): en este entorno `data/benchmarks`, `data/timef` y `data/curated`
-   están vacíos, de modo que la paridad quedó demostrada con la cadena real y datos
-   sintéticos. Ejecutar la unión sobre los datos reales y registrar su reconciliación cuando
-   el servidor esté disponible.
+1. ~~**Unión real meteorología–contaminación**~~ **Ejecutada el 20/11/2026** sobre las ventanas
+   y particiones congeladas de `lima-procedencia-20261120`: 339 205 ventanas (ninguna
+   descartada), 35 280 horas admisibles, paridad real acreditada. Evidencia:
+   `reports/alignment/weather-gfs-union-real-20261120.md` y
+   `metadata/weather-union-real-20261120.json`.
 2. **Disponibilidad horaria del producto archivado**: el proveedor no documenta `available_at`
    por hora (política `undocumented_null`); verificarla contra el servidor para sustituir el
-   experimento retrospectivo por tiempo de emisión por disponibilidad operativa estricta.
+   experimento retrospectivo por tiempo de emisión por disponibilidad operativa estricta. Tras
+   la unión real del 20/11/2026 este es el único criterio de #17 sin acreditar (0 de 1 176
+   valores con evidencia de publicación por valor).

@@ -180,7 +180,7 @@ reales ni a afirmaciones de cumplimiento legal o ausencia de riesgo.
 | Reconciliación de conteos del constructor vs manifiesto (candidatos y descartes por serie) | Probado estructuralmente | `inspect_structure` en `test_structural_inconsistencies_are_rejected[missing_hour]` y conciliación por serie del manifiesto |
 | Suma exacta por serie: `complete == elegidas + descartadas(reason)`; discrepancia detiene el proceso (fail closed) | Probado estructuralmente | `test_discard_counts_reconcile_per_series`; `test_missing_window_group_stops_label_publication` |
 | Sin evidencia no se emiten etiquetas; fallas no publican paquetes parciales; repetición determinista | Probado estructuralmente | `test_structurally_complete_window_stays_scientifically_inadmissible`; `test_failed_write_publishes_no_partial_bundle`; `test_failure_during_label_write_publishes_nothing`; `test_repeated_execution_is_logically_and_binarily_identical` |
-| Conciliación antifuga y por serie sobre el paquete real de #13/#18 con esta versión del código | Verificado sobre 324 463 ventanas reales el 20/11/2026 | [Recibo con los límites, los identificadores y la conciliación por serie](../../metadata/issue-20-verificacion-antifuga.json) |
+| Conciliación antifuga y por serie sobre el paquete real de #13/#18 con esta versión del código | Verificado sobre 324 463 ventanas reales el 20/11/2026, con repetición independiente | [Recibo con los límites, los identificadores y la conciliación por serie](../../metadata/issue-20-verificacion-antifuga.json) · [Informe de la verificación independiente](../../reports/models/verificacion-etiquetas-real-20261120.md) · [Evidencia con hashes e integridad de los paquetes compartidos](../../metadata/event-labels-real-20261120.json) |
 | Decisión de emitir etiquetas reales sobre datos SENAMHI | Exige evidencia institucional (#43) | Posición del intervalo (`hour_ending`), calidad individual y unidades acreditadas por la fuente; sin ello solo se publica `compatibility.json` |
 
 La verificación estructural no sustituye la evidencia de #43 ni la ejecución sobre el paquete
@@ -217,5 +217,12 @@ historia insuficiente y 19 968 tenían objetivos incompletos tras una historia c
 series conciliaron. Hubo cero infracciones de límites y cero identificadores compartidos entre
 historia y objetivo dentro de una ventana. La calidad publicada de los objetivos sigue siendo
 `unknown`. #20 continúa abierta por la calidad individual y la posición del intervalo.
+Una repetición independiente (@qriqs, 22:48 UTC del 20/11/2026, mismo commit base) produjo
+`compatibility.json` y `manifest.json` idénticos byte a byte, concilió las siete series con las
+mismas identidades y verificó la integridad declarada de los paquetes compartidos
+`lima-postcorte-20261118` y `pm-bivariado-20261120`; las ventanas H24/F6 de ese paquete siguen sin
+ser etiquetables por horizonte.
 [Recibo de compatibilidad](../../metadata/issue-20-verificacion-antifuga.json) ·
+[Informe de la verificación independiente](../../reports/models/verificacion-etiquetas-real-20261120.md) ·
+[Evidencia](../../metadata/event-labels-real-20261120.json) ·
 [Reproducción desde el CSV](../../reports/models/procedencia-episodios-lima.md)
