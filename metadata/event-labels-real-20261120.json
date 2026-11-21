@@ -1,0 +1,130 @@
+{
+  "issue": 20,
+  "kind": "verificacion-real-etiquetas-episodios",
+  "executed_at_utc": "2026-11-20",
+  "run_window_utc": "2026-11-20T22:48:02Z/2026-11-20T22:49:18Z",
+  "executed_by": "qriqs",
+  "commit": "4dd224470aa15ccd8da519f274f11882029cd1c5",
+  "branch": "feat/issue-20-verificacion-real",
+  "informe": "reports/models/verificacion-etiquetas-real-20261120.md",
+  "adapter": "src/airaware/senamhi_event_labels.py",
+  "cli": "airaware labels senamhi",
+  "command": "UV_OFFLINE=true nice -n 10 uv run --locked airaware labels senamhi --timeline <compartido>/lima-procedencia-20261120/timeline --windows <compartido>/lima-procedencia-20261120/windows-24 --output data/labels-real-20261120",
+  "exit_code": 0,
+  "policy": {
+    "path": "configs/thresholds.yaml",
+    "policy_id": "pe-pm25-reference-2017-v1",
+    "sha256": "d2931c04249aba99330aa3f1ffc628ce5adb9e6d153dce0813c16e95cd5266a0"
+  },
+  "inputs": {
+    "timeline": {
+      "path": "/home/shared/github/keneth-arias/airaware/data/processed/lima-procedencia-20261120/timeline",
+      "version": "senamhi-hourly-v1",
+      "sha256": "2e8fa784cea645b8eb97b42f3fe36e6c532b5959cc8ae66da0ea416df513413c",
+      "input_sha256_curaduoria": "86170e033b81bd6b53fdf0b044df3df36243ae2c4819a41821ecb839c13ee661",
+      "timezone": "UTC",
+      "frequency_hours": 1
+    },
+    "windows": {
+      "path": "/home/shared/github/keneth-arias/airaware/data/processed/lima-procedencia-20261120/windows-24",
+      "version": "senamhi-pm25-windows-v1",
+      "sha256": "39abf1656905144a61c310f6acde356f7f75eb859846dd6164496b5bc24e39d8",
+      "input_sha256": "2e8fa784cea645b8eb97b42f3fe36e6c532b5959cc8ae66da0ea416df513413c",
+      "history_hours": 24,
+      "horizon_hours": 24,
+      "step_hours": 1
+    },
+    "integrity_checks": {
+      "lima-postcorte-20261118": "sha256sum -c SHA256SUMS: 17/17 OK; no se etiqueta (horizonte 6 no admite forecast_24h)",
+      "pm-bivariado-20261120": "CSV historico 896ae8a106fb128460e81b3f58096f6b9c4d582ef28fffa46e5394c5875c40d4 OK; manifest-fuentes.jsonl a0121b7077025b561d8b80c671e6c382e5da953c3840d39c15a9b442005eaa83 OK; agregado cf29254a857f5afa081f9030210476c2ecca77c910dcae1378c37a8ed6f42287 no recalculado (regla de agregacion no declarada en evidencia.json)",
+      "arbol_compartido": "solo lectura; cero escrituras"
+    }
+  },
+  "verificacion_previa": {
+    "versiones_y_sha_del_paquete": "verify_bundle OK",
+    "target_quality_values": ["unknown"],
+    "target_quality_missing": false,
+    "timeline_units": ["ug/m3"],
+    "windows_total": 324463,
+    "series_total": 7,
+    "target_hours_total": 7787112,
+    "target_hours_measured": 7787112,
+    "measured_complete_windows": 324463
+  },
+  "leakage": {
+    "label_derived_columns": [],
+    "windows_checked": 324463,
+    "boundary_violations": 0,
+    "history_future_id_overlaps": 0,
+    "labels_checked": 0,
+    "label_hours_at_or_before_origin": 0,
+    "label_mean_not_future_only": 0
+  },
+  "candidate_reconciliation": {
+    "1976b93c60ad5310fd6c61542930f7f6f1d9797b160309f556e8d26a46bd2ada": {
+      "candidates": 80276, "complete": 41284, "history_missing": 36762, "future_missing": 2230, "windows_in_bundle": 41284
+    },
+    "5cff99d2b26a9c55ad204380ea56fb650a85bab0a28a92d948dda332df9f8e16": {
+      "candidates": 82484, "complete": 40415, "history_missing": 39771, "future_missing": 2298, "windows_in_bundle": 40415
+    },
+    "769147bd6d8cc92d1773c9b842811309b1a30e3140cbdf4321715468ef37e60a": {
+      "candidates": 82484, "complete": 47486, "history_missing": 31268, "future_missing": 3730, "windows_in_bundle": 47486
+    },
+    "7f6d01086a8bb510ee588c866828d8e955876bd416b46bf8b452554e8f8e3a63": {
+      "candidates": 82484, "complete": 41164, "history_missing": 38328, "future_missing": 2992, "windows_in_bundle": 41164
+    },
+    "828df8886a518b28fae58a5662937bee430181e4ea89bfa1c7cf5c78262618ec": {
+      "candidates": 82484, "complete": 45751, "history_missing": 34383, "future_missing": 2350, "windows_in_bundle": 45751
+    },
+    "956cc6f978a4be9afa426550a8dbbbf38691846887b281145ddfe3a792fdbb57": {
+      "candidates": 82484, "complete": 58217, "history_missing": 22133, "future_missing": 2134, "windows_in_bundle": 58217
+    },
+    "ae2485b1585f200b3d55be0ff285dedcb8f454b003433eb9ce6e7b948554ee80": {
+      "candidates": 82172, "complete": 50146, "history_missing": 27792, "future_missing": 4234, "windows_in_bundle": 50146
+    }
+  },
+  "reconciliation_totals": {
+    "candidates": 574868,
+    "complete": 324463,
+    "history_missing": 230437,
+    "future_missing": 19968,
+    "windows_in_bundle": 324463,
+    "identidades": "candidates == complete + history_missing + future_missing y complete == windows_in_bundle en las 7 series; fail closed, cero descuadres",
+    "emision_completa_igual_elegidas_mas_descartadas": {
+      "elegidas": 0,
+      "descartadas": 0,
+      "nota": "La emision no se alcanza: la elegibilidad bloquea antes de escribir. La identidad se exige en _write_labels con fail closed y esta probada en test_discard_counts_reconcile_per_series; con quality=unknown no hay evidencia admitible que la active sobre datos reales y no se fabrico ninguna."
+    }
+  },
+  "labeling": "inadmissible",
+  "blocked_reasons": ["labeling_evidence_missing"],
+  "labels_generated": 0,
+  "outputs": {
+    "compatibility_sha256": "bccb60c2bed9324eeea4ee0070a8b151f3b75097eb8378df2e3f5483a0dce9e3",
+    "manifest_sha256": "a7743b4d6dfd3c6585162db4a58ef4c0a410bf6cfef6c4f8735e2c863023619b",
+    "identical_to": [
+      "metadata/issue-20-verificacion-antifuga.json",
+      "/home/shared/github/keneth-arias/airaware/data/processed/lima-procedencia-20261120/labels-24/compatibility.json"
+    ],
+    "derivados_locales": "data/labels-real-20261120/ (fuera de Git)"
+  },
+  "runtime": {
+    "elapsed_seconds": 76.22,
+    "max_rss_kib": 1750032,
+    "nice": 10,
+    "offline": true,
+    "gpu": false,
+    "determinismo": "salidas identicas byte a byte a dos corridas independientes previas con el mismo commit base"
+  },
+  "pendiente": {
+    "issue_20": "abierta",
+    "evidencia_43": "posicion del intervalo (hour_ending), calidad individual y unidades acreditadas por la fuente siguen sin evidencia institucional",
+    "etiquetas_regulatorias_diarias": "diferidas"
+  },
+  "not_claimed": [
+    "etiquetas de episodio sobre datos reales",
+    "validacion instrumental o regulatoria",
+    "cumplimiento legal o seguridad sanitaria",
+    "disponibilidad en tiempo real"
+  ]
+}
