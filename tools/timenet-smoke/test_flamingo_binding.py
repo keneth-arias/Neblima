@@ -32,6 +32,17 @@ class FlamingoBindingTest(unittest.TestCase):
             )
         self.assertEqual(set(result["roles"]), {"fit", "inner_validation"})
 
+    def test_role_or_trainer_directory_cannot_redirect_reads(self):
+        for folder in (self.folder / "trainer/fit", self.folder / "trainer"):
+            with self.subTest(folder=folder.name):
+                destination = self.folder / "scorer" / folder.name
+                folder.rename(destination)
+                folder.symlink_to(destination, target_is_directory=True)
+                with self.assertRaisesRegex(ValueError, "carpeta"):
+                    self.bind()
+                folder.unlink()
+                destination.rename(folder)
+
     def test_wrong_base(self):
         self.weights = self.protocol
         with self.assertRaisesRegex(ValueError, "pesos"):

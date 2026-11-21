@@ -18,6 +18,8 @@ def digest(path):
 
 
 def bind(frozen, release_sha256, protocol_path, weights_manifest):
+    if frozen.is_symlink() or (frozen / "trainer").is_symlink():
+        raise ValueError("La entrega y la carpeta del entrenador deben ser carpetas reales")
     root = frozen / "manifest.json"
     if digest(root) != release_sha256 or digest(weights_manifest) != WEIGHTS_SHA256:
         raise ValueError("La entrega o el manifiesto de pesos no corresponde a la revisión fijada")
@@ -33,6 +35,8 @@ def bind(frozen, release_sha256, protocol_path, weights_manifest):
     roles = {}
     for role in ("fit", "inner_validation"):
         folder = frozen / "trainer" / role
+        if folder.is_symlink() or not folder.is_dir():
+            raise ValueError(f"El rol {role} debe ser una carpeta real")
         manifest = folder / "manifest.json"
         actual = digest(manifest)
         if actual != record["manifests"][role]:
