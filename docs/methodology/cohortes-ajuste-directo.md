@@ -1,6 +1,6 @@
 # Cohortes para comparar dos objetivos de ajuste directo
 
-El [protocolo de Lima](../../configs/training/lima-directo-cohortes-v1.json) fija el manifiesto del entrenamiento histórico, los cortes horarios en tiempo universal coordinado (UTC) y las huellas de los identificadores. Los dos ajustes parten del mismo modelo base. Las ventanas de confirmación ya participaron en entrenamientos históricos. Sirven para confirmar la comparación entre estos dos ajustes nuevos.
+El [protocolo de Lima](../../configs/training/lima-directo-cohortes-v1.json) fija el manifiesto del entrenamiento histórico, los cortes horarios en tiempo universal coordinado (UTC) y las huellas de los identificadores. Los dos ajustes parten del mismo modelo base. Las ventanas de confirmación ya participaron en entrenamientos históricos. Se revisaron las curvas de entrenamiento y los resultados finales de selección de cuatro ajustes históricos. Para escoger los cortes nuevos se revisaron identificadores, fechas y cobertura por estación. La confirmación se reserva para comparar los nuevos checkpoints congelados.
 
 Desde la raíz de AirAware, generar una entrega en una carpeta local nueva. El primer argumento apunta a la carpeta que contiene el manifiesto histórico y `train/`.
 

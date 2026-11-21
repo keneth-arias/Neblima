@@ -107,6 +107,10 @@ def export(blocks, protocol_path, output):
         "version": protocol["version"],
         "protocol_sha256": hashlib.sha256(raw).hexdigest(),
         "historical_use": "all_roles_previously_used_for_historical_training",
+        "prior_analyses": [
+            "historical_training_curves_and_final_selection_scores_for_four_fits",
+            "calendar_cut_selection_by_station_coverage_and_id_time_inventory",
+        ],
         "source_manifest_sha256": protocol["source_manifest_sha256"],
         "cohorts": protocol["cohorts"],
         "fit_graph_sample": sample,
