@@ -47,16 +47,71 @@ Las primeras 45 horas ya estaban en la primera captura. Para las otras 65, la co
 
 El conciliador local tiene SHA-256 `60bfdf6b5e64d364ed7ce8b56246625bd68d9983d386c377394fc2d98430a802`. Con los diarios conservados y la carpeta original en la ruta que imprimió systemd, la salida debe coincidir byte por byte con el inventario versionado (SHA-256 `7808a01bd2241a139dca5a542ac44ebfac7d1c0de599b483f27d33952d324707`). Se reprodujeron los cuatro turnos del corte parcial del 20/11 a las 22:10 UTC y los cinco del corte de las 23:10 UTC, incluidas sus huellas y las cuatro recepciones previas.
 
+En bm, exportar solo los registros de las dos unidades con la cuenta que instaló los temporizadores. La copia privada conservada, `diarios-cierre-20261122T181000Z.jsonl`, tiene SHA-256 `8f4aeab99fa94c52475f53e15f7a1f8b38b90050d2c74478d6f492ef3012afa8`. Usarla permite repetir la conciliación después de una rotación del diario.
+
 ```bash
-D=/home/shared/github/keneth-arias/airaware/data
-R="$D/raw/prepiloto-campo-marte-v1"
-C="$D/processed/prepiloto-campo-marte/conciliar_capturas.py"
-T=$(mktemp -d)
-PYTHONPATH="$PWD/tools/timenet-smoke" uv run --locked --project tools/timenet-smoke \
-  python "$C" "$R" --through 2026-11-22T18:10:00Z > "$T/cierre.json"
-cmp "$T/cierre.json" metadata/prepiloto-campo-marte-20261122.json
-uv run --locked --project tools/timenet-smoke python tools/timenet-smoke/station_receipts.py \
-  audit "$R" --through 2026-11-22T18:10:00Z > "$T/cambios.json"
+journalctl --user -u lima-pm25-prepilot-20261120-r2.service \
+  -u lima-pm25-prepiloto-20261120.service -o json --no-pager \
+  --since '2026-11-20 19:05:00.000000 UTC' --until '2026-11-22 18:10:00.000000 UTC' \
+  > "${TMPDIR:-/tmp}/diarios-cierre-20261122T181000Z.jsonl"
+```
+
+Para el cálculo se usó un pod de CPU del perfil local de puntuación de ml-infra, en el espacio `qwen-local-scoring`, con cuenta sin token y sin GPU. Antes de crearlo, comprobar el nodo Ready y los recursos con `kubectl --context microk8s get node bm -o wide` y `kubectl --context microk8s describe node bm`. Copiar al pod la carpeta de recibos en la **misma ruta absoluta** que imprimieron las unidades; en `/tmp/input`, colocar el conciliador local, el diario exportado y la copia del repositorio en `src`. Usar el entorno fijado de `tools/timenet-smoke` (en este ejemplo, `/tmp/.venv`). Desde el pod, este comando verifica los insumos y reproduce la respuesta de la única consulta de diario que hace el conciliador. El pod no requiere acceso al diario general de bm.
+
+```bash
+set -eu
+cd /tmp/input
+sha256sum -c <<'SUMAS'
+60bfdf6b5e64d364ed7ce8b56246625bd68d9983d386c377394fc2d98430a802  conciliar_capturas.py
+8f4aeab99fa94c52475f53e15f7a1f8b38b90050d2c74478d6f492ef3012afa8  diarios-cierre-20261122T181000Z.jsonl
+300948499c6fe4231d49e377913fd2848f13214f6eeff819dc3916becdbc1679  src/tools/timenet-smoke/station_receipts.py
+SUMAS
+export R=/home/shared/github/keneth-arias/airaware/data/raw/prepiloto-campo-marte-v1
+/tmp/.venv/bin/python - <<'PY' > /tmp/cierre.json
+import json
+import os
+import sys
+from pathlib import Path
+from unittest.mock import patch
+
+sys.path.insert(0, str(Path("src/tools/timenet-smoke").resolve()))
+import conciliar_capturas as c
+
+def leer_diario(argumentos):
+    esperado = ["journalctl", "--user", "-u", c.UNITS[0], "-u", c.UNITS[1],
+                "-o", "json", "--no-pager", "--since", "2026-11-20 19:05:00.000000 UTC",
+                "--until", "2026-11-22 18:10:00.000000 UTC"]
+    assert argumentos == esperado
+    return Path("diarios-cierre-20261122T181000Z.jsonl").read_bytes()
+
+with patch.object(c.subprocess, "check_output", leer_diario):
+    print(json.dumps(c.reconcile(Path(os.environ["R"]), c.END), indent=2, sort_keys=True))
+PY
+cmp /tmp/cierre.json src/metadata/prepiloto-campo-marte-20261122.json
+/tmp/.venv/bin/python src/tools/timenet-smoke/station_receipts.py audit "$R" \
+  --through 2026-11-22T18:10:00Z > /tmp/cambios.json
+/tmp/.venv/bin/python - <<'PY'
+import json
+from datetime import datetime
+from pathlib import Path
+from statistics import median, quantiles
+
+cierre = json.loads(Path("/tmp/cierre.json").read_bytes())
+cambios = json.loads(Path("/tmp/cambios.json").read_bytes())
+turnos = {r["seen_utc"]: t["scheduled_at_utc"] for t in cierre["slots"]
+          for a in t["attempts"] for r in a["receipts"]}
+primeras = [x for x in cambios["changes"] if x["kind"] == "first_value"
+            and x["seen_utc"] in turnos]
+def segundos(fin, inicio):
+    return (datetime.fromisoformat(fin) - datetime.fromisoformat(inicio)).total_seconds()
+
+for muestra in ([segundos(fin, inicio) for fin, inicio in turnos.items()],
+                [segundos(x["seen_utc"], x["previous_check_utc"]) for x in primeras],
+                [segundos(cambios["coverage_by_station_hour"][x["station_hour"]]["last_queried_utc"],
+                          x["seen_utc"]) for x in primeras]):
+    print(len(muestra), min(muestra), median(muestra),
+          quantiles(muestra, n=10, method="inclusive")[8], max(muestra))
+PY
 ```
 
 ## Puntaje provisional durante la emisión privada
