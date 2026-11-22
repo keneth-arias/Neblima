@@ -6,6 +6,16 @@ Para Flamingo con Gemma 3 4B, la validación de la versión `v4` conserva el
 control de error cuadrático medio (MSE) normalizado. La comparación de
 ponderación por picos de `v5` está en curso.
 
+Los resultados también están disponibles como archivos JSON.
+
+- [Validación por punto de control](../../metadata/resultados-gemma-20261122/validacion.json)
+  reúne los pasos seleccionados, las huellas y las métricas disponibles por horizonte.
+- [Pruebas](../../metadata/resultados-gemma-20261122/pruebas.json) registra las
+  verificaciones del repositorio, la paridad bilingüe y las recuperaciones sintéticas.
+- [Benchmark](../../metadata/resultados-gemma-20261122/benchmark.json) incluye la
+  confirmación histórica de 1B frente a persistencia, la validación interna y los
+  tiempos de ejecución de Flamingo v4, y el estado del benchmark externo con la CNN.
+
 ## Gemma 3 1B en MicroK8s
 
 Se usó `google/gemma-3-1b-pt` en la revisión
@@ -110,7 +120,9 @@ y los seis horizontes, sin huecos en el registro de pérdida ni de tasa de
 aprendizaje. El informe de comparación tiene SHA-256
 `485a9bd36dbc7887413c8dbe00c036866fbd6d41954774337f32450102e69618`.
 Los ajustes reales de la semilla 27 con MAE físico y MAE ponderado por picos
-fueron aceptados por Nebius. Sus resultados terminales están pendientes.
+completaron la primera evaluación en el paso 500. Se verificó el mismo orden
+de lotes en las primeras 500 actualizaciones de ambos ajustes. Sus resultados
+terminales están pendientes.
 
 ## Evaluación por fuente
 
