@@ -1,0 +1,147 @@
+{
+  "schema": "airaware-gemma-validation-results-v1",
+  "report_date": "2026-11-22",
+  "metric_unit": "ug/m3",
+  "forecast_horizons": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "gemma_1b": {
+    "fit_windows": 225338,
+    "inner_validation_windows": 6664,
+    "checkpoints": [
+      {
+        "seed": 27,
+        "objective": "normalized-mse",
+        "selected": 2000,
+        "stopped": 4000,
+        "overall_mae": 5.433346559583496,
+        "high_mae": 24.433274523643654,
+        "high_blocks": 12,
+        "selected_manifest_sha256": "a741c2bca2b9169f5a2d7e2ce4382170900ecebae148d5810a2406f492ff4dd7"
+      },
+      {
+        "seed": 27,
+        "objective": "physical-mae",
+        "selected": 4500,
+        "stopped": 6500,
+        "overall_mae": 5.123956689534067,
+        "high_mae": 26.198097140641423,
+        "high_blocks": 12,
+        "selected_manifest_sha256": "f1da0c412e9b918f8f4d8a11c8b6b5ee197150501b8e6ea97cd33be01d54304c"
+      },
+      {
+        "seed": 27,
+        "objective": "peak-weighted-mae",
+        "selected": 4500,
+        "stopped": 6500,
+        "overall_mae": 5.10338015088228,
+        "high_mae": 24.38221076014086,
+        "high_blocks": 12,
+        "selected_manifest_sha256": "b4e1959ff8731a371f5d52bc8d009f64f1eeee9ac5e3896824f251d6b15ef650"
+      },
+      {
+        "seed": 28,
+        "objective": "physical-mae",
+        "selected": 4500,
+        "stopped": 6500,
+        "overall_mae": 5.200179546562468,
+        "high_mae": 26.915712570695185,
+        "high_blocks": 12,
+        "selected_manifest_sha256": "9a30bc75662e70d378739e316ab36ef26ec4aee286f144c490a4b31f04a18db1"
+      },
+      {
+        "seed": 28,
+        "objective": "peak-weighted-mae",
+        "selected": 4500,
+        "stopped": 6500,
+        "overall_mae": 5.183133171895068,
+        "high_mae": 24.975760494293667,
+        "high_blocks": 12,
+        "selected_manifest_sha256": "54a70f5b9dade415ddc59458d0eb4f73ff8bdeee33ebe00c003fb7e727629383"
+      }
+    ],
+    "optimizer_recipe_comparison": "pending_terminal_results"
+  },
+  "flamingo_4b_v4": {
+    "seed": 27,
+    "decision": "retain-control",
+    "decision_sha256": "78ddbd8214f23648387f8e692828ccdcbe0ede326f7ff07853dffa0436a3c7bd",
+    "validation_support": {
+      "windows": 6664,
+      "pairs": 39984,
+      "high_pairs": 1179,
+      "high_station_hours": 201,
+      "high_blocks_168h": 12
+    },
+    "checkpoints": [
+      {
+        "objective": "normalized-mse",
+        "selected_step": 7500,
+        "stopped_step": 9500,
+        "selected_manifest_sha256": "749902d8f49ffee36c208c85e3db3b3735a63f8ea49819298189f062f555ae5b",
+        "terminal_receipt_sha256": "782255615d4148de5092a89f0e177297aea57614c63737d985a68a6b04cb4055",
+        "verified_fresh_restores": 2,
+        "mae": 6.02761082210079,
+        "high_mae": 32.80363311744927,
+        "mae_by_horizon": [
+          4.759359208472779,
+          5.446341823111919,
+          6.004905598959288,
+          6.44588097242605,
+          6.667671572958871,
+          6.841505756675837
+        ],
+        "signed_error_by_horizon": [
+          -1.0541463102985253,
+          -1.4951810037274034,
+          -1.5665252966926584,
+          -0.8251820456538028,
+          -0.7921056829065551,
+          -0.8596867078950561
+        ]
+      },
+      {
+        "objective": "physical-mae",
+        "selected_step": 7500,
+        "stopped_step": 9500,
+        "selected_manifest_sha256": "871dfa9cbc856c4e7f1c2d559526d8d55d1e2d37c4ecf1475395a78be14639e7",
+        "terminal_receipt_sha256": "380b65fe20e48679694bd7158e3d7157b10a805c7122dcd120defb929ee49660",
+        "verified_fresh_restores": 2,
+        "mae": 6.04337049107019,
+        "high_mae": 33.81515098303226,
+        "mae_by_horizon": [
+          5.020858509766667,
+          5.507716824404469,
+          5.958492914622859,
+          6.361067232035215,
+          6.611490537768224,
+          6.8005969278237135
+        ],
+        "signed_error_by_horizon": [
+          0.10079654703334882,
+          -1.0291501231153477,
+          -1.5964341343694222,
+          -2.2737604397714226,
+          -2.4739705352851904,
+          -2.767925158628899
+        ]
+      }
+    ]
+  },
+  "flamingo_4b_v5": {
+    "seed": 27,
+    "status": "running_at_readback",
+    "first_matched_updates_inclusive": [
+      1,
+      500
+    ],
+    "batch_order_verified": true,
+    "evidence_sha256": "ecdb671dee7e7bb6717227c097596d10f86d0fcd41cbcb8b4fc7aea390b1db0f",
+    "terminal_metrics": null
+  }
+}

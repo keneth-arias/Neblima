@@ -1,0 +1,977 @@
+{
+  "earlier_ad_hoc_receipts": [
+    {
+      "chart_sha256": "c64943ee5c3d35c587fb06a32f72f3e90812d705429b840f963281cdaba42150",
+      "receipt_sha256": "89fe1ce1a42577b8d17e589cd6f7fcb9641c26b248f7d463e37e1152dbfa92a6",
+      "seen_utc": "2026-11-20T01:24:05.447014+00:00"
+    },
+    {
+      "chart_sha256": "c9cc280b22a34d545913665531de2739b187cfadd8bbf6f3d54a4ac496954d33",
+      "receipt_sha256": "84732b9df1a6a52d8dfaca1c8e46a60190079a3143e536a4939ffc1e09004b82",
+      "seen_utc": "2026-11-20T17:59:34.823969+00:00"
+    },
+    {
+      "chart_sha256": "4e5ffbe3eede0dd5ecc5291ddf264410873cf647804e0d72ac1a5f5d10008376",
+      "receipt_sha256": "3bece7fd5dc5cb8f580f644f3cef0f307d6b047848f1b8e9dfe9dc8015ba57b7",
+      "seen_utc": "2026-11-20T18:02:54.437970+00:00"
+    },
+    {
+      "chart_sha256": "4e5ffbe3eede0dd5ecc5291ddf264410873cf647804e0d72ac1a5f5d10008376",
+      "receipt_sha256": "254a756a3877b8202bf6d531623f8d2add2a9bcaacdf35d30b7c7dfef9d9542e",
+      "seen_utc": "2026-11-20T18:15:45.996286+00:00"
+    }
+  ],
+  "elapsed_slots": 48,
+  "final_cutoff_utc": "2026-11-22T18:10:00+00:00",
+  "scheduled_total": 48,
+  "slot_counts": {
+    "no_linked_receipt": 9,
+    "verified_receipt": 39
+  },
+  "slots": [
+    {
+      "attempts": [
+        {
+          "invocation_id": "82d5dec9483945aeb9c78322396a4aa1",
+          "receipts": [
+            {
+              "changes": {
+                "first_value": 1,
+                "revision": 0,
+                "withdrawn": 0
+              },
+              "chart_sha256": "0811cabec8e07df5a531e9549a6d011fac7c58163dcdc34b1865e528bc4ed19a",
+              "receipt_sha256": "4e5b62d15904eef0a23383d9d4c7b6a41ab452c378c64dbd2da09869555a2b67",
+              "seen_utc": "2026-11-20T19:05:02.037725+00:00"
+            }
+          ],
+          "started_at_utc": "2026-11-20T19:05:00.923031+00:00",
+          "unit": "lima-pm25-prepilot-20261120-r2.service"
+        }
+      ],
+      "scheduled_at_utc": "2026-11-20T19:05:00+00:00",
+      "status": "verified_receipt"
+    },
+    {
+      "attempts": [
+        {
+          "invocation_id": "e874982bd0b744c284be2541855d5674",
+          "receipts": [
+            {
+              "changes": {
+                "first_value": 1,
+                "revision": 0,
+                "withdrawn": 0
+              },
+              "chart_sha256": "75f30af52166d7e0b5c157d1b1b767e49b1737d249daf58977c88e3d1a90cd6e",
+              "receipt_sha256": "252f12c945d5074f8688b20e6e939138e17c54520d0e6e9170088286aa69de65",
+              "seen_utc": "2026-11-20T20:05:10.428972+00:00"
+            }
+          ],
+          "started_at_utc": "2026-11-20T20:05:08.529570+00:00",
+          "unit": "lima-pm25-prepiloto-20261120.service"
+        }
+      ],
+      "scheduled_at_utc": "2026-11-20T20:05:00+00:00",
+      "status": "verified_receipt"
+    },
+    {
+      "attempts": [
+        {
+          "invocation_id": "1a0470eccb35419ab66c89fef7659b30",
+          "receipts": [
+            {
+              "changes": {
+                "first_value": 1,
+                "revision": 0,
+                "withdrawn": 0
+              },
+              "chart_sha256": "2ae5f1eca43e0d5282ad1504d72a8d7dbc40653b573d3c465fceff1908bb3eba",
+              "receipt_sha256": "5d9211d78da98b7a4e2cffbf53dca9f2e71e041fbb8c7b44aba646b29f3f46ad",
+              "seen_utc": "2026-11-20T21:05:11.919204+00:00"
+            }
+          ],
+          "started_at_utc": "2026-11-20T21:05:10.646759+00:00",
+          "unit": "lima-pm25-prepiloto-20261120.service"
+        }
+      ],
+      "scheduled_at_utc": "2026-11-20T21:05:00+00:00",
+      "status": "verified_receipt"
+    },
+    {
+      "attempts": [
+        {
+          "invocation_id": "5278f2f62fa2499fa3590264334dfaad",
+          "receipts": [
+            {
+              "changes": {
+                "first_value": 1,
+                "revision": 0,
+                "withdrawn": 0
+              },
+              "chart_sha256": "23a8e96729f14731784c537afc1350e30085f86556e012a8c1c4ea2934a26947",
+              "receipt_sha256": "c31cc820228d97577833d187d70dace5242a0d0d60f093fd4a48183571bf1070",
+              "seen_utc": "2026-11-20T22:05:12.380393+00:00"
+            }
+          ],
+          "started_at_utc": "2026-11-20T22:05:10.646826+00:00",
+          "unit": "lima-pm25-prepiloto-20261120.service"
+        }
+      ],
+      "scheduled_at_utc": "2026-11-20T22:05:00+00:00",
+      "status": "verified_receipt"
+    },
+    {
+      "attempts": [
+        {
+          "invocation_id": "e7cffc5db1de41f38e780f63be4ac64c",
+          "receipts": [
+            {
+              "changes": {
+                "first_value": 1,
+                "revision": 0,
+                "withdrawn": 0
+              },
+              "chart_sha256": "418104ceb8ccbee2a72b237ebb7ffd219478b074d4b8205474387a487dc8bc16",
+              "receipt_sha256": "c7b0ff79ea78c93981f7d6834f4c0c8922a76db232cad59c645d5468bc9b5945",
+              "seen_utc": "2026-11-20T23:05:12.315522+00:00"
+            }
+          ],
+          "started_at_utc": "2026-11-20T23:05:10.647206+00:00",
+          "unit": "lima-pm25-prepiloto-20261120.service"
+        }
+      ],
+      "scheduled_at_utc": "2026-11-20T23:05:00+00:00",
+      "status": "verified_receipt"
+    },
+    {
+      "attempts": [
+        {
+          "invocation_id": "a7b629998dce40f8a7b9cc89201a6fe0",
+          "receipts": [
+            {
+              "changes": {
+                "first_value": 1,
+                "revision": 0,
+                "withdrawn": 0
+              },
+              "chart_sha256": "a3c76e48edbd44c5e2aa6699102d10a85f0cfc62bcf787923e2f37977d5016f6",
+              "receipt_sha256": "f224fc5a63e57a3fbdc9542142bc9ee7088e64f007686173510626f7225d8655",
+              "seen_utc": "2026-11-21T00:05:12.245076+00:00"
+            }
+          ],
+          "started_at_utc": "2026-11-21T00:05:10.646827+00:00",
+          "unit": "lima-pm25-prepiloto-20261120.service"
+        }
+      ],
+      "scheduled_at_utc": "2026-11-21T00:05:00+00:00",
+      "status": "verified_receipt"
+    },
+    {
+      "attempts": [
+        {
+          "invocation_id": "949861e9eeba4446b41c915c5c71705f",
+          "receipts": [
+            {
+              "changes": {
+                "first_value": 1,
+                "revision": 0,
+                "withdrawn": 0
+              },
+              "chart_sha256": "5f011012e8d1d054eb078bffd0d62eb7990cf01f43ccca0654f60fb1a4242a4e",
+              "receipt_sha256": "9d9939c0ee58b4567229c073cecdb0d2163720319261534dc05207a173ff52ea",
+              "seen_utc": "2026-11-21T01:05:09.152448+00:00"
+            }
+          ],
+          "started_at_utc": "2026-11-21T01:05:07.845329+00:00",
+          "unit": "lima-pm25-prepiloto-20261120.service"
+        }
+      ],
+      "scheduled_at_utc": "2026-11-21T01:05:00+00:00",
+      "status": "verified_receipt"
+    },
+    {
+      "attempts": [
+        {
+          "invocation_id": "24028be4096e4d09bb1a06413e37f039",
+          "receipts": [
+            {
+              "changes": {
+                "first_value": 1,
+                "revision": 0,
+                "withdrawn": 0
+              },
+              "chart_sha256": "8b1bbf5e70ebc8362228afa6303e2b7346225400dee3dcfad0d44478e038840f",
+              "receipt_sha256": "7c9913f75e31100bfee0b7763f036052e9d3b53e374bd23917008b905c2d8946",
+              "seen_utc": "2026-11-21T02:05:11.917138+00:00"
+            }
+          ],
+          "started_at_utc": "2026-11-21T02:05:10.646972+00:00",
+          "unit": "lima-pm25-prepiloto-20261120.service"
+        }
+      ],
+      "scheduled_at_utc": "2026-11-21T02:05:00+00:00",
+      "status": "verified_receipt"
+    },
+    {
+      "attempts": [
+        {
+          "invocation_id": "975e81f4606a445a82884698a7e5416d",
+          "receipts": [
+            {
+              "changes": {
+                "first_value": 1,
+                "revision": 0,
+                "withdrawn": 0
+              },
+              "chart_sha256": "6b1108ed238928c6a5a7f2873023d2fb7ce559e9b55f662a1fdecf9499509b69",
+              "receipt_sha256": "a5e18073413bd52b0feb0c36a540e658587a8255aa9dafb1a0f718ab5f81a460",
+              "seen_utc": "2026-11-21T03:05:04.904247+00:00"
+            }
+          ],
+          "started_at_utc": "2026-11-21T03:05:03.465167+00:00",
+          "unit": "lima-pm25-prepiloto-20261120.service"
+        }
+      ],
+      "scheduled_at_utc": "2026-11-21T03:05:00+00:00",
+      "status": "verified_receipt"
+    },
+    {
+      "attempts": [],
+      "scheduled_at_utc": "2026-11-21T04:05:00+00:00",
+      "status": "no_linked_receipt"
+    },
+    {
+      "attempts": [],
+      "scheduled_at_utc": "2026-11-21T05:05:00+00:00",
+      "status": "no_linked_receipt"
+    },
+    {
+      "attempts": [],
+      "scheduled_at_utc": "2026-11-21T06:05:00+00:00",
+      "status": "no_linked_receipt"
+    },
+    {
+      "attempts": [],
+      "scheduled_at_utc": "2026-11-21T07:05:00+00:00",
+      "status": "no_linked_receipt"
+    },
+    {
+      "attempts": [],
+      "scheduled_at_utc": "2026-11-21T08:05:00+00:00",
+      "status": "no_linked_receipt"
+    },
+    {
+      "attempts": [],
+      "scheduled_at_utc": "2026-11-21T09:05:00+00:00",
+      "status": "no_linked_receipt"
+    },
+    {
+      "attempts": [],
+      "scheduled_at_utc": "2026-11-21T10:05:00+00:00",
+      "status": "no_linked_receipt"
+    },
+    {
+      "attempts": [],
+      "scheduled_at_utc": "2026-11-21T11:05:00+00:00",
+      "status": "no_linked_receipt"
+    },
+    {
+      "attempts": [],
+      "scheduled_at_utc": "2026-11-21T12:05:00+00:00",
+      "status": "no_linked_receipt"
+    },
+    {
+      "attempts": [
+        {
+          "invocation_id": "f44a3039417e45f6b7875f6cb62ead63",
+          "receipts": [
+            {
+              "changes": {
+                "first_value": 10,
+                "revision": 0,
+                "withdrawn": 0
+              },
+              "chart_sha256": "ebeb706a3483729c32eba628c96e164cf2d6cec8cce165ca828c601a3757a46f",
+              "receipt_sha256": "79d9971de682242ef21eb66e94a66113c83cd807e09e8e6442205443cb543608",
+              "seen_utc": "2026-11-21T13:05:01.590925+00:00"
+            }
+          ],
+          "started_at_utc": "2026-11-21T13:05:00.098945+00:00",
+          "unit": "lima-pm25-prepiloto-20261120.service"
+        }
+      ],
+      "scheduled_at_utc": "2026-11-21T13:05:00+00:00",
+      "status": "verified_receipt"
+    },
+    {
+      "attempts": [
+        {
+          "invocation_id": "b2f4accf88fe4748adb841d24677433b",
+          "receipts": [
+            {
+              "changes": {
+                "first_value": 1,
+                "revision": 0,
+                "withdrawn": 0
+              },
+              "chart_sha256": "3af02c107fc01f0ee6bc790ade7fd67a42fe0298d977c2bb45ced8fcd80120e8",
+              "receipt_sha256": "46447191220dcc631e6eedbaca894afdac6e34544d668ca91c3be5da1c9b102d",
+              "seen_utc": "2026-11-21T14:05:08.440762+00:00"
+            }
+          ],
+          "started_at_utc": "2026-11-21T14:05:07.234156+00:00",
+          "unit": "lima-pm25-prepiloto-20261120.service"
+        }
+      ],
+      "scheduled_at_utc": "2026-11-21T14:05:00+00:00",
+      "status": "verified_receipt"
+    },
+    {
+      "attempts": [
+        {
+          "invocation_id": "d1421f37fd2944b4a33791579a4a4022",
+          "receipts": [
+            {
+              "changes": {
+                "first_value": 1,
+                "revision": 0,
+                "withdrawn": 0
+              },
+              "chart_sha256": "d7a952499664304296c4f9f78c6cf4dc757ff91714daff49a4c24aabc118190f",
+              "receipt_sha256": "61ade735f33700eb9ef132372c7657c73085e63c59ad9b72b48aa254a5da0adc",
+              "seen_utc": "2026-11-21T15:05:18.737876+00:00"
+            }
+          ],
+          "started_at_utc": "2026-11-21T15:05:17.339043+00:00",
+          "unit": "lima-pm25-prepiloto-20261120.service"
+        }
+      ],
+      "scheduled_at_utc": "2026-11-21T15:05:00+00:00",
+      "status": "verified_receipt"
+    },
+    {
+      "attempts": [
+        {
+          "invocation_id": "5a6e94d0c47e4deea608d7e7ed6fb416",
+          "receipts": [
+            {
+              "changes": {
+                "first_value": 1,
+                "revision": 0,
+                "withdrawn": 0
+              },
+              "chart_sha256": "089fba8cdfcc14b4a979a878238e7ee678845236c45ce010cb147fdcbefd8850",
+              "receipt_sha256": "0ab5aa8b68c9d9a0a7980bdacd1e9525c820da4d47b4e413cc97e611ad78c75f",
+              "seen_utc": "2026-11-21T16:05:18.478606+00:00"
+            }
+          ],
+          "started_at_utc": "2026-11-21T16:05:17.339549+00:00",
+          "unit": "lima-pm25-prepiloto-20261120.service"
+        }
+      ],
+      "scheduled_at_utc": "2026-11-21T16:05:00+00:00",
+      "status": "verified_receipt"
+    },
+    {
+      "attempts": [
+        {
+          "invocation_id": "5990b6cc62154ff783d79300041dd2db",
+          "receipts": [
+            {
+              "changes": {
+                "first_value": 1,
+                "revision": 0,
+                "withdrawn": 0
+              },
+              "chart_sha256": "f3076e856740e114c19083a7626deae1cbc340f1b34bd08c379f8cd06a724221",
+              "receipt_sha256": "25aae278e7f7a8989889ced32e87544705f4481a10c39c401b7666165e5bd2a6",
+              "seen_utc": "2026-11-21T17:05:18.942781+00:00"
+            }
+          ],
+          "started_at_utc": "2026-11-21T17:05:17.338928+00:00",
+          "unit": "lima-pm25-prepiloto-20261120.service"
+        }
+      ],
+      "scheduled_at_utc": "2026-11-21T17:05:00+00:00",
+      "status": "verified_receipt"
+    },
+    {
+      "attempts": [
+        {
+          "invocation_id": "3a185c6f8ab94ee1beec1d63411aff68",
+          "receipts": [
+            {
+              "changes": {
+                "first_value": 1,
+                "revision": 0,
+                "withdrawn": 0
+              },
+              "chart_sha256": "566bb4b67fb0fd12a2fdaa59f0e26080ae978eb5cd5fdd760b5c345556d31723",
+              "receipt_sha256": "ee04fd3c6c6d3aa60fc5ff52f6499a28cccdae062a23de0060f4ad069c2ebb32",
+              "seen_utc": "2026-11-21T18:05:13.912225+00:00"
+            }
+          ],
+          "started_at_utc": "2026-11-21T18:05:12.206657+00:00",
+          "unit": "lima-pm25-prepiloto-20261120.service"
+        }
+      ],
+      "scheduled_at_utc": "2026-11-21T18:05:00+00:00",
+      "status": "verified_receipt"
+    },
+    {
+      "attempts": [
+        {
+          "invocation_id": "0e33521af3c44b528b65526ab3e1de24",
+          "receipts": [
+            {
+              "changes": {
+                "first_value": 1,
+                "revision": 0,
+                "withdrawn": 0
+              },
+              "chart_sha256": "23517cee0ea1c728723b2fbef1c766d69a3bc16dcfbd158d20c9762c91387336",
+              "receipt_sha256": "22eb244ffec3b94988bc0ebc2898ae8ef179b5ed8f0314ecba19a530945af33a",
+              "seen_utc": "2026-11-21T19:05:08.289119+00:00"
+            }
+          ],
+          "started_at_utc": "2026-11-21T19:05:07.056973+00:00",
+          "unit": "lima-pm25-prepiloto-20261120.service"
+        }
+      ],
+      "scheduled_at_utc": "2026-11-21T19:05:00+00:00",
+      "status": "verified_receipt"
+    },
+    {
+      "attempts": [
+        {
+          "invocation_id": "9a30725811e34085bce5287cec3ae65e",
+          "receipts": [
+            {
+              "changes": {
+                "first_value": 1,
+                "revision": 0,
+                "withdrawn": 0
+              },
+              "chart_sha256": "380daf34a1adb4121c8073bf703e8340cc4a695dab6418e2257426b8d3278d8c",
+              "receipt_sha256": "7bae067f2bdef2b27584cc41f6889dc7d97bcf5e366cff4a78630dbc76c94da3",
+              "seen_utc": "2026-11-21T20:05:13.742137+00:00"
+            }
+          ],
+          "started_at_utc": "2026-11-21T20:05:12.206880+00:00",
+          "unit": "lima-pm25-prepiloto-20261120.service"
+        }
+      ],
+      "scheduled_at_utc": "2026-11-21T20:05:00+00:00",
+      "status": "verified_receipt"
+    },
+    {
+      "attempts": [
+        {
+          "invocation_id": "f3b7d850079b43938f8ee40d04bb58f3",
+          "receipts": [
+            {
+              "changes": {
+                "first_value": 1,
+                "revision": 0,
+                "withdrawn": 0
+              },
+              "chart_sha256": "934291c6eaec7b4dc74c6da166d4550b24b12f462a2f69005b68a8f70503fa2a",
+              "receipt_sha256": "f41fa00c35f3e06eeda445bce35c62d090cc47a3f5da980f941a7df8f766eea5",
+              "seen_utc": "2026-11-21T21:05:03.613204+00:00"
+            }
+          ],
+          "started_at_utc": "2026-11-21T21:05:01.868974+00:00",
+          "unit": "lima-pm25-prepiloto-20261120.service"
+        }
+      ],
+      "scheduled_at_utc": "2026-11-21T21:05:00+00:00",
+      "status": "verified_receipt"
+    },
+    {
+      "attempts": [
+        {
+          "invocation_id": "5fec65d51b9d4cd4ad43777278dda7a6",
+          "receipts": [
+            {
+              "changes": {
+                "first_value": 1,
+                "revision": 0,
+                "withdrawn": 0
+              },
+              "chart_sha256": "42934df0c7c6c60e151829947d0db7e4eeb24cc6df783b1f349129188a893674",
+              "receipt_sha256": "6e6b81f930f2e854e2df6098860166d6e6128fdcbc613e059472e5603bbee95b",
+              "seen_utc": "2026-11-21T22:05:13.950482+00:00"
+            }
+          ],
+          "started_at_utc": "2026-11-21T22:05:12.207050+00:00",
+          "unit": "lima-pm25-prepiloto-20261120.service"
+        }
+      ],
+      "scheduled_at_utc": "2026-11-21T22:05:00+00:00",
+      "status": "verified_receipt"
+    },
+    {
+      "attempts": [
+        {
+          "invocation_id": "ba4aca440fae4e879da74d402654e3a4",
+          "receipts": [
+            {
+              "changes": {
+                "first_value": 1,
+                "revision": 0,
+                "withdrawn": 0
+              },
+              "chart_sha256": "82cc6696fe860a3264faa5615a239da9ae87252517b0b00672f291045f64ee05",
+              "receipt_sha256": "fbd06a282cff5153abcaafd75c5ed08d1880de90186cf09af6b6c1967821bccf",
+              "seen_utc": "2026-11-21T23:05:13.465210+00:00"
+            }
+          ],
+          "started_at_utc": "2026-11-21T23:05:12.206909+00:00",
+          "unit": "lima-pm25-prepiloto-20261120.service"
+        }
+      ],
+      "scheduled_at_utc": "2026-11-21T23:05:00+00:00",
+      "status": "verified_receipt"
+    },
+    {
+      "attempts": [
+        {
+          "invocation_id": "791420acfd7f4549890220fe5b68d3ec",
+          "receipts": [
+            {
+              "changes": {
+                "first_value": 1,
+                "revision": 0,
+                "withdrawn": 0
+              },
+              "chart_sha256": "87a6be74326a81b0c910c2a08985c99b88adc465bb10ee19727430c9b2c791ad",
+              "receipt_sha256": "8b4c480771908bf5cfcfdb3a21d778913855c5c2c923014341d89fed3b93a6e8",
+              "seen_utc": "2026-11-22T00:05:03.175660+00:00"
+            }
+          ],
+          "started_at_utc": "2026-11-22T00:05:01.755287+00:00",
+          "unit": "lima-pm25-prepiloto-20261120.service"
+        }
+      ],
+      "scheduled_at_utc": "2026-11-22T00:05:00+00:00",
+      "status": "verified_receipt"
+    },
+    {
+      "attempts": [
+        {
+          "invocation_id": "147e7139d5254fada80f29e87baa42ab",
+          "receipts": [
+            {
+              "changes": {
+                "first_value": 1,
+                "revision": 0,
+                "withdrawn": 0
+              },
+              "chart_sha256": "ce9a6b48ce115e3eda50a0675127ee899ed53e92051a93474223b5ec0e70d1af",
+              "receipt_sha256": "d55c5ffe362b89c403555a099e766e445a202ef03699401f2e016495d1543e08",
+              "seen_utc": "2026-11-22T01:05:12.414368+00:00"
+            }
+          ],
+          "started_at_utc": "2026-11-22T01:05:10.475164+00:00",
+          "unit": "lima-pm25-prepiloto-20261120.service"
+        }
+      ],
+      "scheduled_at_utc": "2026-11-22T01:05:00+00:00",
+      "status": "verified_receipt"
+    },
+    {
+      "attempts": [
+        {
+          "invocation_id": "32bf7b609b6f498c9e4c404bc8c4707e",
+          "receipts": [
+            {
+              "changes": {
+                "first_value": 1,
+                "revision": 0,
+                "withdrawn": 0
+              },
+              "chart_sha256": "9399688d0d00d1e13273090aaa1d4e776429278addb7f5d9447d6b42e03f590f",
+              "receipt_sha256": "89d4e61b6824860d74a6d49b75ea4a5d842382d3819c1d2e4b99bf3fcd3cc1dc",
+              "seen_utc": "2026-11-22T02:05:12.590017+00:00"
+            }
+          ],
+          "started_at_utc": "2026-11-22T02:05:11.368865+00:00",
+          "unit": "lima-pm25-prepiloto-20261120.service"
+        }
+      ],
+      "scheduled_at_utc": "2026-11-22T02:05:00+00:00",
+      "status": "verified_receipt"
+    },
+    {
+      "attempts": [
+        {
+          "invocation_id": "00ce580263c147a687f517563cf2876a",
+          "receipts": [
+            {
+              "changes": {
+                "first_value": 1,
+                "revision": 0,
+                "withdrawn": 0
+              },
+              "chart_sha256": "c324d57cd525dc53615b04c3681412657ca9a2d1731407350610ac67dc1e1dc4",
+              "receipt_sha256": "b6c9e56fe30dec2f11de2128d7386b2a175f1f51c1dcc059fea90b923cb7c45f",
+              "seen_utc": "2026-11-22T03:05:13.745499+00:00"
+            }
+          ],
+          "started_at_utc": "2026-11-22T03:05:12.207269+00:00",
+          "unit": "lima-pm25-prepiloto-20261120.service"
+        }
+      ],
+      "scheduled_at_utc": "2026-11-22T03:05:00+00:00",
+      "status": "verified_receipt"
+    },
+    {
+      "attempts": [
+        {
+          "invocation_id": "b4fe109e6c7c4122b21251259aa6c148",
+          "receipts": [
+            {
+              "changes": {
+                "first_value": 1,
+                "revision": 0,
+                "withdrawn": 0
+              },
+              "chart_sha256": "d1b7bcfab35cb008098bf135f55adfe1495aaf80fe3214741f83374e737214a3",
+              "receipt_sha256": "e798905eadeb2c6e7b512cc37825eda0fa1bca8fc704cae757fc572dcefe6c44",
+              "seen_utc": "2026-11-22T04:05:13.669836+00:00"
+            }
+          ],
+          "started_at_utc": "2026-11-22T04:05:12.206772+00:00",
+          "unit": "lima-pm25-prepiloto-20261120.service"
+        }
+      ],
+      "scheduled_at_utc": "2026-11-22T04:05:00+00:00",
+      "status": "verified_receipt"
+    },
+    {
+      "attempts": [
+        {
+          "invocation_id": "e626eb2bbadd4886a112e94bb36185f0",
+          "receipts": [
+            {
+              "changes": {
+                "first_value": 1,
+                "revision": 0,
+                "withdrawn": 0
+              },
+              "chart_sha256": "4e06d48d8e34bdeb9d4b4895060c8df9b91b3462afcd93ca25b263ea0d28ec67",
+              "receipt_sha256": "10d2513622830671bcae55af1480df5bf840e2c2ec52df5dc515d5c4be0edd33",
+              "seen_utc": "2026-11-22T05:05:13.639571+00:00"
+            }
+          ],
+          "started_at_utc": "2026-11-22T05:05:12.206733+00:00",
+          "unit": "lima-pm25-prepiloto-20261120.service"
+        }
+      ],
+      "scheduled_at_utc": "2026-11-22T05:05:00+00:00",
+      "status": "verified_receipt"
+    },
+    {
+      "attempts": [
+        {
+          "invocation_id": "2961a27c42da4a24bb985300ec34a927",
+          "receipts": [
+            {
+              "changes": {
+                "first_value": 1,
+                "revision": 0,
+                "withdrawn": 0
+              },
+              "chart_sha256": "94723b6b208b9017f9b5f2b11b9454f30cdc1a4729923a33e54acb4f64beddf5",
+              "receipt_sha256": "f9c2e22cf4a7959910e13694438cc4ba615e5c188a14f00ce56e993a634950c3",
+              "seen_utc": "2026-11-22T06:05:13.287877+00:00"
+            }
+          ],
+          "started_at_utc": "2026-11-22T06:05:11.540519+00:00",
+          "unit": "lima-pm25-prepiloto-20261120.service"
+        }
+      ],
+      "scheduled_at_utc": "2026-11-22T06:05:00+00:00",
+      "status": "verified_receipt"
+    },
+    {
+      "attempts": [
+        {
+          "invocation_id": "3de62b0ecdd54b8aa13ca73c3c4fc34e",
+          "receipts": [
+            {
+              "changes": {
+                "first_value": 1,
+                "revision": 0,
+                "withdrawn": 0
+              },
+              "chart_sha256": "18dcd52e8dfb0b2c3f4911f17d95aaab2f0bf1ac5b0bbbae425c9d64890245b1",
+              "receipt_sha256": "93eb4561a319b34ff536cc48756791e76dd8dca3372c1c5ba829d6a99e559726",
+              "seen_utc": "2026-11-22T07:05:13.859562+00:00"
+            }
+          ],
+          "started_at_utc": "2026-11-22T07:05:12.207403+00:00",
+          "unit": "lima-pm25-prepiloto-20261120.service"
+        }
+      ],
+      "scheduled_at_utc": "2026-11-22T07:05:00+00:00",
+      "status": "verified_receipt"
+    },
+    {
+      "attempts": [
+        {
+          "invocation_id": "4fb794afe8e440cb8d0c1aba26927d84",
+          "receipts": [
+            {
+              "changes": {
+                "first_value": 1,
+                "revision": 0,
+                "withdrawn": 0
+              },
+              "chart_sha256": "a27dbdd6b2d844c27930c019a70fb506d332a6b3b8913c238fc7cfdb95305e36",
+              "receipt_sha256": "f5512186ffd3f24fe2be731732f641044782098ce11a9a5e0479f40528a0bc78",
+              "seen_utc": "2026-11-22T08:05:13.483215+00:00"
+            }
+          ],
+          "started_at_utc": "2026-11-22T08:05:12.206862+00:00",
+          "unit": "lima-pm25-prepiloto-20261120.service"
+        }
+      ],
+      "scheduled_at_utc": "2026-11-22T08:05:00+00:00",
+      "status": "verified_receipt"
+    },
+    {
+      "attempts": [
+        {
+          "invocation_id": "45ebeeeb8b494c6abee28027934f1c42",
+          "receipts": [
+            {
+              "changes": {
+                "first_value": 1,
+                "revision": 0,
+                "withdrawn": 0
+              },
+              "chart_sha256": "b97a32358633f07293f4320966f398f6501c1efd3a6945d886583adfe095c7cc",
+              "receipt_sha256": "02a7654f7e417160bb2314e96eb8503a8160ae1b0f1aa49c8a4b0d92becb4c78",
+              "seen_utc": "2026-11-22T09:05:13.684195+00:00"
+            }
+          ],
+          "started_at_utc": "2026-11-22T09:05:12.207077+00:00",
+          "unit": "lima-pm25-prepiloto-20261120.service"
+        }
+      ],
+      "scheduled_at_utc": "2026-11-22T09:05:00+00:00",
+      "status": "verified_receipt"
+    },
+    {
+      "attempts": [
+        {
+          "invocation_id": "463104bb58b8466490bd23dcbd93af7d",
+          "receipts": [
+            {
+              "changes": {
+                "first_value": 1,
+                "revision": 0,
+                "withdrawn": 0
+              },
+              "chart_sha256": "8f54c7bd26f2e2039ed9166a52a2a8ce22c94c1f6bb7da995b77a3a3df2d22c5",
+              "receipt_sha256": "13c724f4a532bbd27bc3f67fccacf721507b07c6e3680afca9eb9b6d20e60734",
+              "seen_utc": "2026-11-22T10:05:14.167277+00:00"
+            }
+          ],
+          "started_at_utc": "2026-11-22T10:05:12.207459+00:00",
+          "unit": "lima-pm25-prepiloto-20261120.service"
+        }
+      ],
+      "scheduled_at_utc": "2026-11-22T10:05:00+00:00",
+      "status": "verified_receipt"
+    },
+    {
+      "attempts": [
+        {
+          "invocation_id": "49238f38806747bf97cc1e7fc6162db5",
+          "receipts": [
+            {
+              "changes": {
+                "first_value": 1,
+                "revision": 0,
+                "withdrawn": 0
+              },
+              "chart_sha256": "29a650c4b1996ee326018124d3568b4feea9ed2e76f48167265acbe4df2f29ec",
+              "receipt_sha256": "0c783d60a309eb9729d6a84214e11daddb62e11125dcda9aa46dc03ef9e86d9e",
+              "seen_utc": "2026-11-22T11:05:13.336773+00:00"
+            }
+          ],
+          "started_at_utc": "2026-11-22T11:05:12.207097+00:00",
+          "unit": "lima-pm25-prepiloto-20261120.service"
+        }
+      ],
+      "scheduled_at_utc": "2026-11-22T11:05:00+00:00",
+      "status": "verified_receipt"
+    },
+    {
+      "attempts": [
+        {
+          "invocation_id": "03ac4d8639344ef4b2f638124fdd6360",
+          "receipts": [
+            {
+              "changes": {
+                "first_value": 1,
+                "revision": 0,
+                "withdrawn": 0
+              },
+              "chart_sha256": "2250d79b848fc8188395b0e53107174a4fa875d73a0b822d84765c7b46a5f169",
+              "receipt_sha256": "09ce70558ca2ceb4c6a054c74b81f17284825a0b0ef3a05f7c5396e342bd4a77",
+              "seen_utc": "2026-11-22T12:05:15.498725+00:00"
+            }
+          ],
+          "started_at_utc": "2026-11-22T12:05:12.206997+00:00",
+          "unit": "lima-pm25-prepiloto-20261120.service"
+        }
+      ],
+      "scheduled_at_utc": "2026-11-22T12:05:00+00:00",
+      "status": "verified_receipt"
+    },
+    {
+      "attempts": [
+        {
+          "invocation_id": "26cc5c583e2246deb0cce075132a5045",
+          "receipts": [
+            {
+              "changes": {
+                "first_value": 1,
+                "revision": 0,
+                "withdrawn": 0
+              },
+              "chart_sha256": "45978773fc4a2057a4636ecfd11199d7f95b09840f2adf745b59976b16565d4e",
+              "receipt_sha256": "a7ab3d5c185da1e1a22fde0ac103dd2147ac2fbec05eb339e75f2e2d9df2e431",
+              "seen_utc": "2026-11-22T13:05:13.946512+00:00"
+            }
+          ],
+          "started_at_utc": "2026-11-22T13:05:12.206914+00:00",
+          "unit": "lima-pm25-prepiloto-20261120.service"
+        }
+      ],
+      "scheduled_at_utc": "2026-11-22T13:05:00+00:00",
+      "status": "verified_receipt"
+    },
+    {
+      "attempts": [
+        {
+          "invocation_id": "51d983560971460a831afff72ed4fa1a",
+          "receipts": [
+            {
+              "changes": {
+                "first_value": 1,
+                "revision": 0,
+                "withdrawn": 0
+              },
+              "chart_sha256": "3f943786b7ddbd72b97a8bc28fe142a4ca2825896c7c203de7a6922dafbfd3d0",
+              "receipt_sha256": "2a4b3806a3bebde20f6c28a7bb42e354d00af16fbcc0ae70c01b02f16e7ccd46",
+              "seen_utc": "2026-11-22T14:05:13.638072+00:00"
+            }
+          ],
+          "started_at_utc": "2026-11-22T14:05:12.206920+00:00",
+          "unit": "lima-pm25-prepiloto-20261120.service"
+        }
+      ],
+      "scheduled_at_utc": "2026-11-22T14:05:00+00:00",
+      "status": "verified_receipt"
+    },
+    {
+      "attempts": [
+        {
+          "invocation_id": "2e39dc53d7514a30bbdd3b99a16e4803",
+          "receipts": [
+            {
+              "changes": {
+                "first_value": 1,
+                "revision": 0,
+                "withdrawn": 0
+              },
+              "chart_sha256": "8d96222462f6d45c6fc99ea110ef28d91e767f7a15839d9f7e5dfde7ed8118d0",
+              "receipt_sha256": "a7a0b6a1e068f7ff078c5545adfabfd8014a0b15695c329e9877cf54e6984148",
+              "seen_utc": "2026-11-22T15:05:13.604808+00:00"
+            }
+          ],
+          "started_at_utc": "2026-11-22T15:05:12.206879+00:00",
+          "unit": "lima-pm25-prepiloto-20261120.service"
+        }
+      ],
+      "scheduled_at_utc": "2026-11-22T15:05:00+00:00",
+      "status": "verified_receipt"
+    },
+    {
+      "attempts": [
+        {
+          "invocation_id": "c09ed81babac468894d3a7579afdb1fe",
+          "receipts": [
+            {
+              "changes": {
+                "first_value": 1,
+                "revision": 0,
+                "withdrawn": 0
+              },
+              "chart_sha256": "81874a848b31451d90b26bc2446ea9124bf97d24084b3016df950e9e54ee5688",
+              "receipt_sha256": "70bb3fb92104989929b44ccbcfdc184c212c08262fb2003824cb9b173f5e711a",
+              "seen_utc": "2026-11-22T16:05:11.399399+00:00"
+            }
+          ],
+          "started_at_utc": "2026-11-22T16:05:09.406763+00:00",
+          "unit": "lima-pm25-prepiloto-20261120.service"
+        }
+      ],
+      "scheduled_at_utc": "2026-11-22T16:05:00+00:00",
+      "status": "verified_receipt"
+    },
+    {
+      "attempts": [
+        {
+          "invocation_id": "5c9eb82d2c604fec868e911568c85fea",
+          "receipts": [
+            {
+              "changes": {
+                "first_value": 1,
+                "revision": 0,
+                "withdrawn": 0
+              },
+              "chart_sha256": "d142d97e53445d447eacc6cac1deffa35e1111473dc24b30649896660b9b9c2e",
+              "receipt_sha256": "0e5e13f5300c07d92dcd9d25e6919580eb83688b8bf27b5a6f4a76f26e4f93c2",
+              "seen_utc": "2026-11-22T17:05:13.709613+00:00"
+            }
+          ],
+          "started_at_utc": "2026-11-22T17:05:12.207007+00:00",
+          "unit": "lima-pm25-prepiloto-20261120.service"
+        }
+      ],
+      "scheduled_at_utc": "2026-11-22T17:05:00+00:00",
+      "status": "verified_receipt"
+    },
+    {
+      "attempts": [
+        {
+          "invocation_id": "a1474dcf2d8f4cf4bb2be5c826b1b0b7",
+          "receipts": [
+            {
+              "changes": {
+                "first_value": 1,
+                "revision": 0,
+                "withdrawn": 0
+              },
+              "chart_sha256": "145649a74d2d0524fe06a618d9693499bb8cddfb286ba9c0e4eda8d6c161cd4d",
+              "receipt_sha256": "612a4ca84788cc185ba5f30971c123bca86dab6480a9251d571fd6171ce93591",
+              "seen_utc": "2026-11-22T18:05:14.136481+00:00"
+            }
+          ],
+          "started_at_utc": "2026-11-22T18:05:12.207106+00:00",
+          "unit": "lima-pm25-prepiloto-20261120.service"
+        }
+      ],
+      "scheduled_at_utc": "2026-11-22T18:05:00+00:00",
+      "status": "verified_receipt"
+    }
+  ],
+  "through_utc": "2026-11-22T18:10:00+00:00",
+  "unlinked_receipts": []
+}
