@@ -1,38 +1,38 @@
-# Pronóstico de PM2.5 para las próximas seis horas en Lima
+# Six-hour PM2.5 forecasts for Lima
 
-Con 24 horas de historia de PM2.5, Qwen3.5-0.8B con adaptación de bajo rango (LoRA) obtuvo un **error absoluto medio (MAE) de 4,994 µg/m³** en la prueba cronológica reservada. Repetir la última lectura produjo 6,446 µg/m³ y la red convolucional obtuvo 5,158 µg/m³. La reducción frente a persistencia fue **1,452 µg/m³ (22,52 %)**. Esta comparación mide pronósticos retrospectivos de estaciones de SENAMHI en Lima. [Resultados por modelo, estación y horizonte](../../metadata/qwen-heldout-lima.json).
+Given 24 hours of PM2.5 history, Qwen3.5-0.8B with low-rank adaptation (LoRA) achieved a **mean absolute error (MAE) of 4.994 µg/m³** on the chronological held-out test. Repeating the last reading yielded 6.446 µg/m³, and the convolutional neural network yielded 5.158 µg/m³. The reduction relative to persistence was **1.452 µg/m³ (22.52%)**. This comparison measures retrospective forecasts at SENAMHI monitoring stations in Lima. [Results by model, station, and horizon](../../metadata/qwen-heldout-lima.json).
 
-## Prueba cronológica
+## Chronological held-out test
 
-La [selección del 19/11/2026](https://github.com/keneth-arias/Neblima/pull/95) fijó los modelos, las referencias y la regla de evaluación antes de exportar las ventanas de prueba. Se verificó el manifiesto de TimeF y que los identificadores fueran disjuntos respecto de entrenamiento y validación. Los 50 789 orígenes cubren del 26/02/2023 a las 17:00 UTC al 29/05/2024 a las 20:00 UTC, con las discontinuidades de las estaciones. Qwen y la red convolucional recibieron los mismos 24 valores horarios por ventana. Los cinco métodos se evaluaron sobre los mismos seis objetivos por origen.
+The [November 19, 2026 selection](https://github.com/keneth-arias/Neblima/pull/95) fixed the models, baselines, and evaluation rule before the test windows were exported. We verified the TimeF manifest and checked that the test identifiers were disjoint from the training and validation identifiers. The 50,789 forecast origins span February 26, 2023 at 17:00 UTC through May 29, 2024 at 20:00 UTC, with gaps in the station records. Qwen and the convolutional network received the same 24 hourly values per window. We evaluated all five methods on the same six targets per origin.
 
-| Modelo | MAE global (µg/m³) | Diferencia frente a persistencia | MAE con concentración alta (µg/m³) |
+| Model | Overall MAE (µg/m³) | Difference from persistence | High-concentration MAE (µg/m³) |
 | --- | ---: | ---: | ---: |
-| Qwen directo con LoRA | **4,994** | **−1,452** | **18,371** |
-| Red convolucional temporal | 5,158 | −1,288 | 18,434 |
-| Persistencia | 6,446 | 0,000 | 19,616 |
-| Misma hora del día anterior | 7,038 | +0,592 | 23,086 |
-| Promedio de entrenamiento por serie y hora UTC | 8,269 | +1,823 | 34,144 |
+| Direct Qwen with LoRA | **4.994** | **−1.452** | **18.371** |
+| Temporal convolutional network | 5.158 | −1.288 | 18.434 |
+| Persistence | 6.446 | 0.000 | 19.616 |
+| Same hour on the previous day | 7.038 | +0.592 | 23.086 |
+| Training mean by series and UTC hour | 8.269 | +1.823 | 34.144 |
 
-Los cinco modelos comparten un denominador de 304 734 pares ventana-hora. Por el solapamiento, representan **51 319 horas de estación distintas**. Los objetivos se repiten cuando la misma lectura se pronostica desde orígenes sucesivos. Las diferencias son descriptivas para esta partición y una semilla de entrenamiento. Las tres referencias reprodujeron los MAE de prueba de [#25](../baselines/lima-pm25.md). Una segunda evaluación sobre los mismos archivos de inferencia reprodujo exactamente el informe y los hashes de los cinco archivos pareados.
+All five models were evaluated on 304,734 window–hour pairs. Because the windows overlap, these pairs represent **51,319 distinct station-hours**. A target repeats when successive origins forecast the same reading. The differences are descriptive for this split and one training seed. The three baselines reproduced the test MAEs from [#25](../baselines/lima-pm25.md). A second evaluation using the same inference files reproduced the report and the hashes of all five paired files exactly.
 
-Qwen redujo el MAE frente a persistencia en las siete estaciones provisionales y en las seis horas. La reducción fue de 0,272 µg/m³ a una hora y 2,542 µg/m³ a seis. Por estación varió de 0,768 µg/m³ en San Borja a 2,603 µg/m³ en Carabayllo. El percentil 95 fijado en entrenamiento identifica 10 574 objetivos de concentración alta que corresponden a 1772 horas de estación distintas. Allí la reducción fue de 1,244 µg/m³ (6,34 %). El error absoluto de Qwen siguió siendo elevado, 18,371 µg/m³.
+Qwen reduced MAE relative to persistence at all seven provisional stations and at each of the six horizons. The reduction was 0.272 µg/m³ at one hour and 2.542 µg/m³ at six hours. By station, it ranged from 0.768 µg/m³ in San Borja to 2.603 µg/m³ in Carabayllo. The 95th percentile fixed during training identifies 10,574 high-concentration targets corresponding to 1,772 distinct station-hours. For those targets, the reduction was 1.244 µg/m³ (6.34%). Qwen's MAE remained high at 18.371 µg/m³.
 
-## Insumo para la presentación del equipo
+## Team presentation material
 
-![MAE de prueba por hora y dos ejemplos de validación con 24 horas de historia, seis lecturas observadas, persistencia y Qwen.](lima-pm25-prueba.png)
+![Test MAE by forecast hour and two validation examples with 24 hours of history, six observed readings, a persistence forecast, and a Qwen forecast.](lima-pm25-prueba.png)
 
-En el ejemplo de **Carabayllo**, ambos modelos parten de la misma historia. Qwen anticipa parte del descenso y reduce el MAE de la ventana en 3,04 µg/m³. En **San Juan de Lurigancho**, Qwen pronostica un descenso y pierde la subida de las últimas horas. Persistencia obtiene un MAE menor por 2,03 µg/m³. Ambos ejemplos se eligieron en validación por una regla de mediana, antes de la prueba. [Identificadores, orígenes y regla de selección](validacion-cabezales-qwen.md).
+In the **Carabayllo** example, both models start from the same history. Qwen anticipates part of the decline and lowers the window's MAE by 3.04 µg/m³. In **San Juan de Lurigancho**, Qwen forecasts a decline and misses the rise in the final hours. Persistence has a lower MAE by 2.03 µg/m³. Both examples were selected on validation data using a median-based rule before the held-out test. [Identifiers, forecast origins, and selection rule](validacion-cabezales-qwen.md).
 
-El caso de uso es anticipar la evolución horaria en estas estaciones cuando se cuenta con 24 lecturas consecutivas. La evaluación solo incluye ventanas completas. Se conservó la unidad inferida aceptada; la posición del intervalo, la calidad individual y la disponibilidad histórica en tiempo real siguen sin confirmación institucional. Usar estos resultados para alertas en vivo requeriría verificar esa disponibilidad y evaluar lecturas posteriores. Fuente: Servicio Nacional de Meteorología e Hidrología del Perú (SENAMHI). Datos bajo ODC-BY-1.0. Derivación y pronósticos del equipo Cuybernautas. [Atribución y licencia](../../DATA_ATTRIBUTION.md) · [Política de la fuente](../../docs/decisions/005-senamhi-operating-policy.md).
+The use case is to anticipate hourly changes at these stations when 24 consecutive readings are available. The evaluation includes only complete windows. We retained the accepted inferred unit. The placement of readings within their reporting intervals, individual reading quality, and historical real-time availability still await institutional confirmation. Using these results for live alerts would require checking that availability and evaluating subsequent readings. Data come from Peru's National Meteorology and Hydrology Service (SENAMHI) under ODC-BY-1.0. The Cuybernautas team produced the derived data and forecasts. [Attribution and license](../../DATA_ATTRIBUTION.md) · [Source policy](../../docs/decisions/005-senamhi-operating-policy.md).
 
-## Recursos y trazabilidad
+## Resources and traceability
 
-La inferencia reservada de Qwen se ejecutó una vez en una RTX 5070 Ti, con FP32 y lote 16. SkyPilot registró 221,71 s desde el inicio del trabajo hasta su término. La red convolucional se ejecutó en CPU. Ambos archivos de pronósticos conservan el SHA-256 de su punto de control. En el estado final de LoRA se verificaron pesos B y segundos momentos del optimizador finitos y distintos de cero en las 24 proyecciones adaptadas de atención completa y las 90 recurrentes. Esta comprobación confirma que ambas familias recibieron actualizaciones. Se usó el núcleo de referencia de PyTorch. La [medición opcional de núcleos acelerados](https://github.com/keneth-arias/Neblima/issues/96) queda para otro experimento.
+Qwen inference for the held-out test ran once on an RTX 5070 Ti in FP32 with a batch size of 16. SkyPilot recorded 221.71 seconds from job start to completion. The convolutional network ran on CPU. Each forecast file preserves the SHA-256 of its checkpoint. In the final LoRA state, we verified finite, nonzero B weights and optimizer second moments for all 24 adapted full-attention projections and all 90 recurrent projections. This check confirms that both projection families received updates. The run used the PyTorch reference kernel. An [optional accelerated-kernel benchmark](https://github.com/keneth-arias/Neblima/issues/96) remains a separate experiment.
 
-## Reproducir la ronda
+## Reproduce the evaluation
 
-Se usó el manifiesto TimeF de [#22](../../tasks/issue-22-plan.md), la [selección congelada](../../configs/training/lima-pm25-finalistas-v1.yaml) y los archivos de [#25](../baselines/lima-pm25.md). Con los datos y los pesos locales preparados, crear una carpeta nueva. La exportación conserva los objetivos para calcular el error. Para inferencia se guardan únicamente el identificador y la historia de las 24 horas.
+The evaluation used the TimeF manifest from [#22](../../tasks/issue-22-plan.md), the [frozen selection](../../configs/training/lima-pm25-finalistas-v1.yaml), and the files from [#25](../baselines/lima-pm25.md). After preparing the local data and weights, create a new directory. The export retains the targets for scoring. The inference input contains only the identifier and 24-hour history.
 
 ```bash
 inputs=data/benchmarks/qwen-pm25-v1
@@ -52,7 +52,7 @@ with np.load(out / "test.npz", allow_pickle=False) as data, (out / "history.npz"
 PY
 ```
 
-En el entorno de la red convolucional, ejecutar `python tools/training/predict_cnn.py "$inputs/fits/cnn/model.pt" "$out/history.npz" "$out/cnn.npz" --batch 16`. Para Qwen, usar la imagen y los pesos del manifiesto de finalistas, montar los pesos en `/inputs/qwen/weights` y el volumen retenido en `/checkpoints`. Desde la carpeta que contiene `history.npz`, ejecutar el comando siguiente y copiar la salida a `$out/qwen.npz`.
+In the convolutional network environment, run `python tools/training/predict_cnn.py "$inputs/fits/cnn/model.pt" "$out/history.npz" "$out/cnn.npz" --batch 16`. For Qwen, use the image and weights from the finalists manifest, mount the weights at `/inputs/qwen/weights`, and mount the retained volume at `/checkpoints`. From the directory containing `history.npz`, run the following command and copy the output to `$out/qwen.npz`.
 
 ```bash
 HF_HUB_OFFLINE=1 PYTHONPATH=/opt/forecast/src /opt/conda/bin/python -m opentslm.forecast_inference \
@@ -60,7 +60,7 @@ HF_HUB_OFFLINE=1 PYTHONPATH=/opt/forecast/src /opt/conda/bin/python -m opentslm.
   --data history.npz --output qwen.npz --batch 16
 ```
 
-El comparador coteja la revisión incorporada en cada archivo de predicciones con la selección, verifica el manifiesto de #25 y une por identificador y hora. Comprueba también estación, origen UTC, valor observado y último valor de la historia. Los archivos pareados por modelo quedan en almacenamiento local. La figura usa el informe agregado y las dos ventanas de validación fijadas antes de la prueba.
+The comparison checks the revision embedded in each prediction file against the selection, verifies the manifest from #25, and joins records by identifier and hour. It also verifies the station, UTC origin, observed value, and last value in the history. The paired files for each model stay in local storage. The figure uses the aggregate report and the two validation windows fixed before the test.
 
 ```bash
 UV_OFFLINE=true uv run --project tools/timenet-smoke --locked python \
@@ -69,4 +69,4 @@ UV_OFFLINE=true uv run --project tools/timenet-smoke --locked python \
 uv run --script tools/training/plot_forecast_results.py "$inputs" "$out/resultado/report.json" "$out/figura.png"
 ```
 
-La primera instalación del entorno de figuras puede requerir red. Los pesos base de Qwen tienen la revisión `2fc06364715b967f1860aea9cf38778875588b17`. Para restaurar LoRA se necesitan los pesos base y el estado final fijado en la selección. Consultar el [procedimiento de entrenamiento](../../docs/qwen-cluster-runbook.md) y las [sumas de validación](../../metadata/qwen-validation-lora.json).
+The first installation of the plotting environment may require network access. The Qwen base weights use revision `2fc06364715b967f1860aea9cf38778875588b17`. Restoring LoRA requires the base weights and the final state pinned in the selection. See the [training procedure](../../docs/qwen-cluster-runbook.md) and [validation checksums](../../metadata/qwen-validation-lora.json).
