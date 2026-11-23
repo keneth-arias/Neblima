@@ -1,49 +1,60 @@
-# Inventario de fuentes
+# Source catalog
 
-`configs/sources.yaml` es el inventario vigente y `airaware.catalog.Source` define su esquema.
-Valídalo con `uv run --locked airaware catalog validate`.
-Los campos opcionales desconocidos permanecen nulos, vacíos o en `unknown`; no se deducen sin evidencia.
-`metadata/sources.csv` es una plantilla anterior. Los 38 registros incluyen datos, diccionarios y
-metadatos: no representan 38 conjuntos de mediciones independientes.
+[`configs/sources.yaml`](../configs/sources.yaml) is the current inventory.
+[`airaware.catalog.Source`](../src/airaware/catalog.py) defines the schema.
+Entries can represent datasets, dictionaries, or metadata. The legacy
+`metadata/sources.csv` is a column template.
 
-Prioridad 0: mediciones oficiales; 1: otras observaciones o agregaciones; 2: meteorología;
-3: productos atmosféricos o satelitales; 4: contexto. La categoría permanece en `unknown` hasta
-verificarla. `catalog_url` conserva el enlace de partida. Completa `resource_urls` solo después de
-resolver los archivos o las API reales. No pongas credenciales en las URL.
+```bash
+uv run --locked airaware catalog validate
+```
 
-Cada registro admite publicador, descripción, cobertura geográfica/temporal, resolución, variables,
-unidades, metodología, categoría, formatos, tamaño, autenticación, límites de acceso, frecuencia de
-actualización, licencia, atribución, permisos de redistribución, limitaciones, prioridad, estado,
-fecha y notas. Los nombres de campo se mantienen en inglés para conservar el contrato técnico.
+The validator prints the current entry count and status breakdown. Keep
+unknown fields null, empty, or `unknown` according to the schema. Record the
+starting page in `catalog_url` and add `resource_urls` once a specific file
+or application programming interface (API) is resolved. Keep credentials
+out of URLs.
 
-| Estado interno | Significado |
+## Source review
+
+Priorities run from official measurements (0), other observations or
+aggregations (1), and meteorology (2), to atmospheric or satellite products
+(3) and contextual data (4). Track coverage, resolution, units, methodology,
+access, license, attribution, and redistribution per resource.
+
+| Status | Evidence |
 | --- | --- |
-| discovered | Fuente identificada, aún sin verificar |
-| verified | Información verificada con evidencia |
-| downloaded | Archivo descargado e inspeccionado |
-| profiled | Calidad y cobertura analizadas |
-| integrated | Fuente integrada con derechos y metodología documentados |
-| blocked | Bloqueada; explicar el motivo |
-| duplicate | Duplicada; explicar la coincidencia |
-| excluded | Excluida; explicar la decisión |
+| `discovered` | Identified for review. |
+| `verified` | Information confirmed and documented. |
+| `downloaded` | File acquired and inspected. |
+| `profiled` | Quality and coverage analyzed. |
+| `integrated` | Included with documented measurement type and redistribution rights. |
+| `blocked` | Blocker documented. |
+| `duplicate` | Matching resource documented. |
+| `excluded` | Exclusion rationale documented. |
 
-Los estados avanzados requieren una fecha con zona horaria y notas. El validador comprueba que la
-evidencia esté registrada, pero no que sea verdadera: sigue siendo necesaria la revisión humana.
+Advanced statuses require an evidence timestamp with a time zone and notes.
+The validator checks that evidence is recorded. A reviewer confirms what
+it establishes. [Dated access checks](../metadata/source-access.json) ·
+[Web access protocol](web-access.md)
 
-Las líneas sin una fuente concreta siguen como investigación: tránsito/movilidad, emisiones,
-generación eléctrica, construcción/polvo, feriados, uso del suelo, elevación y forma urbana.
-No inventes enlaces para convertir temas en conjuntos de datos. NASA FIRMS ya figura como candidato
-para incendios. Verifica disponibilidad, derechos y pertinencia antes de integrar cada fuente.
+## Where the sources fit
 
-## Revisión vigente
+The initial dataset uses historical Lima readings from Peru's National
+Meteorology and Hydrology Service (SENAMHI). Later experiments use archived
+OpenAQ and hourly SENAMHI targets. Peru's Agency for Environmental Assessment
+and Enforcement (OEFA) provides candidate measurements whose rights and
+compatibility vary by product. Weather, atmospheric reanalysis, and satellite
+context each have their own availability and rights review.
 
-Los 37 candidatos iniciales tienen [evidencia de acceso fechada](sources/inventory-review.md).
-El candidato adicional [EAS_Aire](../reports/acquisition/oefa-eas-aire.md) conserva por separado
-la verificación de su ficha y la adquisición local aportada por Keneth.
-La revisión inicial #3 dejó 29 verified, uno downloaded, cuatro discovered con acceso parcial y tres
-blocked. Tras #4, hay 27 verified y tres downloaded (CSV, diccionario y metadatos SENAMHI); los otros
-siete estados se conservan. verified se limita a las afirmaciones de la ficha; no significa calidad
-o licencia aprobadas.
-La evidencia de cada ID está en metadata/source-access.json. Las pruebas comprueban su correspondencia
-con el catálogo sin red. Para nuevas consultas y descargas web usa [Lightpanda](web-access.md).
-La ficha [SENAMHI](sources/senamhi.md) y el manifiesto distinguen descarga, estructura y pendientes de #4.
+| Source | Evidence |
+| --- | --- |
+| SENAMHI Lima historical monitoring | [Dataset card](dataset-cards/lima-pm25-forecast.md) and [source review (Spanish)](sources/senamhi.md). |
+| OEFA measurement candidates | [Resource and coordinate review (Spanish)](sources/oefa.md). |
+| OpenAQ | [External evaluation](evaluation.md#gemma-3-1b-and-the-cnn-on-external-archives) and [access and overlap review (Spanish)](sources/openaq.md). |
+| Open-Meteo GFS archives | [Attribution and use](../DATA_ATTRIBUTION.md) and [weather source review (Spanish)](sources/weather.md). |
+| Atmospheric and fire context | [CAMS reanalysis (Spanish)](sources/cams.md) and [NASA FIRMS (Spanish)](sources/firms.md). |
+
+Follow the [inventory review (Spanish)](sources/inventory-review.md) for
+the initial evidence and the [evaluation guide](evaluation.md) for the results
+of specific sources and time periods.

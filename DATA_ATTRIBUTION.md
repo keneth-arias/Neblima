@@ -1,37 +1,51 @@
-# Atribución de los datos SENAMHI
+# Data attribution
 
-Fuente: Servicio Nacional de Meteorología e Hidrología del Perú — SENAMHI.
-Conjunto: **Monitoreo de los contaminantes del aire en Lima Metropolitana**.
+Neblima's code uses AGPL-3.0-only. The observations and archived forecasts
+below retain their own terms.
 
-- [Catálogo y aviso de licencia](https://www.datosabiertos.gob.pe/dataset/monitoreo-de-los-contaminantes-del-aire-en-lima-metropolitana-servicio-nacional-de).
-- Licencia de la base: [Open Data Commons Attribution License v1.0 (ODC-BY-1.0)](https://opendatacommons.org/licenses/by/1-0/).
-- Original identificado por SHA-256: 896ae8a106fb128460e81b3f58096f6b9c4d582ef28fffa46e5394c5875c40d4.
-- Adquisición y fecha: metadata/senamhi-lima-download.json; decisión vigente:
-  metadata/senamhi-normalization-decision.json, 17/11/2026.
+## SENAMHI air quality observations
 
-Neblima conserva el original e incorpora lecturas de fecha/hora UTC, unidades inferidas aceptadas
-por el responsable, clasificación de tokens, control de duplicados y agregados derivados. Las futuras
-entregas normalizadas deben detallar sus cambios reales, versión de política y fecha de generación.
-SENAMHI no avala por ello las inferencias ni los resultados de Neblima.
+The source is Peru's National Meteorology and Hydrology Service (Servicio
+Nacional de Meteorología e Hidrología del Perú, SENAMHI). The original dataset
+is **Monitoreo de los contaminantes del aire en Lima Metropolitana**.
+[Catalog and license notice](https://www.datosabiertos.gob.pe/dataset/monitoreo-de-los-contaminantes-del-aire-en-lima-metropolitana-servicio-nacional-de) ·
+[Open Data Commons Attribution License 1.0 (ODC-BY-1.0)](https://opendatacommons.org/licenses/by/1-0/)
 
-Conservar este aviso, el enlace de licencia y la atribución de fuente en distribuciones de la base
-y derivados, incluyendo documentación de exportaciones y avisos accesibles desde aplicaciones.
-Mantener los avisos de origen aplicables. No atribuir a SENAMHI cambios realizados por Neblima.
-La licencia AGPL-3.0-only del código es independiente de la licencia de estos datos.
-No extender esta declaración a otros conjuntos OEFA o fuentes ajenas.
+The selected original has SHA-256
+`896ae8a106fb128460e81b3f58096f6b9c4d582ef28fffa46e5394c5875c40d4`.
+The receipt records the acquisition date and original file, and the
+normalization decision records the policy approved on November 17, 2026.
+[Acquisition receipt](metadata/senamhi-lima-download.json) ·
+[Normalization decision](metadata/senamhi-normalization-decision.json)
 
-# Atribución de la meteorología archivada de Open-Meteo (GFS, #17)
+Neblima preserves the original and derives data with Coordinated Universal
+Time (UTC) labels, accepted unit inferences, token classification,
+duplicate checks, and aggregations. For each normalized release, describe
+the actual changes, policy version, and generation date. Keep this notice,
+the license link, the source credit, and applicable original notices with
+redistributed data and derived data. Include accessible notices in apps and
+attribute Neblima's processing and forecasts to Neblima. SENAMHI does not
+endorse the project's results. This statement covers the identified source.
 
-Proveedor del servicio: **Open-Meteo**, API Previous Model Runs
-(https://open-meteo.com/en/docs/previous-runs-api). Modelo aguas arriba: **GFS — NOAA NCEP**,
-que conserva sus propios términos. La API gratuita no comercial se declara bajo
-**CC-BY-4.0 con atribución obligatoria** (https://open-meteo.com/en/licence), revisada el
-17/11/2026 en docs/sources/weather.md. La variante integrada en #17 usa únicamente la variable
-`temperature_2m_previous_day1` de la muestra fijada por #16
-(`configs/acquisition/weather-lima-sample-plan.json`); procedencia por recurso en
-`metadata/weather-acquisition.json` y evidencia en reports/alignment/weather-gfs-previous-day1.md.
+## Open-Meteo archived forecasts
 
-Open-Meteo no avala las inferencias ni los resultados de Neblima. La decisión de
-redistribución del proyecto permanece `unknown` en configs/sources.yaml mientras no exista una
-decisión explícita de integración; los valores permanecen bajo almacenamiento local. La
-licencia AGPL-3.0-only del código es independiente de estas licencias de datos.
+Open-Meteo provides the Previous Model Runs application programming
+interface (API). The upstream model is the Global Forecast System (GFS)
+from the US National Centers for Environmental Prediction, part of the
+National Oceanic and Atmospheric Administration. The model retains its own
+terms. Open-Meteo states that its free noncommercial API uses
+[CC BY 4.0](https://open-meteo.com/en/licence), which requires attribution.
+[Previous Model Runs API](https://open-meteo.com/en/docs/previous-runs-api)
+
+Neblima's alignment experiment uses only `temperature_2m_previous_day1`
+from the pinned sample. Open-Meteo does not endorse the resulting analysis.
+Neblima records redistribution status as `unknown` and keeps the values in
+local storage. [Acquisition plan](configs/acquisition/weather-lima-sample-plan.json) ·
+[Source receipts](metadata/weather-acquisition.json) ·
+[Alignment evidence (Spanish)](reports/alignment/weather-gfs-previous-day1.md)
+
+## Map and screenshots
+
+The standalone Leaflet map and the dashboard use different map assets. Keep
+the attribution visible in the map you reuse. The [demo guide](docs/demo.md#image-credits)
+lists the public dashboard credits and the mark's source.

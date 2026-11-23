@@ -1,38 +1,51 @@
-# Plan del conjunto de datos
+# Dataset design
 
-## Alcance
+Neblima starts with measured particulate matter in Lima. The
+[Lima PM2.5 dataset card](dataset-cards/lima-pm25-forecast.md) documents
+the completed benchmark. Additional coverage, including Callao and
+other parts of Peru, depends on compatible sources and verified data
+rights.
 
-Empezar con Lima y Callao y ampliar al Perú cuando la cobertura lo permita.
-Priorizar PM2.5 y PM10 medidos. Confirmar estaciones, fechas, intervalo y horizonte después del análisis.
+## Select a source
 
-## Investigación de fuentes
+Use the [source catalog](sources.md) to compare SENAMHI, OEFA, OpenAQ,
+and resources from Peru's national open data portal. Verify the
+resource URL, access requirements, coverage, measurement method, and
+redistribution rights before importing data. Preserve source-specific
+identities and document which evidence supports combining series.
 
-Revisar SENAMHI, OEFA, el Portal Nacional de Datos Abiertos y OpenAQ como candidatos.
-Registrar enlaces reales, requisitos de acceso, cobertura y derechos antes de importar datos.
+## Preserve and normalize observations
 
-## Recolección y normalización
+Keep source bytes intact and record acquisition parameters, time in
+Coordinated Universal Time (UTC), and the SHA-256 checksum. Preserve
+original time fields and interpret them only with documented evidence.
+Use `America/Lima` for local calendar operations when appropriate.
 
-- Conservar originales y registrar parámetros, fecha UTC y suma de verificación SHA-256.
-- Preservar fechas y zona horaria originales; normalizar a UTC y usar America/Lima para calendario.
-- Registrar coordenadas, contaminante, unidad, periodo de promedio, método y marcas de calidad.
-- Conservar datos faltantes como tales. Documentar negativos, límites de detección y conversiones.
-- El CSV de observaciones es una plantilla interna, no un archivo TimeNet validado.
+Record the station coordinates, pollutant, unit, averaging period,
+method, and flags when available. Keep missing observations missing
+and document any rules for negatives, detection limits, or unit
+conversions. [Observation contract](methodology/observation-contract.md)
 
-## Calidad y evaluación
+## Measure quality and evaluate forecasts
 
-Medir cobertura, datos faltantes, huecos, duplicados y conflictos por estación, contaminante,
-fecha y periodo. Resolver conflictos con procedencia documentada.
-Separar entrenamiento, validación y prueba cronológicamente. Ajustar el procesamiento solo con
-entrenamiento. Comparar con persistencia y referencias estacionales; informar MAE y RMSE por
-estación, contaminante y horizonte.
+Measure coverage, gaps, duplicates, and conflicts by station,
+pollutant, time, and averaging period. Retain provenance when resolving
+conflicts. Split data chronologically and fit preprocessing using
+training data. Use validation to choose configurations and reserve
+test targets for final scoring.
 
-## Entrega TimeNet
+Compare against persistence and seasonal baselines. Report mean
+absolute error (MAE) and root mean squared error (RMSE) where supported,
+with counts by station, pollutant, and horizon. [Benchmark
+results](evaluation.md)
 
-Revisar el modelo de datos y los conectores vigentes antes de implementar. Mapear fuentes, señales,
-ejes temporales, metadatos y tareas. Validar una construcción local y preparar el PR externo,
-cuya apertura requiere la autorización del plan. La plantilla CSV por sí sola no es un conjunto TimeNet.
+## Prepare a TimeF release
 
-## Condiciones del primer conjunto
-
-Derechos confirmados, recolección reproducible, procedencia trazable, informe de calidad,
-particiones cronológicas definidas y una construcción TimeF validada.
+Map sources, signals, time axes, metadata, and tasks to the pinned
+TimeNet application programming interface (API). A release needs
+documented rights, reproducible acquisition, traceable processing,
+measured quality, fixed time splits, and a verified build. The legacy
+CSV is a column template. Generate the release with the official
+TimeNet tools and follow the work plan's authorization for upstream
+contributions. [TimeF export guide](timef.md) ·
+[Work plan (Spanish)](../tasks/plan.md)

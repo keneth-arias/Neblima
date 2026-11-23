@@ -1,7 +1,7 @@
 [project]
 name = "airaware"
 version = "0.1.0"
-description = "Ingeniería reproducible de datos de calidad del aire para Lima y el Perú"
+description = "Reproducible air quality data and six-hour PM2.5 forecasting for Lima, Peru"
 readme = "README.md"
 license = "AGPL-3.0-only"
 license-files = ["LICENSE", "NOTICE"]

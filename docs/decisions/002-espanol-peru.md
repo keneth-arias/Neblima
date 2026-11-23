@@ -1,4 +1,17 @@
-# ADR-002: Español del Perú como idioma principal
+# ADR-002 · Documentation and team language
+
+## Maintained public documentation
+
+The public README and maintained guides are in English, with a Spanish
+README for local readers. Team coordination, issues, pull requests, and
+application messages continue in Peruvian Spanish. Source communications,
+historical reports, and working records retain their original language.
+Technical names follow the implementation. Upstream TimeNet contributions
+follow the language required by TimeNet.
+
+## Decisión original del 15/11/2026
+
+El texto siguiente registra el acuerdo inicial del equipo sobre el idioma de trabajo.
 
 ## Estado y fecha
 

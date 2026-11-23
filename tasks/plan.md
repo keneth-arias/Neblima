@@ -319,8 +319,8 @@ Con el piloto y la imagen por digest verificados, el [plan de evaluación de #28
 ## Integración web del mapa de estaciones
 
 Para la demo de #29, el [mapa de las siete estaciones históricas](../web/estaciones.html)
-se distribuye como un archivo estático. El [README](../README.md) muestra cómo copiarlo a una
-carpeta pública e insertarlo en otra página. Los créditos y el aviso sobre el sistema de
+se distribuye como un archivo estático. La [guía del mapa](../docs/demo.md#embed-the-station-map)
+muestra cómo copiarlo a una carpeta pública e insertarlo en otra página. Los créditos y el aviso sobre el sistema de
 referencia acompañan la copia.
 
 Verificación local del 20/11/2026:

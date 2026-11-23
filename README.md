@@ -1,19 +1,91 @@
-# Neblima Perú
+<p align="center">
+  <img src="docs/assets/neblima-mark.svg" alt="" width="80">
+</p>
 
-Proyecto de ingeniería de datos de calidad del aire para Lima, Callao y el Perú. Participamos en el
-[hackathon de TimeNet](https://challenge.timenet.ai/). El primer caso de uso es pronosticar PM2.5
-usando mediciones reales. Participamos como el equipo **Cuybernautas**. Keneth Arias (`@keneth-arias`) lidera datos y plataforma.
+<h1 align="center">Neblima</h1>
 
-**Pronóstico de seis horas.** La demostración usa Gemma 3 1B ajustado con OpenTSLM, con 24 lecturas horarias consecutivas de PM2.5 y una corrección puntual entrenada para los picos. El [informe de Gemma](reports/models/validacion-gemma.md) incluye los seis horizontes, la comparación con la CNN y los límites de las pruebas posteriores en OpenAQ y SENAMHI.
+<p align="center">
+  <strong>Six-hour air quality forecasts for Lima, Peru</strong><br>
+  Replay station readings and see what the next six hours could look like.
+</p>
 
-El idioma de trabajo del equipo es el **español del Perú**. La documentación, las tareas y los PR se
-redactan en español claro. Los comandos, identificadores y nombres técnicos conservan su forma original.
+<p align="center">
+  <a href="https://neblima.orbitly.lat/">Open the demo</a> ·
+  <a href="docs/README.md">Documentation</a> ·
+  <a href="docs/evaluation.md">Evaluation</a> ·
+  <a href="README.es.md">Español</a>
+</p>
 
-## Mapa de las siete estaciones de Lima
+<p align="center">
+  <a href="https://neblima.orbitly.lat/">
+    <img src="docs/assets/neblima-dashboard.png" alt="Neblima dashboard showing Lima's station map, the Carabayllo reading, and its hourly replay" width="920">
+  </a>
+</p>
 
-Selecciona un marcador para ver el nombre de la estación. Las ubicaciones históricas son
-referenciales porque el archivo original no declara el sistema de referencia de las coordenadas.
-[Fuente y licencia del Servicio Nacional de Meteorología e Hidrología del Perú](DATA_ATTRIBUTION.md).
+<p align="center"><sub>Dashboard capture · November 23, 2026 · <a href="docs/demo.md#image-credits">Image credits</a></sub></p>
+
+Neblima uses **24 consecutive hourly observations** of fine particulate
+matter (PM2.5) from one station to predict **the next six hourly values**.
+In the demo, you can explore seven Lima monitoring sites, choose a station and
+forecast origin, and compare the forecast with available observations and a
+baseline that repeats the last reading. The Cuybernautas team built Neblima for
+the [TimeNet challenge](https://challenge.timenet.ai/).
+
+## What the evaluation found
+
+On the frozen historical test, **Qwen reduced mean absolute error (MAE) by
+22.52%** against persistence, from **6.446 to 4.994 µg/m³** across 50,789
+forecast windows. Those windows overlap and cover 51,319 distinct station-hours.
+[Held-out test report (Spanish)](reports/models/prueba-reservada-lima.md)
+
+On frozen archives from OpenAQ and Peru's National Meteorology and Hydrology
+Service (SENAMHI), corrected **Gemma 3 1B** lowered error during high-concentration
+hours, while the convolutional neural network (CNN) had lower overall MAE in
+both archives. Find the source-by-source numbers, the later replay, and the PM10
+experiment in the [evaluation guide](docs/evaluation.md).
+
+Neblima is a research demo for exploring hourly concentrations. The recent
+SENAMHI charts use provider-published times with an unconfirmed time zone, and
+the evaluations are retrospective. The project has yet to validate real-time
+availability or regulatory use. [Dataset card](docs/dataset-cards/lima-pm25-forecast.md)
+
+## Run it locally
+
+Install Git, Make, and [uv](https://docs.astral.sh/uv/getting-started/installation/).
+Neblima was originally called AirAware, so the Python package, command-line tool,
+and TimeF dataset namespace still use `airaware`.
+
+```bash
+git clone https://github.com/keneth-arias/Neblima.git
+cd Neblima
+uv python install
+make setup
+make init
+make doctor
+UV_OFFLINE=true make check
+```
+
+Setup installs the pinned Python 3.13.13 environment and dependencies. After
+setup, the commands above need no provider credentials or air quality downloads.
+Replay the data pipeline with synthetic inputs, or start from an authorized
+local copy of the original data. [Getting started](docs/getting-started.md)
+
+## From source file to forecast
+
+The project keeps original files and their acquisition receipts, normalizes
+observations with row-level provenance, and builds hourly series without filling
+missing readings. It assigns complete windows to chronological splits and
+exports them to TimeF, TimeNet's time-series dataset format. The historical
+SENAMHI release contains **338,892 forecasting tasks** across seven provisional
+station identities. [Architecture](ARCHITECTURE.md) ·
+[Dataset card](docs/dataset-cards/lima-pm25-forecast.md) ·
+[TimeNet connector](https://github.com/OpenTSLM/TimeNet/pull/796)
+
+## Explore the station map
+
+GitHub renders the historical station locations below. Coordinates are
+approximate because the source file doesn't declare a coordinate reference
+system. For a standalone map, see [embedding the map](docs/demo.md#embed-the-station-map).
 
 ```geojson
 {
@@ -30,113 +102,12 @@ referenciales porque el archivo original no declara el sistema de referencia de 
 }
 ```
 
-### Insertar el mapa en tu sitio
+## Team and licenses
 
-Crea una carpeta `mapas/` junto a la página que mostrará el mapa y copia allí
-[estaciones.html](web/estaciones.html). Inserta este bloque en esa página. La ruta relativa
-también funciona si el sitio se publica en una subcarpeta.
+**Cuybernautas** · Keneth Arias (@keneth-arias), Cristopher (@qriqs), and
+Jordan (@J0r-PS). To help improve the pipeline or documentation, see the
+[contribution guide](CONTRIBUTING.md).
 
-```html
-<iframe src="./mapas/estaciones.html" title="Siete estaciones de calidad del aire en Lima"
-  height="720" loading="lazy" style="display: block; width: 100%; border: 0"></iframe>
-```
-
-El navegador carga Leaflet desde `unpkg.com` y el fondo de OpenStreetMap desde
-`tile.openstreetmap.org`. La integración funciona sin compilación ni claves. Los enlaces de las estaciones
-también funcionan sin JavaScript. Las ubicaciones provienen de la sección `stations` de
-[la configuración de alineación](configs/weather-alignment.yaml). Conserva los créditos del mapa
-y el [aviso de atribución de los datos](DATA_ATTRIBUTION.md) al integrarlo.
-
-## Empieza en tu equipo
-
-El proyecto antes se llamaba AirAware. El paquete de Python y el comando se llaman `airaware`,
-y los conjuntos publicados en TimeNet conservan el prefijo `airaware/`.
-
-Instala Git, Make y [uv](https://docs.astral.sh/uv/getting-started/installation/) y clona el repositorio:
-
-```bash
-git clone https://github.com/keneth-arias/Neblima.git
-cd Neblima
-uv python install
-make setup
-make init
-make doctor
-make check
-```
-
-Usamos Python 3.13.13 y dependencias fijadas en `uv.lock`. La instalación descarga herramientas;
-las pruebas y la validación del catálogo funcionan sin internet después de la instalación.
-Para estos comandos no necesitas servicios de pago ni claves de proveedores.
-Consulta [cómo contribuir](CONTRIBUTING.md) para generar el paquete y revisar dependencias.
-
-```bash
-uv run --locked airaware catalog validate
-uv run --locked airaware workspace init
-uv run --locked airaware doctor
-```
-
-`AIRAWARE_DATA_DIR` permite elegir otra carpeta de datos. El archivo `.env` no se carga automáticamente.
-Revisa la [guía del responsable](docs/lead-handbook.md), los [servicios](docs/services.md),
-la [guía de inicio del equipo](docs/team-onboarding.md) y la [distribución de tareas](docs/team-work-allocation.md).
-
-Si recién empiezas, consulta el [glosario práctico](docs/glossary.md).
-
-## Qué funciona hoy
-
-El [catálogo](configs/sources.yaml) registra 40 recursos candidatos, con evidencia y
-bloqueos por fuente. El flujo local de SENAMHI normaliza, depura, alinea y exporta
-[338 892 tareas TimeF de PM2.5](docs/dataset-cards/lima-pm25-forecast.md) con 24 horas
-de historia, seis horas de horizonte y particiones cronológicas. La integración
-continua reproduce la cadena con datos sintéticos y la red deshabilitada.
-
-La evaluación ya tiene [tres referencias](reports/baselines/lima-pm25.md) sobre el conjunto
-congelado. Validación seleccionó persistencia. El trabajo del modelo temporal se sigue en
-[#27](https://github.com/keneth-arias/Neblima/issues/27) y [#28](https://github.com/keneth-arias/Neblima/issues/28).
-El conector de Cuybernautas está en [revisión como borrador de TimeNet](https://github.com/OpenTSLM/TimeNet/pull/796).
-
-En la validación histórica de 44 458 ventanas de Lima, añadir el historial de PM10 redujo
-el error absoluto medio del pronóstico de PM10 de 19,62 a 9,65 µg/m³ y el de PM2.5
-de 4,985 a 4,965 µg/m³. Ambas variantes pronosticaron las mismas seis horas.
-[Validación histórica por estación y horizonte](reports/models/validacion-pm25-pm10.md).
-
-En la prueba externa, añadir PM10 redujo su propio error medio de 21,46 a 11,12 µg/m³
-en OpenAQ y de 20,98 a 10,92 µg/m³ en SENAMHI horario. Para PM2.5, la mejora media
-fue de 0,059 y 0,045 µg/m³, respectivamente. [Resultados de los dos proveedores](reports/models/prueba-externa-pm25-pm10.md).
-
-El [informe de validación de Gemma](reports/models/validacion-gemma.md) registra los
-ajustes de PM2.5 de 1B y 4B, sus puntos de control y las pruebas de recuperación.
-La actualización de 1B incluye el [benchmark por fuente](metadata/resultados-gemma-1b-20261123/benchmark.json)
-y el [pronóstico de seis horas para San Borja](metadata/resultados-gemma-1b-20261123/pronostico.json).
-El [registro de datos externos](metadata/lima-pm-externa-gemma-20261122.json) fija
-las copias locales de OpenAQ y SENAMHI y el corte de la captura operativa más reciente.
-
-La [adquisición meteorológica de #16](reports/acquisition/weather.md) habilita el análisis
-de una semana de pronósticos archivados. Su cobertura queda dentro de entrenamiento,
-por lo que la [alineación retrospectiva integrada](https://github.com/keneth-arias/Neblima/pull/85)
-sirve para comprobar contratos y procedencia. La comparación de modelos de la primera
-ronda usa la versión congelada de PM2.5.
-
-## Organización y próximos pasos
-
-- `configs/sources.yaml`: inventario vigente; [campos y estados](docs/sources.md).
-- `src/airaware/` y `tests/`: herramientas locales y pruebas sin servicios externos.
-- `data/`: datos originales, intermedios, normalizados, depurados, conjuntos de evaluación y TimeF.
-  Los archivos de datos no se suben a Git.
-- `metadata/*.csv`: plantillas iniciales de columnas; no son exportaciones TimeNet.
-- `docs/`: metodología, decisiones y guías del equipo.
-- `.github/`: integración continua (CI), responsables y plantillas de tareas y PR.
-
-SENAMHI y OEFA ya tienen originales locales verificados (#8/#9). Consulten los
-[resultados de perfilamiento](reports/profiling.md) para preparar la selección de #11. Sigan el [protocolo Lightpanda](docs/web-access.md) y la [guía de adquisición](docs/acquisition.md).
-La CLI acquire de #6 ya registra originales y consulta API públicas explícitas con integridad;
-caché, reanudación y lotes acotados se describen en la guía de adquisición (#7).
-El [plan vigente](tasks/plan.md), el [tablero](https://github.com/users/keneth-arias/projects/1) y las
-[tareas](https://github.com/keneth-arias/Neblima/issues) muestran el trabajo pendiente.
-La [arquitectura](ARCHITECTURE.md) diferencia lo implementado de lo propuesto.
-El [plan inicial completo](docs/initial-plan.md) también está adaptado al español. Sus comandos
-propuestos aún no están implementados. El texto original se conserva en el historial de Git.
-
-No subas credenciales ni datos masivos. Verifica las licencias antes de redistribuir datos.
-Que el repositorio sea público no concede derechos sobre las fuentes. El código propio se distribuye bajo
-[AGPL-3.0-only](LICENSE); consulta [la decisión y los límites para TimeNet](docs/decisions/003-licencia-agpl-v3.md).
-No se atribuye una licencia a los datos candidatos.
+Neblima's code uses the [GNU Affero General Public License v3 only](LICENSE).
+SENAMHI's historical Lima air quality database uses the Open Data Commons
+Attribution License 1.0. Other products have their own terms. [Data attribution](DATA_ATTRIBUTION.md)

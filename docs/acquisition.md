@@ -1,11 +1,14 @@
-# Adquisición local con trazabilidad (#6 y #7)
+# Acquire data with provenance
 
-Esta herramienta conserva bytes originales y registra su procedencia. No normaliza observaciones
-ni confirma unidades, tiempos o derechos. Las aclaraciones SENAMHI siguen en #43.
+The `airaware acquire` command preserves original bytes and records where
+they came from. Source evidence governs units, timestamps, and rights.
+The [SENAMHI follow-up](https://github.com/keneth-arias/Neblima/issues/43)
+tracks unresolved questions.
 
-## Preparar cada copia local
+## Prepare your workspace
 
-Keneth, Cristopher y Jordan ejecutan desde la raíz de su propia copia, después de actualizarla:
+Run these commands from the root of your own Linux checkout. The acquisition
+locking and publishing logic uses local filesystem semantics.
 
 ```bash
 make setup
@@ -13,49 +16,51 @@ make init
 uv run --locked airaware acquire --help
 ```
 
-Usar Python/uv según CONTRIBUTING.md. La implementación de bloqueo y publicación corresponde a Linux
-(el entorno local del equipo y los ejecutores Ubuntu de CI). No se probó soporte para Windows.
-Cada copia mantiene datos, credenciales y entorno propios. AIRAWARE_DATA_DIR selecciona otra carpeta
-base; --data-dir tiene precedencia. Los JSON de solicitudes se pueden guardar en data/staging/;
-los datos y manifiestos generados quedan excluidos de Git.
+Keep data, credentials, and environments separate per checkout. Use
+`AIRAWARE_DATA_DIR` or the overriding `--data-dir` option to set the data
+root. Store requests in `data/staging/` if needed. Git excludes generated
+data and manifests.
 
-## Registrar un archivo obtenido con Lightpanda
+## Register a file downloaded with Lightpanda
 
-Primero consultar/descargar el recurso con Lightpanda siguiendo [el protocolo](web-access.md).
-La CLI no instala ni invoca el navegador o las herramientas MCP del agente. Registrar el canal
-real: lightpanda para esa descarga, local para otro original local identificado explícitamente.
-La procedencia declarada por quien importa el archivo sigue necesitando evidencia de la fuente.
-
-Crear una solicitud JSON. Ejemplo sintético para un CSV pequeño, con contenido de al menos dos
-columnas y una fila de datos:
+Follow the [web access protocol](web-access.md) to resolve and download an
+authorized resource. The command imports the downloaded file. Use
+`method: lightpanda` for a Lightpanda download or `method: local` for a
+separately identified local original. Keep evidence for the declared
+provenance. Here is a request template for a small comma-separated values
+(CSV) file.
 
 ```json
 {
-  "source_id": "demo",
-  "resource_url": "https://example.org/data.csv",
+  "source_id": "lima-sample",
+  "resource_url": "https://example.org/lima-sample.csv",
   "method": "lightpanda",
   "format": "csv",
   "max_bytes": 1000000
 }
 ```
 
-Guardar como data/staging/request.json y ejecutar, reemplazando la ruta por el archivo adquirido:
+Save the real request as `data/staging/request.json` and pass the path to
+the original file.
 
 ```bash
-uv run --locked airaware acquire import-file --spec data/staging/request.json --file ruta/al/original.csv
+uv run --locked airaware acquire import-file \
+  --spec data/staging/request.json --file /path/to/original.csv
 ```
 
-max_bytes es obligatorio y nunca puede superar **1000 GiB (1 073 741 824 000 bytes)**. expected_sha256 es opcional, pero debe usarse
-cuando existe una suma previa confiable. acquired_at requiere zona horaria si se conoce la fecha
-real de obtención; dejarlo nulo si se desconoce. verified_at se registra al comprobar bytes. final_url
-es opcional para la URL resuelta por Lightpanda: no inventarla. Las URL no admiten usuario/contraseña,
-fragmentos ni parámetros con nombres de credenciales habituales. No incluir secretos en ningún campo,
-ni siquiera bajo nombres de parámetros diferentes. Esta versión no admite API autenticadas ni firmas URL.
+Set `max_bytes` near the expected size, up to the ceiling of 1,000 GiB
+(1,073,741,824,000 bytes). Set `expected_sha256` when you have a trusted
+checksum. Set `acquired_at` with a time zone when known. The verifier
+records `verified_at`. Use `final_url` only when you have the resolved URL.
+Keep user information, fragments, credentials, and signed parameters out
+of URLs and secrets out of all fields. The current transport supports
+public resources.
 
-## Reutilizar el CSV SENAMHI existente sin descargarlo
+## Reuse the original SENAMHI CSV
 
-El original está en data/raw/senamhi/, mientras su ID de catálogo es senamhi-lima-csv. No se renombra
-ni se duplica. Este ejemplo usa la procedencia ya registrada en #3:
+With the approved original already under `data/raw/senamhi/`, build the
+request from the receipt. This example keeps the original filename and
+uses the catalog ID `senamhi-lima-csv`.
 
 ```bash
 uv run --locked python - <<'PY'
@@ -78,16 +83,18 @@ PY
 uv run --locked airaware acquire import-file --spec data/staging/senamhi-acquisition-request.json --file data/raw/senamhi/senamhi_lima_monitoreo_1.csv
 ```
 
-Salida JSON: artifact (original verificado), manifest (registro local) y reused. Para un original ya
-bajo raw, reused es true desde el primer registro: se reutilizan sus bytes, aunque se cree el primer
-manifiesto de adquisición. Repetir la operación verifica otra vez tamaño, suma, formato y manifiesto,
-sin reescribir el registro previo. Si cambia el contrato/procedencia incompatible o el destino está
-corrupto, falla y conserva los archivos para revisión.
+The result contains `artifact`, `manifest`, and `reused`. An original
+already under `raw/` returns `reused: true` even when the operation writes
+its first acquisition manifest. Repeating the import verifies the size,
+checksum, format, and manifest. An incompatible request or corrupt
+destination fails and preserves the files for review.
 
-## API públicas documentadas
+## Use a documented public API
 
-Usar acquire api solo al elegir explícitamente una API documentada. No usarlo para sustituir
-Lightpanda después de un 403 ni para descargar páginas. Esta es una plantilla, no una API real:
+Use `acquire api` for a reviewed public application programming interface
+(API). Keep a blocked website download in the access log and follow its
+documented access path. The following request shows the fields to supply
+for a documented JSON endpoint.
 
 ```json
 {
@@ -101,133 +108,117 @@ Lightpanda después de un 403 ni para descargar páginas. Esta es una plantilla,
 }
 ```
 
-Con una solicitud real revisada y un host exacto autorizado:
-
 ```bash
 uv run --locked airaware acquire api --spec data/staging/api-request.json --allow-host api.example.org
 ```
 
-El adaptador exige HTTPS en puerto 443 y una lista explícita de hosts; comprueba que todas las IP
-resueltas sean públicas y no multicast. Rechaza redirecciones, cookies entre intentos, compresión HTTP
-y respuestas distintas de 200/206/304 (salvo errores transitorios que se reintentan). No hereda proxies del
-entorno ni envía cabeceras de autenticación. La comprobación DNS y la conexión son operaciones
-separadas: no fija la IP frente a cambios DNS entre ambas. Es una CLI local para fuentes autorizadas,
-no un servicio de descarga para URL suministradas por terceros.
+The adapter requires HTTPS on port 443 and exact allowed hosts. All
+resolved addresses must be public and non-multicast. It rejects redirects,
+cookies between attempts, and compressed responses. It accepts 200, 206,
+or 304 as applicable and retries specific transient failures. It ignores
+environment proxies and sends no authentication headers. Domain Name
+System (DNS) checks occur separately from the connection. Use this local
+command for approved endpoints.
 
-Máximo: tres intentos por recurso; connect timeout de 5 s, lectura/escritura/pool
-de 10 s y presupuesto de 60 s comprobado entre operaciones/chunks. Una operación de red o DNS ya
-iniciada puede terminar después del presupuesto; no se promete un corte de proceso a los 60 s.
-Retry-After admite segundos o fecha HTTP hasta 30 s; valores inválidos/excesivos detienen la operación.
-Sin esa cabecera se esperan 1 y 2 s antes de los intentos segundo y tercero. Solo 429, 500, 502, 503,
-504 y fallas del transporte se reintentan. Formato, suma, límites y 403/404 no generan otro intento.
+The defaults are three attempts, a five-second connection timeout,
+ten-second read, write, and pool timeouts, and a 60-second budget checked
+between operations and chunks. An in-flight operation can finish after the
+budget expires. A valid `Retry-After` can specify seconds or an HTTP date
+up to 30 seconds away. Without that header, retries wait one and two
+seconds. Retried statuses are 429, 500, 502, 503, and 504, plus transport
+failures. A format error, checksum mismatch, limit violation, 403, or 404
+stops the acquisition.
 
-## Formatos y almacenamiento
+## Check formats and storage
 
-- CSV UTF-8/UTF-8 BOM: encabezados no vacíos/únicos, dos o más columnas y filas de igual longitud,
-  al menos una fila de datos. Rechaza HTML en encabezados y bytes NUL. No interpreta medidas ni fechas.
-  Los campos están sujetos al límite estándar del lector csv de Python; no se amplía globalmente.
-- JSON: objeto con las claves json_required_keys, sin claves duplicadas ni constantes NaN/Infinity;
-  hasta 8 MiB para análisis. Es una comprobación de claves, no validación científica de valores/tipos.
-- XLSX/DOCX: contenedor ZIP y XML esenciales, CRC, sin cifrado/macros/DOCTYPE/ENTITY; XML con NUL
-  (incluido UTF-16) se rechaza. Máximo 512 miembros, 8 MiB por miembro, 32 MiB descomprimidos y razón
-  de compresión 200. No extrae archivos ni ejecuta contenido; no certifica todo el documento Office.
+Format checks identify expected structures before publication. Semantic
+validation happens downstream.
 
-Para adquisiciones nuevas desde fuera de raw, se prepara una carpeta .pending-* dentro de la fuente,
-con original.<formato> y manifest.json. Se verifican suma y formato, se vacían archivos/directorios
-con fsync cuando se admite y se publica la carpeta mediante rename en el mismo sistema de archivos:
+- CSV accepts UTF-8 with or without a byte order mark. It requires at
+  least two columns, unique nonempty headers, and one data row. Rows
+  must have equal lengths. It rejects HTML in headers and NUL bytes.
+  Field sizes follow Python's standard CSV reader limit.
+- JSON requires an object with the declared `json_required_keys`, unique
+  keys, and no NaN or infinity constants. Parsing is limited to 8 MiB.
+- XLSX and DOCX require the ZIP structure, essential XML, and valid
+  checksums. The verifier rejects encryption, macros, XML with NUL bytes,
+  and `DOCTYPE` or `ENTITY` declarations. Limits are 512 members, 8 MiB
+  per member, 32 MiB uncompressed, and a compression ratio of 200.
+  Verification runs without extracting or executing the content.
+
+New acquisitions outside `raw/` are prepared in a `.pending-*` directory.
+After verification and filesystem synchronization where supported, the
+directory is renamed on the same filesystem.
 
 ```text
 data/raw/<source_id>/<sha256>/original.csv
 data/raw/<source_id>/<sha256>/manifest.json
 ```
 
-Los originales que ya están bajo raw se registran mediante storage: reference y ruta relativa al
-raw local; no se copian ni se vuelven inmutables por software. Deben mantenerse sin cambios y conservarse
-junto con sus manifiestos. Los paquetes nuevos usan storage: bundle. Un manifiesto ocupa como máximo
-64 KiB; original_name conserva el nombre local saneado cuando se recibe, sin usarlo para construir rutas.
-El resultado es completo o ausente ante fallas previas a publicación. Una falla posterior a rename
-puede dejar un paquete completo: la siguiente operación lo verifica antes de reutilizarlo.
+A file already under `raw/` uses `storage: reference` with a relative path.
+Keep the original and manifest together and preserve the original bytes.
+New copies use `storage: bundle`. A manifest is limited to 64 KiB and can
+record a sanitized `original_name` separately from the storage path.
 
-Se rechazan enlaces simbólicos en destinos/referencias y se excluyen escritores simultáneos por fuente
-mediante flock no bloqueante: un segundo escritor falla sin sobrescribir. El archivo de bloqueo puede
-permanecer; el sistema libera el bloqueo al cerrar el descriptor o terminar el proceso. Ante una caída
-abrupta pueden quedar carpetas .pending-*; no son adquisiciones completas ni se usan como referencias.
-No se borran automáticamente carpetas de otras ejecuciones. Atomicidad/durabilidad dependen del
-sistema de archivos local; no se asume ese comportamiento en almacenamiento remoto o distribuido.
+Nonblocking locks prevent two writers from publishing for the same source.
+The operating system releases the lock when the process closes its
+descriptor or exits. A crash can leave a pending directory or, after
+rename, a complete bundle. The next run verifies a complete bundle
+before reuse. Pending directories remain outside the acquisition
+inventory and need separate cleanup. Destination and reference symlinks
+are rejected. Atomicity and durability depend on the local filesystem.
 
-## Verificación y entrega de #6
+## Reuse and resume API acquisitions
 
-make check ejecuta pruebas sin red: contrato, archivos engañosos, contenedores corruptos, límites,
-manifiesto inválido, caída de copia/publicación, escritor competidor y HTTP simulado con reloj/espera
-inyectados. make build y make audit completan los controles. No se descargan conjuntos en CI.
-
-Demostración local: CSV SENAMHI verificado y comando repetido con reused=true, 68 501 558 bytes y
-SHA-256 896ae8a106fb128460e81b3f58096f6b9c4d582ef28fffa46e5394c5875c40d4. También se validaron
-XLSX/DOCX reales por referencia, sin red, copias nuevas ni cambios en sus originales/manifiestos previos.
-El manifiesto de adquisición es nuevo y distinto de la evidencia histórica de #3/#4, que se conserva.
-
-La CLI API agrega caché condicional, reanudación y presupuestos mediante #7 (ver abajo).
-Las decisiones de unidades, reloj y publicación continúan en #43.
-
-Referencias verificadas con Lightpanda: [HTTPX streaming](https://www.python-httpx.org/quickstart/#streaming-responses),
-[transportes simulados](https://www.python-httpx.org/advanced/transports/#mock-transports) y
-[rename de Python](https://docs.python.org/3/library/os.html#os.rename).
-
-
-## Caché, reanudación y límites de API (#7)
-
-El máximo de 1000 GiB por archivo es un techo autorizado por Keneth, no una estimación de tamaño,
-una reserva de disco ni una descarga solicitada. Conviene fijar max_bytes cerca del tamaño previsto.
-Los límites estructurales de JSON y Office siguen siendo más pequeños y no cambian.
-
-La CLI `acquire api` usa el motor con caché; la función histórica `http.fetch_api` conserva su
-comportamiento simple para consumidores anteriores. Se verifican suma, estructura y contrato antes
-de reutilizar un original. ETag o Last-Modified permiten una consulta condicional; un 304 no evita
-la verificación local. Sin validador se solicita la representación completa.
+The command checks the checksum, structure, and request contract before
+reusing a cached original. It can send a conditional request using
+`ETag` or `Last-Modified`. A 304 still requires local verification.
+Without a validator, the request fetches the complete representation.
 
 ```bash
 uv run --locked airaware acquire api --spec data/staging/api-request.json --allow-host api.example.org --budget-bytes 2000000 --deadline-seconds 120
 uv run --locked airaware acquire api --spec data/staging/api-request.json --allow-host api.example.org --offline
 ```
 
-`--offline` no consulta red ni DNS; falla si no existe un original verificable. `--refresh` reinicia
-el parcial y consulta sin condición; no se combina con offline. El presupuesto de payload incluye
-bytes recibidos en intentos fallidos, reinicios y reanudaciones. Sin --budget-bytes, una consulta API
-usa max_bytes como presupuesto total. No es un contador de tráfico físico: excluye TLS/cabeceras;
-el chunk que supera el límite ya se recibió y se contabiliza antes de abortar. Con concurrencia,
-las respuestas que ya estaban en curso también pueden entregar un chunk. No se inician solicitudes
-nuevas cuando el presupuesto ya está agotado. El plazo configurable admite hasta 86 400 segundos
-por recurso y sigue siendo cooperativo entre operaciones.
+Use `--offline` to verify local originals without network or DNS access.
+Use `--refresh` to clear a partial download and fetch without a condition.
+These options are mutually exclusive. `--budget-bytes` covers response
+payloads across failed attempts, retries, and resumed requests. The API
+defaults to the request's `max_bytes` for the total budget. A chunk crossing
+the limit is counted before the transfer stops. In-flight requests can
+also return a chunk after a shared budget is exhausted. The budget excludes
+transport headers and encryption overhead. The per-resource deadline
+supports up to 86,400 seconds and remains cooperative.
 
-Los parciales y su estado atómico quedan en data/.acquisition-cache/<clave>/, fuera de Git.
-Cada checkpoint registra tamaño y SHA-256; una cola no confirmada tras una caída se recorta solo
-cuando el prefijo registrado pasa la verificación. Un parcial alterado o sin procedencia falla sin
-sobrescribirse. Se anexa únicamente con ETag fuerte idéntico y 206/Content-Range coherentes.
-Un 200 reinicia desde cero; un 416 no prueba integridad. Sin ETag fuerte se reinicia la transferencia.
-La publicación final mantiene la validación de #6 y registra el estado HTTP realmente observado.
+Partials live under `data/.acquisition-cache/<key>/`. Checkpoints record
+size and SHA-256. After a crash, the downloader trims an uncommitted
+suffix only after verifying the saved prefix. It rejects an altered
+partial or one without provenance. Resuming requires an identical strong
+`ETag`, status 206, and coherent `Content-Range`. A 200 restarts the
+transfer, while a 416 does not establish integrity. Without a strong
+`ETag`, the downloader starts over.
 
-Se comprueba espacio libre para el parcial y la copia temporal de publicación más 64 KiB; si falta
-Content-Length, se usa max_bytes para el cálculo conservador. No se preasigna el tamaño autorizado.
-El espacio puede cambiar durante una transferencia: una falla de escritura no publica un parcial.
-Un cambio de contenido produce otra versión por SHA-256 sin reemplazar los originales anteriores.
-Cache-Control: no-store impide conservar un índice HTTP reutilizable o un parcial para otra solicitud;
-el archivo adquirido deliberadamente se conserva como original del proyecto, separado de esa caché.
-No se implementa un proxy ni una caché HTTP general; un cierre abrupto puede dejar un parcial marcado
-para eliminación al siguiente acceso, después de verificar que pertenece a este recurso.
+Disk checks cover the partial, a temporary publication copy, and 64 KiB
+of metadata. Without `Content-Length`, the check uses `max_bytes`.
+A write failure leaves no published partial. Changed content gets its
+own checksum-addressed version. `Cache-Control: no-store` blocks reusable
+HTTP indexes and partials. A deliberately acquired original is managed
+separately with its provenance. After a crash, a marked partial can be
+removed on the next access once its ownership is verified. [HTTP conditions
+and ranges](https://www.rfc-editor.org/rfc/rfc9110.html) ·
+[HTTP cache rules](https://www.rfc-editor.org/rfc/rfc9111.html#section-5.2.2.5)
 
-Protocolo consultado con Lightpanda el 16/11/2026:
-[RFC 9110: condiciones y rangos](https://www.rfc-editor.org/rfc/rfc9110.html) y
-[RFC 9111: no-store](https://www.rfc-editor.org/rfc/rfc9111.html#section-5.2.2.5).
+## Select and estimate a batch
 
-## Lotes, selección y estimación (#7)
+A batch plan is a JSON object with `schema_version: 1` and `jobs`. Each
+job has a `spec`, a `local_file` for Lightpanda or local resources, and
+optional `region`, `start`, `end`, and `expected_size_bytes`. Coverage
+dates describe the whole resource and require both ordered bounds.
+Paths are relative to the working directory. A plan can contain up to
+1,000 jobs and 2 MiB of JSON.
 
-Un plan JSON contiene schema_version: 1 y jobs. Cada tarea incluye spec (el contrato anterior),
-local_file para recursos Lightpanda/local, y opcionalmente region, start, end, expected_size_bytes.
-Las fechas describen la cobertura declarada del recurso completo. Si se declaran, se requieren ambos
-extremos y un intervalo ordenado. Las rutas relativas se resuelven desde la carpeta de ejecución.
-No se interpretan fechas ni se filtran filas de medición. Máximo: 1000 tareas por plan y 2 MiB de JSON.
-
-Ejemplo que reutiliza la solicitud SENAMHI creada antes en esta guía:
+The following example uses the SENAMHI request above. The first command
+estimates the batch. The second verifies the local file offline.
 
 ```bash
 uv run --locked python - <<'PY'
@@ -246,61 +237,65 @@ uv run --locked airaware acquire batch --plan data/staging/senamhi-batch.json --
 uv run --locked airaware acquire batch --plan data/staging/senamhi-batch.json --offline --budget-bytes 0
 ```
 
---source y --region se pueden repetir y comparan valores exactos. --start/--end seleccionan por
-solapamiento inclusivo; un recurso sin cobertura declarada no participa cuando se filtran fechas.
---data-dir o AIRAWARE_DATA_DIR eligen la carpeta de salida. Se eliminan solicitudes duplicadas tras
-seleccionar; el contrato distingue fuente, URL, método, formato, claves JSON y SHA esperado.
-Si dos entradas del mismo recurso tienen políticas diferentes, se conserva la primera seleccionada:
-revisar el plan para no declarar metadatos/límites contradictorios.
+Repeat `--source` and `--region` to select exact matches. Date filters
+use inclusive overlap and omit resources with unknown coverage. Filters
+select whole resources. Duplicate requests are removed after filtering.
+The first selected entry wins when policy fields differ, so check your
+plan for conflicting requests.
 
---dry-run usa solo tamaños declarados o stat de archivos locales: no GET, HEAD, DNS ni creación de
-carpetas de adquisición. known_size_bytes y unknown_count se informan por separado; authorized_max_bytes
-es la suma de techos, no una predicción. La estimación inicial OEFA de aproximadamente 1,23 GB sigue
-sin verificarse; el nuevo máximo no acredita su tamaño. --offline verifica originales locales/API
-sin red y admite presupuesto cero. No descarga recursos Lightpanda faltantes.
+A dry run uses declared sizes or local filesystem metadata. It reports
+`known_size_bytes`, `unknown_count`, and the sum of the declared ceilings
+as `authorized_max_bytes`. It skips network access and creates no
+acquisition folders. Offline mode accepts a zero budget and rejects
+missing originals.
 
-Para un lote API revisado se exige --budget-bytes positivo y --allow-host por cada host autorizado.
-Si faltan tamaños, se requiere además --authorize-unknown; esa opción conserva todos los límites.
-Los tamaños declarados no son garantía y el contador de payload sigue activo. La concurrencia
---workers permite 1 a 4 tareas, por defecto 1. Tareas de una misma fuente se serializan para respetar
-el bloqueo de publicación; recursos de otras fuentes pueden avanzar sin bloquearse. Un fallo queda
-en errors, el comando termina con código distinto de cero y conserva los resultados ya verificados.
+Network batches require a positive `--budget-bytes` and one
+`--allow-host` per approved host. Add `--authorize-unknown` if sizes are
+missing. The limits still apply. `--workers` accepts one to four jobs
+and defaults to one. Jobs for a single source run in sequence. A failed
+job appears in `errors`, produces a nonzero exit status, and leaves
+already verified results available.
 
-Demostración del 16/11/2026: plan local SENAMHI, un recurso seleccionado en Lima, 68 501 558 bytes
-medidos; ejecución offline con reused=true, errors=[] y network_bytes=0. SHA-256 y ruta del original
-coinciden con la evidencia de #3; no se crearon copias masivas ni se alteraron sus bytes.
+## Set the delimiter for OEFA CSV files
 
-## Delimitador CSV explícito para OEFA
+Set `"csv_delimiter": ";"` for a semicolon-delimited resource from Peru's
+Agency for Environmental Assessment and Enforcement (OEFA). The default
+is a comma. The importer preserves the bytes and applies the declared
+delimiter to structural checks. The delimiter is part of the request and
+cache identity. Existing comma-delimited manifests keep their identities.
 
-csv_delimiter admite coma (predeterminado) o punto y coma. Declarar `"csv_delimiter": ";"`
-para el recurso OEFA, sin convertir ni autodetectar los bytes. Las mismas reglas de encabezado,
-comillas y filas rectangulares siguen activas. Un delimitador diferente es otro contrato de validación
-que no puede reutilizarse como el anterior; la identidad de caché/lote también lo distingue.
-Los manifiestos de coma anteriores siguen verificándose y sus claves de caché no cambian.
+## Retrieve a bounded static public file
 
-## Archivo público estático con presupuesto compartido (#9)
-
-El canal http_file requiere source_page_url (página oficial que resolvió el recurso) y no pretende
-ser una API. Primero revisar/resolver el enlace con Lightpanda. Crear una solicitud como las anteriores,
-con method=http_file, source_page_url, resource_url, format, max_bytes y csv_delimiter cuando corresponda.
+Use `method: http_file` for a static file resolved with Lightpanda. The
+request needs `source_page_url`, `resource_url`, `format`, `max_bytes`,
+and `csv_delimiter` where applicable. The first URL is the official
+page on which you found the resource.
 
 ```bash
 uv run --locked airaware acquire file --spec data/staging/oefa-request.json --allow-host www.datosabiertos.gob.pe --budget-bytes 2147483648 --deadline-seconds 1200
 uv run --locked airaware acquire file --spec data/staging/oefa-request.json --allow-host www.datosabiertos.gob.pe --budget-bytes 0 --offline
 ```
 
-La consulta inicial solicita hasta 64 KiB y confirma un tamaño acotado por Content-Length/Content-Range;
-no publica el prefijo como original. Si se ignora Range, solo se consume el prefijo antes de cerrar.
-Tamaño desconocido, rango inválido, 403/418 u otro estado no admitido detienen la operación. Se usa un
-User-Agent con el identificador histórico `AirAware/0.1`, sin cambiar identidad ante un rechazo. La procedencia incluye la página
-oficial; no se inventa documentación API. Tanto consulta como transferencia consumen el mismo ByteBudget.
-El plazo de consulta es 20 s cooperativos y forma parte del plazo total. El cuerpo completo pasa el
-motor común de caché/reanudación/publicación y no puede superar el tamaño confirmado en la consulta.
-Un original de otro tamaño mayor requiere una nueva consulta/estimación. Los límites de identidad DNS,
-chunks recibidos, disco y tiempo cooperativo de #7 se mantienen. La consulta no garantiza que el recurso
-no cambie después; el manifiesto final acredita los bytes realmente recibidos con su propio SHA-256.
+The probe reads up to 64 KiB to confirm the size from `Content-Length` or
+`Content-Range`. If the server ignores the range, the probe stops after
+the prefix. The transfer requires a known bounded size and valid range
+metadata. An unsupported status, including 403 or 418, stops acquisition.
+The probe and transfer share a byte budget. The probe has a cooperative
+20-second deadline within the overall deadline. Requests use the
+`AirAware/0.1` user agent.
 
-Offline no consulta ni resuelve DNS y verifica la caché completa. import-file no permite atribuir a un
-original local el método http_file; ese método exige el transporte correspondiente. acquire batch
-reconoce http_file como tarea de red y exige presupuesto global explícito; el contador incluye la consulta.
-La función API histórica conserva method=api. Los archivos estáticos usan public_file.fetch_public_file.
+The full body uses the same cache, resumption, and publication checks as
+API downloads and can't exceed the probed size. A later increase requires
+a new probe. The final manifest describes the received bytes. Offline mode
+verifies the local cache without DNS. Only the static-file transport can
+produce a manifest with `method: http_file`. A batch treats it as a
+network job and requires an explicit shared budget.
+
+## Verify the acquisition
+
+`make check` tests formats, limits, malformed manifests, storage failures,
+concurrent publication, and HTTP behavior with simulated transport.
+The versioned verification records cover the 68,501,558-byte SENAMHI
+original, its offline reuse, and locally referenced workbook and document
+files. [SENAMHI acquisition report (Spanish)](../reports/acquisition/senamhi.md) ·
+[OEFA acquisition report (Spanish)](../reports/acquisition/oefa.md)

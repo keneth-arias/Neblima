@@ -1,14 +1,17 @@
-# Verificación local de TimeNet con hello-world
+# TimeNet tools and reproducibility checks
 
-Entorno independiente de la aplicación Neblima. Instala timenet y timenet-connectors desde el
-commit `9bd1613019ee61fbc52e02106a1a45990ead7a54`, con dependencias fijadas en su propio uv.lock.
-No instala PyTorch ni cambia el entorno principal. La primera instalación requiere internet.
-Los datos sintéticos generados conservan CC-BY-4.0 según la ficha del conector; no son datos de Lima
-ni quedan cubiertos automáticamente por la AGPL del código de Neblima.
+This environment pins `timenet` and `timenet-connectors` at commit
+`9bd1613019ee61fbc52e02106a1a45990ead7a54`. Its lockfile is separate from
+the main Neblima environment. The first installation needs internet
+access. See the [TimeNet guide](../../docs/timef.md) for the Lima
+benchmark export.
 
-## Construir en la carpeta de datos del proyecto
+## Build the synthetic hello-world dataset
 
-Ejecutar desde la raíz de Neblima:
+Run the official connector from the repository root. Both registry
+arguments point to the same local folder. The command uses the tools'
+locked environment through `--no-isolation` and leaves existing versions
+in place. The synthetic connector data use CC BY 4.0.
 
 ```bash
 uv sync --project tools/timenet-smoke --python 3.13.13 --locked
@@ -22,11 +25,10 @@ uv run --project tools/timenet-smoke --locked timenet-build build \
   --no-isolation
 ```
 
-`--no-isolation` evita que TimeNet cree un segundo entorno para el conector: el comando ya se ejecuta
-en el entorno aislado de esta carpeta. Ambos registros apuntan a la carpeta local. El ejemplo es
-sintético y no descarga observaciones. No usar `--force` para reemplazar versiones existentes.
+## Verify the local build
 
-## Leer y verificar con el SDK
+The software development kit (SDK) can verify the files directly and load
+the same release through a local registry. Compare values after both reads.
 
 ```bash
 UV_OFFLINE=true uv run --project tools/timenet-smoke --locked python - <<'PY'
@@ -45,48 +47,37 @@ with TimeFReader.open(release) as reader:
 client = timenet.TimeNet(sources=[LocalRegistry(registry)])
 dataset = client.load("timenet/hello-world", version="1.0.0")
 assert dataset.records[0].signals[0].to_arrow().slice(0, 8).to_pylist() == expected
-print("Registros:", len(dataset.records), "Tareas:", len(dataset.tasks))
+print("Records:", len(dataset.records), "Tasks:", len(dataset.tasks))
 PY
 ```
 
-## Resultado ejecutado el 15/11/2026
+The recorded November 15, 2026 run verified both reads and matched the
+installed revisions via `direct_url.json`. It produced three records,
+five signals, and five tasks in 4,478,280 bytes. The run receipt
+`data/timef/hello-world-validation.json` records the date, packages,
+checks, counts, sizes, and file checksums. The example compares the
+values and leaves the historical receipt alone. Git excludes the data
+root and the local virtual environment. [Official instructions at the
+pinned revision](https://github.com/OpenTSLM/TimeNet/blob/9bd1613019ee61fbc52e02106a1a45990ead7a54/docs/get-started.md)
 
-- Construcción oficial y verificación de archivos aprobadas.
-- Lectura con TimeFReader y carga con TimeNet desde LocalRegistry aprobadas; valores comparados.
-- Proveniencia instalada comprobada mediante direct_url.json: ambos paquetes usan el commit fijado.
-- Tres registros, cinco señales y cinco tareas; archivos de la versión: 4 478 280 bytes.
-- Versión: `data/timef/timenet/hello-world/1.0.0/`.
-- Informe de la ejecución: `data/timef/hello-world-validation.json`, con fecha, paquetes, controles,
-  conteos, tamaños y SHA-256 de cada archivo. El bloque de lectura anterior verifica el conjunto,
-  pero no regenera por sí solo ese informe detallado.
+## Verify an hourly PM2.5 round trip
 
-Los datos, el informe de ejecución y .venv están excluidos de Git. La configuración y uv.lock sí se
-versionan para reproducir el entorno. La carpeta `data/timef` será el registro local para otros
-conjuntos; los originales de SENAMHI irán en `data/raw/senamhi` cuando se implemente su adquisición.
-Esta prueba no sustituye la validación del futuro conector SENAMHI ni ejecuta la suite de TimeNet.
-
-Referencia: [guía oficial en la revisión fijada](https://github.com/OpenTSLM/TimeNet/blob/9bd1613019ee61fbc52e02106a1a45990ead7a54/docs/get-started.md).
-
-## Ida y vuelta horaria de PM2.5 para #21
-
-Después de instalar el entorno fijado, ejecutar desde la raíz de Neblima:
+The synthetic test creates a provisional station record with a
+Coordinated Universal Time (UTC) origin and one-hour spacing. It verifies
+the TimeF output and compares four Arrow values, including a measured
+zero and a null. It also checks double precision, typed units, and
+provenance.
 
 ```bash
 UV_OFFLINE=true uv run --project tools/timenet-smoke --locked \
   python tools/timenet-smoke/test_senamhi_timef.py
 ```
 
-La prueba crea un registro sintético con una identidad provisional, un origen de reloj
-absoluto en tiempo universal coordinado (UTC) y un paso de una hora. Escribe con
-`TimeFDataset.write`, verifica con `TimeFReader.verify()` y compara los cuatro valores
-con Arrow. Conserva un cero, un nulo, valores con doble precisión, la unidad tipada
-en µg/m³ y un ejemplo de procedencia. El registro y el archivo temporal son sintéticos.
-Los metadatos reales, la atribución y la verificación del Parquet se incorporan en la
-segunda entrega de #21.
+## Export a real SENAMHI sample
 
-## Muestra local real de SENAMHI
-
-Con las dependencias de ambos entornos instaladas y el Parquet de #13 disponible:
+With both environments installed and the verified normalized Parquet
+available, run the sample export against its original station and start
+time.
 
 ```bash
 UV_OFFLINE=true uv run --project tools/timenet-smoke --locked \
@@ -97,29 +88,28 @@ UV_OFFLINE=true uv run --project tools/timenet-smoke --locked \
   --start 2024-05-01T00:00:00Z --hours 24
 ```
 
-La conversión ejecuta la depuración y la alineación locales en el entorno Neblima
-para verificar los archivos y la traza de #13. El registro base de muestra es
-`airaware/senamhi-lima-pm25-sample@0.1.0`. El reloj conserva las etiquetas UTC
-publicadas. La unidad tipada sigue siendo una inferencia aprobada y tanto la posición
-del intervalo como la calidad de las lecturas siguen desconocidas. Los nulos proceden
-de la grilla, con identificadores de auditoría por casilla. La licencia de datos figura
-como `ODC-By-1.0` en TimeNet y la atribución acompaña la versión.
+The converter calls local curation and alignment in the main Neblima
+environment to verify the upstream artifacts. It writes
+`airaware/senamhi-lima-pm25-sample@0.1.0` with published UTC labels,
+the accepted inferred unit, and grid provenance. Interval placement and
+individual quality remain unknown. The release carries the SENAMHI
+attribution and TimeNet's `ODC-By-1.0` identifier.
 
-En la verificación real se conservaron 19 valores finitos y cinco nulos por conflicto.
-La grilla de PM2.5 carece de ceros medidos y la prueba sintética cubre el cero. Una
-copia de la normalización con la traza alterada se rechazó antes de publicar el registro.
-Dos ejecuciones en registros nuevos aprobaron `TimeFReader.verify()` y
-`LocalRegistry`. Coincidieron la identidad, el reloj, los valores Arrow y la procedencia.
-Las sumas SHA-256 de los manifiestos fueron
-`0c457bc4b7452da794c3980c1681e4d3c0d361d0073babf72a38f40929724371` y
-`dbb6f2c621c4bde20ee571eb2f2db49800ca15783b91a6e96af8e673c16e9d42`.
-La diferencia se limita a la suma del archivo de control DuckDB que escribe TimeNet.
+The real sample preserved 19 finite values and five conflict nulls.
+Two fresh registries passed `TimeFReader.verify()` and `LocalRegistry`
+loading and matched on identity, clock, Arrow values, and provenance.
+A modified input trace was rejected. The two manifest checksums below
+differ because of the TimeNet-generated DuckDB control file.
 
-## Reproducción de extremo a extremo de #23
+- `0c457bc4b7452da794c3980c1681e4d3c0d361d0073babf72a38f40929724371`
+- `dbb6f2c621c4bde20ee571eb2f2db49800ca15783b91a6e96af8e673c16e9d42`
 
-Instalar los entornos desde la raíz. La instalación puede acceder a sus fuentes de
-dependencias. La prueba se ejecuta después en un espacio de red aislado de Linux y
-con los permisos del usuario de trabajo.
+## Run the offline tests
+
+The following Linux workflow uses the same network isolation as
+continuous integration. Install the pinned environments before entering
+the namespace. The test target uses the external `/usr/bin/time` command
+to record runtime and peak memory.
 
 ```bash
 uv sync --locked
@@ -128,36 +118,39 @@ sudo -n --preserve-env=HOME,PATH,UV_CACHE_DIR unshare --net \
   --setuid "$(id -u)" --setgid "$(id -g)" -- make test-timef-offline
 ```
 
-El objetivo ejecuta las pruebas aisladas del kit de desarrollo de TimeNet y verifica
-estilo y formato de sus scripts. La prueba de extremo a extremo crea un CSV ficticio
-de 73 filas con un cero, un nulo y un conflicto. Importa el original, verifica su
-suma, normaliza, depura, alinea, genera ventanas, purga cruces y escribe TimeF.
-`TimeFReader.verify()` y `LocalRegistry` comprueban la versión. Se comparan valores,
-identificadores, reloj y particiones de todas las tareas ficticias. Una copia de
-particiones alterada se rechaza antes de escribir otra versión.
+The end-to-end fixture imports a synthetic 73-row CSV with a zero, a null,
+and a conflict. It verifies the original, normalizes, curates, aligns,
+builds windows, purges split crossings, and writes TimeF. The SDK checks
+values, identities, clock labels, and splits. A changed split artifact
+must fail before another release is written. For the focused test and
+standard setup, see [Getting started](../../docs/getting-started.md).
 
-En un checkout limpio con entornos fijados, el comando aprobó cuatro pruebas
-en 3,03 s y usó hasta 203 920 KiB de memoria residente. El control de integración
-continua registra esos recursos por ejecución. La auditoría de dependencias se
-ejecuta aparte con acceso a su servicio de alertas. La corrida local principal
-también aprobó 345 pruebas, el empaquetado y la auditoría.
+## Export historical PM2.5 and PM10 windows
 
-## Exportación histórica de PM2.5 y PM10
-
-Desde la raíz, indicar el directorio de la versión histórica y un destino nuevo en disco local.
+Use the historical release path and a new destination on local disk.
 
 ```bash
 UV_OFFLINE=true uv run --project tools/timenet-smoke --locked python \
   tools/timenet-smoke/export_qwen_windows.py "$release" "$salida" --joint
 ```
 
-El manifiesto fija las huellas de las matrices de entrenamiento y validación, de sus identificadores y de `scaler.json`. El orden de los canales de historia y objetivos es `pm25, pm10`. `origin_hour` cuenta horas desde 1970-01-01 00:00 UTC. El escalador y los percentiles 95 por estación usan las 268 567 horas de estación distintas presentes en las historias de entrenamiento. Las matrices mantienen las concentraciones publicadas, incluido el cero. [Evidencia de la exportación](../../metadata/ventanas-pm25-pm10-entrenamiento.json)
+The manifest pins the training and validation arrays, their identifiers,
+and `scaler.json`. Channel order is `pm25, pm10` in histories and targets.
+`origin_hour` counts hours since January 1, 1970, at 00:00 UTC. The scaler
+and station-level 95th percentiles come from 268,567 distinct
+station-hours in training histories. The arrays retain published
+concentrations, including zeros. [Export receipt](../../metadata/ventanas-pm25-pm10-entrenamiento.json)
 
-## Verificar el ajuste pareado de #88
+## Verify paired PM2.5 and PM10 validation
 
-`joint_validation.py` recibe las matrices históricas, las carpetas de los dos ajustes (A y B), dos exportaciones independientes de inferencia desde los estados restaurados y una carpeta nueva de salida. La reconstrucción de A puede recibir toda la historia de PM10 enmascarada. Ambas exportaciones deben contener exactamente las mismas predicciones por ventana que en la primera restauración.
+`joint_validation.py` checks the historical arrays, the two trained
+states, and independent inference replays. Variant A receives PM2.5 only
+and can be reconstructed with the PM10 history masked. Variant B
+receives both histories. Each replay must reproduce its model's original
+window predictions.
 
-Para reproducir la prueba de A, crear los dos insumos de inferencia desde la misma validación. El siguiente comando recibe la carpeta de matrices exportadas y una carpeta de salida nueva. Conserva los identificadores en su orden original y excluye los objetivos.
+Prepare the two inference inputs from the same validation array, keeping
+the original ID order and leaving targets out.
 
 ```bash
 UV_OFFLINE=true uv run --project tools/timenet-smoke --locked python - "$matrices" "$historias" <<'PY'
@@ -177,7 +170,10 @@ with np.load(matrices / "validation.npz", allow_pickle=False) as datos:
 PY
 ```
 
-En el perfil de entrenamiento de SkyPilot, ejecutar este comando una vez por variante (`first` para A y `both` para B), con la carpeta del ajuste correspondiente en `$ajuste`. El perfil monta `gpu_worker.py` en `/opt/airaware` para aplicar el presupuesto de memoria de la GPU también durante la inferencia. Las revisiones de los pesos base y del entrenador figuran en la [configuración congelada](../../configs/training/lima-pm25-pm10-ajuste-v1.json).
+In the SkyPilot training profile, run inference with `first` for A and
+`both` for B. Use the corresponding training folder for `$ajuste`.
+`gpu_worker.py` applies the profile's GPU memory budget to inference.
+[Pinned training configuration](../../configs/training/lima-pm25-pm10-ajuste-v1.json)
 
 ```bash
 PYTHONPATH=/opt/forecast/src /opt/conda/bin/python /opt/airaware/gpu_worker.py \
@@ -187,7 +183,8 @@ PYTHONPATH=/opt/forecast/src /opt/conda/bin/python /opt/airaware/gpu_worker.py \
   --output "$ajuste/replay-validation.npz"
 ```
 
-Desde la raíz de Neblima, comparar los cuatro archivos de predicciones y generar el informe numérico.
+From the repository root, compare the original and replay predictions
+and write the metrics to a new output directory.
 
 ```bash
 UV_OFFLINE=true uv run --project tools/timenet-smoke --locked python \
@@ -195,17 +192,31 @@ UV_OFFLINE=true uv run --project tools/timenet-smoke --locked python \
   "$ajuste_a/replay-validation.npz" "$ajuste_b/replay-validation.npz" "$salida"
 ```
 
-El verificador coteja el último paso, las sumas de los archivos del estado, el registro efectivo de lotes, el escalador y las concentraciones del conjunto congelado. `paired.parquet` permite revisar cada par de errores. `metrics.json` desglosa por contaminante, estación, horizonte y concentración alta. `freeze.json` identifica ambos modelos y los archivos verificados. La entrada de evaluación es exclusivamente la partición histórica de validación.
+The verifier checks the final update, state checksums, batch logs, scaler,
+and frozen validation concentrations. `paired.parquet` contains paired
+errors. `metrics.json` groups results by pollutant, station, horizon, and
+high concentration. `freeze.json` pins the two models and verified files.
+The input is the historical validation split.
 
-Si el nodo se apaga durante el ajuste, el archivo de eventos puede terminar en bytes NUL después de la última línea JSON completa. El verificador registra el nombre, el SHA-256 del archivo original y la cantidad de esos bytes en `recovered_log_tails`. Una línea JSON incompleta o dañada interrumpe la verificación. Para congelar el modelo, todos los pasos deben estar documentados y cada lote repetido después de reanudar debe conservar los mismos identificadores y la misma tasa de aprendizaje.
+If a shutdown leaves a trailing sequence of NUL bytes after the last
+complete JSON event, the verifier records the original file name,
+checksum, and byte count in `recovered_log_tails`. An incomplete or
+corrupted JSON line stops verification. Every step must be documented.
+Batches replayed after resumption must preserve their IDs and learning
+rate.
 
-## Exportación de solo historias para inferencia de PM2.5
+## Export PM2.5 histories for inference
 
-Para el producto univariado de seis horas, preparar fuera del pod de inferencia un archivo con las claves `window_id` y `history`. El exportador verifica el manifiesto de #25 y conserva el orden de la cohorte. Ejecutar desde la raíz con una ruta de salida nueva.
+Prepare an input file with `window_id` and `history` outside the inference
+pod. The exporter verifies the benchmark manifest and preserves the
+cohort order.
 
 ```sh
 uv run --project tools/timenet-smoke --locked python tools/timenet-smoke/export_qwen_windows.py \
   data/timef/airaware/lima-pm25-forecast/0.1.0 history.npz --split validation --history-only
 ```
 
-Los objetivos del producto histórico se validan durante esta preparación retrospectiva. Montar únicamente el archivo resultante para inferencia y conservar el archivo con mediciones futuras en el evaluador. Los paquetes del piloto en vivo requieren además evidencia de cuándo llegó cada lectura. [Plan de episodios](../../tasks/pronostico-episodios-lima.md)
+The historical exporter verifies targets during preparation. Mount only
+the resulting history file for inference and keep the future observations
+with the evaluator. Live pilot bundles also require evidence of when
+each reading arrived. [Episode forecast plan (Spanish)](../../tasks/pronostico-episodios-lima.md)
