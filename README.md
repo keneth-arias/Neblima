@@ -4,6 +4,8 @@ Proyecto de ingeniería de datos de calidad del aire para Lima, Callao y el Per�
 [hackathon de TimeNet](https://challenge.timenet.ai/). El primer caso de uso es pronosticar PM2.5
 usando mediciones reales. Participamos como el equipo **Cuybernautas**. Keneth Arias (`@keneth-arias`) lidera datos y plataforma.
 
+**Pronóstico de seis horas.** La demostración usa Gemma 3 1B ajustado con OpenTSLM, con 24 lecturas horarias consecutivas de PM2.5 y una corrección puntual entrenada para los picos. El [informe de Gemma](reports/models/validacion-gemma.md) incluye los seis horizontes, la comparación con la CNN y los límites de las pruebas posteriores en OpenAQ y SENAMHI.
+
 El idioma de trabajo del equipo es el **español del Perú**. La documentación, las tareas y los PR se
 redactan en español claro. Los comandos, identificadores y nombres técnicos conservan su forma original.
 

@@ -16,6 +16,10 @@ Los resultados también están disponibles como archivos JSON.
   confirmación histórica de 1B frente a persistencia, la validación interna y los
   tiempos de ejecución de Flamingo v4, y el estado del benchmark externo con la CNN.
 
+![Error absoluto medio de Gemma 3 1B y la CNN de una a seis horas por fuente](gemma-1b-archivos.png)
+
+La figura usa las ventanas completas de cada archivo por separado. La [tabla de resultados](../../metadata/resultados-gemma-1b-20261123/benchmark.json) también registra los resultados posteriores, incluidos los cero ejemplos completos nuevos de OpenAQ. Los intervalos q96 siguen en evaluación.
+
 ## Gemma 3 1B en MicroK8s
 
 Se usó `google/gemma-3-1b-pt` en la revisión
