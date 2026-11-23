@@ -292,7 +292,7 @@ uv run --locked airaware acquire file --spec data/staging/oefa-request.json --al
 La consulta inicial solicita hasta 64 KiB y confirma un tamaño acotado por Content-Length/Content-Range;
 no publica el prefijo como original. Si se ignora Range, solo se consume el prefijo antes de cerrar.
 Tamaño desconocido, rango inválido, 403/418 u otro estado no admitido detienen la operación. Se usa un
-User-Agent honesto AirAware, sin cambiar identidad ante un rechazo. La procedencia incluye la página
+User-Agent con el identificador histórico `AirAware/0.1`, sin cambiar identidad ante un rechazo. La procedencia incluye la página
 oficial; no se inventa documentación API. Tanto consulta como transferencia consumen el mismo ByteBudget.
 El plazo de consulta es 20 s cooperativos y forma parte del plazo total. El cuerpo completo pasa el
 motor común de caché/reanudación/publicación y no puede superar el tamaño confirmado en la consulta.

@@ -13,7 +13,7 @@ Método reproducible: [herramienta de revisión](../tools/oefa-workbook-review/R
 Resultados resumidos y hashes: [metadata/oefa-workbook-analysis.json](../metadata/oefa-workbook-analysis.json).
 Parquet/JSON detallados están en la ruta local indicada en ese registro, fuera de Git.
 
-## Recomendación para AirAware
+## Recomendación para Neblima
 
 **Ninguno de estos cuatro archivos demuestra la meta de cuatro estaciones y 24 meses continuos
 para el primer benchmark de Lima.** EAF es el candidato más útil para un piloto pequeño de eventos

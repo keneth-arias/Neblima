@@ -1,6 +1,6 @@
 # Verificación de recursos de OEFA y coordenadas
 
-Tarea: [#5 — Verificar los recursos de OEFA y sus coordenadas](https://github.com/keneth-arias/airaware/issues/5).
+Tarea: [#5 — Verificar los recursos de OEFA y sus coordenadas](https://github.com/keneth-arias/Neblima/issues/5).
 Revisión: 2026-11-16 (UTC). Responsable: Cristopher (`@qriqs`). Revisión científica y de licencias pendiente de Keneth.
 
 ## Alcance y resultado
@@ -16,7 +16,7 @@ que todas las estaciones usan la misma zona o datum.
 
 Según el publicador, el conjunto contiene Evaluaciones Ambientales de Seguimiento (EAS) de 34
 estaciones. Los metadatos declaran cobertura de Perú para 2018–2021. Estas cifras son declaraciones
-de la fuente, no resultados de un perfilamiento completo de AirAware.
+de la fuente, no resultados de un perfilamiento completo de Neblima.
 
 ## Recursos oficiales resueltos
 

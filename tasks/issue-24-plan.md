@@ -5,7 +5,7 @@ con sus particiones, cobertura, datos faltantes, usos y reproducción. El códig
 aporte se preparó en una copia separada de TimeNet en
 `9bd1613019ee61fbc52e02106a1a45990ead7a54`. Usa MIT para el conector y mantiene
 ODC-By-1.0 para los datos, con el aviso de SENAMHI. Se implementó con la interfaz pública
-de TimeNet y la especificación de entradas y objetivos de AirAware. El conector carece de
+de TimeNet y la especificación de entradas y objetivos de Neblima. El conector carece de
 dependencias del proyecto AGPL.
 
 ## Recibo de verificación

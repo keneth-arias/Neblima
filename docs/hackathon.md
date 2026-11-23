@@ -4,7 +4,7 @@ Fuente principal: [página oficial del reto](https://challenge.timenet.ai/), con
 el 20/11/2026 a las 21:48 UTC con Lightpanda (HTTP 200); reglas, plazo y requisito del PR de datos
 sin cambios respecto de lo registrado en esta página.
 El equipo usa esta matriz para preparar evidencias, sin afirmar que ya completó la entrega.
-Las responsabilidades internas son acuerdos de AirAware, no reglas del organizador.
+Las responsabilidades internas son acuerdos de Neblima, no reglas del organizador.
 
 ## Plazo y hora del Perú
 
@@ -23,7 +23,7 @@ La conversión se comprobó con zoneinfo de Python. Volver a consultar la fuente
 | Publicaciones públicas en X y LinkedIn; ambas requeridas | Enlaces y capturas de métricas disponibles | #29; Jordan redacta, Keneth autoriza publicación | No verificadas ni autorizadas por esta investigación |
 | Compartir en Discord del hackathon | Enlace o comprobante del mensaje publicado | #29; coordinación de Keneth | No verificado; no se envió un mensaje aquí |
 | Formulario oficial por equipo y por ronda antes del cierre | Confirmación y enlaces exigidos | #29; coordinación de Keneth | Pendiente de entrega; no se envió el formulario |
-| Repositorio del proyecto, si corresponde | URL de AirAware; figura como enlace opcional en la página | #29 | Repositorio público disponible; no equivale a una entrega |
+| Repositorio del proyecto, si corresponde | URL de Neblima; figura como enlace opcional en la página | #29 | Repositorio público disponible; no equivale a una entrega |
 
 Los controles de calidad, las metas de cobertura y los porcentajes de integridad son decisiones del
 proyecto, no requisitos oficiales añadidos al hackathon. La página indica que se evalúan impacto,

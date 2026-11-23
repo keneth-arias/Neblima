@@ -67,6 +67,6 @@ modelos con validación y reservar prueba para el informe final. El manifiesto d
 ## Licencias y aporte a TimeNet
 
 La base SENAMHI y su versión convertida conservan ODC-By-1.0 y el aviso de origen.
-El código de AirAware sigue AGPL-3.0-only. El aporte para TimeNet se escribió por separado
+El código de Neblima sigue AGPL-3.0-only. El aporte para TimeNet se escribió por separado
 contra su API y sigue MIT conforme al [ADR-003](../decisions/003-licencia-agpl-v3.md).
 Ver [el recibo de preparación del aporte](../../tasks/issue-24-plan.md).

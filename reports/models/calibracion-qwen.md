@@ -1,6 +1,6 @@
 # Costo del ajuste de Qwen y presupuesto para Lima
 
-Para [#28](https://github.com/keneth-arias/airaware/issues/28) se eligió un proceso por tarjeta y un cabezal por proceso. Las dos RTX 5070 Ti completaron ambos ajustes de 60 pasos en una mediana de **30,92 s**. Dividir el estado con FSDP2 redujo el pico de memoria a **6,46 GiB por tarjeta**. El ajuste individual completo con lote 16 ya cabe en una tarjeta.
+Para [#28](https://github.com/keneth-arias/Neblima/issues/28) se eligió un proceso por tarjeta y un cabezal por proceso. Las dos RTX 5070 Ti completaron ambos ajustes de 60 pasos en una mediana de **30,92 s**. Dividir el estado con FSDP2 redujo el pico de memoria a **6,46 GiB por tarjeta**. El ajuste individual completo con lote 16 ya cabe en una tarjeta.
 
 ## Medición del 19 de noviembre de 2026
 

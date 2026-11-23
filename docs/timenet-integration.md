@@ -19,7 +19,7 @@ Las pruebas enlazadas se **leyeron**, no se presentan como ejecuciones.
 
 Para una futura contribución externa: `make check`, `make lint-fix`, `make test`, `make test-connectors`
 y `make license-check`; `make check-ci` y `make test-unit` reproducen controles rápidos.
-Estos comandos pertenecen a TimeNet. AirAware usa sus propios controles de CONTRIBUTING.md.
+Estos comandos pertenecen a TimeNet. Neblima usa sus propios controles de CONTRIBUTING.md.
 La selección de Python 3.13.13 local y compatibilidad de 3.11 no necesita cambiar.
 OpenTSLM mantiene su revisión anotada, pero su adaptador y compatibilidad se estudian en #27.
 
@@ -28,7 +28,7 @@ OpenTSLM mantiene su revisión anotada, pero su adaptador y compatibilidad se es
 Las firmas abreviadas con puntos suspensivos no enumeran todos los argumentos opcionales; el enlace
 al código es la referencia completa. Las columnas de pruebas indican evidencia inspeccionada.
 
-| Elemento | Contrato o invariante observado | Definición en el commit | Prueba de referencia leída | Consecuencia para AirAware |
+| Elemento | Contrato o invariante observado | Definición en el commit | Prueba de referencia leída | Consecuencia para Neblima |
 | --- | --- | --- | --- | --- |
 | BaseConnector: descarga | `download(cache_dir: Path) -> list[TRaw]`; alternativa `download_async`. Devuelve referencias y es idempotente; no interpreta las observaciones. | [BaseConnector.download](https://github.com/OpenTSLM/TimeNet/blob/9bd1613019ee61fbc52e02106a1a45990ead7a54/packages/timenet/src/timenet/connectors/base.py#L89) | [test_async_connector_download_bridges_to_download_async](https://github.com/OpenTSLM/TimeNet/blob/9bd1613019ee61fbc52e02106a1a45990ead7a54/packages/timenet/tests/connectors/test_base.py#L57) | Separar adquisición y conversión; implementar una variante de descarga. |
 | BaseConnector: conversión | `convert(raw_refs: list[TRaw]) -> TimeFDataset`. Implementar convert o compose; sin red en conversión. | [BaseConnector.convert](https://github.com/OpenTSLM/TimeNet/blob/9bd1613019ee61fbc52e02106a1a45990ead7a54/packages/timenet/src/timenet/connectors/base.py#L144) | [test_connector_without_convert_or_compose_fails_at_construction](https://github.com/OpenTSLM/TimeNet/blob/9bd1613019ee61fbc52e02106a1a45990ead7a54/packages/timenet/tests/connectors/test_base.py#L10) | El conector no debe descargar dentro de convert. |
@@ -40,7 +40,7 @@ al código es la referencia completa. Las columnas de pruebas indican evidencia 
 | Pronóstico y respuesta | ForecastingTask y AnswerTask heredan inputs, targets, prompt y split de Task. None y objetivo vacío no son equivalentes. | [ForecastingTask](https://github.com/OpenTSLM/TimeNet/blob/9bd1613019ee61fbc52e02106a1a45990ead7a54/packages/timenet/src/timenet/types/tasks.py#L485) | [test_none_and_an_explicit_empty_target_remain_distinct](https://github.com/OpenTSLM/TimeNet/blob/9bd1613019ee61fbc52e02106a1a45990ead7a54/packages/timenet/tests/types/test_tasks.py#L73) | El horizonte y la historia se expresan con ventanas/objetivos; no inventar parámetros horizon/lookback. |
 | Clasificación | `label_set: LabelSet` es obligatorio. Las etiquetas objetivo se comprueban contra ese conjunto. | [ClassificationTask](https://github.com/OpenTSLM/TimeNet/blob/9bd1613019ee61fbc52e02106a1a45990ead7a54/packages/timenet/src/timenet/types/tasks.py#L374) | [test_a_classification_task_requires_a_label_set](https://github.com/OpenTSLM/TimeNet/blob/9bd1613019ee61fbc52e02106a1a45990ead7a54/packages/timenet/tests/types/test_label_sets.py#L25) | Definir etiquetas explícitas antes de crear tareas de episodios. |
 | Datos nulos | to_arrow conserva nulos; to_numpy lanza TimeFNullValuesError, subclase de TimeFValidationError. Declarar missing no imputa valores. | [Signal.to_numpy](https://github.com/OpenTSLM/TimeNet/blob/9bd1613019ee61fbc52e02106a1a45990ead7a54/packages/timenet/src/timenet/dataset/time_series.py#L573) | [test_to_numpy_points_null_values_to_arrow](https://github.com/OpenTSLM/TimeNet/blob/9bd1613019ee61fbc52e02106a1a45990ead7a54/packages/timenet/tests/dataset/test_time_series.py#L529) | Conservar máscaras y preparar entradas explícitamente antes de NumPy/PyTorch; objetivos medidos completos. |
-| Particiones | split pertenece a Task. La selección por partición no valida la separación temporal de nuestras ventanas. | [Task](https://github.com/OpenTSLM/TimeNet/blob/9bd1613019ee61fbc52e02106a1a45990ead7a54/packages/timenet/src/timenet/types/tasks.py#L139) | [test_get_split_rejects_a_dataset_that_assigns_no_splits](https://github.com/OpenTSLM/TimeNet/blob/9bd1613019ee61fbc52e02106a1a45990ead7a54/packages/timenet/tests/dataset/test_dataset.py#L940) | AirAware debe probar límites, purgas, duplicados y disponibilidad temporal en #19. |
+| Particiones | split pertenece a Task. La selección por partición no valida la separación temporal de nuestras ventanas. | [Task](https://github.com/OpenTSLM/TimeNet/blob/9bd1613019ee61fbc52e02106a1a45990ead7a54/packages/timenet/src/timenet/types/tasks.py#L139) | [test_get_split_rejects_a_dataset_that_assigns_no_splits](https://github.com/OpenTSLM/TimeNet/blob/9bd1613019ee61fbc52e02106a1a45990ead7a54/packages/timenet/tests/dataset/test_dataset.py#L940) | Neblima debe probar límites, purgas, duplicados y disponibilidad temporal en #19. |
 | Padres y trazabilidad | `import_from(parent, *, alias=None, records=(), signals=(), tasks=(), load=LoadPlan.ALL_LAZY)`. El padre debe estar declarado; las copias no modifican el padre. | [TimeFDataset.import_from](https://github.com/OpenTSLM/TimeNet/blob/9bd1613019ee61fbc52e02106a1a45990ead7a54/packages/timenet/src/timenet/dataset/dataset.py#L106) | [test_reimporting_a_whole_record_changes_nothing_and_keeps_child_edits](https://github.com/OpenTSLM/TimeNet/blob/9bd1613019ee61fbc52e02106a1a45990ead7a54/packages/timenet/tests/dataset/test_composition.py#L562) | Fijar versiones y mantener las dependencias de archivos reutilizados; no publicar un hijo aislado de sus padres. |
 | Escritor y lector | `write(*, path, values_backend=ValuesBackend.PARQUET) -> Path`; lector `TimeFReader.open(path, *, sources_root=None)` y verify(). | [TimeFDataset.write](https://github.com/OpenTSLM/TimeNet/blob/9bd1613019ee61fbc52e02106a1a45990ead7a54/packages/timenet/src/timenet/dataset/dataset.py#L308) | [test_verify_accepts_an_intact_dataset_and_detects_a_changed_artifact](https://github.com/OpenTSLM/TimeNet/blob/9bd1613019ee61fbc52e02106a1a45990ead7a54/packages/timenet/tests/reader/test_reader.py#L565) | Escribir con herramientas oficiales, leer y verificar hashes en #21–#23. |
 | Acceso y publicación | La construcción admite open_access_only; las restricciones de fuente y padres no se eliminan por convertir a TimeF. | [build](https://github.com/OpenTSLM/TimeNet/blob/9bd1613019ee61fbc52e02106a1a45990ead7a54/packages/timenet/src/timenet/producer.py#L24) | [test_open_access_only_refuses_a_gated_parent_before_any_step](https://github.com/OpenTSLM/TimeNet/blob/9bd1613019ee61fbc52e02106a1a45990ead7a54/packages/timenet/tests/test_producer.py#L127) | Revisar la licencia de cada fuente y antecesor antes de redistribuir. |
@@ -53,7 +53,7 @@ El tratamiento PyTorch debe evitar nulos reales; no basta con declarar metadatos
 El detalle está en [docs/data-model/time-series.md](https://github.com/OpenTSLM/TimeNet/blob/9bd1613019ee61fbc52e02106a1a45990ead7a54/docs/data-model/time-series.md#L1) y [packages/timenet/src/timenet/torch.py](https://github.com/OpenTSLM/TimeNet/blob/9bd1613019ee61fbc52e02106a1a45990ead7a54/packages/timenet/src/timenet/torch.py#L1) del adaptador externo.
 
 El formato contiene manifest.json y control.duckdb con valores Parquet/Zarr. La carga de una muestra
-real de AirAware y su reproducibilidad siguen pendientes de #21–#23.
+real de Neblima y su reproducibilidad siguen pendientes de #21–#23.
 No se detectó contradicción en los contratos aquí contrastados entre el código fijado y sus docs.
 Esto no afirma que toda la documentación pública corresponda siempre a ese commit.
 
@@ -82,8 +82,8 @@ alcance y revisión; no es una conclusión sobre repositorios externos ni sobre 
 
 Hay utilidades genéricas de descarga: [download_http](https://github.com/OpenTSLM/TimeNet/blob/9bd1613019ee61fbc52e02106a1a45990ead7a54/packages/timenet-connectors/src/timenet_connectors/download/http.py#L66) y
 [is_cached](https://github.com/OpenTSLM/TimeNet/blob/9bd1613019ee61fbc52e02106a1a45990ead7a54/packages/timenet-connectors/src/timenet_connectors/download/http.py#L46). Son candidatas para evaluar en #6, no una decisión de
-acoplar AirAware a timenet-connectors. En particular, is_cached acepta un archivo existente cuando
-no hay hash esperado: AirAware aún debe registrar su SHA-256 calculado y validar contenido y manifiesto.
+acoplar Neblima a timenet-connectors. En particular, is_cached acepta un archivo existente cuando
+no hay hash esperado: Neblima aún debe registrar su SHA-256 calculado y validar contenido y manifiesto.
 No se ha verificado aquí que estas utilidades cubran reanudación, todos los límites o todo el contrato #6/#7.
 
 ## Licencias y decisiones
@@ -106,8 +106,8 @@ repositorio no concede una excepción ni licencia dual. Ver [ADR-003](decisions/
 Ejecutado: consultas Git de revisión/estado, extracción de definiciones y firmas por AST, búsqueda
 acotada de fichas/conectores e inspección manual de código, pruebas, licencias y reglas.
 No ejecutado: suite de tests de TimeNet, descargas de proveedores ni escritura/lectura de un conjunto
-ambiental de AirAware. El ejemplo sintético sí se construyó y leyó en la verificación posterior.
-Las 31 pruebas propias de AirAware son controles separados de esas verificaciones.
+ambiental de Neblima. El ejemplo sintético sí se construyó y leyó en la verificación posterior.
+Las 31 pruebas propias de Neblima son controles separados de esas verificaciones.
 
 ## Actualización: verificación sintética en ejecución
 

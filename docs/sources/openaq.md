@@ -1,6 +1,6 @@
 # OpenAQ Perú: investigación documental y plan de solapamientos
 
-Tarea: [#31 — Investigar OpenAQ Perú y duplicaciones de agregadores](https://github.com/keneth-arias/airaware/issues/31).
+Tarea: [#31 — Investigar OpenAQ Perú y duplicaciones de agregadores](https://github.com/keneth-arias/Neblima/issues/31).
 Revisión: 20/11/2026 UTC. Alcance: documentación oficial y evidencia local de #88; sin descargas de mediciones,
 sin cuentas nuevas y sin claves. Esta entrega propone; el catálogo (`configs/sources.yaml`) y el
 registro de acceso (`metadata/source-access.json`) se actualizan en un cambio coordinado.
@@ -145,11 +145,11 @@ instrumentos y licencias por ubicación.
 ## (e) PLAN de medición de solapamientos (no ejecutado)
 
 Objetivo: clasificar cada serie peruana que OpenAQ exponga frente a las identidades provisionales
-de AirAware, siguiendo la política de #14 (una copia demostrada de un agregador cede precedencia
+de Neblima, siguiendo la política de #14 (una copia demostrada de un agregador cede precedencia
 al registro original y conserva su vínculo; las mediciones independientes quedan en series
 distintas y una fusión requiere evidencia institucional fechada).
 
-Identidades de referencia actuales de AirAware:
+Identidades de referencia actuales de Neblima:
 
 | Fuente | Identidad provisional | Serie | Ventana declarada |
 | --- | --- | --- | --- |
@@ -166,7 +166,7 @@ Pasos previstos, cada consulta con URL, fecha UTC y resultado registrados:
 2. **Rastreo al proveedor primario.** En OpenAQ, `provider` es quien facilita los datos y `owner`
    quien los posee o los produce; pueden coincidir o no (recurso `providers`, 20/11/2026). El
    cruce es contra `owner` (agencia responsable), con `provider` como antecedente del canal.
-   Una ubicación cuyo `owner` sea SENAMHI u OEFA es candidata a copia de una fuente que AirAware
+   Una ubicación cuyo `owner` sea SENAMHI u OEFA es candidata a copia de una fuente que Neblima
    ya tiene. Con otro propietario se conserva una identidad provisional hasta rastrear el origen.
 3. **Candidatos espaciales.** Comparar `coordinates` (WGS84 decimal) contra las identidades:
    SENAMHI ya tiene latitud/longitud en sus campos de identidad; para OEFA hay que convertir UTM
@@ -190,7 +190,7 @@ Pasos previstos, cada consulta con URL, fecha UTC y resultado registrados:
      dejar el resultado sin determinar.
 
 Artefacto propuesto (no generado en esta entrega): `reports/source-overlap.parquet`, una fila por
-par de series y ventana comparada con `airaware_source`, identidad AirAware, `openaq_location_id`,
+par de series y ventana comparada con `airaware_source`, identidad Neblima, `openaq_location_id`,
 `openaq_sensor_id`, parámetro, unidad, ventana UTC comparada, horas comparadas, fracción de
 coincidencia exacta, error absoluto medio y rama resultante con evidencia (URL y fechas). Se
 genera solo cuando existan datos reales medidos con este método; queda pendiente la comparación.

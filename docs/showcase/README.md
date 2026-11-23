@@ -10,7 +10,7 @@ Con 24 mediciones horarias consecutivas de una estación de Lima, Gemma entrega 
 
 ## Evidencia histórica de Qwen
 
-Este documento organiza la presentación del proyecto AirAware para la primera ronda del reto
+Este documento organiza la presentación del proyecto Neblima para la primera ronda del reto
 [TimeNet](https://challenge.timenet.ai/). El marco de requisitos oficiales y el plazo están en
 [docs/hackathon.md](../hackathon.md); el inventario de enlaces de entrega está en
 [enlaces.md](enlaces.md). Nada de lo descrito aquí está publicado todavía: las publicaciones en
@@ -160,7 +160,7 @@ estado actual.
 - Mensaje: identificar los cambios hechos durante el hackathon: integración y verificación del
   conjunto en TimeNet (PR externo [#796](https://github.com/OpenTSLM/TimeNet/pull/796), en
   borrador), evaluación reservada fusionada
-  ([PR #97](https://github.com/keneth-arias/airaware/pull/97)) y recorrido reproducible desde la
+  ([PR #97](https://github.com/keneth-arias/Neblima/pull/97)) y recorrido reproducible desde la
   observación hasta la predicción sin red.
 - Evidencia: [docs/hackathon.md](../hackathon.md) (criterios que el jurado puede comprobar),
   [tools/timenet-smoke/README.md](../../tools/timenet-smoke/README.md).

@@ -1,6 +1,6 @@
 # Plan de la tarea #1: verificar TimeNet y los requisitos del hackathon
 
-Tarea: [#1](https://github.com/keneth-arias/airaware/issues/1).
+Tarea: [#1](https://github.com/keneth-arias/Neblima/issues/1).
 Responsable: Keneth (`@keneth-arias`). Estado: los cuatro pasos de investigación están ejecutados y documentados; el cierre de la tarea
 queda sujeto a revisión e integración del PR. No se afirma validación TimeF en ejecución. El PR #36 está integrado en main desde el 15/11/2026,
 commit `4585d7542bbc8836ee85cf76cce1d84312827056`; cerró la tarea #2 de herramientas.
@@ -8,10 +8,10 @@ Las tareas se mantienen en GitHub; este documento detalla su orden, sin duplicar
 
 ## Objetivo y alcance
 
-Dejar una base verificable para implementar los conectores de AirAware con las API correctas y
+Dejar una base verificable para implementar los conectores de Neblima con las API correctas y
 entregar al hackathon. La entrega es investigación documentada y decisiones de integración.
 No incluye recolectar datos, desarrollar el conector, ejecutar entrenamiento ni publicar un PR externo.
-La escritura/lectura de un conjunto TimeF de AirAware se verifica en #21–#23, no se declara realizada aquí.
+La escritura/lectura de un conjunto TimeF de Neblima se verifica en #21–#23, no se declara realizada aquí.
 
 ## Evidencia que ya existe
 
@@ -35,7 +35,7 @@ CONTRIBUTING.md y pyproject.toml. Si hay cambios externos, documentar diferencia
 mantiene el commit actual o se propone otro. No actualizar todo el repositorio externo ni su entorno.
 
 **Aceptación:** SHA completo y fecha, Python compatible, versiones de paquetes y comandos de revisión
-registrados con enlaces permanentes. Ninguna modificación en fuentes o dependencias de AirAware.
+registrados con enlaces permanentes. Ninguna modificación en fuentes o dependencias de Neblima.
 
 **Verificación:** `git status --short`, `git rev-parse HEAD`, `git ls-remote origin HEAD` desde la copia
 externa; inspección de archivos en esa revisión. No confundir versión declarada con paquete instalado.
@@ -45,7 +45,7 @@ externa; inspección de archivos en esa revisión. No confundir versión declara
 ## Paso 2. Completar la matriz de API e invariantes
 
 Registrar símbolo, módulo, firma, comportamiento relevante, prueba de referencia, enlace al commit
-y consecuencia para AirAware. Cubrir como mínimo:
+y consecuencia para Neblima. Cubrir como mínimo:
 
 - BaseConnector: download/download_async, convert/compose, metadata y separación de red/conversión.
 - TimeFDataset, Record, Source y Signal: creación, jerarquías, unidades, ejes y carga diferida.
@@ -114,7 +114,7 @@ Antes de proponer su cierre:
 - Presentar matriz de API, ejemplos, evidencia y decisiones con enlaces permanentes y fechas.
 - Dejar desconocidos y bloqueos explícitos; no transferir la validación TimeF pendiente a una afirmación.
 - Ejecutar los controles exigidos por el repositorio: `make check`, `make build` y `make audit`.
-  Estos verifican AirAware; no equivalen a ejecutar las pruebas de TimeNet.
+  Estos verifican Neblima; no equivalen a ejecutar las pruebas de TimeNet.
 
 ## Coordinación
 

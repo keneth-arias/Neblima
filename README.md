@@ -1,4 +1,4 @@
-# AirAware Perú
+# Neblima Perú
 
 Proyecto de ingeniería de datos de calidad del aire para Lima, Callao y el Perú. Participamos en el
 [hackathon de TimeNet](https://challenge.timenet.ai/). El primer caso de uso es pronosticar PM2.5
@@ -49,9 +49,14 @@ y el [aviso de atribución de los datos](DATA_ATTRIBUTION.md) al integrarlo.
 
 ## Empieza en tu equipo
 
-Instala Git, Make y [uv](https://docs.astral.sh/uv/getting-started/installation/). Desde la carpeta raíz:
+El proyecto antes se llamaba AirAware. El paquete de Python y el comando se llaman `airaware`,
+y los conjuntos publicados en TimeNet conservan el prefijo `airaware/`.
+
+Instala Git, Make y [uv](https://docs.astral.sh/uv/getting-started/installation/) y clona el repositorio:
 
 ```bash
+git clone https://github.com/keneth-arias/Neblima.git
+cd Neblima
 uv python install
 make setup
 make init
@@ -86,7 +91,7 @@ continua reproduce la cadena con datos sintéticos y la red deshabilitada.
 
 La evaluación ya tiene [tres referencias](reports/baselines/lima-pm25.md) sobre el conjunto
 congelado. Validación seleccionó persistencia. El trabajo del modelo temporal se sigue en
-[#27](https://github.com/keneth-arias/airaware/issues/27) y [#28](https://github.com/keneth-arias/airaware/issues/28).
+[#27](https://github.com/keneth-arias/Neblima/issues/27) y [#28](https://github.com/keneth-arias/Neblima/issues/28).
 El conector de Cuybernautas está en [revisión como borrador de TimeNet](https://github.com/OpenTSLM/TimeNet/pull/796).
 
 En la validación histórica de 44 458 ventanas de Lima, añadir el historial de PM10 redujo
@@ -107,7 +112,7 @@ las copias locales de OpenAQ y SENAMHI y el corte de la captura operativa más r
 
 La [adquisición meteorológica de #16](reports/acquisition/weather.md) habilita el análisis
 de una semana de pronósticos archivados. Su cobertura queda dentro de entrenamiento,
-por lo que la [alineación retrospectiva integrada](https://github.com/keneth-arias/airaware/pull/85)
+por lo que la [alineación retrospectiva integrada](https://github.com/keneth-arias/Neblima/pull/85)
 sirve para comprobar contratos y procedencia. La comparación de modelos de la primera
 ronda usa la versión congelada de PM2.5.
 
@@ -126,7 +131,7 @@ SENAMHI y OEFA ya tienen originales locales verificados (#8/#9). Consulten los
 La CLI acquire de #6 ya registra originales y consulta API públicas explícitas con integridad;
 caché, reanudación y lotes acotados se describen en la guía de adquisición (#7).
 El [plan vigente](tasks/plan.md), el [tablero](https://github.com/users/keneth-arias/projects/1) y las
-[tareas](https://github.com/keneth-arias/airaware/issues) muestran el trabajo pendiente.
+[tareas](https://github.com/keneth-arias/Neblima/issues) muestran el trabajo pendiente.
 La [arquitectura](ARCHITECTURE.md) diferencia lo implementado de lo propuesto.
 El [plan inicial completo](docs/initial-plan.md) también está adaptado al español. Sus comandos
 propuestos aún no están implementados. El texto original se conserva en el historial de Git.

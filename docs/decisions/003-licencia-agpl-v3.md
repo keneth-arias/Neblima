@@ -1,4 +1,4 @@
-# ADR-003: AGPL v3 para el código propio de AirAware
+# ADR-003: AGPL v3 para el código propio de Neblima
 
 ## Estado y decisión
 
@@ -13,7 +13,7 @@ original en inglés se conserva para evitar sustituirlo por una traducción no o
 
 ## Alcance
 
-La elección cubre el código propio de AirAware y sus contribuciones bajo esa licencia.
+La elección cubre el código propio de Neblima y sus contribuciones bajo esa licencia.
 No cambia las licencias de dependencias, archivos de terceros ni datos de SENAMHI, OEFA u otras
 fuentes. Cada fuente requiere su propia verificación de derechos. Generar datos con el programa
 no concede permisos sobre la fuente ni vuelve automáticamente AGPL todas las salidas.
@@ -21,8 +21,8 @@ no concede permisos sobre la fuente ni vuelve automáticamente AGPL todas las sa
 ## Consecuencia para TimeNet
 
 TimeNet licencia su código bajo MIT y exige MIT para las contribuciones que recibe, según su
-CONTRIBUTING.md en la revisión fijada. AirAware no autoriza una publicación MIT de su código AGPL
-mediante este cambio. No copiar componentes AGPL ni agregar una dependencia de AirAware AGPL al
+CONTRIBUTING.md en la revisión fijada. Neblima no autoriza una publicación MIT de su código AGPL
+mediante este cambio. No copiar componentes AGPL ni agregar una dependencia de Neblima AGPL al
 repositorio MIT como si tuvieran una licencia permisiva.
 
 Antes de preparar el PR externo de #24, definir una contribución separada cuyo código pueda

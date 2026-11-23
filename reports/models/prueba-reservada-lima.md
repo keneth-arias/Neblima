@@ -4,7 +4,7 @@ Con 24 horas de historia de PM2.5, Qwen3.5-0.8B con adaptación de bajo rango (L
 
 ## Prueba cronológica
 
-La [selección del 19/11/2026](https://github.com/keneth-arias/airaware/pull/95) fijó los modelos, las referencias y la regla de evaluación antes de exportar las ventanas de prueba. Se verificó el manifiesto de TimeF y que los identificadores fueran disjuntos respecto de entrenamiento y validación. Los 50 789 orígenes cubren del 26/02/2023 a las 17:00 UTC al 29/05/2024 a las 20:00 UTC, con las discontinuidades de las estaciones. Qwen y la red convolucional recibieron los mismos 24 valores horarios por ventana. Los cinco métodos se evaluaron sobre los mismos seis objetivos por origen.
+La [selección del 19/11/2026](https://github.com/keneth-arias/Neblima/pull/95) fijó los modelos, las referencias y la regla de evaluación antes de exportar las ventanas de prueba. Se verificó el manifiesto de TimeF y que los identificadores fueran disjuntos respecto de entrenamiento y validación. Los 50 789 orígenes cubren del 26/02/2023 a las 17:00 UTC al 29/05/2024 a las 20:00 UTC, con las discontinuidades de las estaciones. Qwen y la red convolucional recibieron los mismos 24 valores horarios por ventana. Los cinco métodos se evaluaron sobre los mismos seis objetivos por origen.
 
 | Modelo | MAE global (µg/m³) | Diferencia frente a persistencia | MAE con concentración alta (µg/m³) |
 | --- | ---: | ---: | ---: |
@@ -28,7 +28,7 @@ El caso de uso es anticipar la evolución horaria en estas estaciones cuando se 
 
 ## Recursos y trazabilidad
 
-La inferencia reservada de Qwen se ejecutó una vez en una RTX 5070 Ti, con FP32 y lote 16. SkyPilot registró 221,71 s desde el inicio del trabajo hasta su término. La red convolucional se ejecutó en CPU. Ambos archivos de pronósticos conservan el SHA-256 de su punto de control. En el estado final de LoRA se verificaron pesos B y segundos momentos del optimizador finitos y distintos de cero en las 24 proyecciones adaptadas de atención completa y las 90 recurrentes. Esta comprobación confirma que ambas familias recibieron actualizaciones. Se usó el núcleo de referencia de PyTorch. La [medición opcional de núcleos acelerados](https://github.com/keneth-arias/airaware/issues/96) queda para otro experimento.
+La inferencia reservada de Qwen se ejecutó una vez en una RTX 5070 Ti, con FP32 y lote 16. SkyPilot registró 221,71 s desde el inicio del trabajo hasta su término. La red convolucional se ejecutó en CPU. Ambos archivos de pronósticos conservan el SHA-256 de su punto de control. En el estado final de LoRA se verificaron pesos B y segundos momentos del optimizador finitos y distintos de cero en las 24 proyecciones adaptadas de atención completa y las 90 recurrentes. Esta comprobación confirma que ambas familias recibieron actualizaciones. Se usó el núcleo de referencia de PyTorch. La [medición opcional de núcleos acelerados](https://github.com/keneth-arias/Neblima/issues/96) queda para otro experimento.
 
 ## Reproducir la ronda
 

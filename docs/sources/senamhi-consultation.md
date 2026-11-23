@@ -3,7 +3,7 @@
 Envío autorizado expresamente por Keneth y realizado mediante Outlook desde keneth.arias@outlook.com
 hacia info.sgd@senamhi.gob.pe. Outlook confirmó la operación y se encontró el mensaje por asunto y
 destinatario, con marca de correo 2026-11-16T01:02:04Z. No confirma recepción ni respuesta de SENAMHI.
-Seguimiento: [#43](https://github.com/keneth-arias/airaware/issues/43).
+Seguimiento: [#43](https://github.com/keneth-arias/Neblima/issues/43).
 No reenviar ni programar recordatorios sin una nueva instrucción de Keneth.
 
 **Asunto:** Consulta académica sobre datos de calidad del aire para el proyecto Air Aware — Hackathon TimeNet
@@ -12,7 +12,7 @@ No reenviar ni programar recordatorios sin una nueva instrucción de Keneth.
 
 Estimado equipo de la Subdirección de Gestión de Datos del SENAMHI:
 
-Reciban un cordial saludo. Mi nombre es Keneth Arias, soy docente peruano de Tecnologías de la Información y la Comunicación (TIC). Junto con dos estudiantes peruanos estamos desarrollando Air Aware (AirAware Perú), un proyecto con el que participamos en el hackathon TimeNet.
+Reciban un cordial saludo. Mi nombre es Keneth Arias, soy docente peruano de Tecnologías de la Información y la Comunicación (TIC). Junto con dos estudiantes peruanos estamos desarrollando Air Aware (Neblima Perú), un proyecto con el que participamos en el hackathon TimeNet.
 
 Nuestro propósito es aprender y aportar, desde un trabajo académico y colaborativo, al estudio de la calidad del aire en Lima y el Perú mediante el análisis de series temporales. Para ello, estamos preparando un conjunto de datos reproducible que permita investigar y evaluar modelos de pronóstico, procurando respetar tanto el significado de las mediciones como las condiciones de uso de la información.
 
@@ -44,7 +44,7 @@ Keneth Arias
 Docente de Tecnologías de la Información y la Comunicación
 Equipo Air Aware — dos estudiantes peruanos y un docente peruano
 keneth.arias@outlook.com
-https://github.com/keneth-arias/airaware
+https://github.com/keneth-arias/Neblima
 
 ## Revisión y alcance
 

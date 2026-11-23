@@ -2,8 +2,8 @@
 
 Ejecución del 20/11/2026 (fecha UTC de cierre: 2026-11-20T23:06:26Z), a cargo de
 @qriqs como entrega acotada de la
-[issue #35](https://github.com/keneth-arias/airaware/issues/35). El conjunto sintético de
-[PR #112](https://github.com/keneth-arias/airaware/pull/112) se generó ahora sobre
+[issue #35](https://github.com/keneth-arias/Neblima/issues/35). El conjunto sintético de
+[PR #112](https://github.com/keneth-arias/Neblima/pull/112) se generó ahora sobre
 **registros reales**: cuatro familias de preguntas (tendencia, máximo, momento y
 comparación) con respuestas recalculadas y verificadas de ida y vuelta, en tiempo universal
 coordinado (UTC). [Evidencia ligera](../metadata/preguntas-temporales-reales-20261120.json).

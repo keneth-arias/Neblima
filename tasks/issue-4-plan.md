@@ -1,7 +1,7 @@
 # Plan de #4: verificar SENAMHI y los derechos de redistribución
 
 Responsable: Keneth (@keneth-arias). Dependencia: #3 cerrada mediante #41.
-Seguimiento y lista de trabajo: [issue #4](https://github.com/keneth-arias/airaware/issues/4).
+Seguimiento y lista de trabajo: [issue #4](https://github.com/keneth-arias/Neblima/issues/4).
 Estado: investigación completada el 16/11/2026; cierre mediante PR #42 y seguimiento externo en #43.
 Keneth aprobó el plan y pidió búsqueda profunda antes de preparar cualquier consulta.
 
@@ -20,7 +20,7 @@ publicación de datos: corresponden a #8/#10/#12/#13 y a sus puntos de decisión
 - metadata/senamhi-lima-download.json registra SHA-256, 68 501 558 bytes y estructura comprobada.
   No es necesario volver a descargarlo. Los extremos textuales de FECHA no prueban continuidad.
 - El catálogo declara Open Data Commons Attribution License y frecuencia horaria para las mediciones;
-  son declaraciones documentales, todavía sin contraste completo ni permiso aprobado en AirAware.
+  son declaraciones documentales, todavía sin contraste completo ni permiso aprobado en Neblima.
 - Lightpanda permitió acceder al catálogo. El 403 previo fue de otro canal; no es un bloqueo vigente
   demostrado de SENAMHI. El acceso a los documentos se comprobará al ejecutar este plan.
 

@@ -24,7 +24,7 @@ que disponga de esos originales con las rutas y sumas declaradas.
 ## Bloqueo del CSV, sin generalizaciones
 
 URL: la registrada como resource_url en configs/acquisition/oefa-csv.json y en la evidencia.
-Canal: http_file de AirAware, host www.datosabiertos.gob.pe, HTTPS, User-Agent honesto AirAware,
+Canal: http_file de Neblima, host www.datosabiertos.gob.pe, HTTPS, User-Agent con el identificador histórico `AirAware/0.1`,
 Range bytes=0-65535, sin autenticación, cookies heredadas, redirecciones ni cambio de identidad.
 El servidor respondió 418, por lo que se cerró la respuesta sin consumir/publicar su cuerpo,
 sin reintentar ni pasar a curl/otro canal. No se descargó la porción de 64 KiB solicitada ni el CSV.

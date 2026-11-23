@@ -1,14 +1,14 @@
 # Verificación local de TimeNet con hello-world
 
-Entorno independiente de la aplicación AirAware. Instala timenet y timenet-connectors desde el
+Entorno independiente de la aplicación Neblima. Instala timenet y timenet-connectors desde el
 commit `9bd1613019ee61fbc52e02106a1a45990ead7a54`, con dependencias fijadas en su propio uv.lock.
 No instala PyTorch ni cambia el entorno principal. La primera instalación requiere internet.
 Los datos sintéticos generados conservan CC-BY-4.0 según la ficha del conector; no son datos de Lima
-ni quedan cubiertos automáticamente por la AGPL del código de AirAware.
+ni quedan cubiertos automáticamente por la AGPL del código de Neblima.
 
 ## Construir en la carpeta de datos del proyecto
 
-Ejecutar desde la raíz de AirAware:
+Ejecutar desde la raíz de Neblima:
 
 ```bash
 uv sync --project tools/timenet-smoke --python 3.13.13 --locked
@@ -69,7 +69,7 @@ Referencia: [guía oficial en la revisión fijada](https://github.com/OpenTSLM/T
 
 ## Ida y vuelta horaria de PM2.5 para #21
 
-Después de instalar el entorno fijado, ejecutar desde la raíz de AirAware:
+Después de instalar el entorno fijado, ejecutar desde la raíz de Neblima:
 
 ```bash
 UV_OFFLINE=true uv run --project tools/timenet-smoke --locked \
@@ -97,7 +97,7 @@ UV_OFFLINE=true uv run --project tools/timenet-smoke --locked \
   --start 2024-05-01T00:00:00Z --hours 24
 ```
 
-La conversión ejecuta la depuración y la alineación locales en el entorno AirAware
+La conversión ejecuta la depuración y la alineación locales en el entorno Neblima
 para verificar los archivos y la traza de #13. El registro base de muestra es
 `airaware/senamhi-lima-pm25-sample@0.1.0`. El reloj conserva las etiquetas UTC
 publicadas. La unidad tipada sigue siendo una inferencia aprobada y tanto la posición
@@ -187,7 +187,7 @@ PYTHONPATH=/opt/forecast/src /opt/conda/bin/python /opt/airaware/gpu_worker.py \
   --output "$ajuste/replay-validation.npz"
 ```
 
-Desde la raíz de AirAware, comparar los cuatro archivos de predicciones y generar el informe numérico.
+Desde la raíz de Neblima, comparar los cuatro archivos de predicciones y generar el informe numérico.
 
 ```bash
 UV_OFFLINE=true uv run --project tools/timenet-smoke --locked python \

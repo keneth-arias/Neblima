@@ -19,7 +19,7 @@ También se ejecutó el adaptador de #20 con los controles de #113 sobre las 324
 
 ## Reproducción
 
-Desde la raíz de AirAware, definir `RAW` como la ruta del CSV aprobado y `BLOCKS` como la carpeta `blocks` de la repetición histórica. El normalizador verifica el SHA-256 del original. El auditor H24/F6 verifica las huellas congeladas de las particiones, la grilla y cada índice antes de cruzarlos. [Preparación de los bloques](intervalos-pm25-replay.md)
+Desde la raíz de Neblima, definir `RAW` como la ruta del CSV aprobado y `BLOCKS` como la carpeta `blocks` de la repetición histórica. El normalizador verifica el SHA-256 del original. El auditor H24/F6 verifica las huellas congeladas de las particiones, la grilla y cada índice antes de cruzarlos. [Preparación de los bloques](intervalos-pm25-replay.md)
 
 ```sh
 set -eu

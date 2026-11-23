@@ -13,7 +13,7 @@ CSV, diccionario XLSX y metadatos DOCX están resueltos y preservados localmente
 acreditan una serie declarada horaria y una publicación de actualización mensual, formatos de
 fecha/hora y licencia de base de datos. Persisten preguntas sobre la exportación histórica: unidades
 de contaminantes, zona horaria, intervalo, calidad y alcance de avisos/derechos para publicación.
-La [consulta revisada](senamhi-consultation.md) fue enviada con autorización de Keneth; seguimiento en [#43](https://github.com/keneth-arias/airaware/issues/43).
+La [consulta revisada](senamhi-consultation.md) fue enviada con autorización de Keneth; seguimiento en [#43](https://github.com/keneth-arias/Neblima/issues/43).
 
 El catálogo conserva unidades de contaminantes sin asignar y redistribution: unknown. Se puede
 continuar preparando adquisición reproducible y análisis estructural; convertir, alinear con
@@ -116,7 +116,7 @@ sobre la exportación y qué avisos concretos conservar. No corresponde relicenc
 o AGPL por las licencias del software. La revisión operativa mantiene pendiente la publicación.
 
 Propuesta de atribución para revisar antes de publicar: SENAMHI, nombre completo del conjunto,
-URL original, ODC-BY-1.0 con enlace, fecha de obtención y descripción de cambios de AirAware.
+URL original, ODC-BY-1.0 con enlace, fecha de obtención y descripción de cambios de Neblima.
 La futura contribución TimeNet debe separar licencia del código, base y componentes añadidos;
 #21/#24 verificarán los requisitos de entrega antes de proponer publicación externa.
 

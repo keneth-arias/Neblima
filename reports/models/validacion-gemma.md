@@ -191,7 +191,7 @@ El 23 de noviembre de 2026 se activó el paquete bajo demanda en MicroK8s para +
 | Corrección de picos | `93bc57abc4b3840c4e59fc2d705fc91fa5b7d6872fd9bb81efdecc7bcd686ffc` |
 | Referencia CNN | `9ceb6dcd793f661720fd58606992581857993f66109dc3024480e164316b7315` |
 
-Dos restauraciones limpias reprodujeron los seis valores en las 85 538 ventanas de integridad y coincidieron con la prueba bilingüe. El escritor privado pasó cuatro pruebas sintéticas, incluido un reintento en cola durante una pausa. La calificación y la prueba del comando instalado devolvieron los mismos seis valores para una ventana SENAMHI. La diferencia absoluta máxima frente a la referencia fue menor que 0,0001 µg/m³. La revisión experimental de intervalos aprobó 171 pruebas de TimeNet sin servicios externos. La base de esta actualización aprobó 576 pruebas de AirAware y 88 pruebas de TimeNet, además de la construcción de paquetes y la auditoría de dependencias.
+Dos restauraciones limpias reprodujeron los seis valores en las 85 538 ventanas de integridad y coincidieron con la prueba bilingüe. El escritor privado pasó cuatro pruebas sintéticas, incluido un reintento en cola durante una pausa. La calificación y la prueba del comando instalado devolvieron los mismos seis valores para una ventana SENAMHI. La diferencia absoluta máxima frente a la referencia fue menor que 0,0001 µg/m³. La revisión experimental de intervalos aprobó 171 pruebas de TimeNet sin servicios externos. La base de esta actualización aprobó 576 pruebas de Neblima y 88 pruebas de TimeNet, además de la construcción de paquetes y la auditoría de dependencias.
 
 ### Comparación de archivos congelados para Gemma 1B
 

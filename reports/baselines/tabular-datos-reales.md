@@ -7,7 +7,7 @@ frente a 7,1695 y 6,9058 µg/m³ de persistencia. Superó a persistencia en las 
 lo superó en OpenAQ (−0,2663 µg/m³) y quedó por debajo en SENAMHI horario (+0,7301 µg/m³).
 La comparación usa los objetivos externos congelados, unidos por `window_id` y `forecast_hour`
 con las predicciones ya registradas, y se ejecutó una sola vez por fuente. Las métricas de
-episodios siguen **pendientes de [#20](https://github.com/keneth-arias/airaware/issues/20)**.
+episodios siguen **pendientes de [#20](https://github.com/keneth-arias/Neblima/issues/20)**.
 Plan del método y contrato del módulo: [tabular-plan.md](tabular-plan.md).
 
 ## Método y selección en validación
@@ -123,7 +123,7 @@ estación y horizonte, con RMSE, está en la
 
 ## Métricas de episodios
 
-**Pendiente de [#20](https://github.com/keneth-arias/airaware/issues/20).** No existen aún
+**Pendiente de [#20](https://github.com/keneth-arias/Neblima/issues/20).** No existen aún
 etiquetas de episodio verificadas para estos objetivos: los positivos y negativos son
 desconocidos, por lo que precisión, exhaustividad, F1, PR-AUC y calibración no se calcularon.
 La evidencia registra el estado `pendiente-de-20` con valores nulos. El umbral p95 por
@@ -187,7 +187,7 @@ republicaciones de OpenAQ en la cohorte externa. Datos bajo ODC-BY-1.0 según
 en el almacenamiento compartido, fuera de Git. Esta corrida conserva agregados del tabular;
 no guarda sus predicciones individuales ni sus pesos, lo que limita su auditoría posterior.
 
-La corrida original corresponde al [corredor incorporado en este PR](https://github.com/keneth-arias/airaware/blob/21db5ad4991aa42f47789501906e3c997a518e70/tools/training/eval_tabular_real.py).
+La corrida original corresponde al [corredor incorporado en este PR](https://github.com/keneth-arias/Neblima/blob/21db5ad4991aa42f47789501906e3c997a518e70/tools/training/eval_tabular_real.py).
 La revisión añadió controles de cobertura, vínculo con las matrices congeladas y rechazo de
 métricas no finitas, probados con insumos sintéticos en `tests/test_tabular_real.py`.
 La evidencia numérica original se conserva; estos ajustes no implican otra evaluación real.

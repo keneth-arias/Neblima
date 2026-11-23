@@ -1,15 +1,15 @@
 # Validación pareada del pronóstico de PM2.5 y PM10 en Lima
 
-**Pregunta.** Con el mismo modelo y las mismas ventanas, ¿cuánto cambia el error de pronosticar cada contaminante cuando se incorpora la historia de PM10? Keneth coordina cuatro entregas de [#88](https://github.com/keneth-arias/airaware/issues/88). El registro histórico que preparó #101 permite empezar el experimento mientras avanza el conector público. [Datos y procedencia](../reports/prueba-externa-pm.md)
+**Pregunta.** Con el mismo modelo y las mismas ventanas, ¿cuánto cambia el error de pronosticar cada contaminante cuando se incorpora la historia de PM10? Keneth coordina cuatro entregas de [#88](https://github.com/keneth-arias/Neblima/issues/88). El registro histórico que preparó #101 permite empezar el experimento mientras avanza el conector público. [Datos y procedencia](../reports/prueba-externa-pm.md)
 
 | Variante | Historia de 24 horas | Salida directa para las horas +1 a +6 |
 | --- | --- | --- |
 | A | PM2.5 con el canal PM10 enmascarado | PM2.5 y PM10 |
 | B | PM2.5 y PM10 | PM2.5 y PM10 |
 
-## 1. Exportar las ventanas y fijar la escala · [#102](https://github.com/keneth-arias/airaware/issues/102)
+## 1. Exportar las ventanas y fijar la escala · [#102](https://github.com/keneth-arias/Neblima/issues/102)
 
-En AirAware, extender la exportación de `tools/timenet-smoke/export_qwen_windows.py` con un lector para `airaware/lima-pm25-pm10-forecast@0.1.0`. El lector antiguo espera una sola señal y seis escalares. El nuevo contrato lee por nombre dos señales de un registro de entrada y dos de un registro de objetivos. Preparar la exportación en lotes. Conservar `window_id`, estación y origen UTC. Exportar en µg/m³ las matrices de historia `[N,24,2]` y objetivos `[N,6,2]`, en orden `[pm25, pm10]`. Verificar nombres, unidades, origen y posición de cada valor contra TimeF.
+En Neblima, extender la exportación de `tools/timenet-smoke/export_qwen_windows.py` con un lector para `airaware/lima-pm25-pm10-forecast@0.1.0`. El lector antiguo espera una sola señal y seis escalares. El nuevo contrato lee por nombre dos señales de un registro de entrada y dos de un registro de objetivos. Preparar la exportación en lotes. Conservar `window_id`, estación y origen UTC. Exportar en µg/m³ las matrices de historia `[N,24,2]` y objetivos `[N,6,2]`, en orden `[pm25, pm10]`. Verificar nombres, unidades, origen y posición de cada valor contra TimeF.
 
 Aceptar únicamente el registro histórico y las particiones `train` y `validation`. Comprobar el SHA-256 del manifiesto, el corte del 02/04/2023 07:00 UTC y las huellas de identificadores ordenados de #101. Se esperan 251 915 ventanas de entrenamiento y 44 458 de validación, sin horas compartidas entre particiones. Registrar también el hash físico de cada matriz. [Huellas de referencia](../metadata/lima-pm-externa-20261120.json)
 
@@ -17,7 +17,7 @@ Ajustar **un escalador común** antes de formar las variantes. Para cada contami
 
 **Aceptación.** Con un fixture, duplicar la aparición de una misma hora conserva el escalador. Alterar objetivos o validación también lo conserva. Una copia contradictoria, una hora fuera del lado permitido del corte o un identificador repetido hacen fallar la exportación. Un fixture con señales distintas detecta canales u horizontes intercambiados. El lector anterior conserva sus pruebas.
 
-## 2. Conectar el entrenador y restaurar las dos salidas · [#103](https://github.com/keneth-arias/airaware/issues/103)
+## 2. Conectar el entrenador y restaurar las dos salidas · [#103](https://github.com/keneth-arias/Neblima/issues/103)
 
 En la bifurcación de OpenTSLM, `QwenForecaster` ya admite `channels=2, targets=2, horizon=6`. Conectar esas dimensiones a `scripts/train_qwen_forecast.py` y `src/opentslm/forecast_inference.py`. Hoy la carga agrega un eje de tamaño uno, `forecast()` calcula la escala de cada ventana, la restauración crea el modelo con dimensiones predeterminadas y la exportación conserva solo el primer canal. Seleccionar el comportamiento por contrato de versión para poder restaurar también el experimento de #28. [Modelo](https://github.com/keneth-arias/OpenTSLM/blob/9b58825f348ebe6df35265c6f81af95bedcbf290/src/opentslm/forecast.py) · [Inferencia](https://github.com/keneth-arias/OpenTSLM/blob/9b58825f348ebe6df35265c6f81af95bedcbf290/src/opentslm/forecast_inference.py)
 
@@ -25,7 +25,7 @@ Ambas variantes parten de la misma revisión base de Qwen3.5-0.8B y de tensores 
 
 **Aceptación.** En un modelo restaurado, permutar o sustituir toda la historia de PM10 en A deja idénticas las 12 predicciones en µg/m³. En B, una prueba controlada verifica que el proyector recibe los valores de PM10 y su máscara. Probar un paso con pérdida y gradientes finitos, lectura de historias sin objetivos en inferencia y paridad antes y después de restaurar. Una máscara, orden de canales, versión o SHA-256 de escalador incompatibles deben impedir la restauración. El trabajo con datos sintéticos puede empezar junto con la entrega 1.
 
-## 3. Ejecutar A y B con igual exposición · [#104](https://github.com/keneth-arias/airaware/issues/104)
+## 3. Ejecutar A y B con igual exposición · [#104](https://github.com/keneth-arias/Neblima/issues/104)
 
 Con las entregas 1 y 2, adaptar `runtime/airaware.py` y el modo `pair` de SkyPilot en ml-infra. El lanzador actual arranca dos cabezales distintos y el runtime verifica la versión antigua de TimeF. Usar dos procesos independientes de una GPU, uno por RTX 5070 Ti, ambos con cabezal directo. Montar la versión histórica de solo lectura y separar las carpetas de los dos ajustes en el volumen de estado. El trabajo debe poder completarse con los registros de prueba externos desmontados. [Lanzador de referencia](https://github.com/keneth-arias/ml-infra/blob/a0494072988a19814452b225c2ad5d7018024b9a/workloads/sky/airaware.yaml)
 
@@ -35,9 +35,9 @@ Medir primero velocidad, memoria y tiempo de guardado y restauración sobre entr
 
 **Aceptación.** Antes de medir la validación real, versionar configuración, revisión de pesos, digest de imagen, revisión del entrenador, hashes del manifiesto, escalador y permutación, presupuesto y regla de selección. En cada estado guardar también brazo, dimensiones y cursor. Antes de comparar resultados, exigir igualdad de exposición y restaurar los dos pasos finales desde sus respectivas carpetas.
 
-## 4. Comparar la validación y congelar los dos estados · [#105](https://github.com/keneth-arias/airaware/issues/105)
+## 4. Comparar la validación y congelar los dos estados · [#105](https://github.com/keneth-arias/Neblima/issues/105)
 
-Preparar en AirAware el evaluador pareado con un fixture mientras se desarrollan los otros PR. Generar la referencia de persistencia de cada contaminante repitiendo su última lectura durante seis horas. La persistencia de PM10 necesita esa lectura y se calcula como referencia independiente de A. Extender el emparejamiento de `tools/timenet-smoke/paired_forecasts.py` con la clave `(window_id, contaminante, horizonte)` y verificar estación, origen UTC, unidad, valor observado y SHA-256 del punto de control. Probar filas desordenadas, duplicadas y faltantes.
+Preparar en Neblima el evaluador pareado con un fixture mientras se desarrollan los otros PR. Generar la referencia de persistencia de cada contaminante repitiendo su última lectura durante seis horas. La persistencia de PM10 necesita esa lectura y se calcula como referencia independiente de A. Extender el emparejamiento de `tools/timenet-smoke/paired_forecasts.py` con la clave `(window_id, contaminante, horizonte)` y verificar estación, origen UTC, unidad, valor observado y SHA-256 del punto de control. Probar filas desordenadas, duplicadas y faltantes.
 
 | Control exigido por variante en validación | Cantidad |
 | --- | ---: |
@@ -51,4 +51,4 @@ Publicar el error absoluto medio (MAE) en µg/m³ de A, B y persistencia por con
 
 **Criterio de cierre de esta fase.** Congelar los dos puntos de control del paso final acordado, incluso si una variante empeora. Registrar SHA-256 de estados, pesos base, escalador, insumos, predicciones y configuración, junto con el brazo, código, imagen, paso y exposición. Restaurar y reproducir las predicciones de validación con esos identificadores. Un experimento posterior de prueba externa consume ese manifiesto y reporta las dos fuentes por separado. El resultado de esta fase es exclusivamente de validación.
 
-En cada PR de AirAware, ejecutar `make check`, `make test-timef-offline`, `make build` y `make audit`. En OpenTSLM, ejecutar la batería del entorno fijado `environments/forecast` y la prueba de un paso. En ml-infra, verificar el lanzador y el runtime con el contrato nuevo y el anterior antes del piloto en GPU.
+En cada PR de Neblima, ejecutar `make check`, `make test-timef-offline`, `make build` y `make audit`. En OpenTSLM, ejecutar la batería del entorno fijado `environments/forecast` y la prueba de un paso. En ml-infra, verificar el lanzador y el runtime con el contrato nuevo y el anterior antes del piloto en GPU.
