@@ -1,0 +1,28 @@
+{
+  "airaware_public_base": {
+    "audit": "no_known_findings",
+    "build": "pass",
+    "commit": "684d045cf0c3671bb3f6e99da5bd00a33fe86f38",
+    "pytest_passed": 576,
+    "timenet_offline_passed": 88
+  },
+  "interval_fit_offline": {
+    "focused_synthetic_tests_passed": 3,
+    "source_commit": "25a758f3c9abbb0303bf2fb3ee012a315b86d64a",
+    "timenet_passed": 171
+  },
+  "private_release": {
+    "bilingual_cases": 8,
+    "bilingual_exact": true,
+    "bilingual_reference_tokens": 43,
+    "clean_restores": 2,
+    "exact_corrected_forecast_sha256": "b18060272132277a4970b105126b2238d6a3cb59634b702474ab2564019b3e52",
+    "forecast_windows_per_restore": 85538,
+    "install_smoke_matches": true,
+    "max_absolute_smoke_difference_ug_m3": 1.7763568394002505e-15,
+    "receipt_sha256": "8083b3953c39b69e13dc334c1ece1a11d1bccb35205f6668d56ba37ddecd7edd",
+    "synthetic_rollback_checks": 4
+  },
+  "report_date": "2026-11-23",
+  "schema": "airaware-gemma-1b-release-tests-v1"
+}

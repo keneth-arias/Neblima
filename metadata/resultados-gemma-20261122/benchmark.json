@@ -1,0 +1,184 @@
+{
+  "schema": "airaware-gemma-benchmark-results-v1",
+  "report_date": "2026-11-22",
+  "metric_unit": "ug/m3",
+  "forecast_horizons": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "gemma_1b_historical_confirmation": {
+    "scope": "historical_confirmation",
+    "independent_fresh_test": false,
+    "comparison_sha256": "531a929333f7cdca619f8510de5889ff3502176768c40bcd8108c82d832c5988",
+    "decision": "retain_control",
+    "selection_sha256": "6019768d1a05bd5a77fe88590637d486d4f98b9dbc67d68d84dc96550797ba53",
+    "windows": 5163,
+    "pairs": 30978,
+    "high_pairs": 455,
+    "high_station_hours": 76,
+    "global_improvement": -0.021235257204679996,
+    "high_improvement": 1.1884755393436977,
+    "improvement_direction": "control_mae_minus_candidate_mae",
+    "by_seed_and_objective": {
+      "27": {
+        "peak-weighted-mae": {
+          "mae": 4.844840185322534,
+          "high_mae": 25.847708504016584,
+          "mae_by_horizon": [
+            3.1234741451637427,
+            4.329800157801908,
+            5.0520006611151835,
+            5.519364997332523,
+            5.486658868473818,
+            5.557742282048051
+          ],
+          "signed_error_by_horizon": [
+            0.10035726250776517,
+            -0.5859319174255072,
+            -0.6570819283233668,
+            0.2432623356958237,
+            -0.6353348355586029,
+            -0.9155524776989975
+          ]
+        },
+        "physical-mae": {
+          "mae": 4.820607590680895,
+          "high_mae": 27.03051416292295,
+          "mae_by_horizon": [
+            3.091348095758476,
+            4.34780441061785,
+            5.050966875921173,
+            5.362302302918912,
+            5.503428923351791,
+            5.567794935517184
+          ],
+          "signed_error_by_horizon": [
+            -0.429368239040178,
+            -0.4929668434308569,
+            -1.2090904601017889,
+            -0.7522332902945661,
+            -1.1750387957815152,
+            -1.3555167874637901
+          ]
+        }
+      },
+      "28": {
+        "peak-weighted-mae": {
+          "mae": 4.932359893357548,
+          "high_mae": 26.46056665282197,
+          "mae_by_horizon": [
+            3.1350303287162697,
+            4.3571827471757345,
+            5.092935767449913,
+            5.502054283859504,
+            5.6751510534779595,
+            5.83180517946592
+          ],
+          "signed_error_by_horizon": [
+            -0.6063715158662387,
+            -0.5159098264936924,
+            -0.4132608868275509,
+            -0.2793087217259636,
+            -0.381653591741916,
+            -0.49867759352526553
+          ]
+        },
+        "physical-mae": {
+          "mae": 4.914121973589827,
+          "high_mae": 27.654712072602994,
+          "mae_by_horizon": [
+            3.157734502627607,
+            4.361492112850745,
+            5.075566463248808,
+            5.507622257604303,
+            5.6320185546461214,
+            5.7502979505614
+          ],
+          "signed_error_by_horizon": [
+            -0.4538504840818326,
+            -0.7347106428070624,
+            -0.9962299708777045,
+            -0.576945287005145,
+            -1.3212966643574886,
+            -1.36724440295914
+          ]
+        }
+      }
+    },
+    "persistence": {
+      "mae": 6.968642262250628,
+      "high_mae": 27.72523076923077,
+      "mae_by_horizon": [
+        3.515820259539017,
+        5.46782490799923,
+        6.937315514235901,
+        8.030278907611846,
+        8.744778229711404,
+        9.115835754406366
+      ],
+      "signed_error_by_horizon": [
+        0.014654270772806432,
+        0.029397637032733275,
+        0.04102266124346308,
+        0.05221189231067211,
+        0.06196591129188483,
+        0.07088514429595197
+      ]
+    },
+    "high_mae_improvement_bootstrap_168h": {
+      "ci95": [
+        1.150760632224705,
+        1.2694487833615504
+      ],
+      "high_blocks": 5,
+      "accepted": 2000,
+      "discarded": 0
+    }
+  },
+  "flamingo_4b_v4_inner_validation": {
+    "scope": "inner_validation",
+    "comparison_sha256": "78ddbd8214f23648387f8e692828ccdcbe0ede326f7ff07853dffa0436a3c7bd",
+    "decision": "retain-control",
+    "global_mae_improvement": -0.015759668969399954,
+    "high_mae_improvement": -1.011517865582988,
+    "improvement_direction": "control_mae_minus_candidate_mae",
+    "persistence": {
+      "mae": 7.165861594637855,
+      "high_mae": 25.71646310432573
+    },
+    "provider_job_timing": [
+      {
+        "objective": "normalized-mse",
+        "provider_started_to_finished_seconds": 7270.895
+      },
+      {
+        "objective": "physical-mae",
+        "provider_started_to_finished_seconds": 7152.856
+      }
+    ],
+    "selected_checkpoint_metrics": "validacion.json"
+  },
+  "external_cnn_benchmark": {
+    "openaq": {
+      "status": "gemma_scores_pending",
+      "clock": "UTC",
+      "windows": 85538,
+      "pm25_target_pairs": 513228,
+      "cnn_receipt_sha256": "6377e9afd972f5a88a1954db82780fa3657c96337b51403ec86e8356c52c1a15"
+    },
+    "senamhi_horario": {
+      "status": "gemma_scores_pending",
+      "clock": "provider_wall_clock",
+      "windows": 102768,
+      "pm25_target_pairs": 616608,
+      "cnn_receipt_sha256": "c25345cfbece47cff91c860fed905e53baefa30affb7f9e6290f918a02dc014f"
+    },
+    "independent_fresh_station_hours": {
+      "status": "pending"
+    }
+  }
+}
