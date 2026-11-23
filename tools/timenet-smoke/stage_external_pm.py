@@ -11,7 +11,6 @@ from urllib.parse import parse_qs, urlparse
 import duckdb
 import pyarrow as pa
 import pyarrow.parquet as pq
-from export_senamhi import sha256_file
 
 HISTORICAL = "896ae8a106fb128460e81b3f58096f6b9c4d582ef28fffa46e5394c5875c40d4"
 ARCHIVE = "0623be0b25cd0bd108065ae35257ef0c3d38cb6e8cfa072c29cd6b9b74071f1d"
@@ -59,6 +58,8 @@ def readings(html, *, expected_series=None):
 
 
 def verify(path, digest):
+    from export_senamhi import sha256_file
+
     if sha256_file(path) != digest:
         raise ValueError(f"SHA-256 incorrecto: {path}")
 

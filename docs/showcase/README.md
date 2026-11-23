@@ -1,5 +1,15 @@
 # Esquema de presentación para el hackathon de TimeNet
 
+## Demostración de pronóstico con Gemma 3 1B
+
+Con 24 mediciones horarias consecutivas de una estación de Lima, Gemma entrega seis concentraciones puntuales de PM2.5. El ajuste corregido redujo el error en horas altas frente a la CNN en los archivos de OpenAQ y SENAMHI. El MAE general fue ligeramente mayor que el de la CNN en ambos. En la prueba posterior de SENAMHI hubo 211 ventanas y un solo bloque semanal con horas altas. La captura posterior de OpenAQ no aportó ventanas completas. Los resultados son retrospectivos y el pronóstico se presenta para revisión.
+
+![MAE por fuente y horizonte](../../reports/models/gemma-1b-archivos.png)
+
+[Pronóstico y evaluación de Gemma](../../reports/models/validacion-gemma.md) · [Benchmark de Gemma 1B en JSON](../../metadata/resultados-gemma-1b-20261123/benchmark.json)
+
+## Evidencia histórica de Qwen
+
 Este documento organiza la presentación del proyecto Neblima para la primera ronda del reto
 [TimeNet](https://challenge.timenet.ai/). El marco de requisitos oficiales y el plazo están en
 [docs/hackathon.md](../hackathon.md); el inventario de enlaces de entrega está en
