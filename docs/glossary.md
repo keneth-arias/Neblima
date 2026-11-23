@@ -1,40 +1,27 @@
-# Glosario práctico del proyecto
+# Glossary
 
-Usamos términos en español para trabajar juntos. Los nombres de archivos, comandos y API conservan
-su forma técnica para poder copiarlos sin errores.
+These terms describe Neblima's data and forecasting workflow.
 
-| Término | Qué significa aquí |
+| Term | Meaning |
 | --- | --- |
-| Tarea o issue | Trabajo con un objetivo, criterios de aceptación y una forma de comprobarlo |
-| PR (pull request) | Solicitud para revisar e integrar cambios de una rama a otra |
-| Rama | Línea de trabajo separada; permite cambiar archivos sin afectar la rama principal |
-| Commit | Versión registrada de un grupo de cambios; no equivale a subirlos a GitHub |
-| CI, integración continua | Controles automáticos que se ejecutan al subir cambios o abrir un PR |
-| Entorno virtual (.venv) | Dependencias de Python propias de una copia del proyecto |
-| CLI | Herramienta que se usa escribiendo comandos en una terminal |
-| API | Interfaz con reglas para que un programa use datos o funciones de otro |
-| Conjunto de datos o dataset | Datos y metadatos organizados para un propósito definido |
-| Serie temporal | Mediciones ordenadas por fecha y hora |
-| Frecuencia de muestreo | Cada cuánto se obtiene una medición; no confundir con el periodo usado para promediar |
-| Entrada o variable | Información disponible al momento de hacer el pronóstico |
-| Objetivo o target | Valor que queremos predecir; debe venir de mediciones válidas |
-| Historia de 72 horas | Las 72 horas anteriores utilizadas para construir las entradas |
-| Horizonte de 24 horas | Las siguientes 24 horas que se quieren pronosticar |
-| Entrenamiento, validación y prueba | Datos para aprender, elegir configuraciones y evaluar el resultado final, respectivamente |
-| Fuga de información | Uso indebido de información del futuro o del conjunto reservado que hace parecer mejor al modelo |
-| Máscara de datos faltantes | Indicador de qué valores están presentes y cuáles no |
-| Imputación | Estimación de un dato faltante; debe justificarse, documentarse y no usar información futura |
-| Modelo de referencia o baseline | Método sencillo con el que se compara un modelo más complejo |
-| Benchmark | Conjunto y procedimiento fijo para comparar métodos con los mismos objetivos |
-| Procedencia y trazabilidad | Registro que permite llegar desde un resultado hasta su fuente y transformaciones |
-| SHA-256 | Suma de verificación para detectar si cambió el contenido de un archivo |
-| CRS | Sistema de referencia que permite interpretar coordenadas; no se debe suponer |
-| Parquet | Formato de archivos por columnas para almacenar y consultar datos |
-| TimeF | Formato de TimeNet; se genera y valida con sus herramientas oficiales |
-| PM2.5 | Material particulado fino; conservar unidad, método y periodo de promedio documentados por la fuente |
-| Bloqueo | Insumo o permiso que falta para avanzar; se registra con el siguiente paso concreto |
+| PM2.5 | Fine particulate matter with an aerodynamic diameter of 2.5 micrometers or less. |
+| Time series | Values ordered by time for a station, pollutant, or other signal. |
+| Sampling frequency | How often a measurement is recorded. The averaging period describes the interval that a reading summarizes. |
+| History | The input readings available through a forecast origin. Neblima's main benchmark uses 24 hourly values. |
+| Forecast origin | The last hour in the input history. |
+| Horizon | The lead time to a predicted value. Neblima's main benchmark scores +1 h through +6 h. |
+| Target | The observed value used to score a prediction. |
+| Persistence | A baseline that predicts the last observed reading at every horizon. |
+| Mean absolute error (MAE) | The average absolute difference between predictions and observations, in the same unit as the target. |
+| Train, validation, and test | Separate data used to fit a model, select a configuration, and score the final result, respectively. |
+| Leakage | Using information that would be unavailable at forecast time or exposing reserved test information during fitting or selection. |
+| Purge | Excluding windows whose full history and targets cross a split boundary. |
+| Provenance | The evidence connecting an output to its source files, records, and transformations. |
+| Missing-value mask | An indicator of which values are present. A measured zero is present. |
+| TimeF | TimeNet's time-series dataset format. |
+| Coordinate reference system (CRS) | The system that gives coordinates their geographic meaning. |
 
-Ejemplo: una ventana de 72/24 usa 72 horas de historia para pronosticar las siguientes 24.
-La lluvia que recién se observó después del inicio de esas 24 horas no es una entrada disponible
-para un pronóstico operativo. Un pronóstico meteorológico emitido antes puede evaluarse como entrada
-si se conserva cuándo estuvo disponible.
+A weather observation recorded after a forecast origin leaks future
+information if used as input. A weather forecast issued before that
+origin can be eligible when its availability is documented.
+[Architecture](../ARCHITECTURE.md)

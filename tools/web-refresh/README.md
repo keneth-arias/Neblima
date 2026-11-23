@@ -1,42 +1,71 @@
-# Pronóstico web Gemma 3 1B
+# Export a Gemma 3 1B forecast for the web
 
-La captura conserva el reloj publicado de SENAMHI y exporta solo historias completas de 24 horas. El predictor usa el checkpoint de la semilla 27 en el paso 4500 y el corrector de picos congelado antes de exportar los seis valores puntuales por origen. Los modelos históricos y la CNN conservan su identidad en las comparaciones.
+The refresh tool prepares a small six-hour forecast snapshot from SENAMHI
+hourly charts. It uses 24 consecutive readings, a fixed Gemma checkpoint
+at update 4,500 from seed 27, and the frozen peak correction. The
+[evaluation guide](../../docs/evaluation.md) describes the model
+comparisons and the [demo guide](../../docs/demo.md) describes what the
+deployed interface displays.
 
-`refresh.py capture DIRECTORIO` consulta como máximo doce gráficos de SENAMHI
-con Lightpanda (45 segundos y 1 MB por consulta). Verifica nombre, contaminante,
-fechas, valores y duplicados. Conserva cada original y su recibo. Una ventana
-usa un solo código de estación; no une instrumentos ni imputa datos.
-El origen común es la última lectura publicada. Si todas tienen más de seis
-horas de retraso respecto del reloj de referencia de Lima, falla y conserva
-la versión pública anterior. Las estaciones sin captura quedan sin lectura.
+## Produce a snapshot
 
-`refresh.py predict DIRECTORIO` restaura Gemma en una GPU local con los pesos y la generación seleccionada de solo lectura.
-`refresh.py correct DIRECTORIO` aplica la corrección congelada en CPU y verifica las huellas del checkpoint, las historias y la corrección.
-`refresh.py export DIRECTORIO` comprueba identificadores, seis horizontes,
-dimensiones y valores finitos antes de escribir `actual.json`.
+The stages share one working directory. The runner needs the pinned
+model artifacts for prediction and correction.
 
-El archivo usa `schema_version: 2`, `clock: provider_wall_clock`,
-`generated_at_utc`, `source_revision`, `model`, `timeline` y `stations`.
-Cada estación tiene recibos, código elegido, última lectura y ocho ventanas
-alineadas con `timeline`. Cada ventana separa `history` (24), `observed` (6),
-`forecast` (6 o `null`), `origin` y `target_times`. No se asigna UTC a las
-etiquetas del gráfico: SENAMHI no declara el desfase. Solo las horas de
-captura y cálculo son UTC. La web conserva las fechas publicadas, incluidos
-los cambios de día, y acredita a SENAMHI bajo ODC-BY 1.0.
+1. Run `refresh.py capture DIRECTORY` to query up to 12 SENAMHI charts
+   with Lightpanda. Each query has a 45-second and 1 MB cap. Capture
+   verifies the name, pollutant, dates, values, and duplicates and keeps
+   the original responses and receipts. A window uses one station code
+   and complete history, without merging instruments or imputing values.
+2. Run `refresh.py predict DIRECTORY` to restore Gemma on the local
+   graphics processing unit (GPU) with read-only weights and generation
+   configuration.
+3. Run `refresh.py correct DIRECTORY` to apply the frozen correction
+   on the CPU and verify the relationship between the checkpoint,
+   histories, and correction.
+4. Run `refresh.py export DIRECTORY` to check identities, dimensions,
+   and finite values for each of six horizons and write `actual.json`.
 
-Pruebas sin red desde la raíz:
+The common origin is the latest published reading. When all stations are
+more than six hours behind the Lima reference clock, capture stops and
+preserves the previous public version. Sites without a capture show no
+reading.
 
-```sh
-uv run --project tools/timenet-smoke --locked python -m unittest discover -s tools/web-refresh -p 'test_*.py'
+## Read the snapshot contract
+
+Version 2 uses `clock: provider_wall_clock`, `generated_at_utc`,
+`source_revision`, `model`, `timeline`, and `stations`. Each station
+contains source receipts, the chosen station code, its latest reading,
+and eight windows aligned to `timeline`. Each window separates
+`history` (24), `observed` (6), and `forecast` (6 or null), and records
+`origin` and `target_times`.
+
+SENAMHI does not declare an offset for the source chart labels. The
+snapshot preserves those dates and times through midnight. Capture and
+calculation timestamps use Coordinated Universal Time (UTC). Credit
+SENAMHI under Open Data Commons Attribution License 1.0 when displaying
+the snapshot. [Data attribution](../../DATA_ATTRIBUTION.md)
+
+## Verify the tool
+
+After installing the pinned TimeNet environment, run these commands
+from the repository root without provider access.
+
+```bash
+UV_OFFLINE=true uv run --project tools/timenet-smoke --locked \
+  python -m unittest discover -s tools/web-refresh -p 'test_*.py'
 uv run --locked ruff check tools/web-refresh
 uv run --locked ruff format --check tools/web-refresh
-make check
-make build
-make audit
 ```
 
-La ejecución pertenece a MicroK8s en `bm`. El renderizador y la publicación
-en `qriqs/airaware-web` están en `ml-infra/workloads/web-refresh/`.
-La variable `NOT_BEFORE=2026-11-23T14:00:00Z` impide consultas programadas
-antes del 23 de noviembre a las 09:00 en `America/Lima`. Una ejecución manual
-sin esa variable permite validar una actualización inmediata.
+Run the main [contribution checks](../../CONTRIBUTING.md#prepare-and-check-your-change)
+before submitting changes.
+
+## Deployment context
+
+The refresh workload runs in MicroK8s on `bm`. The renderer and
+publication flow for `qriqs/airaware-web` are maintained in
+`ml-infra/workloads/web-refresh/`. The initial schedule set
+`NOT_BEFORE=2026-11-23T14:00:00Z` to gate queries before 09:00 in
+`America/Lima` on November 23, 2026. An authorized manual run without
+that value can validate an immediate update.

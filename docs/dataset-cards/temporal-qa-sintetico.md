@@ -1,69 +1,67 @@
-# Preguntas temporales sintéticas con respuestas calculables
+# Synthetic temporal questions with verifiable answers
 
-**Conjunto SINTÉTICO.** Las series y sus valores se generan de forma determinista con
-`src/airaware/temporal_qa.py` a partir de una semilla; no contienen ninguna observación real
-de SENAMHI, OEFA ni de otra fuente. Este conjunto no sirve para medir ni interpretar la
-calidad del aire de Lima.
+`temporal-qa-sintetico@0.1.0` is a synthetic question-answering fixture.
+Neblima generates hourly values deterministically from seeds. The fixture
+contains no real air quality measurements. [Generator](../../src/airaware/temporal_qa.py)
 
-`temporal-qa-sintetico@0.1.0` acompaña la primera entrega de la issue #35: preguntas de
-tendencia, máximo, momento y comparación sobre una serie horaria sintética identificada como
-tal. Cada caso (`TemporalQuestion`) incluye identificador, familia, series e identificadores
-de observación de origen, ventana en UTC, pregunta en texto y respuesta calculada por una
-función pura. La verificación de ida y vuelta (pregunta → respuesta → verificación) recalcula
-cada respuesta desde las series y la ventana y se comprueba en las pruebas. El texto de
-respuesta es solo el valor calculado con su unidad, sin explicaciones causales.
+Each `TemporalQuestion` records the question family, series and source
+observation IDs, Coordinated Universal Time (UTC) window, prompt, and
+answer. Tests recalculate the answer from the underlying series and
+window. An answer contains the requested value and its unit where
+applicable.
 
-## Familias y respuestas
+## Question families
 
-| Familia | Pregunta | Respuesta (formato) |
-| --- | --- | --- |
-| tendencia | media de la primera mitad frente a la segunda | `aumento`, `disminución` o `sin cambio` |
-| máximo | valor máximo de la ventana | valor con unidad, p. ej. `42.17 ug/m3` |
-| momento | instante del primer máximo | ISO 8601 UTC, p. ej. `2026-01-01T05:00:00+00:00` |
-| comparación | media mayor de dos series en la misma ventana | identificador de la serie o `empate` |
+The generator creates disjoint consecutive windows. Offsets are hours
+from the start of each series. The answer strings below preserve the
+Spanish values used by the fixture.
 
-Las ventanas son consecutivas y disjuntas por serie: tendencia (horas 0–48), máximo (48–72),
-momento (72–96) y comparación (96–120), contadas desde el origen de la serie. El generador
-es un congruencial propio (determinista entre plataformas) con ciclo diario triangular y un
-salto de nivel por serie; dos ejecuciones producen el mismo conjunto.
+| Family | Hours | Question | Answer |
+| --- | --- | --- | --- |
+| Trend | 0–48 | How does the mean in the second half compare with the first? | `aumento`, `disminución`, or `sin cambio` |
+| Maximum | 48–72 | What is the maximum reading? | Value and unit, such as `42.17 ug/m3` |
+| Time | 72–96 | When does the maximum first occur? | Timestamp, such as `2026-01-01T05:00:00+00:00` |
+| Comparison | 96–120 | Which series has the higher mean over this window? | Series ID or `empate` |
 
-## Separación de los objetivos de pronóstico
+The seeded congruential generator uses a triangular daily cycle and
+a level shift for each series. The same seed and inputs produce the
+same fixture across platforms.
 
-Los casos de QA usan la estructura `TemporalQuestion`, distinta de las ventanas de
-pronóstico de #18: no comparten campos con las columnas de `windows.parquet` (conjunto
-`FORECAST_TARGET_FIELDS`) ni ventanas con sus intervalos objetivo. La función
-`validate_qa_separated` y las pruebas de `tests/test_temporal_qa.py` fallan si se mezclan:
-añadir una columna de pronóstico a la pregunta, inyectar valores objetivo en un caso de QA o
-solapar una ventana de QA con un objetivo hace fallar la suite. Las pruebas del pronóstico y
-los ejemplos de demostración de [tools/timenet-smoke](../../tools/timenet-smoke/README.md)
-permanecen separados de estos casos y así se registra en esta tarjeta.
+## Keep forecasting targets separate
 
-## Alineación con la interfaz de preguntas temporales de TimeNet
+`TemporalQuestion` cases use their own schema. `validate_qa_separated`
+rejects forecast target fields and windows that overlap reserved
+forecast target intervals. The [tests](../../tests/test_temporal_qa.py)
+check that injecting target values, adding a forecast column, or
+overlapping the intervals fails.
 
-Contrato consultado el **2026-11-20 (UTC)** en la revisión fijada
-`9bd1613019ee61fbc52e02106a1a45990ead7a54` (`configs/upstream.lock.json`), mediante lectura
-puntual y de solo lectura de dos archivos; no se modificó la interfaz externa ni se instaló
-timenet en el paquete principal.
+## Map to TimeNet tasks
 
-| Campo de Neblima | Contrato TimeNet | Evidencia fijada |
-| --- | --- | --- |
-| `prompt` | `AnswerTask.prompt` (texto de la pregunta) | [types/tasks.py, AnswerTask](https://github.com/OpenTSLM/TimeNet/blob/9bd1613019ee61fbc52e02106a1a45990ead7a54/packages/timenet/src/timenet/types/tasks.py#L436) |
-| `answer` | `AnswerTask.targets` como tupla de un solo texto | [types/tasks.py, AnswerTask](https://github.com/OpenTSLM/TimeNet/blob/9bd1613019ee61fbc52e02106a1a45990ead7a54/packages/timenet/src/timenet/types/tasks.py#L436) |
-| `SyntheticSeries.values` | valores de la `Signal` dentro del `Record` que forma `AnswerTask.inputs` | [conector TSQA](https://github.com/OpenTSLM/TimeNet/blob/9bd1613019ee61fbc52e02106a1a45990ead7a54/packages/timenet-connectors/src/timenet_connectors/datasets/chengsenwang/tsqa/connector.py#L1) |
-| `family` | anotación del `Record` con la convención de TSQA (`Annotation` con clave `task`) | [conector TSQA](https://github.com/OpenTSLM/TimeNet/blob/9bd1613019ee61fbc52e02106a1a45990ead7a54/packages/timenet-connectors/src/timenet_connectors/datasets/chengsenwang/tsqa/connector.py#L1) |
-| `question_id`, `observation_ids` | trazabilidad propia de Neblima; sin equivalente obligatorio en `AnswerTask` | — |
-| `window_start`, `window_end_exclusive` | TSQA no modela ventanas: la ventana queda en el texto y en estos campos; no se inventan `horizon`/`lookback` de `ForecastingTask` | [types/tasks.py](https://github.com/OpenTSLM/TimeNet/blob/9bd1613019ee61fbc52e02106a1a45990ead7a54/packages/timenet/src/timenet/types/tasks.py#L485) |
-| `split` | pertenece a `Task` en TimeNet; esta entrega no asigna partición; la estratificada 80/10/10 con semilla 42 de TSQA no sirve como separación temporal de Lima | [conector TSQA](https://github.com/OpenTSLM/TimeNet/blob/9bd1613019ee61fbc52e02106a1a45990ead7a54/packages/timenet-connectors/src/timenet_connectors/datasets/chengsenwang/tsqa/connector.py#L1) |
+The November 20, 2026 review checked the TimeNet API at the commit
+in the [upstream lock](../../configs/upstream.lock.json). This fixture
+provides the fields below and does not assign TimeNet splits.
 
-La conversión a un conjunto TimeF y la asignación de particiones quedan pendientes para una
-entrega posterior de #35.
+| Neblima field | TimeNet representation |
+| --- | --- |
+| `prompt` | `AnswerTask.prompt` |
+| `answer` | `AnswerTask.targets` with one text target |
+| `SyntheticSeries.values` | `Signal` values inside an input `Record` |
+| `family` | Record annotation following the TSQA convention, using the key `task` |
+| `question_id`, `observation_ids` | Neblima-specific provenance |
+| `window_start`, `window_end_exclusive` | Neblima window bounds retained with the question |
 
-## Reproducir
+The TSQA connector's stratified split belongs to that dataset. A
+Lima forecasting release uses chronological splits. [AnswerTask at the
+pinned commit](https://github.com/OpenTSLM/TimeNet/blob/9bd1613019ee61fbc52e02106a1a45990ead7a54/packages/timenet/src/timenet/types/tasks.py#L436) ·
+[TSQA connector at the pinned commit](https://github.com/OpenTSLM/TimeNet/blob/9bd1613019ee61fbc52e02106a1a45990ead7a54/packages/timenet-connectors/src/timenet_connectors/datasets/chengsenwang/tsqa/connector.py#L1)
 
-Sin red ni dependencias nuevas, desde la raíz del proyecto:
+## Reproduce the fixture
+
+From the repository root, after installing the main environment,
+run the generator offline. No provider access is required.
 
 ```bash
-uv run --locked python - <<'PY'
+UV_OFFLINE=true uv run --locked python - <<'PY'
 from datetime import UTC, datetime
 
 from airaware.temporal_qa import build_synthetic_series, generate_questions
@@ -80,15 +78,8 @@ for pregunta in generate_questions(a, b):
 PY
 ```
 
-La suite `tests/test_temporal_qa.py` verifica determinismo, ida y vuelta de cada respuesta y
-la separación de los objetivos de pronóstico.
-
-## Licencias y pendiente
-
-El código es propio de Neblima bajo **AGPL-3.0-only** (LICENSE y NOTICE). La serie es
-sintética: no tiene licencia de datos de terceros ni atribución externa. La versión con
-datos reales SENAMHI queda **pendiente** hasta acreditar trazabilidad de derechos compatible
-con la redistribución; ver la [atribución del original](../../DATA_ATTRIBUTION.md) y la
-[tarjeta de pronóstico](lima-pm25-forecast.md). Tampoco se generó todavía el conjunto como
-archivo versionado ni se validó con el runtime de TimeNet; ambas tareas corresponden a
-entregas posteriores de #35.
+The fixture code uses AGPL-3.0-only and its values come from the generator.
+The synthetic fixture has no verified versioned TimeF export. A separate
+document records the later experiment with real SENAMHI records and the
+checks that keep those questions away from forecasting targets.
+[Real-data validation report (Spanish)](../../reports/preguntas-temporales-reales.md)

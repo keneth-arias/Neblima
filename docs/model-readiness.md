@@ -1,24 +1,56 @@
-# Primer paso de entrenamiento con PM2.5 de Lima
+# Verify one training step on Lima PM2.5
 
-Se ejecutó un paso de AdamW en una RTX 5070 Ti con el decodificador de texto de Qwen3.5-0.8B, el proyector temporal y el cabezal numérico de la [bifurcación de OpenTSLM](https://github.com/keneth-arias/OpenTSLM/pull/1). Los pesos publicados por Qwen tienen licencia Apache-2.0, la bifurcación usa MIT y la integración de Neblima usa AGPL-3.0-only. Los datos de SENAMHI conservan su licencia ODC-BY-1.0 y su [atribución](../DATA_ATTRIBUTION.md). [Revisión del modelo](https://huggingface.co/Qwen/Qwen3.5-0.8B/tree/2fc06364715b967f1860aea9cf38778875588b17).
+This experiment verified one AdamW update on an RTX 5070 Ti with the
+Qwen3.5-0.8B text decoder, temporal projector, and regression head
+from the OpenTSLM fork. Qwen's published weights use Apache-2.0,
+the fork uses MIT, and Neblima's integration uses AGPL-3.0-only.
+SENAMHI data retain their source terms. [OpenTSLM
+adapter](https://github.com/keneth-arias/OpenTSLM/pull/1) ·
+[Model revision](https://huggingface.co/Qwen/Qwen3.5-0.8B/tree/2fc06364715b967f1860aea9cf38778875588b17) ·
+[Data attribution](../DATA_ATTRIBUTION.md)
 
-## Ventana y resultado
+## Input and result
 
-La prueba usa la primera tarea de entrenamiento que entrega el lector de la versión congelada de #25. Se compara el SHA-256 del manifiesto con el publicado en el [informe de referencias](../reports/baselines/lima-pm25.md) y se ejecuta `TimeFReader.verify()`. Se comprueban la señal y su unidad, la estación provisional, la serie, el eje horario y el límite entre historia y objetivos. Las 24 casillas históricas de la ventana están medidas. El último dato corresponde al 02/01/2015 a las 04:00 UTC y los seis objetivos corresponden a las 05:00–10:00 UTC.
+The probe uses the first training task in the frozen benchmark. It
+checks the release manifest against the expected SHA-256, calls
+`TimeFReader.verify()`, and checks the series, provisional station,
+unit, hourly axis, and input-target boundary. The input has 24 measured
+values through January 2, 2015, at 04:00 UTC. Targets run from 05:00
+to 10:00 UTC on the same day. [Baseline report
+(Spanish)](../reports/baselines/lima-pm25.md)
 
-La media y la desviación estándar poblacional se calculan sobre la historia de esa ventana. Cuando la desviación es cero, la escala vale uno. Se aplica esa misma transformación a los seis objetivos para calcular el error cuadrático medio. Se conservan en µg/m³ las predicciones anteriores al paso y los objetivos originales. El decodificador solo recibe la historia y su máscara.
+The probe calculates the mean and population standard deviation on
+the history. For zero standard deviation, it uses a scale of one.
+It applies the history-based transform to the targets for mean
+squared error. The decoder receives the history and mask. The receipt
+keeps the predictions before the update and the original targets in
+µg/m³.
 
-La pérdida normalizada fue 0,6275. El cambio máximo absoluto en el peso inspeccionado del decodificador fue aproximadamente 0,0001, al igual que en el cabezal. La asignación máxima de memoria registrada por PyTorch fue 8,46 GiB. Se usó un solo ejemplo, un cabezal recién inicializado y un solo paso en precisión de 32 bits. Uno de los seis pronósticos previos al ajuste fue negativo. La precisión y la comparación con persistencia quedan para #28. La [evidencia de ejecución](../metadata/qwen-smoke.json) conserva los valores originales del modelo, el tiempo del paso sincronizado, el entorno y los identificadores de procedencia.
+One example, one newly initialized regression head, and one update
+in 32-bit precision produced a normalized loss of 0.6275. The
+largest absolute change in the inspected decoder weight and head was
+about 0.0001. PyTorch reported peak allocated memory of 8.46 GiB.
+One prediction was negative before the update. The probe verifies
+the training path. The [evaluation guide](evaluation.md) reports
+accuracy against baselines. [Execution receipt](../metadata/qwen-smoke.json)
 
-## Reproducir
+## Reproduce the probe
 
-Desde la raíz de Neblima, preparar el entorno de TimeNet con `uv sync --project tools/timenet-smoke --locked`. El siguiente comando usa una copia local de la bifurcación en el commit fijado por [la configuración](../configs/upstream.lock.json). Para otras máquinas, clonar la bifurcación y descargar una vez la revisión del modelo según las [instrucciones del adaptador](https://github.com/keneth-arias/OpenTSLM/blob/20573a0f67f0f53bcd7d06a28869379e80d2d652/environments/forecast/README.md). El entrenamiento lee los pesos de la caché local y usa el entorno separado del lector de TimeNet.
+Install the TimeNet environment and prepare the frozen release. Use
+a local OpenTSLM checkout at the pinned fork revision with its model
+weights already cached. Run from the Neblima root and set `fork`
+to the path to your checkout. [Upstream pins](../configs/upstream.lock.json) ·
+[Adapter environment setup](https://github.com/keneth-arias/OpenTSLM/blob/20573a0f67f0f53bcd7d06a28869379e80d2d652/environments/forecast/README.md)
 
 ```bash
-fork=/home/shared/github/keneth-arias/OpenTSLM
+uv sync --project tools/timenet-smoke --locked
+fork=/path/to/OpenTSLM
 PYTHONPATH="$fork/src" uv run --offline --locked --project "$fork/environments/forecast" \
   python tools/training/qwen_smoke.py \
   --release data/timef/airaware/lima-pm25-forecast/0.1.0
 ```
 
-La salida JSON incluye los SHA-256 de la versión TimeF, la auditoría de fugas, las particiones, la grilla y el entorno de entrenamiento. El paso de verificación descarta los pesos actualizados al terminar. Las pruebas sin GPU reconstruyen dos versiones sintéticas con objetivos distintos para verificar que la historia y la máscara permanezcan idénticas.
+The JSON receipt includes the TimeF, split, grid, and training
+environment checksums alongside its leakage checks. The probe discards
+the updated weights. Tests without a graphics processing unit verify
+that changing synthetic targets leaves the history and mask identical.

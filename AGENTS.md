@@ -8,13 +8,13 @@ Revisa `tasks/plan.md` y la tarea correspondiente. Conserva el trabajo pendiente
 Keneth Arias (`@keneth-arias`) es el responsable principal de datos y plataforma.
 Consulta `docs/lead-handbook.md` y `docs/team-work-allocation.md` para conocer responsables y entregas.
 Cada persona usa su propia copia y entorno; no cambies la rama dentro de la carpeta de otra persona.
-El idioma principal es español latinoamericano, con vocabulario usual en el Perú: archivo, carpeta,
-equipo, datos faltantes, tarea y responsable. Explica las siglas al usarlas por primera vez.
-Documentación, tareas, títulos/descripciones de PR y mensajes visibles se escriben en español.
-Mantén identificadores, rutas, comandos, campos de esquemas y nombres de API en su forma técnica
-original. Los tipos de Conventional Commits se conservan; el resumen puede ir en español.
-Preserva los archivos originales de las fuentes. Sigue el idioma exigido por TimeNet en contribuciones
-externas. La política de idioma actual reemplaza la indicación en inglés del plan original, conservado en Git.
+El equipo coordina en español latinoamericano, con vocabulario usual en el Perú: archivo, carpeta,
+equipo, datos faltantes, tarea y responsable. Escribe el README y las guías públicas vigentes en
+inglés. Conserva la entrada en español y los documentos de evidencia en su idioma original.
+Las tareas, los títulos/descripciones de PR y los mensajes de la aplicación se escriben en español.
+Explica las siglas al usarlas por primera vez. Mantén identificadores, rutas, comandos, campos de
+esquemas y nombres de API en su forma técnica. Los tipos de Conventional Commits se conservan.
+Preserva los archivos originales y sigue el idioma exigido por TimeNet en contribuciones externas.
 
 ## Comandos
 

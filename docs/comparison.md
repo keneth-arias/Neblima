@@ -1,82 +1,86 @@
-# Comparación local y preparación de ventanas (#11)
+# Compare sources and forecast coverage
 
-> Política operativa aprobada: [ADR-005](decisions/005-senamhi-operating-policy.md). comparison-v3 selecciona SENAMHI/Lima/PM2.5
-> para pronóstico con etiquetas UTC publicadas y acepta calidad/posición del intervalo desconocidas.
-> Esto no bloquea #13 ni #18; las etiquetas regulatorias diarias siguen diferidas.
+The local comparison measures how many hourly forecast windows each source
+can support. The current `comparison-v3` policy accepts historical Lima
+PM2.5 from the selected SENAMHI original for retrospective evaluation using
+published UTC labels. Reading quality and interval placement remain
+unknown. Daily regulatory labels require further evidence. [Source policy
+(Spanish)](decisions/005-senamhi-operating-policy.md)
 
-Ejecutar desde la raíz, después de `make setup`, con las adquisiciones de #8/#9:
+## Run the comparison
+
+From the repository root, with the authorized originals and manifests
+available locally, run the comparison.
 
 ```bash
 uv run --locked airaware compare run
-AIRAWARE_DATA_DIR=/ruta/datos uv run --locked airaware compare run
 ```
 
-La configuración aprobada es configs/benchmark.yaml y las entradas se fijan en configs/profiling.json.
-`--policy`, `--inputs` y `--output-root` permiten elegir rutas; cada archivo de configuración admite
-hasta 64 KiB. No se requiere internet. Cada integrante usa sus propios originales/manifiestos y disco;
-Git no distribuye los originales. La CLI devuelve salida 1 si no puede verificar/procesar el contrato.
+The defaults use [`configs/benchmark.yaml`](../configs/benchmark.yaml) and
+[`configs/profiling.json`](../configs/profiling.json). Use `--policy`,
+`--inputs`, and `--output-root` to override the paths. Each configuration
+file can be up to 64 KiB. Set `AIRAWARE_DATA_DIR` to use a different data
+root. The command works offline and exits with status 1 if it can't
+verify or process the inputs.
 
-Se reutilizan identidad, contextos y parser temporal de #10, sin homologación ni conversión horaria.
-Cada origen t usa H instantes [t−(H−1),t] y F instantes [t+1,t+F], todos horarios y finitos,
-sin ambigüedad. Se evalúan las 16 parejas H=24/48/72/168, F=6/12/24/48. PM2.5 es el objetivo
-principal aprobado; PM10 es un escenario separado. Lima significa provincia LIMA del departamento
-LIMA. Callao es un escenario adicional separado. No se amplía la geografía para completar una cuota.
+The comparison preserves provisional identities, source contexts, and
+native clock labels. Each origin uses consecutive finite hourly values
+for its history and future targets. The scenarios pair 24, 48, 72, or 168
+history hours with 6, 12, 24, or 48 future hours. Lima means Lima Province
+in the Lima Department. PM10 and Callao use separate scenarios.
 
-## Denominadores y filtros
+## Read the counts
 
-La traza de filas sigue orden fijo: fuera del ámbito, periodo no horario, reloj no interpretable
-(o no alineado), valor no finito, intervalo ambiguo, filas aceptadas. Estas categorías son disjuntas
-y suman las filas originales. Las filas aceptadas menos repeticiones consolidadas equivalen a puntos
-únicos. La cobertura simultánea cuenta identidades distintas con puntos en un mismo instante; no cuenta
-varios contextos de la misma estación como estaciones diferentes. No demuestra que todas esas
-estaciones tengan ventanas completas en los mismos orígenes. La consolidación solo existe en la vista diagnóstica: no cambia originales ni presume que
-todas las repeticiones completas son observaciones duplicadas que deban borrarse.
+Rows fall into mutually exclusive categories in this order. They can
+be outside scope, have a nonhourly period, have an unparseable or unaligned
+clock, lack a finite value, have an ambiguous interval, or be accepted.
+Accepted rows minus consolidated repetitions give the unique points in
+the diagnostic view. Simultaneous coverage counts distinct stations at
+one timestamp, which can include stations without a complete forecast
+window at that origin.
 
-Para cada serie el universo de orígenes se limita al primer/último punto admisible, dejando espacio
-para H y F. No se cuenta como cobertura confirmada toda la extensión de fechas publicada.
-La ausencia de puntos se reporta como cero puntos/ventanas estructurales, sin inventar una serie.
-Las ventanas se separan en historia incompleta, futuro incompleto entre historias completas y
-completas. Estas tres cantidades suman los candidatos. Se usan rachas consecutivas para contar sin
-materializar todas las ventanas ni rellenar huecos. Los periodos/contextos/estaciones no se mezclan.
-Los límites exteriores que no permiten H+F instantes quedan fuera del universo de candidatos.
+Candidate origins sit between the first and last admissible points and
+leave room for the full history and target interval. The report separates
+incomplete histories, complete histories with incomplete targets, and
+complete windows. Runs of consecutive hours provide counts without
+imputation. Contexts and stations stay separate. Numeric magnitude alone
+doesn't exclude a reading.
 
-`forecasting-readiness.parquet` contiene fuente/hash, política/hash, estación/contexto, señal,
-geografía, H/F, conteos, límites del reloj y bloqueos. Si falta una definición científica,
-`scientific_valid_windows` es nulo aunque haya ventanas estructurales. Los conteos no sustituyen las
-ventanas de entrenamiento de #18 ni los splits de #19. Las estadísticas no determinan filtros usando
-resultados de prueba futuros. No se descartan negativos ni extremos solo por su magnitud.
+`forecasting-readiness.parquet` records source and policy checksums,
+identity, scenario, counts, clock limits, and blockers. Structural
+coverage can be measured while `scientific_valid_windows` remains null.
+The [dataset card](dataset-cards/lima-pm25-forecast.md) documents how the
+selected source proceeds to actual windows and split manifests.
 
-## Política vigente comparison-v2 (17/11/2026)
+## Understand policy versions
 
-Keneth eliminó la cuota fija de estaciones y meses continuos. No hay denominador de 4×24×720
-ni puntuación de tamaño sustituta. Se publican ventanas, estaciones, rachas y pérdidas reales;
-components, scientific_score y sensitivity_equal quedan nulos en v2. Los pesos históricos no
-se aplican. La cobertura simultánea se informa para al menos una estación (quorum_stations=1),
-como disponibilidad del archivo y no como una nueva condición de aceptación.
+The current policy follows the change introduced by `comparison-v2`.
+It reports observed windows, stations, coverage runs, and losses without
+a fixed station quota or minimum consecutive months. The historical
+`comparison-v1` remains readable for reproducibility. Keep historical
+results and their configuration hashes together. The v2 report keeps
+`components`, `scientific_score`, and `sensitivity_equal` null and uses
+`quorum_stations=1` for simultaneous file coverage.
 
-La política comparison-v1 conserva compatibilidad de lectura con denominadores explícitos para
-reproducir informes históricos; no es la configuración vigente. No cambiar hashes ni resultados
-viejos para simular que se calcularon con v2. Los bloqueos científicos siguen siendo independientes
-de tener más o menos datos. Para SENAMHI, UTC y unidades operativas están en la decisión #13;
-la posición del intervalo y la calidad individual quedan pendientes, sin bloquear normalización.
+## Inspect the artifacts
 
-## Solapamientos y publicación
+`source-overlap.parquet` counts shared timestamps on the original clocks
+by signal and geography. The diagnostic doesn't match stations across
+providers. Scientific overlap remains unknown until clock compatibility is
+verified. Missing timestamps can produce zero diagnostic overlap even
+when observations existed.
 
-`source-overlap.parquet` cuenta intersección de instantes distintos en el reloj original por señal y
-geografía; no empareja estaciones de redes distintas. La intersección científica permanece nula
-porque no está verificada la compatibilidad de relojes entre fuentes. Cero en el diagnóstico no
-prueba ausencia histórica de mediciones cuando los timestamps están ausentes.
+Each run publishes two Parquet files, `summary.json`, and `manifest.json`
+to a new folder under `reports/generated/comparison/`. The workflow
+verifies originals before and after processing and before publication.
+It publishes the artifacts together by rename. A failure removes only
+the current run's temporary files. DuckDB uses two threads, a 768 MB
+working memory setting, a 10 GB temporary-storage limit, and disabled
+automatic extensions. The process can use more memory than DuckDB's
+setting.
 
-Cada ejecución crea una carpeta nueva en reports/generated/comparison/ con ambos Parquet,
-summary.json y manifest.json. Se verifica el original antes, después de procesar cada fuente y
-antes de publicar; las salidas se publican juntas por renombrado. Un error elimina únicamente los
-temporales de esa ejecución. DuckDB usa dos hilos, memoria configurada 768 MB (no límite absoluto
-del proceso), temporales de hasta 10 GB y extensiones automáticas deshabilitadas. No hay servidor.
-
-Los bloqueos declarados por fuente deben ser explícitos en configuración, incluso si la lista está
-vacía tras revisión documentada. Cambiarla no aporta por sí mismo evidencia de unidades, reloj,
-calidad o derechos. Toda revisión debe conservar la procedencia institucional que justifique el cambio.
-La configuración y su versión forman parte de los hashes de cada entrega.
-
-La cobertura simultánea no implica una cohorte fija. En v2 se informa disponibilidad con al menos
-una estación; no se exige un número de estaciones o meses continuos.
+Document each source's blockers in the configuration, even if review
+produces an empty list. Record the evidence for changes to units, clocks,
+quality, or rights. [Comparison report
+(Spanish)](../reports/dataset-comparison.md) · [Initial benchmark selection
+(Spanish)](../reports/benchmark-selection.md)

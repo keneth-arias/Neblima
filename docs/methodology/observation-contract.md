@@ -1,25 +1,44 @@
-# Contrato común v1 (#12)
+# Observation contract v1
 
-`airaware.schemas` define Observation, Provenance, Source, Station, Sensor y Relocation.
-Los modelos Pydantic rechazan campos extra y permiten exportación JSON mediante model_dump(mode='json').
-El esquema JSON se obtiene con Observation.model_json_schema(); no se mantiene una copia duplicada.
+[`airaware.schemas`](../../src/airaware/schemas.py) defines `Observation`,
+`Provenance`, `Source`, `Station`, `Sensor`, and `Relocation`. The Pydantic
+models reject extra fields. Use `Observation.model_json_schema()` for the
+JSON schema and `model_dump(mode="json")` for JSON-compatible output.
 
-- Conservar raw_fields, value_raw, parameter_raw, unit_raw y time_raw sin transformación.
-- value solo existe cuando value_status=finite. Censura, ausencias, códigos sin interpretar y
-  no finitos se distinguen; cero sigue siendo un número. No se impone signo por intuición.
-- provenance identifica fuente, SHA-256 y número de registro (CSV: encabezado=1) o fila/hoja XLSX.
-- station_id y sensor_id son nulos hasta resolver identidad; un nombre de punto no prueba permanencia.
-- observed_at conserva el timestamp publicado con zona/evidencia aunque la posición del intervalo
-  sea desconocida; no implica inicio/fin. Es opcional y compatible con registros v1 anteriores.
-- start/end son instantes con zona, evidencia y fin posterior. Los relojes hipotéticos se conservan
-  fuera de estos campos en diagnósticos separados. available_at no se inventa desde la fecha medida.
-- quality=unknown no equivale a valid. kind distingue measured, derived, modeled, reanalysis,
-  forecast e imputed; derived/imputed requieren parent_ids. No se habilita imputación por definirla.
-- Station conserva coordenadas originales; latitud/longitud requieren par y evidencia de conversión.
-  Relocation permite fecha desconocida, pero exige evidencia. Source separa licencia y pruebas de derechos.
+## Values and original records
 
-Los adaptadores #13/#30 deben conservar el contexto de campaña en raw_fields y evitar homologaciones
-implícitas. Validar el contrato no confirma unidad, reloj, derechos ni elegibilidad de #11. Este
-incremento no normaliza fuentes masivas ni cambia las interfaces existentes de Cristopher.
+Keep `raw_fields`, `value_raw`, `parameter_raw`, `unit_raw`, and
+`time_raw` as supplied. Only `value_status="finite"` carries a numeric
+`value`. The statuses `censored`, `missing`, `unresolved`, and
+`nonfinite` preserve distinct cases. Zero remains a numeric value.
+Apply sign or detection-limit rules only when the source supports them.
 
-Verificación: tests/test_observation_schema.py; make check, make build y make audit.
+`provenance` records the source, the original SHA-256 checksum, and a
+record number. Count the CSV header as row 1. For an Excel workbook,
+preserve the worksheet and row. Preserve campaign context in
+`raw_fields`. Use `parent_ids` to trace derived and imputed observations
+to their inputs.
+
+## Time, quality, and identity
+
+`observed_at` can hold a published timestamp with its time zone and
+supporting evidence. Leave it null if the clock can't be interpreted.
+An observed timestamp can exist while the interval boundaries remain
+unknown. Set `start` and `end` only when supported, with an end after
+the start. Record `available_at` only when publication evidence exists.
+
+Keep `quality="unknown"` until evidence supports a quality judgment.
+The `kind` field distinguishes measured, derived, modeled, reanalysis,
+forecast, and imputed values. The schema can represent imputed values. The
+Lima benchmark uses complete observed windows.
+
+Leave `station_id` and `sensor_id` unresolved when names are the only
+identity evidence. `Station` retains original coordinates and requires
+evidence for an interpreted latitude-longitude pair. `Relocation` accepts
+an unknown date and requires evidence of the relocation. `Source`
+records a license separately from evidence of data rights.
+
+Model validation checks structure and consistency. Review units, clocks,
+rights, and benchmark eligibility against source evidence.
+[Schema tests](../../tests/test_observation_schema.py) ·
+[Historical SENAMHI policy (Spanish)](../decisions/005-senamhi-operating-policy.md)

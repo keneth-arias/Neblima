@@ -1,64 +1,61 @@
-# Arquitectura inicial de Neblima
+# Neblima architecture
 
-Neblima tendrá una secuencia reproducible de descarga, revisión y preparación de observaciones.
-Un conector mínimo para TimeNet convertirá las versiones aprobadas usando las API oficiales de TimeF.
-Están implementados el entorno local, catálogo, diagnóstico y adquisición acotada de #6.
-Lightpanda consulta páginas/recursos web; la CLI registra originales o consulta API públicas explícitas.
-SENAMHI se preserva localmente; no hay todavía normalización ni procesamiento científico de producción.
+Neblima turns source files into auditable hourly forecasts. The core uses local
+files, the `airaware` Python package, and a separate TimeNet environment. The
+[public demo](https://neblima.orbitly.lat/) presents a station snapshot and
+retrospective results.
 
-## Componentes actuales
+## Data flow
 
-- `src/airaware/catalog.py`: contrato de fuentes con Pydantic y lectura segura de YAML.
-  Un valor nulo indica información desconocida.
-- `src/airaware/cli.py`: catálogo, entorno y entrada al grupo acquire; errores sin valores de configuración.
-- `src/airaware/acquisition/`: contrato, validación de formatos, almacenamiento atómico, transporte API
-  y CLI; [guía y límites](docs/acquisition.md). La red está separada de la normalización.
-- `src/airaware/profiling/`: lectura local verificada, perfiles Parquet por fuente/estación/señal
-  y tokens; [metodología](docs/profiling.md). No convierte datos al esquema normalizado.
-- `configs/sources.yaml`: 38 recursos con evidencia de revisión y bloqueos conservados.
-- `configs/upstream.lock.json`: revisiones externas inspeccionadas; no instala el SDK.
-- `uv.lock`: dependencias exactas del proyecto y de desarrollo. Python se fija por separado.
-- `.github/workflows/ci.yml`: instalación, controles, generación de paquetes y auditoría de dependencias.
+Each stage has a local input and output. Acquisition is the network boundary.
+The core preparation stages operate on the files and metadata already on disk.
 
-## Flujo propuesto de datos
+| Stage | Inputs and outputs |
+| --- | --- |
+| Discover | Validate the resources and evidence in `configs/sources.yaml` with `airaware catalog validate`. |
+| Acquire | Import authorized local files or retrieve explicit public resources through `airaware acquire`. Store original bytes under `raw/` and record their origin and SHA-256 checksum. |
+| Profile and compare | Use DuckDB to inspect coverage, units, raw tokens, and missingness. Compare candidate series before choosing the initial source. |
+| Normalize | Read the original and its manifest. Write Parquet observations with preserved raw fields, interpreted values where justified, and row-level provenance. |
+| Curate and align | Apply the historical SENAMHI policy, retain links to exact duplicates, flag conflicts, and build an hourly grid that distinguishes missing values from missing rows. |
+| Build the benchmark | Keep complete histories and targets. Use fixed chronological cutoffs and purge any window that crosses a split boundary. |
+| Export and evaluate | Write and verify a TimeF release with TimeNet. Compare predictions against identical targets and select models using validation. |
+| Publish a demo snapshot | Prepare recent provider-chart readings and six point forecasts for eligible histories. The web renderer consumes a small JSON snapshot. |
 
-`raw` (archivos originales inmutables) → `staging` (lectura por fuente) → `normalized` (Parquet con
-esquema común) → `curated` (observaciones compatibles y sin duplicados) → `benchmarks` (ventanas y
-particiones fijas de evaluación) → `timef` (salida del escritor oficial).
+The [dataset card](docs/dataset-cards/lima-pm25-forecast.md) records the
+selected original, split boundaries, and counts. The [evaluation
+guide](docs/evaluation.md) explains the comparisons. Optional weather
+alignment has a separate input and availability contract. [Weather alignment
+report (Spanish)](reports/alignment/weather-gfs-union-real-20261120.md)
 
-`AIRAWARE_DATA_DIR` elige la carpeta de datos; por defecto es `./data` desde la ubicación actual.
-Ejecuta los comandos desde la raíz del repositorio. Git ignora los datos y conserva solo marcadores.
-Si usas otra carpeta, evita ubicarla dentro de un repositorio ajeno. Cada descarga deberá registrar
-URL, fecha, SHA-256, parámetros y derechos de uso.
+## Where the implementation lives
 
-## Decisiones
+The main workspace creates `raw/`, `staging/`, `normalized/`, `curated/`,
+`benchmarks/`, and `timef/` under `data/`. Commands that accept
+`AIRAWARE_DATA_DIR` can use a separate data root. Generated datasets and
+model weights belong in local storage.
 
-Usamos archivos locales y DuckDB para el perfilamiento (#10; [ADR-004](docs/decisions/004-duckdb-perfilamiento-local.md)).
-No se configura ahora un servicio de base de datos, orquestación, almacenamiento remoto ni modelos.
-Consulta [ADR-001](docs/decisions/001-local-first-foundation.md), la [política de idioma](docs/decisions/002-espanol-peru.md)
-y las [notas de TimeNet](docs/timenet-integration.md).
+| Path | Responsibility |
+| --- | --- |
+| [`src/airaware/`](src/airaware/) | Command-line interface, catalog and observation schemas, acquisition, profiling, curation, hourly alignment, and benchmark logic. |
+| [`configs/`](configs/) | Source catalog, acquisition specifications, normalization policies, benchmark options, and upstream revision pins. |
+| [`tools/timenet-smoke/`](tools/timenet-smoke/) | Isolated TimeNet environment, exporters, evaluation scripts, and reproducibility tests. |
+| [`tools/training/`](tools/training/) | Model probes, evaluation helpers, and plotting scripts. |
+| [`tools/web-refresh/`](tools/web-refresh/) | Capture, prediction, correction, and export of a public web snapshot. |
+| [`web/`](web/) | Standalone historical station map. |
+| [`metadata/`](metadata/) and [`reports/`](reports/) | Versioned acquisition receipts, run summaries, benchmark metrics, and evidence. The legacy CSVs are column templates. |
 
-## Contratos confirmados al ejecutar la tarea #1
+## Interfaces and invariants
 
-La [revisión de código](docs/timenet-integration.md) vincula cada contrato a un commit y una prueba
-fuente inspeccionada. Se mantiene la revisión 9bd1613 de TimeNet: no hay actualización de dependencias.
+The [observation contract](docs/methodology/observation-contract.md) defines
+raw values, missingness, time, units, and provenance. Preserve a measured zero
+as zero. Keep publication time unknown until evidence establishes it. Historical
+SENAMHI files and recent charts use different time metadata, as described in
+the [dataset card](docs/dataset-cards/lima-pm25-forecast.md) and
+[demo guide](docs/demo.md).
 
-- El conector externo separará download/download_async de convert/compose. La secuencia independiente
-  de Neblima no dependerá del registro de TimeNet para adquirir o normalizar sus fuentes.
-- Las series usarán origen y ejes temporales físicos verificados; OrdinalAxis de TSQA no se trasladará
-  directamente a mediciones con fecha/hora. El esquema y la granularidad final se fijan en #12.
-- Las tareas contendrán la partición; #19 debe comprobar que sus entradas/objetivos no se superpongan
-  indebidamente. El SDK no determina por nosotros los límites cronológicos ni la disponibilidad de variables.
-- La clasificación exige LabelSet. Los objetivos escalares pueden usar ScalarPredictionTask y unidad;
-  el pronóstico temporal y las respuestas usan sus tipos propios. No inventar parámetros de ventana.
-- Se preservarán los valores nulos y máscaras. La conversión a NumPy/PyTorch requiere preparación
-  explícita; no se reparan observaciones silenciosamente para satisfacer al formato.
-- Las bases por fuente seguirán separadas cuando difieran derechos o significado. La composición
-  fijará padres y mantendrá trazabilidad y archivos requeridos; su lectura/escritura se probará en #21–#23.
-- Los ayudantes de descarga de TimeNet son referencia para #6, no un reemplazo ya aprobado de los
-  manifiestos, controles de contenido, caché verificable y límites que necesita Neblima.
-
-No apareció una contradicción bloqueante en los contratos examinados. El código propio usa AGPL-3.0-only
-por decisión de Keneth; la inspección de MIT de TimeNet no concede derechos sobre datos externos.
-La contribución MIT externa necesita revisar autoría y permisos por separado según
-[ADR-003](docs/decisions/003-licencia-agpl-v3.md).
+The [upstream lock](configs/upstream.lock.json) records the inspected TimeNet
+and OpenTSLM revisions. TimeNet 0.12.0 runs in its own locked environment.
+The [TimeNet guide](docs/timef.md) shows how to build and verify a local
+release with the official reader. Source data and the software that processes
+it have separate terms. [Data attribution](DATA_ATTRIBUTION.md) ·
+[Licensing decision (Spanish)](docs/decisions/003-licencia-agpl-v3.md)

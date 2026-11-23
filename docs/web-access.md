@@ -1,27 +1,29 @@
-# Consulta web y descarga con Lightpanda
+# Inspect and download web resources
 
-Por decisión de Keneth, Lightpanda es el medio inicial para consultar páginas web y descargar
-sus recursos. Esta regla aplica al equipo completo: las carpetas locales no incluyen un navegador
-ni una sesión compartida. Quien no tenga Lightpanda debe configurar su propia instalación o pedir
-que Keneth ejecute la consulta y entregue la evidencia. La validación local y CI no lo necesitan.
-No agregar claves, cookies ni sesiones de otra persona al repositorio.
+Use Lightpanda first for source pages and web resources. Run it from your
+own environment, or ask the data lead to supply verified evidence from a
+separate environment. Local checks and continuous integration (CI) run
+without a browser session.
 
-1. Abrir la página oficial con Lightpanda goto y un tiempo de espera acotado (10–20 segundos).
-2. Registrar URL solicitada, URL final, fecha UTC, código HTTP si está disponible, título y resultado.
-   Inspeccionar tree/extract/evaluate para distinguir contenido, portada genérica y página de error.
-3. Resolver enlaces de recursos con links o extract. Un HTTP 200 de una portada no verifica el conjunto.
-4. Descargar un recurso autorizado con Lightpanda download. Crear primero la carpeta de destino;
-   si la herramienta solo admite un nombre relativo, mover luego el archivo a data/raw/<fuente>/.
-5. Mantener los bytes originales; registrar URL, tamaño real, SHA-256, formato observado y fecha.
-   Dejar nulo el código HTTP del archivo si download no lo expone. Verificar que no sea una página HTML.
-6. Si hay 403, 404, autenticación o tiempo agotado, registrar el canal y el motivo; conservar el candidato
-   y proponer una alternativa oficial. No eludir controles ni dar por caído el proveedor entero.
+1. Open the official page with a bounded timeout, typically 10 to 20
+   seconds. Record the requested and final URLs, time in Coordinated
+   Universal Time (UTC), status if available, title, and outcome.
+2. Inspect the page or accessible tree and resolve the actual resource
+   links. A provider landing page returning 200 only verifies access to
+   that page.
+3. Download an authorized resource with Lightpanda and keep the original
+   bytes. Record the source URL, byte count, SHA-256 checksum, observed file
+   format, and acquisition time. Leave the file status unknown if the tool
+   doesn't expose it. Check that data downloads contain the expected
+   format.
+4. Record the reason for blocked, missing, authenticated, or timed-out
+   resources. Keep the candidate and document an official alternative
+   without bypassing the provider's access controls.
 
-Las API y los archivos masivos requieren un descargador reproducible acotado (#6/#7), separado de la
-conversión local. Lightpanda sirve para resolver y comprobar páginas/recursos; esta decisión no instala
-una dependencia de navegador en el paquete Python ni en las pruebas sin servicios externos.
-No cambiar de herramienta silenciosamente cuando Lightpanda falle. Documentar cualquier alternativa.
-Las descargas grandes, cuentas nuevas y pagos mantienen las autorizaciones del plan inicial.
-
-El registro revisable de esta ejecución es metadata/source-access.json. Cada resultado tiene fecha y
-próxima acción; un acceso público no determina licencia ni permisos de redistribución.
+Use bounded and reproducible download commands for documented APIs and
+large files. Keep the download separate from local conversion. If
+Lightpanda fails, document any alternative you use. Follow the work plan
+for large downloads, new accounts, and payments. Keep keys, cookies, and
+other people's browser sessions out of the repository.
+[Acquisition reference](acquisition.md) ·
+[Tracked access evidence](../metadata/source-access.json)

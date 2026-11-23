@@ -1,102 +1,94 @@
-# Perfilamiento local de las fuentes
+# Profile local source files
 
-Este diagnóstico de #10 mide los originales adquiridos en #8/#9. No normaliza datos,
-selecciona estaciones ni declara series aptas para entrenamiento. El plan vigente está en
-[tasks/issue-10-plan.md](../tasks/issue-10-plan.md); los resultados reales, en
-[reports/profiling.md](../reports/profiling.md).
+The profiler measures structure, coverage, and missingness in original
+files that you already acquired. It produces diagnostic views before
+normalization and benchmark selection. [Measured results
+(Spanish)](../reports/profiling.md)
 
-## Ejecución
+## Run the profiler
 
-Desde la raíz, después de `make setup`, con los originales y manifiestos locales:
+From the repository root, after `make setup`, run the following commands
+with your local originals and acquisition manifests.
 
 ```bash
 uv run --locked airaware profile run --config configs/profiling.json
 uv run --locked airaware profile run --source senamhi-lima-csv
-AIRAWARE_DATA_DIR=/ruta/airaware-data uv run --locked airaware profile run
 ```
 
-`AIRAWARE_DATA_DIR` contiene `raw/` con la misma estructura de adquisición. Cada integrante
-puede usar su propio disco sin editar el plan. Los datos masivos no vienen con Git: conservar
-las rutas y manifiestos de adquisición o ejecutar primero su adquisición autorizada.
-El comando no necesita internet. Seleccionar una fuente desconocida falla antes de procesar.
-Una fuente que falla se informa en `errors`, permite terminar las demás y produce salida 1.
+Set `AIRAWARE_DATA_DIR` when your `raw/` folder is outside the default data
+root. Keep the acquisition structure intact. The command runs offline.
+An unknown source fails before processing. If a selected source fails,
+the output records it in `errors`, the other sources can finish, and the
+command exits with status 1.
 
-Cada ejecución publica una carpeta nueva en `reports/generated/profiling/`, ignorada por Git.
-No sobrescribe informes anteriores ni escribe dentro de `raw/`. Se comprueban SHA-256,
-columnas, delimitador y conteo esperado. Se vuelve a verificar el original antes de publicar.
-Una falla elimina solamente los temporales propios; no publica informes parciales.
+Each run writes a new folder under `reports/generated/profiling/`. The
+profiler checks checksums, columns, delimiters, and expected row counts.
+Before publishing, it verifies the original again. Failure cleans up
+only the current run's temporary files.
 
-DuckDB procesa columnas VARCHAR y exporta Parquet Zstandard. La lectura es estricta:
-no omite filas mal formadas y conserva cadenas vacías y marcadores. Usa dos hilos,
-`memory_limit=768MB`, temporales locales con límite de 10 GB y extensiones automáticas
-inactivas. El límite de memoria de DuckDB no es un límite absoluto del proceso; disponer
-además de espacio para la base de trabajo. La dependencia fijada es DuckDB 1.5.6.
+DuckDB reads strings, keeps empty fields and markers, rejects malformed
+rows, and writes Parquet with Zstandard compression. It uses two threads,
+a 768 MB working memory setting, a 10 GB temporary-storage limit, and
+disabled automatic extensions. The process may use more memory than the
+DuckDB setting. The environment pins DuckDB in [`uv.lock`](../uv.lock).
 
-## Archivos y denominadores
+## Inspect the output
 
-| Archivo | Una fila representa | Contenido |
+Use the source checksum and algorithm in each Parquet file to identify
+its inputs. Metrics are deterministic for the same inputs and software
+versions. Execution time and output folder name can vary.
+
+| File | Unit of analysis | Content |
 | --- | --- | --- |
-| datasets.parquet | Una fuente | Filas, columnas, repeticiones exactas, grupos de estación, fechas y estados de reloj |
-| stations.parquet | Un grupo provisional de estación | Nombre/contexto original, filas, series, fechas y relojes interpretables |
-| signals.parquet | Una señal en un contexto comparable | Celdas, distribución, conflictos, huecos y constantes |
-| tokens.parquet | Un token literal por contexto y dimensión | Marcadores/no numéricos y fechas/horas no interpretables |
-| manifest.json | Una ejecución de fuente | Entrada verificada, algoritmo, versión DuckDB, duración y hashes de Parquet |
+| `datasets.parquet` | Source | Rows, columns, exact repeats, station groups, dates, and clock states. |
+| `stations.parquet` | Provisional station group | Original name and context, rows, series, dates, and parsed clocks. |
+| `signals.parquet` | Signal within a context | Cells, distributions, conflicts, gaps, and constants. |
+| `tokens.parquet` | Raw token within a context and dimension | Marker and invalid numeric tokens, unparseable dates, and clocks. |
+| `manifest.json` | Source run | Input, algorithm, DuckDB version, runtime, and output checksums. |
 
-Todos los Parquet incluyen `source_id`, `input_sha256` y `algorithm`. El manifiesto y la
-configuración fijada permiten rastrear las entradas. El tiempo de ejecución y el nombre de
-carpeta cambian entre ejecuciones; las métricas son deterministas para entradas/versiones iguales.
+Provisional identity groups original names, coordinates, altitude, and
+location text. OEFA also uses zone and datum. Its `series_context` lists
+the assessment, averaging period, unit, analysis type, sample type, and
+origin. SENAMHI uses an empty context array. A station can have multiple
+contexts. The profiler keeps units and signal contexts separate.
 
-La identidad provisional agrupa nombre, coordenadas, altitud y ubicación textual. OEFA añade
-zona y datum. No se corrigen coordenadas ni se homologan estaciones (#14). `series_context`
-es un arreglo JSON de OEFA con este orden: evaluación, periodo, unidad, tipo de análisis,
-tipo de muestra y procedencia. SENAMHI usa `[]`. Una misma estación puede tener varios contextos.
-Las estadísticas y huecos se calculan por señal dentro de cada contexto, nunca mezclando unidades.
+The signal denominator is every row in the context. The exclusive
+counts `finite_count`, `empty_count`, `marker_count`,
+`invalid_numeric_count`, and `nonfinite_count` sum to `rows`. A marker
+in a wide OEFA file can mean the signal was outside that row's analysis.
+The profiler preserves literal tokens and recognizes `-`, `NA`, `N/A`,
+`ND`, `NAN`, and `NULL` after trimming for classification. Empty cells
+remain empty and decimal commas retain their original representation.
 
-Cada señal conserva como denominador todas las filas de su contexto. Las clases excluyentes son
-`finite_count`, `empty_count`, `marker_count`, `invalid_numeric_count` y `nonfinite_count`.
-Su suma es `rows`. Un marcador en una columna ancha de OEFA puede indicar que la señal no
-corresponde al análisis de esa fila: no se interpreta como porcentaje científico de pérdida.
-Los tokens se conservan literalmente; para clasificarlos se recortan espacios y reconocen
-`-`, `NA`, `N/A`, `ND`, `NAN`, `NULL`. No se inventa su significado institucional.
-No se convierte coma decimal ni se reemplazan vacíos por cero.
+## Interpret clock and quality diagnostics
 
-## Tiempo y calidad
+The profiler parses the original clock syntax. SENAMHI dates have eight
+digits and its times have up to six digits. OEFA accepts an ISO date and
+an `HH:MM:SS` clock, optionally prefixed with the spreadsheet date
+December 30 or 31, 1899. A standalone spreadsheet date doesn't establish
+midnight. Date extrema include valid dates without a parsed clock. Clock
+extrema describe the parsed subset and do not establish UTC coverage.
 
-Las fechas y horas se interpretan sintácticamente en el reloj original, sin zona confirmada.
-SENAMHI admite FECHA de ocho dígitos y HORA de hasta seis dígitos con ceros a la izquierda.
-OEFA admite fecha ISO y hora HH:MM:SS, opcionalmente precedida por fecha base 1899-12-30/31.
-Una hora que contiene solo una fecha base no se convierte en medianoche. `first_date/last_date`
-usan la fecha aun si falta hora; `first_parsed_clock/last_parsed_clock` cubren solo la parte
-con reloj interpretable. Nunca son una afirmación de cobertura UTC.
+`unparsed_start_rows` is partitioned in order into unparseable dates,
+missing clocks, and unsupported clocks. Token dimensions `start_date`,
+`start_clock`, and `signal` are separate views. Don't add their counts
+as distinct source rows.
 
-`unparsed_start_rows` se divide en fecha no interpretable, hora faltante y hora no admitida
-(con precedencia en ese orden). `tokens.parquet` separa dimensiones `start_date`, `start_clock`
-y `signal`; los tokens de fecha y reloj no se suman entre sí como filas diferentes.
+`exact_duplicate_rows` counts extra decoded rows with identical fields.
+`duplicate_extra_rows` counts repeated series, start, and end groups
+with a parseable start. `conflict_slots` counts groups with more than
+one distinct finite value. These counts leave all original rows intact.
 
-`exact_duplicate_rows` cuenta filas adicionales con todos los campos decodificados iguales.
-No prueba duplicación física de observaciones cuando faltan identificadores u horas.
-`duplicate_extra_rows` cuenta repeticiones de serie/inicio/fin con inicio interpretable;
-`conflict_slots` cuenta esos grupos con más de un valor finito distinto. No se elimina nada.
+Hourly metrics require the exact period `1 hora`, a finite value, an
+aligned start, and an unambiguous interval. `expected_hour_slots` spans
+the first through last admissible value, inclusive. `missing_hour_slots`
+subtracts distinct admissible hours, and `longest_gap_hours` measures
+the largest internal gap. Without an admissible value, these metrics
+stay null. Constant streaks end at gaps or conflicts.
 
-Las métricas horarias solo admiten SENAMHI y OEFA con PERIODO exactamente `1 hora`, valores
-finitos, inicio alineado y sin ambigüedad de intervalo. `expected_hour_slots` es la extensión
-inclusiva entre el primer y último punto admisible, no toda la fecha publicada por la fuente.
-`missing_hour_slots` resta instantes admisibles distintos; `longest_gap_hours` mide el mayor
-hueco interno. Sin puntos admisibles, las métricas son nulas. Las rachas constantes exigen
-horas consecutivas de igual valor y se interrumpen ante huecos o conflictos.
-
-Mínimo, máximo y cuantiles incluyen todas las celdas finitas, con ceros, negativos y repeticiones.
-`is_constant` es nulo si no hay valores finitos. `extreme_count` aplica la regla exploratoria
-Q1−3×IQR/Q3+3×IQR dentro del contexto. Las marcas no son límites sanitarios, no descartan
-picos válidos y no se usan para imputar o ajustar modelos: evitar fuga temporal en #19.
-
-Persisten las aclaraciones de unidades, reloj, intervalos y banderas SENAMHI (#43), y las
-limitaciones OEFA documentadas en [sources/oefa.md](sources/oefa.md). #11 debe decidir fuentes
-con esta evidencia; #12/#14/#18 definen esquema, identidad y ventanas más adelante.
-
-## Referencias de implementación
-
-- [Lectura CSV de DuckDB 1.5](https://duckdb.org/docs/1.5/data/csv/overview): esquema explícito,
-  conservación de cadenas y lectura estricta.
-- [Memoria de DuckDB 1.5](https://duckdb.org/docs/1.5/guides/performance/how_to_tune_workloads):
-  memoria de trabajo y operaciones que pueden exceder el límite del administrador de búferes.
+Numeric summaries include finite zeros, negatives, and repeats.
+`is_constant` is null without finite values. `extreme_count` applies
+the exploratory bounds Q1 − 3 × IQR and Q3 + 3 × IQR, where IQR is the
+interquartile range. These flags describe distributions and have no role
+in regulatory thresholds, model fitting, or imputation. [Comparison
+methods](comparison.md) · [Source limitations](sources.md)
