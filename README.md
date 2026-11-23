@@ -96,6 +96,13 @@ En la prueba externa, añadir PM10 redujo su propio error medio de 21,46 a 11,12
 en OpenAQ y de 20,98 a 10,92 µg/m³ en SENAMHI horario. Para PM2.5, la mejora media
 fue de 0,059 y 0,045 µg/m³, respectivamente. [Resultados de los dos proveedores](reports/models/prueba-externa-pm25-pm10.md).
 
+El [informe de validación de Gemma](reports/models/validacion-gemma.md) registra los
+ajustes de PM2.5 de 1B y 4B, sus puntos de control y las pruebas de recuperación.
+La actualización de 1B incluye el [benchmark por fuente](metadata/resultados-gemma-1b-20261123/benchmark.json)
+y el [pronóstico de seis horas para San Borja](metadata/resultados-gemma-1b-20261123/pronostico.json).
+El [registro de datos externos](metadata/lima-pm-externa-gemma-20261122.json) fija
+las copias locales de OpenAQ y SENAMHI y el corte de la captura operativa más reciente.
+
 La [adquisición meteorológica de #16](reports/acquisition/weather.md) habilita el análisis
 de una semana de pronósticos archivados. Su cobertura queda dentro de entrenamiento,
 por lo que la [alineación retrospectiva integrada](https://github.com/keneth-arias/airaware/pull/85)

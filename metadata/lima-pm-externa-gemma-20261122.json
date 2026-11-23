@@ -1,0 +1,60 @@
+{
+  "schema": "airaware-lima-pm25-external-refresh-v1",
+  "frozen_source_metadata": "metadata/lima-pm-externa-20261120.json",
+  "frozen_source_metadata_sha256": "64c571dad4317fc866cc4371bd7c879a4774a6c07011aa3cdf4aac9a0090208d",
+  "archives": {
+    "openaq": {
+      "dataset_id": "airaware/lima-pm25-pm10-openaq",
+      "dataset_version": "0.1.0",
+      "local_path": "data/benchmarks/lima-pm25-pm10-externa-v1/openaq",
+      "clock": "UTC",
+      "windows": 85538,
+      "pm25_target_pairs": 513228,
+      "latest_complete_target": "2026-09-15T11:00:00+00:00",
+      "timef_manifest_sha256": "182515abee87227bddb9e510c7f84309891b7afa0f8514fdb637708f6ecfa98c",
+      "local_manifest_sha256": "248a4861366d2a1b0281941d1128577045999d2950a277bac58cd0491d318edb",
+      "scorer_input_receipt_sha256": "f1a0f215d981dc72b454b86f78dc045efc92306a19ce89fcbdeb59c75f435517",
+      "cnn_receipt_sha256": "6377e9afd972f5a88a1954db82780fa3657c96337b51403ec86e8356c52c1a15"
+    },
+    "senamhi_horario": {
+      "dataset_id": "airaware/lima-pm25-pm10-senamhi-horario",
+      "dataset_version": "0.1.0",
+      "local_path": "data/benchmarks/lima-pm25-pm10-externa-v1/senamhi_horario",
+      "clock": "provider_wall_clock",
+      "windows": 102768,
+      "pm25_target_pairs": 616608,
+      "latest_complete_target": "2026-11-19T20:00:00",
+      "timef_manifest_sha256": "5b34f95f540c7ef3c2787040b09f54531535875918c1facc5f68723c4625bc42",
+      "local_manifest_sha256": "57c07194ed96e44b607c3322622050d3ed8c79eeb8fb45f0865984a1923e668c",
+      "scorer_input_receipt_sha256": "3a4cdedb2483902d7bd9d56f7a4ed7609827ac39bd006ab63695bc544d687188",
+      "cnn_receipt_sha256": "c25345cfbece47cff91c860fed905e53baefa30affb7f9e6290f918a02dc014f"
+    }
+  },
+  "openaq_refresh": {
+    "source": "https://openaq-data-archive.s3.amazonaws.com/",
+    "checked_at_utc": "2026-11-22T21:02:55.528073+00:00",
+    "location_count": 8,
+    "begin_day": "2026-10-30",
+    "end_day_inclusive": "2026-11-22",
+    "objects": 0,
+    "listing_receipt_sha256": "95f130d132c5201f58fdd975fa151ff6982cc61e650004298a61336329d03af8",
+    "latest_known_finite_pm_utc": "2026-10-29T00:00:00+00:00"
+  },
+  "senamhi_campo_de_marte": {
+    "local_path": "data/raw/campo-marte-operativo-20261120",
+    "parameter": "pm25",
+    "observation_timezone": null,
+    "scoring_role": "operational_only",
+    "snapshots": 40,
+    "counts": {
+      "first_value": 112,
+      "revision": 0,
+      "withdrawn": 0
+    },
+    "first_finite_provider_hour": "2026-11-18T00:00:00",
+    "last_finite_provider_hour": "2026-11-22T15:00:00",
+    "latest_capture_utc": "2026-11-22T20:09:01.857788+00:00",
+    "latest_capture_receipt_sha256": "199835360b408fce05cc45f3c0857c955eccfd351ff07b080af5b54e1349b7e2",
+    "latest_chart_sha256": "dc4f4fa2861a60b389a9d8cb1e4bb93a2f79486284551df130cddcf7563df68e"
+  }
+}

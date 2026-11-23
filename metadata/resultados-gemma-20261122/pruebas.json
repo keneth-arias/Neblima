@@ -1,0 +1,91 @@
+{
+  "schema": "airaware-gemma-test-results-v1",
+  "report_date": "2026-11-22",
+  "airaware": {
+    "verified_commit": "cd83ce01a1535252f3c02759e3c4136ed943bcdc",
+    "local_commands": {
+      "make check": {
+        "passed": 576,
+        "python": "3.13.13"
+      },
+      "make test-timef-offline": {
+        "passed": 88
+      },
+      "make build": {
+        "status": "passed"
+      },
+      "make audit": {
+        "status": "passed"
+      }
+    },
+    "github": {
+      "quality_python_3_11": "passed",
+      "quality_python_3_13_13": "passed",
+      "audit": "passed"
+    }
+  },
+  "gemma_1b": {
+    "opentslm_forecast_suite": {
+      "commit": "1bc3cb17cf431dd2d13e8632ff939d3406597096",
+      "passed": 90
+    },
+    "synthetic_recovery": {
+      "step": 500,
+      "checkpoint_state_exact": true,
+      "learning_curve_exact": true,
+      "synthetic": true,
+      "verified_unique_loss_steps_per_run": 500,
+      "fresh_inference": {
+        "both_fresh_restores_exact": true,
+        "horizons": 6,
+        "windows": 5
+      }
+    },
+    "bilingual": {
+      "cases": 8,
+      "reference_tokens": 43,
+      "repeat_max_abs_nll": 0.0,
+      "restored_max_abs_nll": 0.0,
+      "greedy_ids_match": true,
+      "text_forecast_text_exact": true
+    },
+    "optimizer_follow_up": {
+      "synthetic": true,
+      "optimizer_recipe": "warmup-grouped",
+      "updates_verified": 500,
+      "checkpoint_state_exact": true,
+      "learning_curve_exact": true,
+      "resume_checkpoint": "19:ab88997398305e8fd12a0fc7770101987c9b55820fdf5c3ec3f22834dd4f1eea",
+      "qualification_sha256": "f86d4e7024722c26ccaf4c6ffdddd959ac76582a98e18e8da5627bdba3762885"
+    }
+  },
+  "flamingo_4b_v5": {
+    "bilingual_baseline": {
+      "status": "completed",
+      "reference_cases": 2,
+      "verified_receipt_files": 4,
+      "repeat_max_abs_nll": 0.0,
+      "complete_receipt_sha256": "bc9a61e7dd88685b96c97737e9081f4f82482abafccc78e2a02e781f5a3c2654"
+    },
+    "replay": {
+      "synthetic": true,
+      "verified_updates": 500,
+      "restored_step": 2,
+      "resume_checkpoint": "2:e3edae3927a0bef39f1ca58aca9d0dfbdf5167611977dce9796d90dcb5b19c87",
+      "terminal_step": 500,
+      "matching_evaluation_steps": [
+        0,
+        500
+      ],
+      "matching_horizons": 6,
+      "matching_tensor_counts": {
+        "model": 138,
+        "optimizer": 414,
+        "rng": 2
+      },
+      "loss_logging_gaps": 0,
+      "learning_rate_logging_gaps": 0,
+      "comparison_sha256": "485a9bd36dbc7887413c8dbe00c036866fbd6d41954774337f32450102e69618"
+    }
+  }
+}
