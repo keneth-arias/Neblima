@@ -26,7 +26,10 @@ make doctor
 make check
 ```
 
-En otra computadora, clona el repositorio público y sigue CONTRIBUTING.md.
+En una computadora nueva, ejecuta `git clone https://github.com/keneth-arias/Neblima.git`,
+entra a la carpeta `Neblima` y sigue [la guía de contribución](../CONTRIBUTING.md).
+Las copias de la tabla conservan sus rutas locales. Para actualizar el remoto de una copia
+que usa SSH, ejecuta `git remote set-url origin git@github.com:keneth-arias/Neblima.git`.
 El PR #36 ya está integrado. Las copias preparadas originalmente usaban
 `chore/platform-foundation`; cada integrante debe actualizar su propia copia a main cuando esté
 sin cambios pendientes, antes de empezar otra tarea:

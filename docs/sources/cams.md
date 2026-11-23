@@ -1,6 +1,6 @@
 # CAMS EAC4: investigación documental de información atmosférica complementaria
 
-Tarea: [#33 — Probar información atmosférica y satelital complementaria](https://github.com/keneth-arias/airaware/issues/33).
+Tarea: [#33 — Probar información atmosférica y satelital complementaria](https://github.com/keneth-arias/Neblima/issues/33).
 Revisión: 20/11/2026 UTC. Alcance: solo documentación oficial; sin descargas de datos ni
 muestras, sin cuentas nuevas y sin claves. Esta entrega investiga la fuente y propone; la
 implementación de adquisición espera #17/#25 y el catálogo (`configs/sources.yaml`) y el
@@ -41,7 +41,7 @@ contenidos después de la fecha de cada fila.
 CAMS produce dos líneas globales de composición atmosférica que no deben mezclarse: los
 **pronósticos globales** (modelado en tiempo casi real, corridas 00/12 UTC, grilla 0,4°×0,4°,
 cobertura declarada desde 2015) y el **reanálisis EAC4** (pasado consolidado con asimilación,
-grilla 0,75°×0,75°, desde 2003). Para AirAware el candidato es EAC4: ofrece historia
+grilla 0,75°×0,75°, desde 2003). Para Neblima el candidato es EAC4: ofrece historia
 compatible con las ventanas del benchmark (2015) y cobertura global que incluye Lima. La
 cuenta del Atmosphere Data Store (ADS) es obligatoria para descargar y está pendiente de
 autorización de Keneth, igual que la clave de OpenAQ en #116: sin ella no hay evidencia de

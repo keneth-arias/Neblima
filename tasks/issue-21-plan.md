@@ -5,7 +5,7 @@ Los dos paquetes instalados declaran el commit
 `9bd1613019ee61fbc52e02106a1a45990ead7a54` en direct_url.json.
 La [revisión de interfaces](../docs/timenet-integration.md) es la referencia para la implementación.
 El alcance de datos sigue la [política aprobada](../docs/decisions/005-senamhi-operating-policy.md).
-El seguimiento está en [#21](https://github.com/keneth-arias/airaware/issues/21).
+El seguimiento está en [#21](https://github.com/keneth-arias/Neblima/issues/21).
 
 ## Entrega 1 · Ida y vuelta con una muestra sintética
 
@@ -22,7 +22,7 @@ sin red. Archivos previstos: src/airaware/timenet/, tools/timenet-smoke/ y prueb
 ## Entrega 2 · Adaptar la salida real de #13 y verificar una muestra acotada
 
 Con el contrato Parquet de #13 disponible, cotejar columnas, tipos, particiones, manifiesto y
-rechazos. Verificar integridad antes de convertir. Reutilizar adquisición de AirAware para
+rechazos. Verificar integridad antes de convertir. Reutilizar adquisición de Neblima para
 obtener referencias locales. Mantener convert determinista, sin descargas, leyendo solo la
 muestra seleccionada y preservando procedencia, hash, identificación provisional y versión
 de la política. Probar archivo ausente, hash incorrecto y rechazo trazable de conflictos de

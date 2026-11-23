@@ -1,6 +1,6 @@
 # Tarea #3: inventario de fuentes ambientales
 
-Responsable: Keneth. Depende de #2 (cerrada). Entrega en [PR #41](https://github.com/keneth-arias/airaware/pull/41).
+Responsable: Keneth. Depende de #2 (cerrada). Entrega en [PR #41](https://github.com/keneth-arias/Neblima/pull/41).
 
 ## Plan ejecutado
 

@@ -45,13 +45,13 @@ Contrato consultado el **2026-11-20 (UTC)** en la revisión fijada
 puntual y de solo lectura de dos archivos; no se modificó la interfaz externa ni se instaló
 timenet en el paquete principal.
 
-| Campo de AirAware | Contrato TimeNet | Evidencia fijada |
+| Campo de Neblima | Contrato TimeNet | Evidencia fijada |
 | --- | --- | --- |
 | `prompt` | `AnswerTask.prompt` (texto de la pregunta) | [types/tasks.py, AnswerTask](https://github.com/OpenTSLM/TimeNet/blob/9bd1613019ee61fbc52e02106a1a45990ead7a54/packages/timenet/src/timenet/types/tasks.py#L436) |
 | `answer` | `AnswerTask.targets` como tupla de un solo texto | [types/tasks.py, AnswerTask](https://github.com/OpenTSLM/TimeNet/blob/9bd1613019ee61fbc52e02106a1a45990ead7a54/packages/timenet/src/timenet/types/tasks.py#L436) |
 | `SyntheticSeries.values` | valores de la `Signal` dentro del `Record` que forma `AnswerTask.inputs` | [conector TSQA](https://github.com/OpenTSLM/TimeNet/blob/9bd1613019ee61fbc52e02106a1a45990ead7a54/packages/timenet-connectors/src/timenet_connectors/datasets/chengsenwang/tsqa/connector.py#L1) |
 | `family` | anotación del `Record` con la convención de TSQA (`Annotation` con clave `task`) | [conector TSQA](https://github.com/OpenTSLM/TimeNet/blob/9bd1613019ee61fbc52e02106a1a45990ead7a54/packages/timenet-connectors/src/timenet_connectors/datasets/chengsenwang/tsqa/connector.py#L1) |
-| `question_id`, `observation_ids` | trazabilidad propia de AirAware; sin equivalente obligatorio en `AnswerTask` | — |
+| `question_id`, `observation_ids` | trazabilidad propia de Neblima; sin equivalente obligatorio en `AnswerTask` | — |
 | `window_start`, `window_end_exclusive` | TSQA no modela ventanas: la ventana queda en el texto y en estos campos; no se inventan `horizon`/`lookback` de `ForecastingTask` | [types/tasks.py](https://github.com/OpenTSLM/TimeNet/blob/9bd1613019ee61fbc52e02106a1a45990ead7a54/packages/timenet/src/timenet/types/tasks.py#L485) |
 | `split` | pertenece a `Task` en TimeNet; esta entrega no asigna partición; la estratificada 80/10/10 con semilla 42 de TSQA no sirve como separación temporal de Lima | [conector TSQA](https://github.com/OpenTSLM/TimeNet/blob/9bd1613019ee61fbc52e02106a1a45990ead7a54/packages/timenet-connectors/src/timenet_connectors/datasets/chengsenwang/tsqa/connector.py#L1) |
 
@@ -85,7 +85,7 @@ la separación de los objetivos de pronóstico.
 
 ## Licencias y pendiente
 
-El código es propio de AirAware bajo **AGPL-3.0-only** (LICENSE y NOTICE). La serie es
+El código es propio de Neblima bajo **AGPL-3.0-only** (LICENSE y NOTICE). La serie es
 sintética: no tiene licencia de datos de terceros ni atribución externa. La versión con
 datos reales SENAMHI queda **pendiente** hasta acreditar trazabilidad de derechos compatible
 con la redistribución; ver la [atribución del original](../../DATA_ATTRIBUTION.md) y la

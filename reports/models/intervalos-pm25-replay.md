@@ -6,7 +6,7 @@ El exportador tomó los archivos univariados de #28 de entrenamiento, validació
 
 ## Reproducción desde las matrices de #28
 
-Desde la raíz de AirAware, ejecutar el comando con la carpeta original de #28 y una carpeta nueva. Las tres huellas se comprueban contra los [insumos de entrenamiento y selección](../../configs/training.yaml) y el [recibo público de la prueba de #28](../../metadata/qwen-heldout-lima.json).
+Desde la raíz de Neblima, ejecutar el comando con la carpeta original de #28 y una carpeta nueva. Las tres huellas se comprueban contra los [insumos de entrenamiento y selección](../../configs/training.yaml) y el [recibo público de la prueba de #28](../../metadata/qwen-heldout-lima.json).
 
 ```sh
 uv run --project tools/timenet-smoke --locked python tools/timenet-smoke/replay_episode_intervals.py "$origen_qwen_v1" "$salida"

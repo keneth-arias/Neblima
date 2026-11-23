@@ -6,7 +6,7 @@
 
 Revisión: 17/11/2026 UTC, Keneth. Evidencia para #11/#43; no cambia reglas ni originales.
 Registro numérico reproducido: [metadata-methods-review.json](../../metadata/metadata-methods-review.json).
-Se leyó código externo, sin ejecutarlo ni instalar sus requisitos en AirAware. No se copió su código.
+Se leyó código externo, sin ejecutarlo ni instalar sus requisitos en Neblima. No se copió su código.
 
 ## SENAMHI: referencia externa identificada
 
@@ -23,7 +23,7 @@ construye una grilla horaria completa por estación, distingue cobertura de medi
 para medias diarias. Exige 18 horas para conservar una media diaria. Es útil como método candidato
 para #20; no convierte una historia incompleta en una ventana completa para #11/#18.
 
-Sus denominadores diarios incluyen horas del calendario completo; AirAware limita ciertos diagnósticos
+Sus denominadores diarios incluyen horas del calendario completo; Neblima limita ciertos diagnósticos
 al primer/último punto admisible. Comparar porcentajes exige igualar denominadores. Sus coordenadas
 se toman del primer registro por nombre: no sustituye la identidad provisional ni un historial de #14.
 
@@ -31,10 +31,10 @@ se toman del primer registro por nombre: no sustituye la identidad provisional n
 
 - La hora se obtiene dividiendo el campo por 10 000 y truncando; no valida minutos/segundos como
   nuestro parser. El archivo actual está alineado a horas, pero el método ocultaría otros valores futuros.
-- Convierte errores numéricos a ausentes y anula negativos. AirAware conserva tokens y banderas;
+- Convierte errores numéricos a ausentes y anula negativos. Neblima conserva tokens y banderas;
   este archivo no tenía negativos finitos, pero la política no debe generalizarse a otras fuentes.
 - Resuelve repeticiones comparando las tres señales juntas y descarta toda la estación/hora si algún
-  vector difiere. Eso puede retirar una señal inequívoca por conflicto en otra. AirAware distingue
+  vector difiere. Eso puede retirar una señal inequívoca por conflicto en otra. Neblima distingue
   conflictos por señal y conserva los originales; no copiar sus conteos como si fueran nuestra política.
 - El README sitúa los 42 grupos conflictivos el 1 de mayo de 2024. La reproducción local encontró
   **35 el 01/05 (00–04 h, siete estaciones) y siete el 30/05 (00 h)**. El código cuenta grupos sin

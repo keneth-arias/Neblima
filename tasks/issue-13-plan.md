@@ -1,7 +1,7 @@
 # Plan de #13: normalización SENAMHI a Parquet validado y particionado
 
 Responsable: Cristopher (@qriqs). Revisión de contratos y decisiones científicas: Keneth
-(@keneth-arias). Rastreador: [issue #13](https://github.com/keneth-arias/airaware/issues/13).
+(@keneth-arias). Rastreador: [issue #13](https://github.com/keneth-arias/Neblima/issues/13).
 Rama de esta entrega documental: `docs/issue-13-senamhi-normalization-plan`.
 Base revisada: `origin/main` en `081a3ec`, con PR #69 integrado.
 

@@ -8,7 +8,7 @@ Estado revisado el 15/11/2026; vuelve a verificar accesos antes de depender de e
 | Git y GitHub CLI | Instalados para los tres usuarios; solo Keneth está autenticado | Cada integrante configura su propia cuenta; no compartir tokens |
 | uv | Versión 0.11.20 disponible para todos | En otra máquina, seguir la [instalación oficial](https://docs.astral.sh/uv/getting-started/installation/) |
 | Python | 3.13.13 instalado por separado para cada usuario; versión fijada en .python-version | `uv python install` y `make setup` |
-| Repositorio | Público: keneth-arias/airaware | Subir código, documentación y solo muestras pequeñas permitidas |
+| Repositorio | Público: keneth-arias/Neblima | Subir código, documentación y solo muestras pequeñas permitidas |
 | Tablero | 35 tareas; 18 reservadas para el equipo y 17 a cargo de Keneth | Mantener prioridades, dependencias y bloqueos |
 | GitHub Actions | Pasaron controles de Python 3.11, Python 3.13.13 y auditoría | Conservar los tres controles aprobados |
 | Datos locales | Carpetas independientes por integrante | Revisar espacio disponible antes de descargar; usar AIRAWARE_DATA_DIR si corresponde |

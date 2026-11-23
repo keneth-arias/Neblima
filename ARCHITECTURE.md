@@ -1,6 +1,6 @@
-# Arquitectura inicial de AirAware
+# Arquitectura inicial de Neblima
 
-AirAware tendrá una secuencia reproducible de descarga, revisión y preparación de observaciones.
+Neblima tendrá una secuencia reproducible de descarga, revisión y preparación de observaciones.
 Un conector mínimo para TimeNet convertirá las versiones aprobadas usando las API oficiales de TimeF.
 Están implementados el entorno local, catálogo, diagnóstico y adquisición acotada de #6.
 Lightpanda consulta páginas/recursos web; la CLI registra originales o consulta API públicas explícitas.
@@ -44,7 +44,7 @@ La [revisión de código](docs/timenet-integration.md) vincula cada contrato a u
 fuente inspeccionada. Se mantiene la revisión 9bd1613 de TimeNet: no hay actualización de dependencias.
 
 - El conector externo separará download/download_async de convert/compose. La secuencia independiente
-  de AirAware no dependerá del registro de TimeNet para adquirir o normalizar sus fuentes.
+  de Neblima no dependerá del registro de TimeNet para adquirir o normalizar sus fuentes.
 - Las series usarán origen y ejes temporales físicos verificados; OrdinalAxis de TSQA no se trasladará
   directamente a mediciones con fecha/hora. El esquema y la granularidad final se fijan en #12.
 - Las tareas contendrán la partición; #19 debe comprobar que sus entradas/objetivos no se superpongan
@@ -56,7 +56,7 @@ fuente inspeccionada. Se mantiene la revisión 9bd1613 de TimeNet: no hay actual
 - Las bases por fuente seguirán separadas cuando difieran derechos o significado. La composición
   fijará padres y mantendrá trazabilidad y archivos requeridos; su lectura/escritura se probará en #21–#23.
 - Los ayudantes de descarga de TimeNet son referencia para #6, no un reemplazo ya aprobado de los
-  manifiestos, controles de contenido, caché verificable y límites que necesita AirAware.
+  manifiestos, controles de contenido, caché verificable y límites que necesita Neblima.
 
 No apareció una contradicción bloqueante en los contratos examinados. El código propio usa AGPL-3.0-only
 por decisión de Keneth; la inspección de MIT de TimeNet no concede derechos sobre datos externos.

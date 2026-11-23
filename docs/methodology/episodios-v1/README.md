@@ -10,7 +10,7 @@ Estas cinco ventanas son inventadas. Los dos umbrales son constantes ilustrativa
 | w4 | Falta +3 h, se supera el umbral en +6 h | Indeterminado bajo la regla de seis objetivos completos. |
 | w5 | Misma historia y mismos objetivos que w1, umbral de otra estación | Negativo. |
 
-Verificar los resultados con `uv run --locked pytest -q tests/test_ejemplo_episodios.py` en la raíz de AirAware. Para preparar el archivo de inferencia del cabezal directo, ejecutar desde esa raíz con una ruta de salida nueva.
+Verificar los resultados con `uv run --locked pytest -q tests/test_ejemplo_episodios.py` en la raíz de Neblima. Para preparar el archivo de inferencia del cabezal directo, ejecutar desde esa raíz con una ruta de salida nueva.
 
 ```sh
 uv run --project tools/timenet-smoke --locked python - <<'PY'

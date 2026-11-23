@@ -78,7 +78,7 @@ Texto propuesto:
 > disponibilidad en tiempo real ni uso regulatorio diario; la unidad µg/m³ es una
 > inferencia aceptada y la calidad individual de cada lectura sigue desconocida.
 >
-> Código y evidencia: https://github.com/keneth-arias/airaware
+> Código y evidencia: https://github.com/keneth-arias/Neblima
 > Datos: SENAMHI, base Monitoreo de los contaminantes del aire en Lima Metropolitana
 > (ODC-By-1.0). Derivaciones y pronósticos: equipo Cuybernautas.
 >
@@ -116,7 +116,7 @@ Texto propuesto:
 >   persistencia obtiene un MAE menor por 2,03 µg/m³.
 > - Alcance retrospectivo sobre las horas publicadas; sin tiempo real ni uso regulatorio.
 >
-> Repositorio: https://github.com/keneth-arias/airaware
+> Repositorio: https://github.com/keneth-arias/Neblima
 > Atribución obligatoria: datos de SENAMHI (ODC-By-1.0); derivaciones y pronósticos del
 > equipo Cuybernautas.
 

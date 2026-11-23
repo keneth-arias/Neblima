@@ -11,8 +11,8 @@ dejar aquí su fecha y comprobante. Requisitos oficiales y plazo: [docs/hackatho
 
 | Enlace o material | Referencia | Estado | Uso previsto en la entrega |
 | --- | --- | --- | --- |
-| Repositorio del proyecto | <https://github.com/keneth-arias/airaware> | Listo (público) | Enlace opcional que admite la página oficial; no equivale por sí solo a una entrega |
-| PR interno de evaluación reservada | <https://github.com/keneth-arias/airaware/pull/97> | Fusionado | Soporte técnico de los resultados que muestra la presentación |
+| Repositorio del proyecto | <https://github.com/keneth-arias/Neblima> | Listo (público) | Enlace opcional que admite la página oficial; no equivale por sí solo a una entrega |
+| PR interno de evaluación reservada | <https://github.com/keneth-arias/Neblima/pull/97> | Fusionado | Soporte técnico de los resultados que muestra la presentación |
 | Ficha del conjunto `airaware/lima-pm25-forecast@0.1.0` | [docs/dataset-cards/lima-pm25-forecast.md](../dataset-cards/lima-pm25-forecast.md) | Listo | Fuente de cobertura, particiones, licencia y límites del conjunto |
 | Informe de la prueba cronológica reservada | [reports/models/prueba-reservada-lima.md](../../reports/models/prueba-reservada-lima.md) | Listo | Métricas de la presentación (MAE 4,994 frente a 6,446 µg/m³; mejoras 22,52 % y 6,34 %) |
 | Evaluación externa de PM2.5 y PM10 | [Informe por fuente, contaminante y horizonte](../../reports/models/prueba-externa-pm25-pm10.md) | Listo | Evidencia complementaria sobre el aporte del historial de PM10 en Lima |

@@ -2,7 +2,7 @@
 
 El [protocolo de Lima](../../configs/training/lima-directo-cohortes-v1.json) fija el manifiesto del entrenamiento histórico, los cortes horarios en tiempo universal coordinado (UTC) y las huellas de los identificadores. Los dos ajustes parten del mismo modelo base. Las ventanas de confirmación ya participaron en entrenamientos históricos. Se revisaron las curvas de entrenamiento y los resultados finales de selección de cuatro ajustes históricos. Para escoger los cortes nuevos se revisaron identificadores, fechas y cobertura por estación. La confirmación se reserva para comparar los nuevos checkpoints congelados.
 
-Desde la raíz de AirAware, generar una entrega en una carpeta local nueva. El primer argumento apunta a la carpeta que contiene el manifiesto histórico y `train/`.
+Desde la raíz de Neblima, generar una entrega en una carpeta local nueva. El primer argumento apunta a la carpeta que contiene el manifiesto histórico y `train/`.
 
 ```sh
 uv run --project tools/timenet-smoke --locked python tools/timenet-smoke/direct_cohorts.py "$bloques" "$salida"
