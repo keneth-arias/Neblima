@@ -29,7 +29,7 @@ Revisión del 17/11/2026; implementación propia, sin ejecutar notebooks ajenos 
 
 ## Límites encontrados al leer DataGabo
 
-El notebook carga aire.csv y ciclovias.csv locales en Latin-1. La copia SENAMHI de AirAware se
+El notebook carga aire.csv y ciclovias.csv locales en Latin-1. La copia SENAMHI de Neblima se
 lee con el contrato UTF-8 ya verificado; no se renombra ni descarga otra copia. El notebook no
 publica los CSV ni sus hashes, por lo que 577 794 filas y el nombre de origen son indicios de
 correspondencia, no prueba de igualdad de bytes como en la referencia de Cristhian.
@@ -37,7 +37,7 @@ correspondencia, no prueba de igualdad de bytes como en la referencia de Cristhi
 La limpieza usa dropna(how='all') sobre PM10/PM2_5/NO2, lo cual evita borrar una fila por faltar
 una sola señal. Sin embargo, el resumen final usa df_aire original, no df_aire_analisis. Aunque
 los promedios omiten nulos, no corrige duplicados ni conflictos ni mide calendario faltante.
-AirAware conserva todas las filas y aplica la política existente por señal para puntos diagnósticos.
+Neblima conserva todas las filas y aplica la política existente por señal para puntos diagnósticos.
 
 El README describe agregación anual, pero el groupby del cruce final agrupa solo por DISTRITO_NORM,
 sin FECHA/año: produce un promedio de todas las filas disponibles a lo largo del periodo. Se pondera
@@ -48,7 +48,7 @@ Las tablas annual/monthly sí separan año y estación, con denominadores y fech
 El inner join elimina distritos sin coincidencia con ciclovías y muestra seis distritos: no prueba
 que los demás tengan cero infraestructura ni cubre toda la ciudad. Se requerirían CSV, año, versión,
 licencia y auditoría de claves con left/anti joins antes de adoptar ese cruce. No se descargaron
-ciclovías para esta entrega; el objetivo de AirAware sigue siendo calidad del aire horaria.
+ciclovías para esta entrega; el objetivo de Neblima sigue siendo calidad del aire horaria.
 
 Las gráficas comparan concentraciones y kilómetros en un mismo eje numérico; magnitudes de unidades
 distintas no expresan una proporción física. Además, infraestructura de 2023 frente a contaminación

@@ -1,6 +1,6 @@
 # Primer paso de entrenamiento con PM2.5 de Lima
 
-Se ejecutó un paso de AdamW en una RTX 5070 Ti con el decodificador de texto de Qwen3.5-0.8B, el proyector temporal y el cabezal numérico de la [bifurcación de OpenTSLM](https://github.com/keneth-arias/OpenTSLM/pull/1). Los pesos publicados por Qwen tienen licencia Apache-2.0, la bifurcación usa MIT y la integración de AirAware usa AGPL-3.0-only. Los datos de SENAMHI conservan su licencia ODC-BY-1.0 y su [atribución](../DATA_ATTRIBUTION.md). [Revisión del modelo](https://huggingface.co/Qwen/Qwen3.5-0.8B/tree/2fc06364715b967f1860aea9cf38778875588b17).
+Se ejecutó un paso de AdamW en una RTX 5070 Ti con el decodificador de texto de Qwen3.5-0.8B, el proyector temporal y el cabezal numérico de la [bifurcación de OpenTSLM](https://github.com/keneth-arias/OpenTSLM/pull/1). Los pesos publicados por Qwen tienen licencia Apache-2.0, la bifurcación usa MIT y la integración de Neblima usa AGPL-3.0-only. Los datos de SENAMHI conservan su licencia ODC-BY-1.0 y su [atribución](../DATA_ATTRIBUTION.md). [Revisión del modelo](https://huggingface.co/Qwen/Qwen3.5-0.8B/tree/2fc06364715b967f1860aea9cf38778875588b17).
 
 ## Ventana y resultado
 
@@ -12,7 +12,7 @@ La pérdida normalizada fue 0,6275. El cambio máximo absoluto en el peso inspec
 
 ## Reproducir
 
-Desde la raíz de AirAware, preparar el entorno de TimeNet con `uv sync --project tools/timenet-smoke --locked`. El siguiente comando usa una copia local de la bifurcación en el commit fijado por [la configuración](../configs/upstream.lock.json). Para otras máquinas, clonar la bifurcación y descargar una vez la revisión del modelo según las [instrucciones del adaptador](https://github.com/keneth-arias/OpenTSLM/blob/20573a0f67f0f53bcd7d06a28869379e80d2d652/environments/forecast/README.md). El entrenamiento lee los pesos de la caché local y usa el entorno separado del lector de TimeNet.
+Desde la raíz de Neblima, preparar el entorno de TimeNet con `uv sync --project tools/timenet-smoke --locked`. El siguiente comando usa una copia local de la bifurcación en el commit fijado por [la configuración](../configs/upstream.lock.json). Para otras máquinas, clonar la bifurcación y descargar una vez la revisión del modelo según las [instrucciones del adaptador](https://github.com/keneth-arias/OpenTSLM/blob/20573a0f67f0f53bcd7d06a28869379e80d2d652/environments/forecast/README.md). El entrenamiento lee los pesos de la caché local y usa el entorno separado del lector de TimeNet.
 
 ```bash
 fork=/home/shared/github/keneth-arias/OpenTSLM

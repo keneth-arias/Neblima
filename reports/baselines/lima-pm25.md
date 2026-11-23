@@ -62,6 +62,6 @@ El SHA-256 del manifiesto TimeF de entrada es
 SHA-256 de predicciones `0897715db89a7bfdab00be6b327753a029a9db65c96f622f0200af8fc7f62412`.
 SHA-256 de métricas `9236a257a5ad8495b8b57c79d588178569c4b81f1afa012628f981a36bac1e8c`.
 
-Pasaron 347 pruebas de AirAware, el empaquetado y la auditoría de dependencias.
+Pasaron 347 pruebas de Neblima, el empaquetado y la auditoría de dependencias.
 Pasaron seis pruebas TimeF con red deshabilitada, entre ellas desfases de una hora y un
 día, selección de datos de entrenamiento y escalado indefinido para series constantes.

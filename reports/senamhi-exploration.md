@@ -29,7 +29,7 @@ Nuestra tabla conserva Carabayllo, que no figura en aquel cruce final con ciclov
 Estos números son promedios de filas disponibles de todo el histórico, conservando repeticiones
 para reproducir el cálculo de referencia. No son medias anuales ni promedios de toda la población
 distrital; cada señal tiene diferentes faltantes. Las unidades no se certifican por reproducir
-números externos. Las tablas horarias/diarias de AirAware sí resuelven conflictos por señal.
+números externos. Las tablas horarias/diarias de Neblima sí resuelven conflictos por señal.
 
 ## Cobertura y completitud sin imputación
 

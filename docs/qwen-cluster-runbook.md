@@ -4,7 +4,7 @@ El entrenamiento usa una imagen del perfil SkyPilot de ml-infra, un pod en `bm` 
 
 ## Preparar la entrada
 
-Montar la versión TimeF congelada y la revisión fijada de Qwen desde el almacenamiento local. Desde AirAware, después de instalar el entorno fijado de TimeNet, exportar dos archivos nuevos en la carpeta de insumos del volumen. Omitir `--sample` para exportar una partición completa.
+Montar la versión TimeF congelada y la revisión fijada de Qwen desde el almacenamiento local. Desde Neblima, después de instalar el entorno fijado de TimeNet, exportar dos archivos nuevos en la carpeta de insumos del volumen. Omitir `--sample` para exportar una partición completa.
 
 ```bash
 UV_OFFLINE=true uv run --project tools/timenet-smoke --locked \
@@ -61,7 +61,7 @@ LoRA híbrida verificó 114 proyecciones en las 24 capas del decodificador. En d
 
 ## Preparar la validación completa de #28
 
-La versión `qwen-pm25-v1` contiene todas las ventanas de entrenamiento y validación. Desde la raíz de AirAware, usar una carpeta nueva para conservar el piloto y verificar la referencia antes del ajuste.
+La versión `qwen-pm25-v1` contiene todas las ventanas de entrenamiento y validación. Desde la raíz de Neblima, usar una carpeta nueva para conservar el piloto y verificar la referencia antes del ajuste.
 
 ```bash
 inputs=data/benchmarks/qwen-pm25-v1

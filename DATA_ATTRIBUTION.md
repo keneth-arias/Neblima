@@ -9,14 +9,14 @@ Conjunto: **Monitoreo de los contaminantes del aire en Lima Metropolitana**.
 - Adquisición y fecha: metadata/senamhi-lima-download.json; decisión vigente:
   metadata/senamhi-normalization-decision.json, 17/11/2026.
 
-AirAware conserva el original e incorpora lecturas de fecha/hora UTC, unidades inferidas aceptadas
+Neblima conserva el original e incorpora lecturas de fecha/hora UTC, unidades inferidas aceptadas
 por el responsable, clasificación de tokens, control de duplicados y agregados derivados. Las futuras
 entregas normalizadas deben detallar sus cambios reales, versión de política y fecha de generación.
-SENAMHI no avala por ello las inferencias ni los resultados de AirAware.
+SENAMHI no avala por ello las inferencias ni los resultados de Neblima.
 
 Conservar este aviso, el enlace de licencia y la atribución de fuente en distribuciones de la base
 y derivados, incluyendo documentación de exportaciones y avisos accesibles desde aplicaciones.
-Mantener los avisos de origen aplicables. No atribuir a SENAMHI cambios realizados por AirAware.
+Mantener los avisos de origen aplicables. No atribuir a SENAMHI cambios realizados por Neblima.
 La licencia AGPL-3.0-only del código es independiente de la licencia de estos datos.
 No extender esta declaración a otros conjuntos OEFA o fuentes ajenas.
 
@@ -31,7 +31,7 @@ que conserva sus propios términos. La API gratuita no comercial se declara bajo
 (`configs/acquisition/weather-lima-sample-plan.json`); procedencia por recurso en
 `metadata/weather-acquisition.json` y evidencia en reports/alignment/weather-gfs-previous-day1.md.
 
-Open-Meteo no avala las inferencias ni los resultados de AirAware. La decisión de
+Open-Meteo no avala las inferencias ni los resultados de Neblima. La decisión de
 redistribución del proyecto permanece `unknown` en configs/sources.yaml mientras no exista una
 decisión explícita de integración; los valores permanecen bajo almacenamiento local. La
 licencia AGPL-3.0-only del código es independiente de estas licencias de datos.

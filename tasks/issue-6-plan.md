@@ -1,7 +1,7 @@
 # Plan de #6: adquisición atómica con trazabilidad
 
 Responsable: Keneth (@keneth-arias), liderazgo de datos y plataforma.
-Seguimiento y lista de trabajo: [#6](https://github.com/keneth-arias/airaware/issues/6).
+Seguimiento y lista de trabajo: [#6](https://github.com/keneth-arias/Neblima/issues/6).
 Dependencias: #2 y #4. La investigación #4 quedó cerrada con #42; las aclaraciones externas siguen en #43.
 Estado: plan aprobado por Keneth; implementación de #6 ejecutada y verificada.
 Entrega en PR #44; sin nuevas descargas SENAMHI/OEFA.

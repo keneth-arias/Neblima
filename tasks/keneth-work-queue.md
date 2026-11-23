@@ -1,6 +1,6 @@
 # Cola de trabajo de Keneth para TimeNet
 
-Estado al 18/11/2026. Las [asignaciones de GitHub](https://github.com/keneth-arias/airaware/issues?q=is%3Aissue%20is%3Aopen%20assignee%3Akeneth-arias)
+Estado al 18/11/2026. Las [asignaciones de GitHub](https://github.com/keneth-arias/Neblima/issues?q=is%3Aissue%20is%3Aopen%20assignee%3Akeneth-arias)
 dejan cuatro tareas abiertas con Keneth. El [manifiesto 24/6](issue-19-plan.md)
 conserva 237 397 ventanas de entrenamiento, 50 706 de validación, 50 789 de prueba
 y 313 purgas. #21–#25 cerraron con la [exportación TimeF](issue-22-plan.md), la
@@ -26,10 +26,10 @@ material preparado de los enlaces y autorizaciones pendientes.
   correspondencias sustentadas por identidad, equipo y vigencia.
 - **#43.** Registrar aclaraciones institucionales sobre intervalo, calidad, cambios de equipos
   y unidades. La consulta de seguimiento del 17/11 también se remitió a José Luis Rodríguez.
-- **#17.** Cristopher integró [la alineación meteorológica](https://github.com/keneth-arias/airaware/pull/85).
+- **#17.** Cristopher integró [la alineación meteorológica](https://github.com/keneth-arias/Neblima/pull/85).
   La muestra de #79 solo toca entrenamiento. El [plan de implementación](plan.md) registra
   el alcance del cruce y los requisitos de una evaluación posterior.
-- **#20.** Cristopher integró [la comprobación estructural de etiquetas](https://github.com/keneth-arias/airaware/pull/86).
+- **#20.** Cristopher integró [la comprobación estructural de etiquetas](https://github.com/keneth-arias/Neblima/pull/86).
   La prueba estructural de ventanas de 24 horas y la emisión de etiquetas tienen criterios propios.
 
 ## Integración de cada PR

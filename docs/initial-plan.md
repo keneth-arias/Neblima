@@ -1,4 +1,4 @@
-# AirAware Perú: ingeniería de conjuntos de datos ambientales temporales
+# Neblima Perú: ingeniería de conjuntos de datos ambientales temporales
 
 > Actualización del 17/11/2026: Keneth eliminó el requisito de cuatro estaciones/24 meses.
 > Para SENAMHI se adopta UTC por confirmación del responsable, unidades inferidas aceptadas y
@@ -540,7 +540,7 @@ data/
 ```
 
 Los módulos propuestos pueden ser archivos mientras sean pequeños, como catalog.py.
-Separar AirAware de la contribución mínima al repositorio externo de TimeNet.
+Separar Neblima de la contribución mínima al repositorio externo de TimeNet.
 
 ## 17. Comandos y experiencia de desarrollo
 
@@ -646,4 +646,4 @@ Producir un plan y dependencias antes de una implementación extensa.
 
 El primer resultado práctico debe ser una adquisición reproducible, un inventario completo y una
 comparación de calidad de SENAMHI Lima y OEFA Perú. Esas mediciones decidirán el contenido del primer
-conjunto TimeF de AirAware Perú.
+conjunto TimeF de Neblima Perú.

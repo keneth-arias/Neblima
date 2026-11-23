@@ -1,7 +1,7 @@
-# Plan de implementación de AirAware Perú
+# Plan de implementación de Neblima Perú
 
 Fuente: [plan inicial completo](../docs/initial-plan.md), adaptado al español del Perú.
-El estado vigente está en las [tareas de GitHub](https://github.com/keneth-arias/airaware/issues) y el
+El estado vigente está en las [tareas de GitHub](https://github.com/keneth-arias/Neblima/issues) y el
 [tablero](https://github.com/users/keneth-arias/projects/1). Este documento es un índice ordenado;
 distingue evidencia documental, descargas y resultados de modelos.
 
@@ -18,35 +18,35 @@ y los enlaces exigidos. La fecha oficial se registra en la guía del hackathon.
 
 | Tarea | Frente | Evidencia o condición para retomarla |
 | --- | --- | --- |
-| [#11](https://github.com/keneth-arias/airaware/issues/11) | Decisión aprobada | Para un analista ambiental de Lima, formular la pregunta retrospectiva: con 24 horas de PM2.5, ¿cuánto mejora el pronóstico de las seis horas siguientes frente a repetir la última medición? ADR-005 admite 339 205 ventanas solapadas en siete identidades provisionales antes de las particiones. Citar comparison-v3 y distinguir cobertura, desempeño medido y utilidad por validar. |
-| [#14](https://github.com/keneth-arias/airaware/issues/14) | Datos | Entregar una tabla auditable por señal con identidad provisional, fila de origen, duplicado exacto o conflicto y decisión. Seguir un caso desde el archivo original hasta la vista depurada y conciliar los conteos. |
-| [#15](https://github.com/keneth-arias/airaware/issues/15) | Datos | Mostrar una serie horaria en tiempo universal coordinado (UTC) con un cero observado, un valor nulo y una hora ausente. Verificar sus máscaras y conciliar horas utilizables y descartadas por estación. |
-| [#16](https://github.com/keneth-arias/airaware/issues/16) | Ampliación | Muestra fijada y verificada con #79. Se conservan las limitaciones de disponibilidad y derechos por producto. |
-| [#17](https://github.com/keneth-arias/airaware/issues/17) | Ampliación | El PR #85 integró la paridad de objetivos, el rechazo de emisiones tardías y las máscaras en pruebas. Queda por verificar la unión real y la disponibilidad horaria. Avance 20/11 (PR #117): matriz de verificación de la unión retrospectiva. La disponibilidad operativa por hora sigue pendiente de evidencia. |
-| [#18](https://github.com/keneth-arias/airaware/issues/18) | Datos | Preparar primero historias completas de 24 h y objetivos completos de 6 h según ADR-005. Conciliar ventanas antes de particionar con comparison-v3 y explicar diferencias por identidad, conflicto, hueco o paso. Los demás horizontes quedan identificados por configuración. |
-| [#19](https://github.com/keneth-arias/airaware/issues/19) | Evaluación | Congelar fechas de corte en UTC y un manifiesto de identificadores antes de seleccionar modelos. Documentar ventanas purgadas y demostrar con una prueba de frontera que ninguna hora de entrada u objetivo se comparte entre particiones para una serie. |
-| [#20](https://github.com/keneth-arias/airaware/issues/20) | Condicional | Integración estructural verificada con 324 463 ventanas 24/24 reales. Mantener abierta hasta acreditar la posición del intervalo y la calidad individual; solo entonces emitir etiquetas. Diferir etiquetas regulatorias diarias y métricas de episodios sin respaldo. Avance 20/11 (PR #113): antifuga etiquetas→entradas probada y reconciliación de descartes por serie; matriz en docs/methodology/event-labels.md. |
-| [#21](https://github.com/keneth-arias/airaware/issues/21) | TimeNet | Con #13 integrado, verificar el manifiesto Parquet antes de convertir una muestra local. Reabrirla con TimeFReader.verify() y Arrow; comprobar eje UTC, identidad, cero, nulo, procedencia, unidad inferida y atribución. Comparar dos conversiones por contenido lógico. |
-| [#22](https://github.com/keneth-arias/airaware/issues/22) | TimeNet | Con #19 y #21, abrir una ForecastingTask con el lector oficial y reconstruir sus 24 entradas y 6 objetivos. Comparar identificadores, límites y conteos de cada partición con el manifiesto congelado; registrar la versión del conjunto base. |
-| [#23](https://github.com/keneth-arias/airaware/issues/23) | Ejecución técnica | Desde un entorno fijado, reproducir sin red el recorrido de una muestra hasta una tarea leída por el kit de desarrollo de TimeNet. Guardar comando, revisión, hashes, tiempo, memoria y resultado de controles; comprobar que un archivo alterado falla. |
-| [#24](https://github.com/keneth-arias/airaware/issues/24) | Contribución | Ficha integrada en #83 y contribución autorizada en el borrador externo TimeNet #796. Código MIT y datos ODC-By-1.0 con atribución. |
-| [#25](https://github.com/keneth-arias/airaware/issues/25) | Evaluación | Comparar persistencia y referencia diaria sobre idénticos identificadores. Registrar error absoluto medio (MAE), raíz del error cuadrático medio (RMSE), número de objetivos y unidad por estación y hora futura. Fijar en validación la referencia principal antes de evaluar la prueba. |
-| [#26](https://github.com/keneth-arias/airaware/issues/26) | Condicional | Comparar el modelo tabular en las mismas ventanas de #25. Evaluar episodios únicamente si #20 sustenta la etiqueta; informar positivos, negativos y métricas indefinidas. Priorizar #27–#28 para la primera ronda. Avance 20/11 (PR #111): módulo src/airaware/benchmarks/ con ajuste solo en entrenamiento y selección en validación, verificado en sintéticos. Avance 20/11 (PR #136): comparación exploratoria sobre los objetivos externos ya utilizados por #88 con cobertura idéntica (513 228 y 616 608 pares); tabular MAE 5,5278 en OpenAQ y 6,3090 en SENAMHI horario, supera a persistencia en ambas fuentes y al temporal A solo en OpenAQ; comparación histórica de #25 y episodios de #20 pendientes. [Informe](../reports/baselines/tabular-datos-reales.md). |
-| [#27](https://github.com/keneth-arias/airaware/issues/27) | Modelo temporal | Fijar revisión, licencia y presupuesto del modelo. Leer un lote desde #22, verificar dimensiones y objetivos y demostrar un paso de ajuste con pérdida finita dentro del presupuesto aprobado. Registrar memoria, duración y comando. |
-| [#28](https://github.com/keneth-arias/airaware/issues/28) | Resultados | Entrenar o ajustar el modelo temporal y elegir configuración en validación. Guardar semilla, revisión, costo y predicciones de prueba enlazadas a #19. Comparar con #25 por estación y horizonte; mostrar la diferencia en MAE, un caso de error y el efecto del solapamiento al interpretar la incertidumbre. |
-| [#29](https://github.com/keneth-arias/airaware/issues/29) | Presentación | Preparar una demo que abra TimeF, muestre 24 h de historia y superponga seis predicciones, referencia y observaciones reservadas. Explicar un acierto y un error, límites y aportes durante el reto. Preparar textos para X, LinkedIn y Discord; con autorización, compartir avances temprano, guardar enlaces y capturas fechadas de métricas disponibles y verificar el recibo del formulario del equipo. Avance 20/11 (PR #110): esquema y enlaces de entrega en docs/showcase/; publicaciones y formulario siguen pendientes de autorización. |
-| [#30](https://github.com/keneth-arias/airaware/issues/30) | Ampliación | Retomar la extensión nacional con una matriz de compatibilidad por serie de OEFA, derechos y cobertura. Registrar exclusiones antes de mezclar fuentes o afirmar generalización fuera de Lima. Avance 20/11 (PR #114): matriz de compatibilidad EAS/EAC/EAF/EAT/IPASH y conversión UTM 17S WGS84 probada; el CSV completo de EAS sigue sin descargar. |
-| [#31](https://github.com/keneth-arias/airaware/issues/31) | Ampliación | Para una muestra peruana acotada, rastrear cada serie de OpenAQ al proveedor y cuantificar copias de observaciones ya incluidas; documentar elegibilidad y atribución. Avance 20/11 (PR #116): docs/sources/openaq.md con 401 anónimo verificado (clave v3 bloqueada a autorización) y plan de solapamientos; sin descargas. |
-| [#32](https://github.com/keneth-arias/airaware/issues/32) | Ampliación | Con #19 y #30, identificar estaciones reservadas y auditar su ausencia del entrenamiento y preentrenamiento. Informar cobertura y error por estación en una evaluación secundaria separada. Avance 20/11 (PR #115): módulo de retención con aislamiento espacial y temporal probado; ejecución real pendiente del paquete de datos. |
-| [#33](https://github.com/keneth-arias/airaware/issues/33) | Ampliación | Elegir un producto atmosférico con licencia, máscara y disponibilidad temporal verificadas. Medir su aporte en objetivos compartidos con #25 y registrar el cambio de cobertura. Avance 20/11 (PR #119): docs/sources/cams.md documenta el reanálisis EAC4, su grilla de 0,75° y las máscaras de sus insumos. La comparación requiere acceso autorizado y evidencia de publicación anterior al origen del pronóstico. |
-| [#34](https://github.com/keneth-arias/airaware/issues/34) | Ampliación | Elegir una variable de contexto con fechas históricas de disponibilidad demostrables. Comparar con y sin ella sobre los mismos casos y documentar costo e incertidumbre. Avance 20/11 (PR #121): docs/sources/firms.md con cobertura histórica declarada para la ventana de Lima; Earthdata/MAP_KEY y comparación pendientes. |
-| [#35](https://github.com/keneth-arias/airaware/issues/35) | Ampliación | Generar preguntas con respuesta calculable desde una serie TimeF trazable y comprobar las respuestas automáticamente. Mantener separados los casos de prueba del pronóstico y los ejemplos para demostración. Avance 20/11 (PR #112): generación determinista de preguntas sobre serie sintética con respuestas verificadas y separación probada; versión con datos reales pendiente. |
-| [#43](https://github.com/keneth-arias/airaware/issues/43) | Seguimiento | Registrar evidencia institucional fechada si llega y enumerar los campos o decisiones que cambia. Mantener visibles calidad individual, posición del intervalo y disponibilidad desconocidas; un nuevo contacto requiere autorización de Keneth. |
+| [#11](https://github.com/keneth-arias/Neblima/issues/11) | Decisión aprobada | Para un analista ambiental de Lima, formular la pregunta retrospectiva: con 24 horas de PM2.5, ¿cuánto mejora el pronóstico de las seis horas siguientes frente a repetir la última medición? ADR-005 admite 339 205 ventanas solapadas en siete identidades provisionales antes de las particiones. Citar comparison-v3 y distinguir cobertura, desempeño medido y utilidad por validar. |
+| [#14](https://github.com/keneth-arias/Neblima/issues/14) | Datos | Entregar una tabla auditable por señal con identidad provisional, fila de origen, duplicado exacto o conflicto y decisión. Seguir un caso desde el archivo original hasta la vista depurada y conciliar los conteos. |
+| [#15](https://github.com/keneth-arias/Neblima/issues/15) | Datos | Mostrar una serie horaria en tiempo universal coordinado (UTC) con un cero observado, un valor nulo y una hora ausente. Verificar sus máscaras y conciliar horas utilizables y descartadas por estación. |
+| [#16](https://github.com/keneth-arias/Neblima/issues/16) | Ampliación | Muestra fijada y verificada con #79. Se conservan las limitaciones de disponibilidad y derechos por producto. |
+| [#17](https://github.com/keneth-arias/Neblima/issues/17) | Ampliación | El PR #85 integró la paridad de objetivos, el rechazo de emisiones tardías y las máscaras en pruebas. Queda por verificar la unión real y la disponibilidad horaria. Avance 20/11 (PR #117): matriz de verificación de la unión retrospectiva. La disponibilidad operativa por hora sigue pendiente de evidencia. |
+| [#18](https://github.com/keneth-arias/Neblima/issues/18) | Datos | Preparar primero historias completas de 24 h y objetivos completos de 6 h según ADR-005. Conciliar ventanas antes de particionar con comparison-v3 y explicar diferencias por identidad, conflicto, hueco o paso. Los demás horizontes quedan identificados por configuración. |
+| [#19](https://github.com/keneth-arias/Neblima/issues/19) | Evaluación | Congelar fechas de corte en UTC y un manifiesto de identificadores antes de seleccionar modelos. Documentar ventanas purgadas y demostrar con una prueba de frontera que ninguna hora de entrada u objetivo se comparte entre particiones para una serie. |
+| [#20](https://github.com/keneth-arias/Neblima/issues/20) | Condicional | Integración estructural verificada con 324 463 ventanas 24/24 reales. Mantener abierta hasta acreditar la posición del intervalo y la calidad individual; solo entonces emitir etiquetas. Diferir etiquetas regulatorias diarias y métricas de episodios sin respaldo. Avance 20/11 (PR #113): antifuga etiquetas→entradas probada y reconciliación de descartes por serie; matriz en docs/methodology/event-labels.md. |
+| [#21](https://github.com/keneth-arias/Neblima/issues/21) | TimeNet | Con #13 integrado, verificar el manifiesto Parquet antes de convertir una muestra local. Reabrirla con TimeFReader.verify() y Arrow; comprobar eje UTC, identidad, cero, nulo, procedencia, unidad inferida y atribución. Comparar dos conversiones por contenido lógico. |
+| [#22](https://github.com/keneth-arias/Neblima/issues/22) | TimeNet | Con #19 y #21, abrir una ForecastingTask con el lector oficial y reconstruir sus 24 entradas y 6 objetivos. Comparar identificadores, límites y conteos de cada partición con el manifiesto congelado; registrar la versión del conjunto base. |
+| [#23](https://github.com/keneth-arias/Neblima/issues/23) | Ejecución técnica | Desde un entorno fijado, reproducir sin red el recorrido de una muestra hasta una tarea leída por el kit de desarrollo de TimeNet. Guardar comando, revisión, hashes, tiempo, memoria y resultado de controles; comprobar que un archivo alterado falla. |
+| [#24](https://github.com/keneth-arias/Neblima/issues/24) | Contribución | Ficha integrada en #83 y contribución autorizada en el borrador externo TimeNet #796. Código MIT y datos ODC-By-1.0 con atribución. |
+| [#25](https://github.com/keneth-arias/Neblima/issues/25) | Evaluación | Comparar persistencia y referencia diaria sobre idénticos identificadores. Registrar error absoluto medio (MAE), raíz del error cuadrático medio (RMSE), número de objetivos y unidad por estación y hora futura. Fijar en validación la referencia principal antes de evaluar la prueba. |
+| [#26](https://github.com/keneth-arias/Neblima/issues/26) | Condicional | Comparar el modelo tabular en las mismas ventanas de #25. Evaluar episodios únicamente si #20 sustenta la etiqueta; informar positivos, negativos y métricas indefinidas. Priorizar #27–#28 para la primera ronda. Avance 20/11 (PR #111): módulo src/airaware/benchmarks/ con ajuste solo en entrenamiento y selección en validación, verificado en sintéticos. Avance 20/11 (PR #136): comparación exploratoria sobre los objetivos externos ya utilizados por #88 con cobertura idéntica (513 228 y 616 608 pares); tabular MAE 5,5278 en OpenAQ y 6,3090 en SENAMHI horario, supera a persistencia en ambas fuentes y al temporal A solo en OpenAQ; comparación histórica de #25 y episodios de #20 pendientes. [Informe](../reports/baselines/tabular-datos-reales.md). |
+| [#27](https://github.com/keneth-arias/Neblima/issues/27) | Modelo temporal | Fijar revisión, licencia y presupuesto del modelo. Leer un lote desde #22, verificar dimensiones y objetivos y demostrar un paso de ajuste con pérdida finita dentro del presupuesto aprobado. Registrar memoria, duración y comando. |
+| [#28](https://github.com/keneth-arias/Neblima/issues/28) | Resultados | Entrenar o ajustar el modelo temporal y elegir configuración en validación. Guardar semilla, revisión, costo y predicciones de prueba enlazadas a #19. Comparar con #25 por estación y horizonte; mostrar la diferencia en MAE, un caso de error y el efecto del solapamiento al interpretar la incertidumbre. |
+| [#29](https://github.com/keneth-arias/Neblima/issues/29) | Presentación | Preparar una demo que abra TimeF, muestre 24 h de historia y superponga seis predicciones, referencia y observaciones reservadas. Explicar un acierto y un error, límites y aportes durante el reto. Preparar textos para X, LinkedIn y Discord; con autorización, compartir avances temprano, guardar enlaces y capturas fechadas de métricas disponibles y verificar el recibo del formulario del equipo. Avance 20/11 (PR #110): esquema y enlaces de entrega en docs/showcase/; publicaciones y formulario siguen pendientes de autorización. |
+| [#30](https://github.com/keneth-arias/Neblima/issues/30) | Ampliación | Retomar la extensión nacional con una matriz de compatibilidad por serie de OEFA, derechos y cobertura. Registrar exclusiones antes de mezclar fuentes o afirmar generalización fuera de Lima. Avance 20/11 (PR #114): matriz de compatibilidad EAS/EAC/EAF/EAT/IPASH y conversión UTM 17S WGS84 probada; el CSV completo de EAS sigue sin descargar. |
+| [#31](https://github.com/keneth-arias/Neblima/issues/31) | Ampliación | Para una muestra peruana acotada, rastrear cada serie de OpenAQ al proveedor y cuantificar copias de observaciones ya incluidas; documentar elegibilidad y atribución. Avance 20/11 (PR #116): docs/sources/openaq.md con 401 anónimo verificado (clave v3 bloqueada a autorización) y plan de solapamientos; sin descargas. |
+| [#32](https://github.com/keneth-arias/Neblima/issues/32) | Ampliación | Con #19 y #30, identificar estaciones reservadas y auditar su ausencia del entrenamiento y preentrenamiento. Informar cobertura y error por estación en una evaluación secundaria separada. Avance 20/11 (PR #115): módulo de retención con aislamiento espacial y temporal probado; ejecución real pendiente del paquete de datos. |
+| [#33](https://github.com/keneth-arias/Neblima/issues/33) | Ampliación | Elegir un producto atmosférico con licencia, máscara y disponibilidad temporal verificadas. Medir su aporte en objetivos compartidos con #25 y registrar el cambio de cobertura. Avance 20/11 (PR #119): docs/sources/cams.md documenta el reanálisis EAC4, su grilla de 0,75° y las máscaras de sus insumos. La comparación requiere acceso autorizado y evidencia de publicación anterior al origen del pronóstico. |
+| [#34](https://github.com/keneth-arias/Neblima/issues/34) | Ampliación | Elegir una variable de contexto con fechas históricas de disponibilidad demostrables. Comparar con y sin ella sobre los mismos casos y documentar costo e incertidumbre. Avance 20/11 (PR #121): docs/sources/firms.md con cobertura histórica declarada para la ventana de Lima; Earthdata/MAP_KEY y comparación pendientes. |
+| [#35](https://github.com/keneth-arias/Neblima/issues/35) | Ampliación | Generar preguntas con respuesta calculable desde una serie TimeF trazable y comprobar las respuestas automáticamente. Mantener separados los casos de prueba del pronóstico y los ejemplos para demostración. Avance 20/11 (PR #112): generación determinista de preguntas sobre serie sintética con respuestas verificadas y separación probada; versión con datos reales pendiente. |
+| [#43](https://github.com/keneth-arias/Neblima/issues/43) | Seguimiento | Registrar evidencia institucional fechada si llega y enumerar los campos o decisiones que cambia. Mantener visibles calidad individual, posición del intervalo y disponibilidad desconocidas; un nuevo contacto requiere autorización de Keneth. |
 
 ## Decisiones de ejecución
 
 - Mantener el nombre airaware. Empezar por PM2.5 medido en Lima/Callao y ampliar con evidencia.
-- Verificar las API y fijar revisiones antes de implementar; separar AirAware del conector externo mínimo.
+- Verificar las API y fijar revisiones antes de implementar; separar Neblima del conector externo mínimo.
 - Priorizar M0–M3, la primera entrega TimeF de M5 y las referencias/modelo temporal de M8.
   M4 depende de meteorología verificada. El primer flujo completo puede usar solo contaminación.
 - Licencias incompatibles y significado de medición desconocido son motivos de exclusión.
@@ -66,42 +66,42 @@ referencias, adaptador, experimento temporal y entrega.
 M3 y fuentes meteorológicas verificadas habilitan M4. M6 nacional y M7 complementario vienen después.
 
 ## Índice de tareas
-- [#1: Verificar las API de TimeNet y los requisitos del hackathon](https://github.com/keneth-arias/airaware/issues/1)
-- [#2: Preparar las herramientas de Python y la integración continua sin servicios externos](https://github.com/keneth-arias/airaware/issues/2)
-- [#3: Construir y validar el inventario de fuentes ambientales](https://github.com/keneth-arias/airaware/issues/3)
-- [#4: Verificar los recursos de SENAMHI y los derechos de redistribución](https://github.com/keneth-arias/airaware/issues/4)
-- [#5: Verificar los recursos de OEFA y sus coordenadas](https://github.com/keneth-arias/airaware/issues/5)
-- [#6: Implementar descargas atómicas con trazabilidad](https://github.com/keneth-arias/airaware/issues/6)
-- [#7: Agregar reanudación y límites a la descarga](https://github.com/keneth-arias/airaware/issues/7)
-- [#8: Recolectar una muestra reproducible de SENAMHI Lima](https://github.com/keneth-arias/airaware/issues/8)
-- [#9: Recolectar datos acotados de OEFA y su documentación](https://github.com/keneth-arias/airaware/issues/9)
-- [#10: Analizar la cobertura de estaciones y la calidad de las señales](https://github.com/keneth-arias/airaware/issues/10)
-- [#11: Comparar fuentes y seleccionar el primer conjunto de evaluación de Lima](https://github.com/keneth-arias/airaware/issues/11)
-- [#12: Definir el esquema común de observaciones y estaciones](https://github.com/keneth-arias/airaware/issues/12)
-- [#13: Normalizar SENAMHI a Parquet validado y particionado](https://github.com/keneth-arias/airaware/issues/13)
-- [#14: Resolver identidades de estaciones y duplicados entre fuentes](https://github.com/keneth-arias/airaware/issues/14)
-- [#15: Construir líneas temporales de contaminación y máscaras de datos faltantes](https://github.com/keneth-arias/airaware/issues/15)
-- [#16: Verificar fuentes meteorológicas y recolectar una muestra por estación](https://github.com/keneth-arias/airaware/issues/16)
-- [#17: Alinear meteorología y contaminación sin información futura](https://github.com/keneth-arias/airaware/issues/17)
-- [#18: Construir ventanas de pronóstico de PM2.5 con objetivos completos](https://github.com/keneth-arias/airaware/issues/18)
-- [#19: Fijar particiones cronológicas y comprobar fugas de información](https://github.com/keneth-arias/airaware/issues/19)
-- [#20: Validar la metodología para etiquetar episodios de contaminación](https://github.com/keneth-arias/airaware/issues/20)
-- [#21: Implementar el conector base de SENAMHI para TimeNet](https://github.com/keneth-arias/airaware/issues/21)
-- [#22: Exportar el conjunto de evaluación de Lima a TimeF sin fugas](https://github.com/keneth-arias/airaware/issues/22)
-- [#23: Verificar la entrega del conjunto de datos de extremo a extremo sin servicios externos](https://github.com/keneth-arias/airaware/issues/23)
-- [#24: Documentar la metodología y preparar la contribución a TimeNet](https://github.com/keneth-arias/airaware/issues/24)
-- [#25: Evaluar modelos de referencia de persistencia y estacionalidad](https://github.com/keneth-arias/airaware/issues/25)
-- [#26: Evaluar un modelo tabular y métricas de episodios](https://github.com/keneth-arias/airaware/issues/26)
-- [#27: Implementar el adaptador de OpenTSLM y una prueba acotada de modelo](https://github.com/keneth-arias/airaware/issues/27)
-- [#28: Entrenar y evaluar el experimento temporal del hackathon](https://github.com/keneth-arias/airaware/issues/28)
-- [#29: Preparar la presentación y la entrega del hackathon](https://github.com/keneth-arias/airaware/issues/29)
+- [#1: Verificar las API de TimeNet y los requisitos del hackathon](https://github.com/keneth-arias/Neblima/issues/1)
+- [#2: Preparar las herramientas de Python y la integración continua sin servicios externos](https://github.com/keneth-arias/Neblima/issues/2)
+- [#3: Construir y validar el inventario de fuentes ambientales](https://github.com/keneth-arias/Neblima/issues/3)
+- [#4: Verificar los recursos de SENAMHI y los derechos de redistribución](https://github.com/keneth-arias/Neblima/issues/4)
+- [#5: Verificar los recursos de OEFA y sus coordenadas](https://github.com/keneth-arias/Neblima/issues/5)
+- [#6: Implementar descargas atómicas con trazabilidad](https://github.com/keneth-arias/Neblima/issues/6)
+- [#7: Agregar reanudación y límites a la descarga](https://github.com/keneth-arias/Neblima/issues/7)
+- [#8: Recolectar una muestra reproducible de SENAMHI Lima](https://github.com/keneth-arias/Neblima/issues/8)
+- [#9: Recolectar datos acotados de OEFA y su documentación](https://github.com/keneth-arias/Neblima/issues/9)
+- [#10: Analizar la cobertura de estaciones y la calidad de las señales](https://github.com/keneth-arias/Neblima/issues/10)
+- [#11: Comparar fuentes y seleccionar el primer conjunto de evaluación de Lima](https://github.com/keneth-arias/Neblima/issues/11)
+- [#12: Definir el esquema común de observaciones y estaciones](https://github.com/keneth-arias/Neblima/issues/12)
+- [#13: Normalizar SENAMHI a Parquet validado y particionado](https://github.com/keneth-arias/Neblima/issues/13)
+- [#14: Resolver identidades de estaciones y duplicados entre fuentes](https://github.com/keneth-arias/Neblima/issues/14)
+- [#15: Construir líneas temporales de contaminación y máscaras de datos faltantes](https://github.com/keneth-arias/Neblima/issues/15)
+- [#16: Verificar fuentes meteorológicas y recolectar una muestra por estación](https://github.com/keneth-arias/Neblima/issues/16)
+- [#17: Alinear meteorología y contaminación sin información futura](https://github.com/keneth-arias/Neblima/issues/17)
+- [#18: Construir ventanas de pronóstico de PM2.5 con objetivos completos](https://github.com/keneth-arias/Neblima/issues/18)
+- [#19: Fijar particiones cronológicas y comprobar fugas de información](https://github.com/keneth-arias/Neblima/issues/19)
+- [#20: Validar la metodología para etiquetar episodios de contaminación](https://github.com/keneth-arias/Neblima/issues/20)
+- [#21: Implementar el conector base de SENAMHI para TimeNet](https://github.com/keneth-arias/Neblima/issues/21)
+- [#22: Exportar el conjunto de evaluación de Lima a TimeF sin fugas](https://github.com/keneth-arias/Neblima/issues/22)
+- [#23: Verificar la entrega del conjunto de datos de extremo a extremo sin servicios externos](https://github.com/keneth-arias/Neblima/issues/23)
+- [#24: Documentar la metodología y preparar la contribución a TimeNet](https://github.com/keneth-arias/Neblima/issues/24)
+- [#25: Evaluar modelos de referencia de persistencia y estacionalidad](https://github.com/keneth-arias/Neblima/issues/25)
+- [#26: Evaluar un modelo tabular y métricas de episodios](https://github.com/keneth-arias/Neblima/issues/26)
+- [#27: Implementar el adaptador de OpenTSLM y una prueba acotada de modelo](https://github.com/keneth-arias/Neblima/issues/27)
+- [#28: Entrenar y evaluar el experimento temporal del hackathon](https://github.com/keneth-arias/Neblima/issues/28)
+- [#29: Preparar la presentación y la entrega del hackathon](https://github.com/keneth-arias/Neblima/issues/29)
   · [Integración web del mapa de estaciones](#integración-web-del-mapa-de-estaciones)
-- [#30: Normalizar OEFA y validar la compatibilidad de mediciones nacionales](https://github.com/keneth-arias/airaware/issues/30)
-- [#31: Investigar OpenAQ Perú y duplicaciones de agregadores](https://github.com/keneth-arias/airaware/issues/31)
-- [#32: Evaluar estaciones separadas y particiones seguras para preentrenamiento nacional](https://github.com/keneth-arias/airaware/issues/32)
-- [#33: Probar información atmosférica y satelital complementaria](https://github.com/keneth-arias/airaware/issues/33)
-- [#34: Evaluar incendios, movilidad y otras variables de contexto opcionales](https://github.com/keneth-arias/airaware/issues/34)
-- [#35: Generar preguntas temporales con respuestas verificables como ampliación](https://github.com/keneth-arias/airaware/issues/35)
+- [#30: Normalizar OEFA y validar la compatibilidad de mediciones nacionales](https://github.com/keneth-arias/Neblima/issues/30)
+- [#31: Investigar OpenAQ Perú y duplicaciones de agregadores](https://github.com/keneth-arias/Neblima/issues/31)
+- [#32: Evaluar estaciones separadas y particiones seguras para preentrenamiento nacional](https://github.com/keneth-arias/Neblima/issues/32)
+- [#33: Probar información atmosférica y satelital complementaria](https://github.com/keneth-arias/Neblima/issues/33)
+- [#34: Evaluar incendios, movilidad y otras variables de contexto opcionales](https://github.com/keneth-arias/Neblima/issues/34)
+- [#35: Generar preguntas temporales con respuestas verificables como ampliación](https://github.com/keneth-arias/Neblima/issues/35)
 
 ## Puntos de control
 
@@ -161,7 +161,7 @@ revisada y enviada con autorización de Keneth; el informe de #4 distingue resul
 ## Siguiente paso de Keneth: #6, adquisición atómica
 
 #42 está integrado y #4 quedó cerrada. La consulta SENAMHI se envió con autorización de Keneth;
-las aclaraciones pendientes pasan a [#43](https://github.com/keneth-arias/airaware/issues/43).
+las aclaraciones pendientes pasan a [#43](https://github.com/keneth-arias/Neblima/issues/43).
 Este cierre no confirma unidades, zona horaria ni publicación. No se esperará la respuesta para
 implementar herramientas que solo preservan bytes y procedencia.
 
@@ -284,7 +284,7 @@ validación científica. #13/#14/#18/#19 continúan como entregas propias; #20/#
 ## Adaptación después de #79
 
 #16 cerró con la [adquisición meteorológica verificable](../reports/acquisition/weather.md).
-El [PR #85](https://github.com/keneth-arias/airaware/pull/85) integró la alineación de GFS
+El [PR #85](https://github.com/keneth-arias/Neblima/pull/85) integró la alineación de GFS
 `previous_day1` por `window_id`. La unión real queda como comprobación local
 cuando estén disponibles los siete paquetes y los artefactos congelados.
 
@@ -297,7 +297,7 @@ por estación, emisión y disponibilidad. La muestra permite probar la unión y 
 máscaras en entrenamiento. Una evaluación meteorológica requiere cobertura
 verificada en validación y prueba y una comparación sobre objetivos comunes.
 
-El [PR #86](https://github.com/keneth-arias/airaware/pull/86) integró la verificación del contrato
+El [PR #86](https://github.com/keneth-arias/Neblima/pull/86) integró la verificación del contrato
 estructural de etiquetas para un horizonte de 24 horas. La emisión sigue condicionada
 por la evidencia temporal y de calidad de #20 y #43. El benchmark principal usa el
 horizonte de seis horas y conserva su [ficha](../docs/dataset-cards/lima-pm25-forecast.md).
@@ -342,7 +342,7 @@ Verificación local del 20/11/2026:
 
 El [plan del conector, conjunto y modelo bivariados](issue-88-pm10.md) incorpora el histórico 85/15 y la prueba externa desde junio de 2024. El [informe de preparación](../reports/prueba-externa-pm.md) registra los tres conjuntos TimeF y sus controles. El diseño contrasta dos variantes que pronostican ambos contaminantes a seis horas sobre las mismas ventanas.
 
-Para ejecutar y congelar la [comparación pareada en validación](issue-88-validacion.md), seguir las subtareas de GitHub. [#102](https://github.com/keneth-arias/airaware/issues/102) entrega las matrices y el escalador. [#103](https://github.com/keneth-arias/airaware/issues/103) conecta el entrenador y la inferencia. Ambas habilitan [#104](https://github.com/keneth-arias/airaware/issues/104), el ajuste en dos GPU. [#105](https://github.com/keneth-arias/airaware/issues/105) entrega los errores pareados y el manifiesto de los dos modelos antes de la prueba externa.
+Para ejecutar y congelar la [comparación pareada en validación](issue-88-validacion.md), seguir las subtareas de GitHub. [#102](https://github.com/keneth-arias/Neblima/issues/102) entrega las matrices y el escalador. [#103](https://github.com/keneth-arias/Neblima/issues/103) conecta el entrenador y la inferencia. Ambas habilitan [#104](https://github.com/keneth-arias/Neblima/issues/104), el ajuste en dos GPU. [#105](https://github.com/keneth-arias/Neblima/issues/105) entrega los errores pareados y el manifiesto de los dos modelos antes de la prueba externa.
 
 La [validación histórica de #104 y #105](../reports/models/validacion-pm25-pm10.md) compara las dos variantes y la persistencia por contaminante, horizonte y estación. El [manifiesto](../metadata/validacion-pm25-pm10-congelacion.json) fija los dos estados del paso 15 745 y las predicciones reproducidas.
 

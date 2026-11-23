@@ -171,7 +171,7 @@ reconciliación local; el proveedor nunca recorta filas.
   desconocida.
 - `available_at` del proveedor por hora no está documentado en ninguna de las tres fuentes
   muestreadas y queda como desconocido; **`acquired_at` de los manifiestos (Open-Meteo
-  2026-11-17T23:41Z; NOAA Lima 2026-11-18T00:14Z) es solo procedencia local de AirAware y nunca
+  2026-11-17T23:41Z; NOAA Lima 2026-11-18T00:14Z) es solo procedencia local de Neblima y nunca
   se usa como `available_at`**.
 - Posición del intervalo horario (inicio vs fin de la hora) no declarada por Open-Meteo en las
   páginas revisadas: desconocida, sin inferencia.

@@ -5,12 +5,12 @@ Envío aceptado por Outlook y copia localizada en el buzón del remitente. Desti
 <consultas@oefa.gob.pe>, verificado en su página institucional de contacto. Remitente: Keneth Arias <keneth.arias@outlook.com>.
 Sin copia a otros contactos ni archivos adjuntos. No se confirma aún recepción ni respuesta de OEFA.
 
-Asunto: Consulta y orientación sobre datos de calidad del aire para proyecto educativo AirAware Perú
+Asunto: Consulta y orientación sobre datos de calidad del aire para proyecto educativo Neblima Perú
 
 Estimado equipo del Servicio de Información y Atención al Ciudadano del OEFA:
 
 Reciba un cordial saludo. Mi nombre es Keneth Arias, soy profesor peruano de Tecnologías de la
-Información y Comunicación. Junto con dos estudiantes peruanos estamos desarrollando AirAware Perú,
+Información y Comunicación. Junto con dos estudiantes peruanos estamos desarrollando Neblima Perú,
 un proyecto educativo de análisis y pronóstico de calidad del aire para nuestra participación en el
 hackathon TimeNet (https://challenge.timenet.ai/), con interés inicial en Lima y posible extensión al Perú.
 
@@ -50,7 +50,7 @@ breve que nos permita usar correctamente los datos sería de gran ayuda. Si lo c
  y cuentan con disponibilidad, también agradeceríamos una breve orientación técnica con el equipo responsable.
 
 Comprendemos la carga de trabajo que tienen y valoramos mucho el tiempo que puedan brindarnos.
-Nuestro repositorio es https://github.com/keneth-arias/airaware. Con gusto podemos compartir ejemplos
+Nuestro repositorio es https://github.com/keneth-arias/Neblima. Con gusto podemos compartir ejemplos
 pequeños de los campos que nos generan dudas, sin adjuntar el archivo completo.
 
 Muchas gracias por su atención y por el trabajo que realizan.
@@ -58,5 +58,5 @@ Muchas gracias por su atención y por el trabajo que realizan.
 Atentamente,
 Keneth Arias
 Profesor de Tecnologías de la Información y Comunicación
-Equipo AirAware Perú
+Equipo Neblima Perú
 keneth.arias@outlook.com

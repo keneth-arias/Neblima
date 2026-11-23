@@ -180,7 +180,7 @@ coordenadas: no declarado en el CSV ni en el diccionario; permanece sin converti
 | NASA POWER | horario UTC o LST (parámetro) | no aplica | GEOS-IT ~2 días; MERRA-2 reajustes periódicos |
 | OEFA | fechas seriales sin época confirmada | no aplica | pendiente (bloqueos citados) |
 
-`acquired_at` (momento de la descarga por AirAware) no se usa como `available_at` del proveedor
+`acquired_at` (momento de la descarga por Neblima) no se usa como `available_at` del proveedor
 en ningún caso; los manifiestos de adquisición registran `acquired_at`/`verified_at` solo como
 procedencia local.
 

@@ -1,6 +1,6 @@
 # Guion de grabación de la demo (primera ronda)
 
-Plan de grabación toma por toma para la demostración de AirAware en la primera ronda del reto
+Plan de grabación toma por toma para la demostración de Neblima en la primera ronda del reto
 [TimeNet](https://challenge.timenet.ai/). Este archivo es un borrador interno: **no se ha grabado
 ni publicado nada** y la grabación espera la autorización prevista en el plan (Keneth valida las
 afirmaciones; matriz en [docs/hackathon.md](../hackathon.md)). Después de grabar, registrar el
@@ -21,7 +21,7 @@ Solo se usan insumos existentes y versionados:
 
 La grabación ocurre en el entorno donde exista el paquete de datos, es decir, la máquina y carpeta
 que contienen `data/timef/airaware/lima-pm25-forecast/0.1.0` (la copia local de Cristopher con los
-datos restaurados), ejecutando desde la raíz de esa copia de AirAware. **No grabar desde un
+datos restaurados), ejecutando desde la raíz de esa copia de Neblima. **No grabar desde un
 checkout de trabajo cualquiera**: la carpeta `data/` no está versionada en Git y sin ella la
 verificación no corre. El video se guarda en almacenamiento local; no se sube al repositorio.
 

@@ -101,7 +101,7 @@ for source in openaq senamhi_horario; do
 done
 ```
 
-De vuelta en AirAware, el evaluador exige las huellas de los estados y los identificadores ordenados de cada cohorte. Produce un `paired.parquet` por proveedor con fuente, estación, ventana, origen, hora objetivo, contaminante, horizonte, observación, ambos pronósticos y persistencia. Envía cada fuente a su propia tabla de métricas.
+De vuelta en Neblima, el evaluador exige las huellas de los estados y los identificadores ordenados de cada cohorte. Produce un `paired.parquet` por proveedor con fuente, estación, ventana, origen, hora objetivo, contaminante, horizonte, observación, ambos pronósticos y persistencia. Envía cada fuente a su propia tabla de métricas.
 
 ```bash
 for source in openaq senamhi_horario; do
@@ -111,7 +111,7 @@ done
 "$P" "$T/joint_coverage.py" "$F" "$R/cobertura.json"
 ```
 
-Para verificar los conectores, construir ambas versiones con `timenet-build` en un mismo registro local siguiendo el README del [conector publicado](https://github.com/keneth-arias/TimeNet/tree/e9c406a408fe2b57c4cdafa0f155f8c2cf7a0cd5/packages/timenet-connectors/src/timenet_connectors/datasets/airaware/lima_pm25_pm10_forecast). En AirAware, pasar la ruta de ese registro como `REGISTRY`.
+Para verificar los conectores, construir ambas versiones con `timenet-build` en un mismo registro local siguiendo el README del [conector publicado](https://github.com/keneth-arias/TimeNet/tree/e9c406a408fe2b57c4cdafa0f155f8c2cf7a0cd5/packages/timenet-connectors/src/timenet_connectors/datasets/airaware/lima_pm25_pm10_forecast). En Neblima, pasar la ruta de ese registro como `REGISTRY`.
 
 ```bash
 "$P" "$T/verify_joint_connector.py" "$REGISTRY" \

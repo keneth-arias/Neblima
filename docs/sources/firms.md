@@ -1,6 +1,6 @@
 # FIRMS (NASA): investigación documental de la variable de contexto de incendios
 
-Tarea: [#34 — Evaluar incendios, movilidad y otras variables de contexto opcionales](https://github.com/keneth-arias/airaware/issues/34). Refs #34.
+Tarea: [#34 — Evaluar incendios, movilidad y otras variables de contexto opcionales](https://github.com/keneth-arias/Neblima/issues/34). Refs #34.
 Revisión: 20/11/2026 UTC. Alcance: solo documentación oficial; sin descargas de datos ni
 muestras, sin cuentas nuevas y sin claves. Esta entrega investiga la fuente y propone; la
 implementación de adquisición espera los acuerdos de #33 y la comparación contra la

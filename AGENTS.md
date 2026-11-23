@@ -1,4 +1,4 @@
-# Instrucciones para contribuir a AirAware
+# Instrucciones para contribuir a Neblima
 
 Lee `CONSTRAINTS.md` antes de escribir código. No debilites los controles para aprobar un cambio.
 Revisa `tasks/plan.md` y la tarea correspondiente. Conserva el trabajo pendiente de otras personas.
