@@ -170,11 +170,20 @@ def rewrite_timeline(timeline, mutate):
     return manifest["output_sha256"]
 
 
-def rewrite_windows(windows, mutate=None, *, manifest_changes=None):
+def rewrite_windows(windows, mutate=None, *, manifest_changes=None, nullable_fields=()):
     table = pq.read_table(windows / WINDOWS_FILE)
     rows = [mutate(dict(row)) for row in table.to_pylist()] if mutate else None
     if rows is not None:
-        pq.write_table(pa.Table.from_pylist(rows, schema=table.schema), windows / WINDOWS_FILE)
+        schema = table.schema
+        if nullable_fields:
+            schema = pa.schema(
+                [
+                    field.with_nullable(True) if field.name in nullable_fields else field
+                    for field in schema
+                ],
+                metadata=schema.metadata,
+            )
+        pq.write_table(pa.Table.from_pylist(rows, schema=schema), windows / WINDOWS_FILE)
     manifest = read_manifest(windows)
     manifest["output_sha256"] = sha256_file(windows / WINDOWS_FILE)
     manifest.update(manifest_changes or {})
@@ -859,7 +868,13 @@ def test_missing_window_group_stops_label_publication(tmp_path, monkeypatch):
 )
 def test_leakage_requires_exact_window_bounds(tmp_path, field, offset):
     timeline, windows, _ = full_bundle(tmp_path)
-    rewrite_windows(windows, lambda row: {**row, field: row[field] + offset if offset else None})
+    # DuckDB 2 conserva la nulabilidad del Parquet original. La prueba necesita
+    # un archivo donde el verificador pueda leer el límite nulo deliberado.
+    rewrite_windows(
+        windows,
+        lambda row: {**row, field: row[field] + offset if offset is not None else None},
+        nullable_fields=(field,) if offset is None else (),
+    )
     with pytest.raises(ValueError, match="límites"):
         verify_no_label_leakage(verify_bundle(timeline, windows))
 
