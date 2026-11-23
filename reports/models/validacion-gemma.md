@@ -1,6 +1,6 @@
 # Validación de Gemma para pronósticos de PM2.5
 
-Resultados verificados al 22 de noviembre de 2026. La confirmación histórica de
+Resultados de los ajustes originales al 22 de noviembre de 2026. Los resultados de la activación privada y el pronóstico de Gemma 1B se actualizaron el 23 de noviembre. La confirmación histórica de
 Gemma 3 1B conserva el control de error absoluto medio (MAE) en unidades físicas.
 Para Flamingo con Gemma 3 4B, la validación de la versión `v4` conserva el
 control de error cuadrático medio (MSE) normalizado. La comparación de
@@ -71,8 +71,23 @@ En el seguimiento del optimizador, la receta con calentamiento y tasas separadas
 restauró el paso 19 con manifiesto
 `ab88997398305e8fd12a0fc7770101987c9b55820fdf5c3ec3f22834dd4f1eea`.
 Coincidieron el estado y las 500 actualizaciones de la prueba sintética frente
-a la ejecución continua. La comparación real de las tres recetas con MAE físico
-tiene dos ajustes iniciados y el de tasas separadas en cola en el último registro.
+a la ejecución continua.
+
+Las tres recetas de optimización de MAE físico usaron los mismos lotes en
+6 500 actualizaciones y coincidieron en la evaluación inicial. En los tres
+casos, el punto elegido fue el paso 4 500 y la parada temprana ocurrió en el
+paso 6 500. Las 6 664 ventanas de validación interna incluyeron 1 179 pares
+de horas altas en 12 bloques semanales.
+
+| Receta | MAE general (µg/m³) | MAE en horas altas (µg/m³) |
+| --- | ---: | ---: |
+| Base | 5,124 | 26,198 |
+| Calentamiento | 5,141 | 26,578 |
+| Calentamiento y tasas separadas | 5,195 | 26,564 |
+
+La validación interna conservó la receta base. Se verificaron los archivos de
+los puntos seleccionados. La comparación termina en esta etapa y conserva los
+datos de confirmación para el protocolo ya registrado.
 
 ## Flamingo con Gemma 3 4B en Nebius
 
@@ -147,10 +162,94 @@ La captura operativa de SENAMHI para Campo de Marte incorpora 40 originales
 verificados y 112 horas con lecturas finitas, hasta el 22/11 a las 15:00
 en la hora publicada. La última recepción fue a las 20:09 UTC. Esta serie
 operativa queda separada del archivo congelado y del futuro conjunto
-independiente. Los intervalos por punto de control y las métricas de Gemma
-contra la CNN por fuente siguen pendientes.
+independiente. Las secciones siguientes registran la evaluación final de Gemma 1B por fuente.
 
 Las copias de los archivos congelados y las capturas operativas están bajo
-`data/` en bm. Git registra los conteos y las huellas de verificación. Los
-pesos, las predicciones y los registros detallados se conservan en
-almacenamiento privado.
+`data/` en bm. Git registra los conteos y las huellas de verificación. Los pesos, las predicciones por ventana de las evaluaciones y los registros detallados se conservan en almacenamiento privado.
+
+## Resultados finales de Gemma 1B y pronóstico de seis horas
+
+Los resultados del 23 de noviembre se pueden descargar en JSON.
+
+- [Validación](../../metadata/resultados-gemma-1b-20261123/validacion.json) del paquete y de los intervalos.
+- [Pruebas](../../metadata/resultados-gemma-1b-20261123/pruebas.json) de restauración, paridad y ejecución.
+- [Benchmark](../../metadata/resultados-gemma-1b-20261123/benchmark.json) de OpenAQ y SENAMHI, con pares, métricas por horizonte y decisiones.
+- [Pronóstico](../../metadata/resultados-gemma-1b-20261123/pronostico.json) puntual de San Borja, con procedencia y hora de cálculo.
+
+### Activación privada de los pronósticos puntuales de 1B
+
+El 23 de noviembre de 2026 se activó el paquete bajo demanda en MicroK8s para +1 h a +6 h, con 24 horas de historia. Se usó el punto de control de MAE físico de la semilla 27 en la actualización 4 500, con la corrección de picos congelada. La CNN sigue a cargo de los pronósticos y alertas públicos.
+
+| Artefacto | SHA-256 |
+| --- | --- |
+| Paquete verificado | `3b0eb55dada3fa67e68248c46c39b6c9f00f1006f53a7c5b92af39305a3d7de6` |
+| Manifiesto del punto de control | `f1da0c412e9b918f8f4d8a11c8b6b5ee197150501b8e6ea97cd33be01d54304c` |
+| Corrección de picos | `93bc57abc4b3840c4e59fc2d705fc91fa5b7d6872fd9bb81efdecc7bcd686ffc` |
+| Referencia CNN | `9ceb6dcd793f661720fd58606992581857993f66109dc3024480e164316b7315` |
+
+Dos restauraciones limpias reprodujeron los seis valores en las 85 538 ventanas de integridad y coincidieron con la prueba bilingüe. El escritor privado pasó cuatro pruebas sintéticas, incluido un reintento en cola durante una pausa. La calificación y la prueba del comando instalado devolvieron los mismos seis valores para una ventana SENAMHI. La diferencia absoluta máxima frente a la referencia fue menor que 0,0001 µg/m³. La revisión experimental de intervalos aprobó 171 pruebas de TimeNet sin servicios externos. La base de esta actualización aprobó 576 pruebas de AirAware y 88 pruebas de TimeNet, además de la construcción de paquetes y la auditoría de dependencias.
+
+### Comparación de archivos congelados para Gemma 1B
+
+Las horas altas se cuentan con el umbral de concentración fijado durante el ajuste. Cada registro contiene los mismos pares para Gemma corregido y la CNN. El criterio retrospectivo puntual utiliza 2 000 remuestreos pareados en bloques de 168 horas. El extremo superior del intervalo de confianza del 95 % del MAE general Gemma menos CNN debe ser inferior a +0,10 µg/m³. Para horas altas, el extremo inferior de la mejora CNN menos Gemma debe ser positivo.
+
+| Fuente | Ventanas | Pares totales | Pares de horas altas | Bloques con horas altas | MAE Gemma / CNN | MAE alto Gemma / CNN |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| OpenAQ congelado | 85 538 | 513 228 | 43 687 | 105 | 6,041 / 6,001 | 15,855 / 16,008 |
+| SENAMHI archivado | 102 768 | 616 608 | 47 718 | 123 | 5,829 / 5,769 | 15,817 / 15,983 |
+
+| Fuente | Diferencia de MAE general | IC del 95 % de la diferencia | Mejora de MAE alto | IC del 95 % de la mejora |
+| --- | ---: | ---: | ---: | ---: |
+| OpenAQ congelado | +0,03984 | [−0,00627, +0,08350] | +0,15244 | [+0,03401, +0,28080] |
+| SENAMHI archivado | +0,05987 | [+0,01710, +0,09902] | +0,16645 | [+0,05410, +0,29045] |
+
+Ambos archivos superaron los dos criterios retrospectivos puntuales. El margen corresponde al conjunto de cada fuente. Por horizonte, el comportamiento fue el siguiente, en µg/m³.
+
+| Horizonte | OpenAQ Gemma | OpenAQ CNN | SENAMHI Gemma | SENAMHI CNN |
+| ---: | ---: | ---: | ---: | ---: |
+| +1 h | 3,420 | 3,505 | 3,296 | 3,375 |
+| +2 h | 5,209 | 5,242 | 5,017 | 5,041 |
+| +3 h | 6,154 | 6,178 | 5,931 | 5,938 |
+| +4 h | 6,847 | 6,741 | 6,605 | 6,478 |
+| +5 h | 7,203 | 7,062 | 6,960 | 6,788 |
+| +6 h | 7,413 | 7,279 | 7,168 | 6,998 |
+
+### Cobertura e intervalos en evaluación para Gemma 1B
+
+La calibración v3 del Gemma corregido tuvo cobertura general de 91,81 % en OpenAQ y de 92,15 % en SENAMHI. El reajuste con cuantil superior q96 produjo 89,00 % y 89,39 %, respectivamente. Los dos resultados q96 excedieron el límite de 85 % para una banda nominal de 80 %. La cobertura en horas altas fue 80,21 % y 80,20 %. El q96 se registró para evaluación retrospectiva.
+
+La prueba condicional usó 3 780 ventanas para ajustar, 4 123 para calibrar y 3 956 posteriores para evaluar. El MAE puntual de 11,223 µg/m³ coincidió entre calibradores. En 23 736 pares, la cobertura condicional fue 78,71 % en general y 67,86 % en horas altas. La cobertura de v3 en las mismas horas altas fue 80,45 %. El ancho medio en horas ordinarias bajó de 36,93 a 30,65 µg/m³. A +6 h, el ajuste condicional cubrió 58,19 % de 1 246 pares en horas altas frente a 74,56 % con v3. El criterio de horas altas falló.
+
+Otros ensayos exploratorios evaluaron un cabezal conjunto, bandas asimétricas y una mezcla de corrección de picos. El cabezal conjunto redujo el MAE general frente a la CNN en ambos archivos, pero aumentó el MAE en horas altas. La mezcla eligió peso cero en los tres pliegues. El ajuste por aumento reciente de concentración redujo el MAE de horas altas en 0,593 µg/m³ sobre 58 080 pares, con un aumento global de 0,00235 µg/m³ que incumplió su criterio por pliegue. El reajuste corto de 128 actualizaciones aumentó ambos errores frente al cabezal conjunto. El paquete privado entrega pronósticos puntuales de la corrección seleccionada.
+
+### Evaluación retrospectiva sobre archivos más recientes para Gemma 1B
+
+Para OpenAQ se verificaron 257 objetos del archivo público después del corte anterior. Entre las 3 207 lecturas que cumplieron los filtros, hubo cero ventanas completas nuevas de 24 horas de historia y seis objetivos.
+
+SENAMHI aportó 211 ventanas completas de seis estaciones, con objetivos del 21 al 22 de noviembre de 2026 según la hora publicada. El MAE general fue **3,734 µg/m³ para Gemma y 3,650 para la CNN**. La diferencia observada fue +0,08346 µg/m³. En 12 pares de horas altas, el MAE fue 22,325 para Gemma y 24,089 para la CNN. Esos pares pertenecen a un solo bloque de 168 horas. El mínimo registrado es de cuatro, por lo que no se estimaron los intervalos de confianza ni se aprobó la promoción.
+
+Cada horizonte tiene 211 pares, dos de ellos en horas altas. Los resultados están en µg/m³.
+
+| Horizonte | MAE Gemma | MAE CNN | MAE alto Gemma | MAE alto CNN |
+| ---: | ---: | ---: | ---: | ---: |
+| +1 h | 2,056 | 2,140 | 7,032 | 9,667 |
+| +2 h | 3,129 | 3,119 | 21,250 | 22,271 |
+| +3 h | 3,701 | 3,715 | 25,651 | 27,372 |
+| +4 h | 4,203 | 4,065 | 26,243 | 27,897 |
+| +5 h | 4,549 | 4,350 | 26,773 | 28,387 |
+| +6 h | 4,765 | 4,514 | 27,003 | 28,942 |
+
+### Pronóstico puntual para San Borja
+
+MicroK8s en bm produjo el pronóstico de Gemma 1B a las **02:23:27 UTC del 23 de noviembre de 2026**. El origen fue el **22 de noviembre a las 21:00**, según el reloj publicado en el gráfico de SENAMHI. La entrada contiene 24 lecturas horarias consecutivas de PM2.5, sin imputaciones. El gráfico carece de un desfase explícito. Las fechas de destino conservan sus etiquetas y la hora de cálculo se registra en UTC. [Gráfico de SENAMHI](https://www.senamhi.gob.pe/site/sea/www/site/sea/graficas/dato_hora.php?estacion=00112270&cont=N_PM25&f1=21%2F11%2F2026&f2=23%2F11%2F2026)
+
+| Horizonte | Hora publicada por SENAMHI | PM2.5 previsto (µg/m³) |
+| --- | --- | ---: |
+| +1 h | 2026-11-22 22:00 | 19,33 |
+| +2 h | 2026-11-22 23:00 | 18,17 |
+| +3 h | 2026-11-23 00:00 | 18,12 |
+| +4 h | 2026-11-23 01:00 | 17,82 |
+| +5 h | 2026-11-23 02:00 | 18,23 |
+| +6 h | 2026-11-23 03:00 | 18,44 |
+
+Este pronóstico puntual corresponde al paquete privado y se publica como resultado informativo para revisión.
