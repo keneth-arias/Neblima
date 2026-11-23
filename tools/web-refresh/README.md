@@ -1,9 +1,6 @@
-# Datos públicos de la web
+# Pronóstico web Gemma 3 1B
 
-La actualización usa la CNN pública congelada de AirAware, con 24 lecturas
-horarias y seis salidas. Los pesos deben tener SHA-256
-`9ceb6dcd793f661720fd58606992581857993f66109dc3024480e164316b7315`.
-Los pesos, originales y credenciales se mantienen fuera de Git.
+La captura conserva el reloj publicado de SENAMHI y exporta solo historias completas de 24 horas. El predictor usa el checkpoint de la semilla 27 en el paso 4500 y el corrector de picos congelado antes de exportar los seis valores puntuales por origen. Los modelos históricos y la CNN conservan su identidad en las comparaciones.
 
 `refresh.py capture DIRECTORIO` consulta como máximo doce gráficos de SENAMHI
 con Lightpanda (45 segundos y 1 MB por consulta). Verifica nombre, contaminante,
@@ -13,12 +10,12 @@ El origen común es la última lectura publicada. Si todas tienen más de seis
 horas de retraso respecto del reloj de referencia de Lima, falla y conserva
 la versión pública anterior. Las estaciones sin captura quedan sin lectura.
 
-`refresh.py predict DIRECTORIO` restaura la CNN en CPU y verifica los pesos.
-Requiere `compare_cnn.py` en `PYTHONPATH` y `/model/model.pt` de solo lectura.
+`refresh.py predict DIRECTORIO` restaura Gemma en una GPU local con los pesos y la generación seleccionada de solo lectura.
+`refresh.py correct DIRECTORIO` aplica la corrección congelada en CPU y verifica las huellas del checkpoint, las historias y la corrección.
 `refresh.py export DIRECTORIO` comprueba identificadores, seis horizontes,
 dimensiones y valores finitos antes de escribir `actual.json`.
 
-El archivo usa `schema_version: 1`, `clock: provider_wall_clock`,
+El archivo usa `schema_version: 2`, `clock: provider_wall_clock`,
 `generated_at_utc`, `source_revision`, `model`, `timeline` y `stations`.
 Cada estación tiene recibos, código elegido, última lectura y ocho ventanas
 alineadas con `timeline`. Cada ventana separa `history` (24), `observed` (6),
@@ -30,7 +27,7 @@ los cambios de día, y acredita a SENAMHI bajo ODC-BY 1.0.
 Pruebas sin red desde la raíz:
 
 ```sh
-uv run --locked python -m unittest discover -s tools/web-refresh -p 'test_*.py'
+uv run --project tools/timenet-smoke --locked python -m unittest discover -s tools/web-refresh -p 'test_*.py'
 uv run --locked ruff check tools/web-refresh
 uv run --locked ruff format --check tools/web-refresh
 make check

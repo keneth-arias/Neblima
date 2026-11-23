@@ -1,4 +1,4 @@
-"""Capturar SENAMHI y exportar un pronóstico público pequeño con la CNN congelada."""
+"""Capturar SENAMHI y exportar un pronóstico público pequeño con Gemma 3 1B."""
 
 import argparse
 import hashlib
@@ -15,14 +15,16 @@ from urllib.parse import urlencode
 from zoneinfo import ZoneInfo
 
 ENDPOINT = "https://www.senamhi.gob.pe/site/sea/www/site/sea/graficas/dato_hora.php"
-CHECKPOINT = "9ceb6dcd793f661720fd58606992581857993f66109dc3024480e164316b7315"
+CHECKPOINT = "f1da0c412e9b918f8f4d8a11c8b6b5ee197150501b8e6ea97cd33be01d54304c"
+CORRECTION = "93bc57abc4b3840c4e59fc2d705fc91fa5b7d6872fd9bb81efdecc7bcd686ffc"
+RELEASE = "3b0eb55dada3fa67e68248c46c39b6c9f00f1006f53a7c5b92af39305a3d7de6"
 STATIONS = {
-    "CARABAYLLO": ["111286", "113260"],
+    "CARABAYLLO": ["113260"],
     "CAMPO_DE_MARTE": ["112194"],
-    "SAN_JUAN_DE_LURIGANCHO": ["112267", "113258"],
-    "SAN_MARTIN_DE_PORRES": ["112265", "00112272"],
-    "SANTA_ANITA": ["112208", "00112271"],
-    "SAN_BORJA": ["112193", "00112270"],
+    "SAN_JUAN_DE_LURIGANCHO": ["113258"],
+    "SAN_MARTIN_DE_PORRES": ["00112272"],
+    "SANTA_ANITA": ["00112271"],
+    "SAN_BORJA": ["00112270"],
     "VILLA_MARIA_DEL_TRIUNFO": ["112233"],
 }
 HOUR = timedelta(hours=1)
@@ -131,7 +133,6 @@ def download(url, directory):
 
 
 def capture(root):
-    import numpy as np
 
     now = datetime.now(UTC)
     root.mkdir(parents=True, exist_ok=True)
@@ -195,7 +196,6 @@ def capture(root):
     if local - origin > 6 * HOUR:
         raise ValueError("Todas las observaciones tienen más de seis horas de retraso")
     timeline = [origin + i * HOUR for i in range(-7, 1)]
-    ids, histories = [], []
     for station, record in stations.items():
         points = selected.get(station, {})
         record["latest_observed_at"] = max(
@@ -204,52 +204,110 @@ def capture(root):
         if record["latest_observed_at"] is not None:
             record["latest_observed_at"] = record["latest_observed_at"].isoformat()
         record["windows"] = [window_at(points, label) for label in timeline]
+    snapshot = {
+        "schema_version": 2,
+        "generated_at_utc": now.isoformat(),
+        "clock": "provider_wall_clock",
+        "unit": "µg/m³",
+        "source_revision": os.environ["AIRAWARE_REVISION"],
+        "timeline": [label.isoformat() for label in timeline],
+        "stations": stations,
+    }
+    write_history(root, snapshot)
+    write_json(root / "capture.json", snapshot)
+    print(f"Captura verificada: {len(selected)}/7 estaciones", flush=True)
+
+
+def digest(path):
+    with path.open("rb") as stream:
+        return hashlib.file_digest(stream, "sha256").hexdigest()
+
+
+def write_history(root, snapshot):
+    import numpy as np
+
+    ids, histories = [], []
+    for station, record in snapshot["stations"].items():
         for window in record["windows"]:
             if eligible(window):
+                if record["source_code"] not in STATIONS[station]:
+                    raise ValueError("Instrumento fuera de la nómina de Gemma")
                 ids.append(station + "/" + window["origin"])
                 histories.append(window["history"])
     np.savez(
         root / "history.npz",
-        window_id=np.array(ids),
-        history=np.array(histories, dtype="float32").reshape(-1, 24),
-    )
-    write_json(
-        root / "capture.json",
-        {
-            "schema_version": 1,
-            "generated_at_utc": now.isoformat(),
-            "clock": "provider_wall_clock",
-            "unit": "µg/m³",
-            "source_revision": os.environ["AIRAWARE_REVISION"],
-            "timeline": [label.isoformat() for label in timeline],
-            "stations": stations,
-        },
-    )
-    print(
-        f"Captura verificada: {len(selected)}/7 estaciones; {len(ids)} historias completas",
-        flush=True,
+        window_id=np.asarray(ids, dtype=str),
+        history=np.asarray(histories, dtype="float64").reshape(-1, 24),
     )
 
 
 def predict(root):
     import numpy as np
-    from compare_cnn import predict_from_checkpoint, sha256
 
-    weights = Path("/model/model.pt")
-    if sha256(weights) != CHECKPOINT:
-        raise ValueError("Los pesos no coinciden con la CNN pública congelada")
     with np.load(root / "history.npz", allow_pickle=False) as data:
-        empty = not len(data["window_id"])
-    if empty:
-        np.savez(
-            root / "predictions.npz",
-            window_id=np.array([]),
-            predicted=np.empty((0, 6)),
-            forecast_hour=np.arange(1, 7),
-            checkpoint_sha256=CHECKPOINT,
+        if not len(data["window_id"]):
+            return
+    subprocess.run(
+        [
+            sys.executable,
+            "-u",
+            "-m",
+            "opentslm.forecast_inference",
+            "--head",
+            "direct",
+            "--backbone",
+            "gemma-1b",
+            "--require-history-only",
+            "--weights",
+            "/model/weights",
+            "--checkpoint",
+            "/model/step-00004500",
+            "--selected-manifest-sha256",
+            CHECKPOINT,
+            "--data",
+            str(root / "history.npz"),
+            "--output",
+            str(root / "raw.npz"),
+            "--batch",
+            "16",
+        ],
+        check=True,
+    )
+
+
+def correct(root):
+    from types import SimpleNamespace
+
+    import numpy as np
+    from direct_bias_correction import apply
+
+    history = root / "history.npz"
+    hp = digest(history)
+    with np.load(history, allow_pickle=False) as data:
+        if not len(data["window_id"]):
+            np.savez(
+                root / "predictions.npz",
+                window_id=np.array([], dtype=str),
+                predicted=np.empty((0, 6)),
+                forecast_hour=np.arange(1, 7),
+                history_sha256=hp,
+                checkpoint_sha256=CHECKPOINT,
+                correction_sha256=CORRECTION,
+            )
+            return
+    raw = root / "raw.npz"
+    receipt = apply(
+        SimpleNamespace(
+            history=history,
+            history_sha256=hp,
+            forecast=raw,
+            forecast_sha256=digest(raw),
+            correction=Path("/model/correction.json"),
+            correction_sha256=CORRECTION,
+            output=root / "predictions.npz",
         )
-    else:
-        predict_from_checkpoint(weights, root / "history.npz", root / "predictions.npz", 16)
+    )
+    print(json.dumps(receipt), flush=True)
 
 
 def export(root):
@@ -260,12 +318,14 @@ def export(root):
         ids, predictions = data["window_id"].tolist(), data["predicted"]
         if (
             data["checkpoint_sha256"].item() != CHECKPOINT
+            or data["history_sha256"].item() != digest(root / "history.npz")
+            or data["correction_sha256"].item() != CORRECTION
             or predictions.shape != (len(ids), 6)
             or len(set(ids)) != len(ids)
             or not np.isfinite(predictions).all()
             or not np.array_equal(data["forecast_hour"], np.arange(1, 7))
         ):
-            raise ValueError("Pronósticos incompatibles con la CNN o sus seis horizontes")
+            raise ValueError("Pronósticos incompatibles con Gemma o sus seis horizontes")
         forecasts = dict(zip(ids, predictions.tolist(), strict=True))
     expected = set()
     for station, record in snapshot["stations"].items():
@@ -277,7 +337,9 @@ def export(root):
     if set(forecasts) != expected:
         raise ValueError("Los identificadores de predicción difieren de las historias")
     snapshot["model"] = {
-        "name": "AirAware CNN",
+        "name": "Gemma 3 1B",
+        "release_sha256": RELEASE,
+        "correction_sha256": CORRECTION,
         "checkpoint_sha256": CHECKPOINT,
         "computed_at_utc": datetime.now(UTC).isoformat(),
     }
@@ -287,8 +349,10 @@ def export(root):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("command", choices=["capture", "predict", "export"])
+    parser.add_argument("command", choices=["capture", "predict", "correct", "export"])
     parser.add_argument("root", type=Path)
     args = parser.parse_args()
     if args.command == "capture" or not (args.root / "skip").exists():
-        {"capture": capture, "predict": predict, "export": export}[args.command](args.root)
+        {"capture": capture, "predict": predict, "correct": correct, "export": export}[
+            args.command
+        ](args.root)

@@ -1,9 +1,13 @@
 """Exportación pública: sin imputación ni confusión entre hora publicada y UTC."""
 
 import importlib.util
+import json
 import unittest
 from datetime import datetime, timedelta
 from pathlib import Path
+from tempfile import TemporaryDirectory
+
+import numpy as np
 
 spec = importlib.util.spec_from_file_location("refresh", Path(__file__).with_name("refresh.py"))
 refresh = importlib.util.module_from_spec(spec)
@@ -50,6 +54,34 @@ class RefreshTests(unittest.TestCase):
         new = {origin: 20}
         self.assertEqual(refresh.choose_series([("old", old), ("new", new)])[0], "old")
         self.assertFalse(refresh.eligible(refresh.window_at(new, origin)))
+
+    def test_solo_exporta_resultados_del_checkpoint_corregido(self):
+        with TemporaryDirectory() as temp:
+            root = Path(temp)
+            window = refresh.window_at({}, datetime(2026, 11, 22, 21))
+            window["history"] = list(range(24))
+            snapshot = {"stations": {"SAN_BORJA": {"source_code": "00112270", "windows": [window]}}}
+            refresh.write_json(root / "capture.json", snapshot)
+            refresh.write_history(root, snapshot)
+            fields = dict(
+                window_id=["SAN_BORJA/" + window["origin"]],
+                predicted=[range(6)],
+                forecast_hour=np.arange(1, 7),
+                checkpoint_sha256=refresh.CHECKPOINT,
+                history_sha256=refresh.digest(root / "history.npz"),
+                correction_sha256=refresh.CORRECTION,
+            )
+            for key in ("history_sha256", "checkpoint_sha256", "correction_sha256"):
+                np.savez(root / "predictions.npz", **(fields | {key: "0" * 64}))
+                with self.assertRaises(ValueError):
+                    refresh.export(root)
+            np.savez(root / "predictions.npz", **fields)
+            refresh.export(root)
+            result = json.loads((root / "actual.json").read_text())
+            self.assertEqual(result["model"]["name"], "Gemma 3 1B")
+            self.assertEqual(
+                result["stations"]["SAN_BORJA"]["windows"][0]["forecast"], list(range(6))
+            )
 
     def test_programacion_no_se_adelanta_a_las_nueve_de_lima(self):
         self.assertFalse(refresh.started("2026-11-23T13:59:59+00:00", "2026-11-23T14:00:00Z"))
